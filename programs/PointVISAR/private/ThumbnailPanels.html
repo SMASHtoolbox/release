@@ -1,0 +1,265 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of ThumbnailPanels</title>
+  <meta name="keywords" content="ThumbnailPanels">
+  <meta name="description" content="ThumbnailPanels :">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">PointVISAR</a> &gt; <a href="index.html">private</a> &gt; ThumbnailPanels.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/PointVISAR/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>ThumbnailPanels
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>ThumbnailPanels :</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function [slider,panel,label,button]=ThumbnailPanels(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> ThumbnailPanels :</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="PointVISARGUI.html" class="code" title="function fig=PointVISARGUI(data)">PointVISARGUI</a>	PointVISARGUI</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function func=ResizeFcn(src,eventdata)</a></li><li><a href="#_sub2" class="code">function func=PositionPanels(src,eventdata)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% ThumbnailPanels :</span>
+0002 <a name="_sub0" href="#_subfunctions" class="code">function [slider,panel,label,button]=ThumbnailPanels(varargin)</a>
+0003 
+0004 <span class="comment">% make sure an even number of input arguments were given</span>
+0005 <span class="keyword">if</span> logical(rem(nargin,2))
+0006     error(<span class="string">'Unmatched number of input arguments'</span>)
+0007 <span class="keyword">end</span>
+0008 
+0009 <span class="comment">% define variables</span>
+0010 parent=[];
+0011 SliderValue=[];
+0012 SliderThickness=[];
+0013 NumThumbs=[];
+0014 PanelLabel={};
+0015 ButtonLabel={};
+0016 
+0017 <span class="comment">% sweep through input, updating the appropriate variables</span>
+0018 <span class="keyword">for</span> ii=1:2:nargin
+0019     varlabel=varargin{ii};
+0020     <span class="keyword">switch</span> lower(varlabel)
+0021         <span class="keyword">case</span> <span class="string">'parent'</span>
+0022             parent=varargin{ii+1};
+0023         <span class="keyword">case</span> <span class="string">'slidervalue'</span>
+0024             SliderValue=varargin{ii+1};
+0025         <span class="keyword">case</span> <span class="string">'sliderthickness'</span>
+0026             SliderThickness=varargin{ii+1};
+0027         <span class="keyword">case</span> <span class="string">'numthumbs'</span>
+0028             NumThumbs=varargin{ii+1};
+0029         <span class="keyword">case</span> <span class="string">'panellabel'</span>
+0030             PanelLabel=varargin{ii+1};
+0031         <span class="keyword">case</span> <span class="string">'buttonlabel'</span>
+0032             ButtonLabel=varargin{ii+1};
+0033         <span class="keyword">otherwise</span>
+0034             msg2=<span class="string">' is not a valid field name'</span>;
+0035             error([varlabel msg2]);
+0036     <span class="keyword">end</span>
+0037 <span class="keyword">end</span>
+0038 
+0039 <span class="comment">% apply default values as necessary</span>
+0040 <span class="keyword">if</span> isempty(parent)
+0041     parent=gcf;
+0042 <span class="keyword">end</span>
+0043 <span class="keyword">if</span> isempty(SliderValue)
+0044     SliderValue=1/3;
+0045 <span class="keyword">end</span>
+0046 <span class="keyword">if</span> isempty(SliderThickness)
+0047     SliderThickness=25;
+0048 <span class="keyword">end</span>
+0049 <span class="keyword">if</span> isempty(NumThumbs)
+0050     NumThumbs=2;
+0051 <span class="keyword">end</span>
+0052 <span class="keyword">if</span> isempty(PanelLabel)
+0053     PanelLabel={<span class="string">'Thumbnails'</span>,<span class="string">'Main panel'</span>};
+0054 <span class="keyword">end</span>
+0055 <span class="keyword">if</span> isempty(ButtonLabel)
+0056     ButtonLabel={<span class="string">'select'</span>,<span class="string">'select'</span>};
+0057 <span class="keyword">end</span>
+0058 
+0059 <span class="comment">% see if a ThumbnailPanels system already exists in the parent figure</span>
+0060 SliderTag=<span class="string">'ThumbnailPanelsSlider'</span>;
+0061 main=findobj(parent,<span class="string">'Style'</span>,<span class="string">'slider'</span>,<span class="string">'Tag'</span>,SliderTag);
+0062 <span class="keyword">if</span> ishandle(main) <span class="comment">% update ThumbnailPanels system</span>
+0063     data=get(main,<span class="string">'UserData'</span>);
+0064     set(data.slider,<span class="string">'Value'</span>,SliderValue);
+0065     <a href="#_sub2" class="code" title="subfunction func=PositionPanels(src,eventdata)">PositionPanels</a>(parent,[]);
+0066 <span class="keyword">else</span> <span class="comment">% create SplitPanels system</span>
+0067     figcolor=get(parent,<span class="string">'Color'</span>);
+0068     colorshift=0.05;
+0069     <span class="keyword">for</span> ii=1:3
+0070         thumbcolor(ii)=min([1 figcolor(ii)+colorshift]);
+0071         maincolor(ii)=max([0 figcolor(ii)-colorshift]);
+0072     <span class="keyword">end</span>    
+0073     <span class="comment">% panel sizing slider</span>
+0074     slider=uicontrol(<span class="string">'Style'</span>,<span class="string">'slider'</span>,<span class="string">'Tag'</span>,SliderTag,<span class="keyword">...</span>
+0075         <span class="string">'Value'</span>,SliderValue,<span class="string">'Callback'</span>,@<a href="#_sub2" class="code" title="subfunction func=PositionPanels(src,eventdata)">PositionPanels</a>);
+0076     <span class="comment">% thumbnail panels</span>
+0077     <span class="keyword">for</span> ii=1:NumThumbs
+0078         panel(ii)=uipanel(<span class="string">'Parent'</span>,parent,<span class="string">'Units'</span>,<span class="string">'pixels'</span>,<span class="keyword">...</span>
+0079             <span class="string">'BackgroundColor'</span>,thumbcolor);
+0080     <span class="keyword">end</span>
+0081     <span class="comment">% main panel</span>
+0082     panel(end+1)=uipanel(<span class="string">'Parent'</span>,parent,<span class="string">'Units'</span>,<span class="string">'pixels'</span>,<span class="keyword">...</span>
+0083         <span class="string">'BackgroundColor'</span>,maincolor);
+0084     <span class="comment">% labels and buttons</span>
+0085     <span class="keyword">for</span> ii=1:2
+0086         label(ii)=uicontrol(<span class="string">'Style'</span>,<span class="string">'text'</span>,<span class="string">'Parent'</span>,parent,<span class="keyword">...</span>
+0087             <span class="string">'String'</span>,PanelLabel{ii},<span class="keyword">...</span>
+0088             <span class="string">'HorizontalAlignment'</span>,<span class="string">'center'</span>);
+0089         button(ii)=uicontrol(<span class="string">'Style'</span>,<span class="string">'pushbutton'</span>,<span class="string">'Parent'</span>,parent,<span class="keyword">...</span>
+0090             <span class="string">'String'</span>,ButtonLabel{ii});
+0091     <span class="keyword">end</span>
+0092     set([label(1) button(1)],<span class="string">'BackgroundColor'</span>,thumbcolor);
+0093     set([label(2) button(2)],<span class="string">'BackgroundColor'</span>,maincolor);
+0094     <span class="comment">% store information for later use</span>
+0095     data.slider=slider;
+0096     data.panel=panel;
+0097     data.button=button;
+0098     data.label=label;
+0099     data.thickness=SliderThickness;
+0100     set(slider,<span class="string">'UserData'</span>,data);
+0101     <span class="comment">% size everything the first time</span>
+0102     <a href="#_sub1" class="code" title="subfunction func=ResizeFcn(src,eventdata)">ResizeFcn</a>(gcf,[]);
+0103     <span class="comment">% allow future resizing</span>
+0104     set(gcf,<span class="string">'ResizeFcn'</span>,@<a href="#_sub1" class="code" title="subfunction func=ResizeFcn(src,eventdata)">ResizeFcn</a>);
+0105 <span class="keyword">end</span>
+0106 
+0107 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0108 <a name="_sub1" href="#_subfunctions" class="code">function func=ResizeFcn(src,eventdata)</a>
+0109 
+0110 SliderTag=<span class="string">'ThumbnailPanelsSlider'</span>;
+0111 fig=ancestor(src,<span class="string">'figure'</span>);
+0112 slider=findobj(fig,<span class="string">'Tag'</span>,SliderTag);
+0113 data=get(slider,<span class="string">'UserData'</span>);
+0114 
+0115 thickness=data.thickness;
+0116 
+0117 FigUnits=get(fig,<span class="string">'Units'</span>);
+0118 set(gcf,<span class="string">'Units'</span>,<span class="string">'pixels'</span>);
+0119 figpos=get(fig,<span class="string">'Position'</span>);
+0120 set(gcf,<span class="string">'Units'</span>,FigUnits);
+0121 
+0122 pos=[0 0 figpos(3) thickness];
+0123 set(slider,<span class="string">'Position'</span>,pos);
+0124 
+0125 <a href="#_sub2" class="code" title="subfunction func=PositionPanels(src,eventdata)">PositionPanels</a>(src,[]);
+0126 
+0127 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0128 <a name="_sub2" href="#_subfunctions" class="code">function func=PositionPanels(src,eventdata)</a>
+0129 
+0130 <span class="comment">% find the main slider</span>
+0131 SliderTag=<span class="string">'ThumbnailPanelsSlider'</span>;
+0132 fig=ancestor(src,<span class="string">'figure'</span>);
+0133 slider=findobj(fig,<span class="string">'Tag'</span>,SliderTag);
+0134 data=get(slider,<span class="string">'UserData'</span>);
+0135 
+0136 <span class="comment">% determine slider settings</span>
+0137 value=get(slider,<span class="string">'Value'</span>);
+0138 
+0139 <span class="comment">% determine the working area</span>
+0140 FigUnits=get(gcf,<span class="string">'Units'</span>);
+0141 set(gcf,<span class="string">'Units'</span>,<span class="string">'pixels'</span>);
+0142 figpos=get(gcf,<span class="string">'Position'</span>);
+0143 set(gcf,<span class="string">'Units'</span>,FigUnits);
+0144 
+0145 pos=get(slider,<span class="string">'Position'</span>);
+0146 
+0147 <span class="comment">% position thumbnails, label, and buttons</span>
+0148 N=numel(data.panel)-1;
+0149 x0=0;
+0150 Lx=value*figpos(3);
+0151 <span class="keyword">if</span> Lx&gt;0
+0152     extent1=get(data.label(1),<span class="string">'Extent'</span>);
+0153     extent2=get(data.button(1),<span class="string">'Extent'</span>);
+0154     Ly=max([extent1(4) extent2(4)]);
+0155     y0=figpos(4)-Ly;
+0156     set(data.label(1),<span class="string">'Position'</span>,[x0 y0 Lx extent1(4)],<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0157     LxB=1.20*extent2(3);
+0158     x0B=x0+Lx-LxB;
+0159     set(data.button(1),<span class="string">'Position'</span>,[x0B y0 LxB extent2(4)],<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0160 
+0161     y0=pos(2)+pos(4);
+0162     Ly=figpos(4)-y0-Ly;
+0163     Ly=Ly/N;
+0164     y0=y0+(N-1)*Ly;
+0165     <span class="keyword">for</span> ii=1:N
+0166         set(data.panel(ii),<span class="string">'Position'</span>,[x0 y0 Lx Ly]);
+0167         y0=y0-Ly;
+0168         <span class="comment">%extent=get(data.detail(ii),'Extent');</span>
+0169         <span class="comment">%detailpos=get(data.detail(ii),'Position');</span>
+0170         <span class="comment">%LD=max(detailpos(3:4));</span>
+0171         <span class="comment">%set(data.detail(ii),'Position',[Lx-LD Ly-LD LD LD]);</span>
+0172     <span class="keyword">end</span>
+0173     
+0174     set(data.panel(1:end-1),<span class="string">'Visible'</span>,<span class="string">'on'</span>)
+0175     set(data.label(1),<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0176     set(data.button(1),<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0177     <span class="comment">%set(data.detail(1:end-1),'Visible','on');</span>
+0178 <span class="keyword">else</span>
+0179     set(data.panel(1:end-1),<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+0180     set(data.label(1),<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+0181     set(data.button(1:end-1),<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+0182 <span class="keyword">end</span>
+0183 
+0184 <span class="comment">% position main panel, label</span>
+0185 x0=x0+Lx;
+0186 Lx=(1-value)*figpos(3);
+0187 <span class="keyword">if</span> Lx&gt;0
+0188     extent1=get(data.label(2),<span class="string">'Extent'</span>);
+0189     extent2=get(data.button(2),<span class="string">'Extent'</span>);
+0190     Ly=max([extent1(4) extent2(4)]);
+0191     y0=figpos(4)-Ly;
+0192     set(data.label(2),<span class="string">'Position'</span>,[x0 y0 Lx extent1(4)],<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0193     LxB=1.20*extent2(3);
+0194     x0B=x0+Lx-LxB;
+0195     set(data.button(2),<span class="string">'Position'</span>,[x0B y0 LxB extent2(4)],<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0196 
+0197     y0=figpos(4)-Ly;
+0198     set(data.label(2),<span class="string">'Position'</span>,[x0 y0 Lx Ly])
+0199     
+0200     y0=pos(2)+pos(4);
+0201     Ly=figpos(4)-y0-Ly;
+0202     set(data.panel(end),<span class="string">'Position'</span>,[x0 y0 Lx Ly]);
+0203     <span class="comment">%detailpos=get(data.detail(end),'Position');</span>
+0204     <span class="comment">%LD=max(detailpos(3:4));</span>
+0205     <span class="comment">%set(data.detail(end),'Position',[Lx-LD Ly-LD LD LD]);</span>
+0206     
+0207     set(data.panel(end),<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0208     set(data.label(2),<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0209     set(data.button(2),<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0210     <span class="comment">%set(data.detail(end),'Visible','on');</span>
+0211 <span class="keyword">else</span>
+0212     set(data.panel(end),<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+0213     set(data.label(2),<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+0214     set(data.button(2),<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+0215     <span class="comment">%set(data.detail(end),'Visible','off');</span>
+0216 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

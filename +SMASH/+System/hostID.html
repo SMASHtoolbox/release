@@ -1,0 +1,78 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of hostID</title>
+  <meta name="keywords" content="hostID">
+  <meta name="description" content="hostID Determine computer's host ID">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../index.html">SMASHtoolbox</a> &gt; <a href="../index.html">+SMASH</a> &gt; <a href="index.html">+System</a> &gt; hostID.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../index.html"><img alt="<" border="0" src="../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+System&nbsp;<img alt=">" border="0" src="../../../../right.png"></a></td></tr></table>-->
+
+<h1>hostID
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>hostID Determine computer's host ID</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function value=hostID() </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> hostID Determine computer's host ID 
+
+ This function determines the host ID of the computer running MATLAB by
+ probing the operating system.  
+    value=hostID;
+
+ See also <a href="userdir.html" class="code" title="function location=userdir()">userdir</a>, <a href="username.html" class="code" title="function value=username()">username</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% hostID Determine computer's host ID</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This function determines the host ID of the computer running MATLAB by</span>
+0004 <span class="comment">% probing the operating system.</span>
+0005 <span class="comment">%    value=hostID;</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% See also userdir, username</span>
+0008 <span class="comment">%</span>
+0009 
+0010 <span class="comment">% created February 24, 2013 by Daniel Dolan (Sandia National Laboratories)</span>
+0011 <a name="_sub0" href="#_subfunctions" class="code">function value=hostID()</a>
+0012 
+0013 <span class="keyword">if</span> isunix
+0014     [~,result]=system(<span class="string">'hostname -s'</span>);
+0015     value=sscanf(result,<span class="string">'%s'</span>);
+0016 <span class="keyword">else</span>
+0017     [~,result]=system(<span class="string">'ipconfig /all'</span>);
+0018     start=regexpi(result,<span class="string">'Host Name'</span>);
+0019     result=result(start:end);
+0020     start=regexp(result,<span class="string">':'</span>);
+0021     start=start(1)+1;
+0022     value=sscanf(result(start:end),<span class="string">'%s'</span>,1);
+0023 <span class="keyword">end</span>
+0024 
+0025 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

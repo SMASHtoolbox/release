@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of screen</title>
+  <meta name="keywords" content="screen">
+  <meta name="description" content="probe primary monitor size">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">SIRHEN</a> &gt; <a href="index.html">private</a> &gt; screen.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/SIRHEN/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>screen
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>probe primary monitor size</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function [fig,button,haxes,hp]=screen(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> probe primary monitor size</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="MinimalFigure.html" class="code" title="function varargout=MinimalFigure(varargin)">MinimalFigure</a>	MinimalFigure: create a minimalistic figure useful for GUIs</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="AnalysisScreen.html" class="code" title="function fig=AnalysisScreen(prevfig)">AnalysisScreen</a>	allocate mising input</li><li><a href="SelectionScreen.html" class="code" title="function fig=SelectionScreen(prevfig)">SelectionScreen</a>	allocate mising input</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function ResizeFcn(fig,varargin)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [fig,button,haxes,hp]=screen(varargin)</a>
+0002 
+0003 <span class="comment">% probe primary monitor size</span>
+0004 monpos=get(0,<span class="string">'MonitorPositions'</span>);
+0005 diagonal=monpos(:,3).^2+monpos(:,4).^2;
+0006 [~,keep]=max(diagonal);
+0007 monLx=monpos(keep,3);
+0008 monLy=monpos(keep,4);
+0009 fig=<a href="MinimalFigure.html" class="code" title="function varargout=MinimalFigure(varargin)">MinimalFigure</a>(<span class="string">'Visible'</span>,<span class="string">'off'</span>,<span class="string">'units'</span>,<span class="string">'pixels'</span>,<span class="keyword">...</span>
+0010     <span class="string">'NumberTitle'</span>,<span class="string">'off'</span>,<span class="string">'IntegerHandle'</span>,<span class="string">'off'</span>,varargin{:});
+0011 Ly=0.80*monLy;
+0012 Lx=min([(8.5/11)*Ly 0.80*monLx]);
+0013 <span class="comment">%x0=monpos(1)+(monLx-Lx)/2;</span>
+0014 <span class="comment">%y0=monpos(2)+(monLy-Ly)/2;</span>
+0015 set(fig,<span class="string">'Position'</span>,[0 0 Lx Ly]);
+0016 movegui(fig,<span class="string">'center'</span>);
+0017 
+0018 <span class="comment">% create control buttons</span>
+0019 button(1)=uicontrol(<span class="string">'Style'</span>,<span class="string">'pushbutton'</span>,<span class="string">'String'</span>,<span class="string">' &lt; Previous '</span>,<span class="keyword">...</span>
+0020     <span class="string">'Tag'</span>,<span class="string">'previous'</span>,<span class="string">'Units'</span>,<span class="string">'pixels'</span>);
+0021 button(2)=uicontrol(<span class="string">'Style'</span>,<span class="string">'pushbutton'</span>,<span class="string">'String'</span>,<span class="string">' Next &gt; '</span>,<span class="keyword">...</span>
+0022     <span class="string">'Tag'</span>,<span class="string">'next'</span>,<span class="string">'Units'</span>,<span class="string">'pixels'</span>);
+0023 
+0024 width=0;
+0025 height=0;
+0026 <span class="keyword">for</span> n=1:numel(button)
+0027     extent=get(button(n),<span class="string">'Extent'</span>);
+0028     width=max([width 1.25*extent(3)]);
+0029     height=max([height 1.250*extent(4)]);
+0030 <span class="keyword">end</span>
+0031 set(button,<span class="string">'Position'</span>,[1 1 width height]);
+0032 
+0033 <span class="comment">% create plots</span>
+0034 hp=uipanel(<span class="string">'Parent'</span>,fig,<span class="string">'Tag'</span>,<span class="string">'plots'</span>,<span class="string">'Units'</span>,<span class="string">'pixels'</span>,<span class="keyword">...</span>
+0035     <span class="string">'BackGroundColor'</span>,get(fig,<span class="string">'Color'</span>),<span class="keyword">...</span>
+0036     <span class="string">'BorderType'</span>,<span class="string">'none'</span>);
+0037 haxes(1)=axes(<span class="string">'Parent'</span>,hp,<span class="string">'Box'</span>,<span class="string">'on'</span>,<span class="keyword">...</span>
+0038     <span class="string">'Units'</span>,<span class="string">'normalized'</span>,<span class="string">'OuterPosition'</span>,[0 1/2 1 1/2]);
+0039 haxes(2)=axes(<span class="string">'Parent'</span>,hp,<span class="string">'Box'</span>,<span class="string">'on'</span>,<span class="keyword">...</span>
+0040     <span class="string">'Units'</span>,<span class="string">'normalized'</span>,<span class="string">'OuterPosition'</span>,[0 0/2 1 1/2]);
+0041 <span class="comment">%linkaxes(ha,'x');</span>
+0042 
+0043 
+0044 <span class="comment">% final stuff</span>
+0045 set(fig,<span class="string">'ResizeFcn'</span>,@<a href="#_sub1" class="code" title="subfunction ResizeFcn(fig,varargin)">ResizeFcn</a>);
+0046 
+0047 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0048 <span class="comment">% figure resize function %</span>
+0049 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0050 <a name="_sub1" href="#_subfunctions" class="code">function ResizeFcn(fig,varargin)</a>
+0051 
+0052 <span class="comment">% get size information</span>
+0053 figpos=get(fig,<span class="string">'Position'</span>);
+0054 h=guihandles(fig);
+0055 haxes=findobj(fig,<span class="string">'Type'</span>,<span class="string">'axes'</span>);
+0056 
+0057 pos_prev=get(h.previous,<span class="string">'Position'</span>);
+0058 pos_next=get(h.next,<span class="string">'Position'</span>);
+0059 
+0060 <span class="comment">% enforce minimum size</span>
+0061 Lxmin=2*(pos_prev(3)+pos_next(3));
+0062 <span class="keyword">if</span> figpos(3)&lt;Lxmin
+0063     figpos(3)=Lxmin;
+0064 <span class="keyword">end</span>
+0065 
+0066 <span class="comment">%Lymin=10*pos_prev(4);</span>
+0067 Lymin=9*Lxmin/16;
+0068 <span class="keyword">if</span> figpos(4)&lt;Lymin
+0069     dy=Lymin-figpos(4);
+0070     figpos(2)=figpos(2)-dy;
+0071     figpos(4)=Lymin;
+0072 <span class="keyword">end</span>
+0073 set(fig,<span class="string">'Position'</span>,figpos);
+0074 
+0075 <span class="comment">% position buttons and panel</span>
+0076 margin=pos_prev(4)/2;
+0077 
+0078 x0=margin;
+0079 y0=margin;
+0080 pos=[x0 y0 pos_prev(3:4)];
+0081 set(h.previous,<span class="string">'Position'</span>,pos)
+0082 
+0083 x0=figpos(3)-margin-pos_next(3);
+0084 pos=[x0 y0 pos_next(3:4)];
+0085 set(h.next,<span class="string">'Position'</span>,pos)
+0086 
+0087 <span class="comment">%y0=0;</span>
+0088 y0=margin+pos_next(4);
+0089 Ly=figpos(4)-y0;
+0090 pos=[0 y0 figpos(3) Ly];
+0091 set(h.plots,<span class="string">'Position'</span>,pos);</pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

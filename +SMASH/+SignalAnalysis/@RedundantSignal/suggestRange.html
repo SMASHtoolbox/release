@@ -1,0 +1,182 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of suggestRange</title>
+  <meta name="keywords" content="suggestRange">
+  <meta name="description" content="suggestRange Suggest measurement ranges">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="../../index.html">+SMASH</a> &gt; <a href="../index.html">+SignalAnalysis</a> &gt; <a href="index.html">@RedundantSignal</a> &gt; suggestRange.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+SignalAnalysis/@RedundantSignal&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>suggestRange
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>suggestRange Suggest measurement ranges</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function range=suggestRange(object,bound,configuration,overlap) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> suggestRange Suggest measurement ranges
+
+ This method suggest measurement ranges for specified source bound using
+ the current parameter state.
+    range=suggestRange(object,bound);
+ The input &quot;bound&quot; must be a two-element arry defining the maximumim and
+ minimum values of the source signal.  The output &quot;range&quot; is a two-column
+ table of min/max values for each measurement.
+
+ The default suggestion interleaves the measurements across the source
+ bound, accounting for measurement scaling/shifting.  Specifying a third
+ argument:
+    range=suggestRange(object,bound,configuration);
+ controls the suggested configuration.
+    -'interleave' is the default value.
+    -'bottom', 'center', and 'top' stagger measurements relative to
+    the source bound.  
+ All measurements start at the lower bound for 'bottom' configuration;
+ maximum values increase until last measurement reaches the upper bound.
+ 'top' configuration is the exact opposite of 'bottom': all measurements
+ start at the upper bound and sequentially span downward to the lower
+ bound. 'middle' configuration centers all measurements on the source
+ bound with symmetrically increasing ranges.
+
+ Interleaved ranges overlap one another by 10%.  Alternate values may be
+ specified with a fourth input.
+    range=suggestRange(object,bound,configuration,overlap);
+ The input &quot;overlap&quot; must be greater than 0 and less than or equal to 1.
+
+ NOTE: suggestions may not represent valid measurement ranges in an actual
+ recording sytem!
+
+ See also <a href="RedundantSignal.html" class="code" title="">RedundantSignal</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% suggestRange Suggest measurement ranges</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This method suggest measurement ranges for specified source bound using</span>
+0004 <span class="comment">% the current parameter state.</span>
+0005 <span class="comment">%    range=suggestRange(object,bound);</span>
+0006 <span class="comment">% The input &quot;bound&quot; must be a two-element arry defining the maximumim and</span>
+0007 <span class="comment">% minimum values of the source signal.  The output &quot;range&quot; is a two-column</span>
+0008 <span class="comment">% table of min/max values for each measurement.</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% The default suggestion interleaves the measurements across the source</span>
+0011 <span class="comment">% bound, accounting for measurement scaling/shifting.  Specifying a third</span>
+0012 <span class="comment">% argument:</span>
+0013 <span class="comment">%    range=suggestRange(object,bound,configuration);</span>
+0014 <span class="comment">% controls the suggested configuration.</span>
+0015 <span class="comment">%    -'interleave' is the default value.</span>
+0016 <span class="comment">%    -'bottom', 'center', and 'top' stagger measurements relative to</span>
+0017 <span class="comment">%    the source bound.</span>
+0018 <span class="comment">% All measurements start at the lower bound for 'bottom' configuration;</span>
+0019 <span class="comment">% maximum values increase until last measurement reaches the upper bound.</span>
+0020 <span class="comment">% 'top' configuration is the exact opposite of 'bottom': all measurements</span>
+0021 <span class="comment">% start at the upper bound and sequentially span downward to the lower</span>
+0022 <span class="comment">% bound. 'middle' configuration centers all measurements on the source</span>
+0023 <span class="comment">% bound with symmetrically increasing ranges.</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">% Interleaved ranges overlap one another by 10%.  Alternate values may be</span>
+0026 <span class="comment">% specified with a fourth input.</span>
+0027 <span class="comment">%    range=suggestRange(object,bound,configuration,overlap);</span>
+0028 <span class="comment">% The input &quot;overlap&quot; must be greater than 0 and less than or equal to 1.</span>
+0029 <span class="comment">%</span>
+0030 <span class="comment">% NOTE: suggestions may not represent valid measurement ranges in an actual</span>
+0031 <span class="comment">% recording sytem!</span>
+0032 <span class="comment">%</span>
+0033 <span class="comment">% See also RedundantSignal</span>
+0034 <span class="comment">%</span>
+0035 
+0036 <span class="comment">%</span>
+0037 <span class="comment">% created February 2, 2019 by Daniel Dolan (Sandia National Laboratories)</span>
+0038 <span class="comment">%</span>
+0039 <a name="_sub0" href="#_subfunctions" class="code">function range=suggestRange(object,bound,configuration,overlap)</a>
+0040 
+0041 <span class="comment">% manage input</span>
+0042 assert(nargin &gt;= 2,<span class="string">'ERROR: insufficient input'</span>);
+0043 assert(isnumeric(bound) &amp;&amp; (numel(bound) == 2),<span class="string">'ERROR: invalid source bound'</span>);
+0044 bound=sort(bound);
+0045 assert(diff(bound) &gt; 0,<span class="string">'ERROR: invalid source bound'</span>);
+0046 
+0047 <span class="keyword">if</span> (nargin &lt; 3) || isempty(configuration)
+0048     configuration=<span class="string">'interleave'</span>;
+0049 <span class="keyword">else</span>
+0050     assert(ischar(configuration),<span class="string">'ERROR: invalid configuration'</span>);
+0051 <span class="keyword">end</span>
+0052 
+0053 <span class="keyword">if</span> (nargin &lt; 4) || isempty(overlap)
+0054     <span class="comment">%overlap=0.10;</span>
+0055     overlap=0.25;
+0056 <span class="keyword">else</span>
+0057     assert(isnumeric(overlap) &amp;&amp; isscalar(overlap) &amp;&amp; (overlap &gt; 0) &amp;&amp; (overlap &lt;= 1),<span class="keyword">...</span>
+0058         <span class="string">'ERROR: invalid overlap'</span>);
+0059 <span class="keyword">end</span>
+0060 
+0061 <span class="comment">% calculate source ranges</span>
+0062 span=bound(2)-bound(1);
+0063 range=nan(object.NumberSignals,2);
+0064 <span class="keyword">switch</span> lower(configuration)
+0065     <span class="keyword">case</span> <span class="string">'interleave'</span>
+0066         M=object.NumberSignals;
+0067         forward=span*(1+(M-1)*overlap)/M;
+0068         backward=overlap*span;
+0069         <span class="keyword">for</span> m=1:object.NumberSignals
+0070             <span class="keyword">if</span> m == 1
+0071                 range(m,1)=bound(1);
+0072             <span class="keyword">else</span>
+0073                 range(m,1)=range(m-1,2)-backward;
+0074             <span class="keyword">end</span>
+0075             range(m,2)=range(m,1)+forward;
+0076         <span class="keyword">end</span>
+0077     <span class="keyword">case</span> <span class="string">'bottom'</span>
+0078         range(:,1)=bound(1);
+0079         <span class="keyword">for</span> m=1:object.NumberSignals
+0080             range(m,2)=range(m,1)+span/pow2(m-1);
+0081         <span class="keyword">end</span>
+0082     <span class="keyword">case</span> <span class="string">'center'</span>
+0083         center=(bound(1)+bound(2))/2;
+0084         <span class="keyword">for</span> m=1:object.NumberSignals
+0085             shift=span/pow2(m-1)/2;
+0086             range(m,1)=center-shift;
+0087             range(m,2)=center+shift;
+0088         <span class="keyword">end</span>
+0089     <span class="keyword">case</span> <span class="string">'top'</span>
+0090         range(:,2)=bound(2);
+0091         <span class="keyword">for</span> m=1:object.NumberSignals
+0092             range(m,1)=range(m,2)-span/pow2(m-1);
+0093         <span class="keyword">end</span>        
+0094     <span class="keyword">otherwise</span>
+0095         error(<span class="string">'ERROR: &quot;%s&quot; is not a valid configuration'</span>,configuration);
+0096 <span class="keyword">end</span>
+0097 
+0098 <span class="comment">% transform source ranges to measurement ranges</span>
+0099 <span class="keyword">for</span> m=1:object.NumberSignals
+0100     range(m,:)=range(m,:)*object.Parameter(m,2)+object.Parameter(m,3);
+0101 <span class="keyword">end</span>
+0102 
+0103 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

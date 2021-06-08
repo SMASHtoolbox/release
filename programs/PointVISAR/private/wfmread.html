@@ -1,0 +1,472 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of wfmread</title>
+  <meta name="keywords" content="wfmread">
+  <meta name="description" content="wfmread : Read Tektronix binary data files">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">PointVISAR</a> &gt; <a href="index.html">private</a> &gt; wfmread.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/PointVISAR/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>wfmread
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>wfmread : Read Tektronix binary data files</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function [y,t,info,iover,iunder]=wfmread(filename) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> wfmread : Read Tektronix binary data files
+
+ This function is an updated version of wfmread.  The original version
+ (written by Daniel Dolan) supported the TDS XXX family of digitizers
+ (e.g., TDS 694).  Tektronix has since released various TDS XXXX models
+ (e.g., TDS 5000), which use a different binary file format; these files
+ can be read into MATLAB using wfm2read (written by Erik Benkler).  This
+ program can read files created by both digitizer families.
+
+ Usage:
+
+ Retrive vertical (y) and horizontal (t) data:
+  &gt;&gt;[y,t]=wfmread(filename);
+ If filename is omitted or empty, the user will be prompted for one with a
+ dialog box.
+
+ Retrieve (t,y) data along with record information (number points, etc.):
+  &gt;&gt;[y,t,info]=wfmread;</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="LoadSignals.html" class="code" title="function VisarData = LoadSignals(VisarData)">LoadSignals</a>	LOADSIGNALS   Loads raw signals into PointVISAR</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function [y,t,info]=wfmXXXread(filename,mode)</a></li><li><a href="#_sub2" class="code">function [y, t, info, ind_over, ind_under] = wfmXXXXread(filename, datapoints)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% wfmread : Read Tektronix binary data files</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This function is an updated version of wfmread.  The original version</span>
+0004 <span class="comment">% (written by Daniel Dolan) supported the TDS XXX family of digitizers</span>
+0005 <span class="comment">% (e.g., TDS 694).  Tektronix has since released various TDS XXXX models</span>
+0006 <span class="comment">% (e.g., TDS 5000), which use a different binary file format; these files</span>
+0007 <span class="comment">% can be read into MATLAB using wfm2read (written by Erik Benkler).  This</span>
+0008 <span class="comment">% program can read files created by both digitizer families.</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% Usage:</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% Retrive vertical (y) and horizontal (t) data:</span>
+0013 <span class="comment">%  &gt;&gt;[y,t]=wfmread(filename);</span>
+0014 <span class="comment">% If filename is omitted or empty, the user will be prompted for one with a</span>
+0015 <span class="comment">% dialog box.</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">% Retrieve (t,y) data along with record information (number points, etc.):</span>
+0018 <span class="comment">%  &gt;&gt;[y,t,info]=wfmread;</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">%</span>
+0021 
+0022 <span class="comment">% created 2/18/2006 by Daniel Dolan</span>
+0023 <span class="comment">% updated 10/14/2008 by Daniel Dolan</span>
+0024 <span class="comment">%   -modified wfmXXXXread to handle WFM003 format (four density values</span>
+0025 <span class="comment">%    changed from uint32 to double precision)</span>
+0026 <span class="comment">%   -corrected a minor error in the time base calculation</span>
+0027 <span class="comment">% updated 5/28/2009 by Daniel Dolan</span>
+0028 <span class="comment">%   -revised logic to handle uint8 and int8 data types for WFM#003 format</span>
+0029 
+0030 <span class="comment">% updated 8/27/2009 by Daniel Dolan</span>
+0031 
+0032 <span class="comment">%   -implemented a graceful logic to handle non-Tektronix WFM files (empty output)</span>
+0033 <a name="_sub0" href="#_subfunctions" class="code">function [y,t,info,iover,iunder]=wfmread(filename)</a>
+0034 
+0035 <span class="comment">% input check</span>
+0036 <span class="keyword">if</span> nargin&lt;1
+0037     filename=<span class="string">''</span>;
+0038 <span class="keyword">end</span>
+0039 <span class="keyword">if</span> isempty(filename)
+0040     [fname,pname]=uigetfile(<span class="string">'*.wfm;*.WFM'</span>,<span class="string">'Choose Tektronix WFM file'</span>);
+0041     filename=[pname fname];
+0042 <span class="keyword">end</span>
+0043 <span class="keyword">if</span> exist(filename,<span class="string">'file'</span>)~=2
+0044     id=<span class="string">'wfmread:FileNotFound'</span>;
+0045     message=<span class="string">'File error: \n \t %s \n \t does not exist!\n'</span>;
+0046     error(id,message,filename);
+0047 <span class="keyword">end</span>
+0048 
+0049 <span class="comment">% make sure file can be opened</span>
+0050 fid=fopen(filename,<span class="string">'rb'</span>);
+0051 <span class="keyword">if</span> fid==-1
+0052     id=<span class="string">'wfmread:FileNotOpened'</span>;
+0053     message=<span class="string">'File error: \n \t %s \n \t cannot be opened!\n'</span>;
+0054     error(id,message,filename);
+0055 <span class="keyword">end</span>
+0056 
+0057 <span class="comment">% call reader function based on the first few bytes</span>
+0058 startA=char(fread(fid,8,<span class="string">'uchar'</span>)');
+0059 frewind(fid)
+0060 startB=dec2hex(fread(fid,1,<span class="string">'uint16'</span>),4);
+0061 fclose(fid);
+0062 <span class="keyword">if</span> strfind(startA,<span class="string">'LLWFM'</span>)
+0063     [y,t,info]=<a href="#_sub1" class="code" title="subfunction [y,t,info]=wfmXXXread(filename,mode)">wfmXXXread</a>(filename);
+0064     <span class="keyword">if</span> nargout&gt;3
+0065         warning(<span class="string">'Over/under-ranging not supported for TDS XXX data'</span>);
+0066         iover=repmat(false,size(y));
+0067         iunder=repmat(false,size(x));
+0068     <span class="keyword">end</span>
+0069 <span class="keyword">elseif</span> strcmp(startB,<span class="string">'0F0F'</span>) || strcmp(startB,<span class="string">'F0F0'</span>)
+0070     [y,t,info,iover,iunder]=<a href="#_sub2" class="code" title="subfunction [y, t, info, ind_over, ind_under] = wfmXXXXread(filename, datapoints)">wfmXXXXread</a>(filename);
+0071 <span class="keyword">else</span> <span class="comment">% this is not a Tektronix WFM file</span>
+0072     [y,t,info,iover,iunder]=deal([]);
+0073 <span class="keyword">end</span>
+0074 
+0075 <span class="keyword">end</span> 
+0076 
+0077 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0078 <a name="_sub1" href="#_subfunctions" class="code">function [y,t,info]=wfmXXXread(filename,mode)</a>
+0079     
+0080 [fp,message]=fopen(filename,<span class="string">'rb'</span>,<span class="string">'b'</span>); <span class="comment">% big-endian format</span>
+0081 <span class="keyword">if</span> fp==-1
+0082     error([<span class="string">'Unable to open file: '</span> filename]);
+0083 <span class="keyword">end</span>
+0084 
+0085 <span class="comment">% main header</span>
+0086 a=fread(fp,1,<span class="string">'uchar'</span>);
+0087 <span class="keyword">if</span> char(a)==<span class="string">':'</span>
+0088    start=fread(fp,7,<span class="string">'uchar'</span>);
+0089 <span class="keyword">else</span>
+0090    start=fread(fp,6,<span class="string">'uchar'</span>);
+0091 <span class="keyword">end</span>
+0092 start=char([a start']);
+0093 count_bytes=str2num(char(fread(fp,1,<span class="string">'uchar'</span>))'); <span class="comment">% number of bytes in count</span>
+0094 bytes=str2num(char(fread(fp,count_bytes,<span class="string">'uchar'</span>))'); <span class="comment">% bytes to end of file</span>
+0095 magic_num=fread(fp,1,<span class="string">'int32'</span>); <span class="comment">% &quot;magic number&quot;</span>
+0096 length=fread(fp,1,<span class="string">'int32'</span>); <span class="comment">% length of header+curve data</span>
+0097 
+0098 <span class="comment">% reference header</span>
+0099 vertPos=fread(fp,1,<span class="string">'double'</span>);
+0100 horzPos=fread(fp,1,<span class="string">'double'</span>);
+0101 vertZoom=fread(fp,1,<span class="string">'double'</span>);
+0102 horzZoom=fread(fp,1,<span class="string">'double'</span>);
+0103 
+0104 <span class="comment">% waveform header</span>
+0105 acqmode=fread(fp,1,<span class="string">'int16'</span>);
+0106 minMaxFormat=fread(fp,1,<span class="string">'int16'</span>);
+0107 duration=fread(fp,1,<span class="string">'double'</span>);
+0108 vertCpl=fread(fp,1,<span class="string">'int16'</span>);
+0109 horzUnit=fread(fp,1,<span class="string">'int16'</span>);
+0110 horzScalePerPoint=fread(fp,1,<span class="string">'double'</span>);
+0111 vertUnit=fread(fp,1,<span class="string">'int16'</span>);
+0112 vertOffset=fread(fp,1,<span class="string">'double'</span>);
+0113 vertPos=fread(fp,1,<span class="string">'double'</span>);
+0114 vertGain=fread(fp,1,<span class="string">'double'</span>);
+0115 <span class="comment">%recordLength=fread(fp,1,'uint64');</span>
+0116 recordLength=fread(fp,1,<span class="string">'uint32'</span>);
+0117 trigPos=fread(fp,1,<span class="string">'int16'</span>);
+0118 wfmHeaderVersion=fread(fp,1,<span class="string">'int16'</span>);
+0119 sampleDensity=fread(fp,1,<span class="string">'int16'</span>);
+0120 burstSegmentLength=fread(fp,1,<span class="string">'int16'</span>);
+0121 sourceWfm=fread(fp,1,<span class="string">'int16'</span>);
+0122 video1=fread(fp,3,<span class="string">'int16'</span>);
+0123 video2=fread(fp,1,<span class="string">'double'</span>);
+0124 video3=fread(fp,1,<span class="string">'int16'</span>);
+0125 
+0126 <span class="comment">% check to see extended header is present</span>
+0127 <span class="keyword">if</span> (length-2*recordLength-2*32)==196
+0128    <span class="comment">% do something (eventually)</span>
+0129 <span class="keyword">end</span>
+0130 
+0131 <span class="comment">% store important info</span>
+0132 info.nop=recordLength;
+0133 <span class="keyword">switch</span> horzUnit
+0134     <span class="keyword">case</span> 609
+0135         info.tunit=<span class="string">'volts'</span>;
+0136     <span class="keyword">case</span> 610
+0137         info.tunit=<span class="string">'seconds'</span>;
+0138         info.samplingrate=horzScalePerPoint;
+0139         info.duration=duration;
+0140 <span class="keyword">end</span>
+0141 <span class="keyword">switch</span> vertUnit
+0142     <span class="keyword">case</span> 609
+0143         info.yunit=<span class="string">'volts'</span>;
+0144     <span class="keyword">case</span> 610
+0145         info.yunit=<span class="string">'seconds'</span>;
+0146 <span class="keyword">end</span>
+0147 <span class="keyword">switch</span> vertCpl
+0148     <span class="keyword">case</span> 565
+0149         unit.ycoupling=<span class="string">'DC'</span>;
+0150     <span class="keyword">case</span> 566
+0151         unit.ycoupling=<span class="string">'AC'</span>;
+0152 <span class="keyword">end</span>
+0153 
+0154 <span class="comment">% extract the data</span>
+0155 preamble=fread(fp,16,<span class="string">'int16'</span>);
+0156 data=fread(fp,recordLength,<span class="string">'int16'</span>);
+0157 postamble=fread(fp,16,<span class="string">'int16'</span>);
+0158 checksum=fread(fp,1,<span class="string">'int16'</span>);
+0159 fclose(fp);
+0160 
+0161 <span class="comment">% calculate thet and y data series</span>
+0162 ii=0:(recordLength-1);
+0163 t=(ii'-recordLength*trigPos/100)*horzScalePerPoint;
+0164 y=data*vertGain/25/256+vertOffset-vertPos*vertGain;
+0165 
+0166 <span class="keyword">end</span>
+0167 
+0168 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0169 <a name="_sub2" href="#_subfunctions" class="code">function [y, t, info, ind_over, ind_under] = wfmXXXXread(filename, datapoints)</a>
+0170    
+0171 <span class="keyword">if</span> nargin&lt;2
+0172     datapoints=[];
+0173 <span class="keyword">end</span>
+0174 
+0175 [fid,message]=fopen(filename);
+0176 
+0177 <span class="comment">%read the waveform static file info</span>
+0178 byte_order_verification = dec2hex(fread(fid,1,<span class="string">'uint16'</span>),4);
+0179 <span class="keyword">if</span> byte_order_verification == <span class="string">'0F0F'</span>
+0180     byteorder=<span class="string">'l'</span>; <span class="comment">% little-endian byte order</span>
+0181 <span class="keyword">else</span> 
+0182     byteorder=<span class="string">'b'</span>; <span class="comment">% big-endian byte order</span>
+0183 <span class="keyword">end</span>
+0184 versioning_number = char(fread(fid,8,<span class="string">'*char'</span>,byteorder)');
+0185 <span class="keyword">if</span> strcmp(versioning_number,<span class="string">':WFM#003'</span>)
+0186     version3=true;
+0187 <span class="keyword">else</span>
+0188     version3=false;
+0189 <span class="keyword">end</span>
+0190 
+0191 num_digits_in_byte_count = fread(fid,1,<span class="string">'*uint8'</span>,byteorder);
+0192 num_bytes_to_EOF = fread(fid,1,<span class="string">'*int32'</span>,byteorder);
+0193 num_bytes_per_point = fread(fid,1,<span class="string">'uint8'</span>,byteorder); <span class="comment">%do not convert to same type, since required as double later</span>
+0194 byte_offset_to_beginning_of_curve_buffer = fread(fid,1,<span class="string">'*uint32'</span>,byteorder);
+0195 horizontal_zoom_scale_factor = fread(fid,1,<span class="string">'*int32'</span>,byteorder);
+0196 horizontal_zoom_position = fread(fid,1,<span class="string">'*float32'</span>,byteorder);
+0197 vertical_zoom_scale_factor = fread(fid,1,<span class="string">'*double'</span>,byteorder);
+0198 vertical_zoom_position = fread(fid,1,<span class="string">'*float32'</span>,byteorder);
+0199 waveform_label = char(fread(fid,32,<span class="string">'*char'</span>,byteorder)');
+0200 N = fread(fid,1,<span class="string">'*uint32'</span>,byteorder);
+0201 size_of_waveform_header = fread(fid,1,<span class="string">'*uint16'</span>,byteorder);
+0202 
+0203 <span class="comment">%read waveform header</span>
+0204 setType = fread(fid,4,<span class="string">'*int8'</span>,byteorder); 
+0205 wfmCnt = fread(fid,1,<span class="string">'*uint32'</span>,byteorder); 
+0206 fread(fid,24,<span class="string">'char'</span>,byteorder); <span class="comment">%skip bytes 86 to 109 (not for use)</span>
+0207 wfm_update_spec_count = fread(fid,1,<span class="string">'*uint32'</span>,byteorder); 
+0208 imp_dim_ref_count = fread(fid,1,<span class="string">'*uint32'</span>,byteorder); 
+0209 exp_dim_ref_count = fread(fid,1,<span class="string">'*uint32'</span>,byteorder); 
+0210 data_type = fread(fid,4,<span class="string">'*int8'</span>,byteorder);  
+0211 fread(fid,16,<span class="string">'char'</span>,byteorder); <span class="comment">%skip bytes 126 to 141 (not for use)</span>
+0212 curve_ref_count = fread(fid,1,<span class="string">'*uint32'</span>,byteorder);
+0213 num_req_fast_frames = fread(fid,1,<span class="string">'*uint32'</span>,byteorder);
+0214 num_acq_fast_frames = fread(fid,1,<span class="string">'*uint32'</span>,byteorder);
+0215 <span class="comment">%There's a misprinting in the SDK article, the &quot;:&quot; at the beginning of version number string is missing.</span>
+0216 <span class="comment">%read optional entry in WFM#002 (and higher?) file format:</span>
+0217 <span class="keyword">if</span> sscanf(versioning_number,<span class="string">':WFM#%3d'</span>)&gt;1 <span class="comment">% see footnote 6 in SDK Article concerning TDS5000B scopes and version number 002</span>
+0218    summary_frame_type = fread(fid,1,<span class="string">'*uint16'</span>,byteorder);
+0219 <span class="keyword">end</span>                                       
+0220 pixmap_display_format = fread(fid,4,<span class="string">'*int8'</span>,byteorder); 
+0221 pixmap_max_value = fread(fid,1,<span class="string">'uint64'</span>,byteorder); <span class="comment">%storage in a uint64 variable does not work. Uses only double. Bug in Matlab?</span>
+0222 
+0223 <span class="comment">%explicit dimension 1</span>
+0224 ed1.dim_scale = fread(fid,1,<span class="string">'*double'</span>,byteorder);
+0225 ed1.dim_offset = fread(fid,1,<span class="string">'*double'</span>,byteorder);
+0226 ed1.dim_size = fread(fid,1,<span class="string">'*uint32'</span>,byteorder);
+0227 dummy=fread(fid,20,<span class="string">'*char'</span>,byteorder);
+0228 ed1.units = char(dummy(1:find(dummy==0)));         <span class="comment">%read units until NULL string (suggested by Tom Gaudette)</span>
+0229 ed1.dim_extent_min = fread(fid,1,<span class="string">'*double'</span>,byteorder);
+0230 ed1.dim_extent_max = fread(fid,1,<span class="string">'*double'</span>,byteorder);
+0231 ed1.dim_resolution = fread(fid,1,<span class="string">'*double'</span>,byteorder);
+0232 ed1.dim_ref_point = fread(fid,1,<span class="string">'*double'</span>,byteorder);
+0233 ed1.format = fread(fid,4,<span class="string">'*int8'</span>,byteorder);
+0234 ed1.storage_type = fread(fid,4,<span class="string">'*int8'</span>,byteorder); 
+0235 ed1.n_value = fread(fid,1,<span class="string">'*int32'</span>,byteorder);
+0236 ed1.over_range = fread(fid,1,<span class="string">'*int32'</span>,byteorder);
+0237 ed1.under_range = fread(fid,1,<span class="string">'*int32'</span>,byteorder);
+0238 ed1.high_range = fread(fid,1,<span class="string">'*int32'</span>,byteorder);
+0239 ed1.low_range = fread(fid,1,<span class="string">'*int32'</span>,byteorder);
+0240 ed1.user_scale = fread(fid,1,<span class="string">'*double'</span>,byteorder);
+0241 ed1.user_units = char(fread(fid,20,<span class="string">'*char'</span>,byteorder)');
+0242 ed1.user_offset = fread(fid,1,<span class="string">'*double'</span>,byteorder);
+0243 <span class="keyword">if</span> version3
+0244     ed1.point_density = fread(fid,1,<span class="string">'*double'</span>,byteorder);
+0245 <span class="keyword">else</span>
+0246     ed1.point_density = fread(fid,1,<span class="string">'*uint32'</span>,byteorder);
+0247 <span class="keyword">end</span>
+0248 
+0249 ed1.href = fread(fid,1,<span class="string">'*double'</span>,byteorder);
+0250 ed1.trig_delay = fread(fid,1,<span class="string">'*double'</span>,byteorder);
+0251 
+0252 <span class="comment">%explicit dimension 2</span>
+0253 ed2.dim_scale = fread(fid,1,<span class="string">'*double'</span>,byteorder);
+0254 ed2.dim_offset = fread(fid,1,<span class="string">'*double'</span>,byteorder);
+0255 ed2.dim_size = fread(fid,1,<span class="string">'*uint32'</span>,byteorder);
+0256 dummy=fread(fid,20,<span class="string">'*char'</span>,byteorder);
+0257 ed2.units = char(dummy(1:find(dummy==0)));         <span class="comment">%read units until NULL string (suggested by Tom Gaudette)</span>
+0258 ed2.dim_extent_min = fread(fid,1,<span class="string">'*double'</span>,byteorder);
+0259 ed2.dim_extent_max = fread(fid,1,<span class="string">'*double'</span>,byteorder);
+0260 ed2.dim_resolution = fread(fid,1,<span class="string">'*double'</span>,byteorder);
+0261 ed2.dim_ref_point = fread(fid,1,<span class="string">'*double'</span>,byteorder);
+0262 ed2.format = fread(fid,4,<span class="string">'*int8'</span>,byteorder);
+0263 ed2.storage_type = fread(fid,4,<span class="string">'*int8'</span>,byteorder); 
+0264 ed2.n_value = fread(fid,1,<span class="string">'*int32'</span>,byteorder);
+0265 ed2.over_range = fread(fid,1,<span class="string">'*int32'</span>,byteorder);
+0266 ed2.under_range = fread(fid,1,<span class="string">'*int32'</span>,byteorder);
+0267 ed2.high_range = fread(fid,1,<span class="string">'*int32'</span>,byteorder);
+0268 ed2.low_range = fread(fid,1,<span class="string">'*int32'</span>,byteorder);
+0269 ed2.user_scale = fread(fid,1,<span class="string">'*double'</span>,byteorder);
+0270 ed2.user_units = char(fread(fid,20,<span class="string">'*char'</span>,byteorder)');
+0271 ed2.user_offset = fread(fid,1,<span class="string">'*double'</span>,byteorder);
+0272 <span class="keyword">if</span> version3
+0273     ed2.point_density = fread(fid,1,<span class="string">'*double'</span>,byteorder);
+0274 <span class="keyword">else</span>
+0275     ed2.point_density = fread(fid,1,<span class="string">'*uint32'</span>,byteorder);
+0276 <span class="keyword">end</span>
+0277 ed2.href = fread(fid,1,<span class="string">'*double'</span>,byteorder);
+0278 ed2.trig_delay = fread(fid,1,<span class="string">'*double'</span>,byteorder);
+0279 
+0280 <span class="comment">%implicit dimension 1</span>
+0281 id1.dim_scale = fread(fid,1,<span class="string">'*double'</span>,byteorder);
+0282 id1.dim_offset = fread(fid,1,<span class="string">'*double'</span>,byteorder);
+0283 id1.dim_size = fread(fid,1,<span class="string">'*uint32'</span>,byteorder);
+0284 id1.units = char(fread(fid,20,<span class="string">'*char'</span>,byteorder)');
+0285 id1.dim_extent_min = fread(fid,1,<span class="string">'*double'</span>,byteorder);
+0286 id1.dim_extent_max = fread(fid,1,<span class="string">'*double'</span>,byteorder);
+0287 id1.dim_resolution = fread(fid,1,<span class="string">'*double'</span>,byteorder);
+0288 id1.dim_ref_point = fread(fid,1,<span class="string">'*double'</span>,byteorder);
+0289 id1.spacing = fread(fid,1,<span class="string">'*uint32'</span>,byteorder);
+0290 id1.user_scale = fread(fid,1,<span class="string">'*double'</span>,byteorder);
+0291 id1.user_units = char(fread(fid,20,<span class="string">'*char'</span>,byteorder)');
+0292 id1.user_offset = fread(fid,1,<span class="string">'*double'</span>,byteorder);
+0293 <span class="keyword">if</span> version3
+0294     id1.point_density = fread(fid,1,<span class="string">'*double'</span>,byteorder);
+0295 <span class="keyword">else</span>
+0296     id1.point_density = fread(fid,1,<span class="string">'*uint32'</span>,byteorder);
+0297 <span class="keyword">end</span>
+0298 id1.href = fread(fid,1,<span class="string">'*double'</span>,byteorder);
+0299 id1.trig_delay = fread(fid,1,<span class="string">'*double'</span>,byteorder);
+0300 
+0301 <span class="comment">%implicit dimension 2</span>
+0302 id2.dim_scale = fread(fid,1,<span class="string">'*double'</span>,byteorder);
+0303 id2.dim_offset = fread(fid,1,<span class="string">'*double'</span>,byteorder);
+0304 id2.dim_size = fread(fid,1,<span class="string">'*uint32'</span>,byteorder);
+0305 id2.units = char(fread(fid,20,<span class="string">'*char'</span>,byteorder)');
+0306 id2.dim_extent_min = fread(fid,1,<span class="string">'*double'</span>,byteorder);
+0307 id2.dim_extent_max = fread(fid,1,<span class="string">'*double'</span>,byteorder);
+0308 id2.dim_resolution = fread(fid,1,<span class="string">'*double'</span>,byteorder);
+0309 id2.dim_ref_point = fread(fid,1,<span class="string">'*double'</span>,byteorder);
+0310 id2.spacing = fread(fid,1,<span class="string">'*uint32'</span>,byteorder);
+0311 id2.user_scale = fread(fid,1,<span class="string">'*double'</span>,byteorder);
+0312 id2.user_units = char(fread(fid,20,<span class="string">'*char'</span>,byteorder)');
+0313 id2.user_offset = fread(fid,1,<span class="string">'*double'</span>,byteorder);
+0314 <span class="keyword">if</span> version3
+0315     id2.point_density = fread(fid,1,<span class="string">'*double'</span>,byteorder);
+0316 <span class="keyword">else</span>
+0317     id2.point_density = fread(fid,1,<span class="string">'*uint32'</span>,byteorder);
+0318 <span class="keyword">end</span>
+0319 id2.href = fread(fid,1,<span class="string">'*double'</span>,byteorder);
+0320 id2.trig_delay = fread(fid,1,<span class="string">'*double'</span>,byteorder);
+0321 
+0322 <span class="comment">%time base 1</span>
+0323 tb1_real_point_spacing = fread(fid,1,<span class="string">'*uint32'</span>,byteorder);
+0324 tb1_sweep = fread(fid,4,<span class="string">'*int8'</span>,byteorder); 
+0325 tb1_type_of_base = fread(fid,4,<span class="string">'*int8'</span>,byteorder); 
+0326 
+0327 <span class="comment">%time base 2</span>
+0328 tb2_real_point_spacing = fread(fid,1,<span class="string">'*uint32'</span>,byteorder);
+0329 tb2_sweep = fread(fid,4,<span class="string">'*int8'</span>,byteorder); 
+0330 tb2_type_of_base = fread(fid,4,<span class="string">'*int8'</span>,byteorder); 
+0331 
+0332 <span class="comment">%wfm update specicfication</span>
+0333 real_point_offset = fread(fid,1,<span class="string">'*uint32'</span>,byteorder);
+0334 tt_offset = fread(fid,1,<span class="string">'*double'</span>,byteorder);
+0335 frac_sec = fread(fid,1,<span class="string">'*double'</span>,byteorder);
+0336 GMT_sec = fread(fid,1,<span class="string">'*int32'</span>,byteorder);
+0337 
+0338 <span class="comment">%wfm curve information</span>
+0339 state_flags = fread(fid,1,<span class="string">'*int32'</span>,byteorder); 
+0340 <span class="comment">%There's a misprinting in the SDK article here:</span>
+0341 <span class="comment">%The field type of &quot;state_flags&quot; is &quot;long&quot; (4 bytes) instead of &quot;double&quot; (8 bytes)</span>
+0342 <span class="comment">%The offset values starting from 820 (&quot;end of curve buffer offset&quot;) are printed incorrectly, too.</span>
+0343 type_of_checksum = fread(fid,4,<span class="string">'*int8'</span>,byteorder); 
+0344 checksum = fread(fid,1,<span class="string">'*int16'</span>,byteorder); 
+0345 precharge_start_offset = fread(fid,1,<span class="string">'*uint32'</span>,byteorder);
+0346 data_start_offset = fread(fid,1,<span class="string">'uint32'</span>,byteorder); <span class="comment">%do not convert to same type, since required as double later</span>
+0347 postcharge_start_offset = fread(fid,1,<span class="string">'uint32'</span>,byteorder); <span class="comment">%do not convert to same type, since required as double later</span>
+0348 postcharge_stop_offset = fread(fid,1,<span class="string">'*uint32'</span>,byteorder);
+0349 end_of_curve_buffer_offset = fread(fid,1,<span class="string">'*uint32'</span>,byteorder);
+0350 
+0351 <span class="comment">%In this first version of wfm2read I omit the implementation of fast frames and other complicated stuff and jump directly to the curve buffer</span>
+0352 offset = double(byte_offset_to_beginning_of_curve_buffer+data_start_offset);
+0353 
+0354 <span class="keyword">switch</span> ed1.format(1)
+0355     <span class="keyword">case</span> 0 
+0356         format=<span class="string">'*int16'</span>;
+0357     <span class="keyword">case</span> 1 
+0358         format=<span class="string">'*int32'</span>;
+0359     <span class="keyword">case</span> 2 
+0360         format=<span class="string">'*uint32'</span>;
+0361     <span class="keyword">case</span> 3 
+0362         format=<span class="string">'*uint64'</span>;  <span class="comment">%may not work properly. Bug in Matlab? Does not convert to uint64, but to double instead.</span>
+0363     <span class="keyword">case</span> 4 
+0364         format=<span class="string">'*float32'</span>;
+0365     <span class="keyword">case</span> 5 
+0366         format=<span class="string">'*float64'</span>;
+0367     <span class="keyword">case</span> 6
+0368         format=<span class="string">'*unit8'</span>;
+0369     <span class="keyword">case</span> 7
+0370         format=<span class="string">'*int8'</span>;
+0371     <span class="keyword">otherwise</span>
+0372         error([<span class="string">'invalid data format or error in file '</span> filename]);
+0373 <span class="keyword">end</span>
+0374 
+0375 <span class="comment">%read the curve buffer portion which is displayed on the scope only</span>
+0376 <span class="comment">%(i.e. drop precharge and postcharge points)</span>
+0377 nop=(postcharge_start_offset-data_start_offset)/num_bytes_per_point; <span class="comment">%number of data points</span>
+0378 <span class="keyword">if</span> nargin==2
+0379     nop = min(nop, datapoints); <span class="comment">% take only as many data points as set by optional input parameter, or all of them if datapoints is larger than number of data points in file</span>
+0380 <span class="keyword">end</span>
+0381 fseek(fid, offset,<span class="string">'bof'</span>);
+0382 values=double(fread(fid,nop,format,byteorder));<span class="comment">%read data values from curve buffer</span>
+0383 <span class="comment">%handling over- and underranged values</span>
+0384 ind_over=find(values==ed1.over_range); <span class="comment">%find indices of values that are larger than the AD measurement range (upper limit)</span>
+0385 ind_under=find(values&lt;=-ed1.over_range);<span class="comment">%find indices of values that are larger than the AD measurement range (lower limit)</span>
+0386 y = ed1.dim_offset + ed1.dim_scale *values;  <span class="comment">%scale data values to obtain in correct units</span>
+0387 fclose(fid);
+0388 <span class="comment">%t = id1.dim_offset + id1.dim_scale * (1:nop)';</span>
+0389 t =id1.dim_offset+id1.dim_scale*transpose(0:(nop-1));
+0390 
+0391 info.yunit = ed1.units;
+0392 info.tunit = id1.units;
+0393 info.yres = ed1.dim_resolution;
+0394 info.samplingrate = 1/id1.dim_scale;
+0395 info.nop = nop;
+0396 
+0397 <span class="comment">%print warning if there are wrong values because they are lying outside</span>
+0398 <span class="comment">%the AD converter digitization window:</span>
+0399 <span class="keyword">if</span> length(ind_over)
+0400    warning([int2str(length(ind_over)), <span class="string">' over range value(s) in file '</span> filename]);
+0401 <span class="keyword">end</span>
+0402 <span class="keyword">if</span> length(ind_under)
+0403    warning([int2str(length(ind_under)), <span class="string">' under range value(s) in file '</span> filename]);
+0404 <span class="keyword">end</span>
+0405 
+0406 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

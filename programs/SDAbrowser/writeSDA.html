@@ -1,0 +1,131 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of writeSDA</title>
+  <meta name="keywords" content="writeSDA">
+  <meta name="description" content="writeSDA Write archive records">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="index.html">SDAbrowser</a> &gt; writeSDA.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../index.html"><img alt="<" border="0" src="../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/SDAbrowser&nbsp;<img alt=">" border="0" src="../../../../right.png"></a></td></tr></table>-->
+
+<h1>writeSDA
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>writeSDA Write archive records</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function writeSDA(filename,label,varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> writeSDA Write archive records
+
+ This function writes records to a Sandia Data Archive (SDA) file.
+ Individual records can be created from any MATLAB variable using a text
+ label.
+    writeSDA(filename,label,variable);
+    writeSDA(filename,label,variable,description);
+    writeSDA(filename,label,variable,description,deflate);
+ The optional input &quot;description&quot; assocates a text description (of
+ arbitrary length) with the record.  The optional input &quot;deflate&quot; is an
+ integer from 0 to 9 that controls the lossless compression level.
+ NOTE: SDA records must have a unique label!  Specifying a label already
+ present in the archive will generate an error.
+
+ Calling this function with an asterisk:
+    writeSDA(filename,'*'); % no compression
+    writeSDA(filename,'*',deflate); % specify compression
+ writes every variable in the current workspace to the archive file.
+
+ Text and binary files can also be imported into the archive.
+    writeSDA(filename,'-import',insertfile); 
+    writeSDA(filename,'-import',insertfile,description);
+    writeSDA(filename,'-import',insertfile,description,deflate);
+
+ See also <a href="probeSDA.html" class="code" title="function varargout=probeSDA(filename)">probeSDA</a>, <a href="readSDA.html" class="code" title="function varargout=readSDA(filename,record)">readSDA</a>, <a href="SDAbrowser.html" class="code" title="function varargout=SDAbrowser(filename)">SDAbrowser</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% writeSDA Write archive records</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This function writes records to a Sandia Data Archive (SDA) file.</span>
+0004 <span class="comment">% Individual records can be created from any MATLAB variable using a text</span>
+0005 <span class="comment">% label.</span>
+0006 <span class="comment">%    writeSDA(filename,label,variable);</span>
+0007 <span class="comment">%    writeSDA(filename,label,variable,description);</span>
+0008 <span class="comment">%    writeSDA(filename,label,variable,description,deflate);</span>
+0009 <span class="comment">% The optional input &quot;description&quot; assocates a text description (of</span>
+0010 <span class="comment">% arbitrary length) with the record.  The optional input &quot;deflate&quot; is an</span>
+0011 <span class="comment">% integer from 0 to 9 that controls the lossless compression level.</span>
+0012 <span class="comment">% NOTE: SDA records must have a unique label!  Specifying a label already</span>
+0013 <span class="comment">% present in the archive will generate an error.</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% Calling this function with an asterisk:</span>
+0016 <span class="comment">%    writeSDA(filename,'*'); % no compression</span>
+0017 <span class="comment">%    writeSDA(filename,'*',deflate); % specify compression</span>
+0018 <span class="comment">% writes every variable in the current workspace to the archive file.</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% Text and binary files can also be imported into the archive.</span>
+0021 <span class="comment">%    writeSDA(filename,'-import',insertfile);</span>
+0022 <span class="comment">%    writeSDA(filename,'-import',insertfile,description);</span>
+0023 <span class="comment">%    writeSDA(filename,'-import',insertfile,description,deflate);</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">% See also probeSDA, readSDA, SDAbrowser</span>
+0026 <span class="comment">%</span>
+0027 
+0028 <span class="comment">%</span>
+0029 <span class="comment">% created February 3, 2017 by Daniel Dolan (Sandia National Laboratories)</span>
+0030 <span class="comment">%</span>
+0031 <a name="_sub0" href="#_subfunctions" class="code">function writeSDA(filename,label,varargin)</a>
+0032 
+0033 <span class="comment">% manage input</span>
+0034 assert(nargin &gt;= 2,<span class="string">'ERROR: insufficient input'</span>);
+0035 <span class="keyword">try</span>
+0036     archive=SMASH.FileAccess.SDAfile(filename);
+0037 <span class="keyword">catch</span> 
+0038     error(<span class="string">'ERROR: invalid archive file'</span>);
+0039 <span class="keyword">end</span>
+0040 
+0041 <span class="comment">% write requested record(s)</span>
+0042 <span class="keyword">if</span> (nargin==2) &amp;&amp; strcmp(label,<span class="string">'*'</span>)
+0043     <span class="keyword">if</span> nargin&lt;3
+0044         deflate=1;
+0045     <span class="keyword">else</span>
+0046         deflate=varargin{1};
+0047     <span class="keyword">end</span>
+0048     command=sprintf(<span class="string">'SMASH.FileAccess.workspace2sda(''%s'',%d)'</span>,<span class="keyword">...</span>
+0049         filename,deflate);
+0050     evalin(<span class="string">'caller'</span>,command);
+0051 <span class="keyword">elseif</span> strcmpi(label,<span class="string">'-import'</span>)
+0052     source=varargin{1};
+0053     assert(exist(source,<span class="string">'file'</span>)==2,<span class="string">'ERROR: insertion file not found'</span>);
+0054     import(archive,source,varargin{:});
+0055 <span class="keyword">else</span>
+0056     assert(nargin &gt;= 3,<span class="string">'ERROR: insufficient input'</span>);
+0057     insert(archive,label,varargin{:});
+0058 <span class="keyword">end</span>
+0059 
+0060 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

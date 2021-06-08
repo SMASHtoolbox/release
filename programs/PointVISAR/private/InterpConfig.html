@@ -1,0 +1,191 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of InterpConfig</title>
+  <meta name="keywords" content="InterpConfig">
+  <meta name="description" content="InterpConfig : interpret a configuration file">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">PointVISAR</a> &gt; <a href="index.html">private</a> &gt; InterpConfig.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/PointVISAR/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>InterpConfig
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>InterpConfig : interpret a configuration file</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function [data,status]=InterpConfig(data,filename) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> InterpConfig : interpret a configuration file</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="CreateRecord.html" class="code" title="function func=CreateRecord(type)">CreateRecord</a>	CreateRecord    Creates a single VISAR record with default empty fields</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="LoadConfig.html" class="code" title="function [data,status]=LoadConfig(filename)">LoadConfig</a>	LoadConfig  Loads a PointVISAR configuration file.</li><li><a href="MergeConfigs.html" class="code" title="function func=MergeConfigs()">MergeConfigs</a>	prompt the user for mutliple config files</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function func=NotesScanner(array)</a></li><li><a href="#_sub2" class="code">function [filename,status]=FilenameScanner(array,pathname)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% InterpConfig : interpret a configuration file</span>
+0002 
+0003 <span class="comment">% created 1/22/2007 by Daniel Dolan</span>
+0004 <a name="_sub0" href="#_subfunctions" class="code">function [data,status]=InterpConfig(data,filename)</a>
+0005 
+0006 status.exitmode=<span class="string">'normal'</span>;
+0007 status.message=<span class="string">''</span>;
+0008 pathname=fileparts(filename);
+0009 
+0010 numrecords=numel(data);
+0011 <span class="keyword">for</span> ii=1:numrecords
+0012     name=fieldnames(data{ii}); <span class="comment">% store specified fields</span>
+0013     record=<a href="CreateRecord.html" class="code" title="function func=CreateRecord(type)">CreateRecord</a>(data{ii}.Type); <span class="comment">% create default record</span>
+0014     name0=record.ParameterFields;
+0015     numfields=numel(name0);    
+0016     <span class="keyword">for</span> jj=1:numfields <span class="comment">% sweep through specifiable fields</span>
+0017         <span class="comment">% locate field name in record</span>
+0018         <span class="keyword">if</span> isfield(data{ii},name0{jj}) <span class="comment">% interpret configuration value</span>
+0019             value0=record.(name0{jj});
+0020             value=data{ii}.(name0{jj});
+0021             <span class="keyword">if</span> isnumeric(value0)
+0022                 value=sscanf(value,<span class="string">'%g'</span>);
+0023                 <span class="keyword">if</span> isempty(value)
+0024                     value=value0;
+0025                 <span class="keyword">end</span>
+0026             <span class="keyword">elseif</span> islogical(value0)
+0027                 value=logical(sscanf(value,<span class="string">'%g'</span>));
+0028             <span class="keyword">else</span>
+0029                 <span class="keyword">switch</span> name0{jj}
+0030                     <span class="keyword">case</span> <span class="string">'Notes'</span>
+0031                         value=<a href="#_sub1" class="code" title="subfunction func=NotesScanner(array)">NotesScanner</a>(value);                       
+0032                     <span class="keyword">case</span> <span class="string">'InputFiles'</span>
+0033                         [value,status]=<a href="#_sub2" class="code" title="subfunction [filename,status]=FilenameScanner(array,pathname)">FilenameScanner</a>(value,pathname);
+0034                     <span class="keyword">case</span> <span class="string">'OutputFile'</span>
+0035                         [value,status]=<a href="#_sub2" class="code" title="subfunction [filename,status]=FilenameScanner(array,pathname)">FilenameScanner</a>(value,pathname);
+0036                         <span class="comment">%if isempty(value)</span>
+0037                         <span class="comment">%    % do nothing</span>
+0038                         <span class="comment">%else</span>
+0039                         <span class="comment">%    value=value{1};</span>
+0040                         <span class="comment">%end</span>
+0041                     <span class="keyword">otherwise</span>
+0042                         value=sscanf(value,<span class="string">'%c'</span>);
+0043                 <span class="keyword">end</span>
+0044             <span class="keyword">end</span>
+0045             record.(name0{jj})=value;
+0046         <span class="keyword">end</span>
+0047         <span class="comment">% remove field name from list</span>
+0048         <span class="keyword">for</span> kk=1:numel(name)
+0049             <span class="keyword">if</span> strcmp(name{kk},name0{jj})
+0050                 name(kk)=[];
+0051                 <span class="keyword">break</span>
+0052             <span class="keyword">end</span>
+0053         <span class="keyword">end</span>
+0054     <span class="keyword">end</span>
+0055     <span class="comment">% warn user about unused fields</span>
+0056     <span class="keyword">for</span> kk=1:numel(name)
+0057         fprintf(<span class="string">'Unrecognized field &quot;%s&quot; ignored\n'</span>,name{kk});
+0058         data{ii}=rmfield(data{ii},name{kk});
+0059     <span class="keyword">end</span>
+0060     data{ii}=record; <span class="comment">% store interpreted record</span>
+0061 <span class="keyword">end</span>
+0062 
+0063 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0064 <a name="_sub1" href="#_subfunctions" class="code">function func=NotesScanner(array)</a>
+0065 
+0066 array=strtrim(array);
+0067 stop=strfind(array,sprintf(<span class="string">'\n'</span>));
+0068 start=[1 (stop+1)];
+0069 stop=[(stop-1) numel(array)];
+0070 N=numel(start);
+0071 func=cell(1,N);
+0072 <span class="keyword">for</span> kk=1:N
+0073     func{kk}=strtrim(array(start(kk):stop(kk)));
+0074 <span class="keyword">end</span>
+0075 
+0076 
+0077 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0078 <a name="_sub2" href="#_subfunctions" class="code">function [filename,status]=FilenameScanner(array,pathname)</a>
+0079 
+0080 filename={};
+0081 status.exitmode=<span class="string">'normal'</span>;
+0082 status.message=<span class="string">''</span>;
+0083 olddir=pwd;
+0084 
+0085 done=false;
+0086 <span class="keyword">while</span> ~done  
+0087     <span class="comment">% try to read file name</span>
+0088     [fname,count,errmsg,next]=sscanf(array,<span class="string">'%s'</span>,1);
+0089     <span class="comment">% handle empty field</span>
+0090     <span class="keyword">if</span> isempty(fname) 
+0091         done=true;
+0092         <span class="keyword">continue</span>
+0093     <span class="keyword">end</span>
+0094     <span class="comment">% handle quotes</span>
+0095     quotes=strfind(fname,<span class="string">''''</span>);
+0096     <span class="keyword">switch</span> numel(quotes)
+0097         <span class="keyword">case</span> 0 <span class="comment">% space free scan</span>
+0098             <span class="comment">% nothing needs to be done</span>
+0099         <span class="keyword">case</span> 1 <span class="comment">% space(s) in file name</span>
+0100             quotes=strfind(array,<span class="string">''''</span>);
+0101             <span class="keyword">if</span> numel(quotes)&lt;2
+0102                 status.exitmode=<span class="string">'error'</span>;
+0103                 status.message=<span class="keyword">...</span>
+0104                     sprintf(<span class="string">'Unmatched quotes in file name: %s'</span>,fname);
+0105                 fprintf(<span class="string">'%s\n'</span>,status.message);
+0106                 <span class="keyword">return</span>
+0107             <span class="keyword">end</span>
+0108             fname=array(quotes(1):quotes(2));
+0109             fname=fname(2:end-1);
+0110             next=quotes(2)+1;
+0111         <span class="keyword">case</span> 2 <span class="comment">% space free scan with matching quotes</span>
+0112             fname=fname(2:end-1);
+0113         <span class="keyword">otherwise</span>
+0114             status.exitmode=<span class="string">'error'</span>;
+0115             status.message=sprintf(<span class="string">'Too many quotes in file name: %s'</span>,fname);
+0116             fprinf(<span class="string">'%s\n'</span>,status.message);
+0117             <span class="keyword">return</span>
+0118     <span class="keyword">end</span>
+0119     <span class="comment">% replace inappropriate slashes</span>
+0120     fname((fname==<span class="string">'\'</span>) | (fname==<span class="string">'/'</span>))=filesep;    
+0121     <span class="comment">% convert to absolute file name</span>
+0122     cd(pathname);
+0123     [local,fname,ext]=fileparts(fname);
+0124     <span class="keyword">if</span> isempty(local)
+0125         local=olddir;
+0126     <span class="keyword">end</span>
+0127     <span class="keyword">try</span>
+0128         cd(local);
+0129         filename{end+1}=fullfile(pwd,[fname ext]);
+0130     <span class="keyword">catch</span>
+0131         cd(olddir);
+0132         status.exitmode=<span class="string">'error'</span>;
+0133         status.message=<span class="keyword">...</span>
+0134             sprintf(<span class="string">'Invalid directory specified: %s'</span>,<span class="keyword">...</span>
+0135             fullfile(pathname,local));
+0136         fprintf(<span class="string">'%s\n'</span>,status.message);
+0137         <span class="keyword">return</span>
+0138     <span class="keyword">end</span>
+0139     array=array(next:end);
+0140 <span class="keyword">end</span>
+0141 
+0142 cd(olddir);</pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of faker</title>
+  <meta name="keywords" content="faker">
+  <meta name="description" content="faker : sythesize a three-phase measurement from two-phase data">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="index.html">THRIVE</a> &gt; faker.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../index.html"><img alt="<" border="0" src="../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/THRIVE&nbsp;<img alt=">" border="0" src="../../../../right.png"></a></td></tr></table>-->
+
+<h1>faker
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>faker : sythesize a three-phase measurement from two-phase data</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function faker(infile,outfile) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> faker : sythesize a three-phase measurement from two-phase data</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% faker : sythesize a three-phase measurement from two-phase data</span>
+0002 
+0003 <a name="_sub0" href="#_subfunctions" class="code">function faker(infile,outfile)</a>
+0004 
+0005 <span class="comment">% handle input</span>
+0006 <span class="keyword">if</span> (nargin&lt;1) || isempty(infile)
+0007     [filename,pathname]=uigetfile(<span class="string">'*.*'</span>,<span class="string">'Select two-phase input file'</span>);
+0008     <span class="keyword">if</span> isnumeric(filename) <span class="comment">% user pressed cancel</span>
+0009         <span class="keyword">return</span>
+0010     <span class="keyword">end</span>
+0011     infile=fullfile(pathname,filename);
+0012 <span class="keyword">end</span>
+0013 
+0014 <span class="keyword">if</span> (nargin&lt;2) || isempty(outfile)
+0015     [filename,pathname]=uiputfile(<span class="string">'*.*'</span>,<span class="string">'Select three-phase output file'</span>);
+0016     <span class="keyword">if</span> isnumeric(filename) <span class="comment">% user pressed cancel</span>
+0017         <span class="keyword">return</span>
+0018     <span class="keyword">end</span>
+0019     outfile=fullfile(pathname,filename);
+0020 <span class="keyword">end</span>
+0021 
+0022 <span class="comment">% read input file</span>
+0023 data=ColumnReader(infile);
+0024 time=data(:,1);
+0025 D1=data(:,2);
+0026 D2=data(:,3);
+0027 
+0028 <span class="comment">% perfom ellipse fit</span>
+0029 params=DirectEllipseFit(D1,D2);
+0030 baseline=params(1:2);
+0031 amplitude=params(3:4);
+0032 beta=params(5)+pi/2;
+0033 
+0034 <span class="comment">% calculate normalized and quadrature signals</span>
+0035 D1n=(D1-baseline(1))/amplitude(1);
+0036 D2n=(D2-baseline(2))/amplitude(2);
+0037 Dy=cos(beta)*D1n-D2n;
+0038 Dx=sin(beta)*D1n;
+0039 
+0040 <span class="comment">% determine phase difference</span>
+0041 phi=unwrap(atan2(Dy,Dx));
+0042 
+0043 <span class="comment">% generate third signal</span>
+0044 baseline=mean(baseline);
+0045 amplitude=mean(amplitude);
+0046 beta=pi-beta/2;
+0047 D3=baseline+amplitude*cos(phi-beta);
+0048 
+0049 <span class="comment">% write results to a file</span>
+0050 data=transpose([time(:) D1(:) D2(:) D3(:)]);
+0051 format=<span class="string">'%+.6e %+.5f %+.5f %+.5f\n'</span>;
+0052 fid=fopen(outfile,<span class="string">'wt'</span>);
+0053 fprintf(fid,format,data);
+0054 fclose(fid);</pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

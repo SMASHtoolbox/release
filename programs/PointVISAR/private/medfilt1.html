@@ -1,0 +1,175 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of medfilt1</title>
+  <meta name="keywords" content="medfilt1">
+  <meta name="description" content="MEDFILT1  One dimensional median filter.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">PointVISAR</a> &gt; <a href="index.html">private</a> &gt; medfilt1.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/PointVISAR/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>medfilt1
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>MEDFILT1  One dimensional median filter.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function y = medfilt1(x, n, blksz, DIM) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">MEDFILT1  One dimensional median filter.
+   Y = MEDFILT1(X,N) returns the output of the order N, one dimensional
+   median filtering of X.  Y is the same size as X; for the edge points,
+   zeros are assumed to the left and right of X.  If X is a matrix,
+   then MEDFILT1 operates along the columns of X.
+
+   If you do not specify N, MEDFILT1 uses a default of N = 3.
+   For N odd, Y(k) is the median of X( k-(N-1)/2 : k+(N-1)/2 ).
+   For N even, Y(k) is the median of X( k-N/2 : k+N/2-1 ).
+
+   Y = MEDFILT1(X,N,BLKSZ) uses a for-loop to compute BLKSZ (&quot;block size&quot;) 
+   output samples at a time.  Use this option with BLKSZ &lt;&lt; LENGTH(X) if 
+   you are low on memory (MEDFILT1 uses a working matrix of size
+   N x BLKSZ).  By default, BLKSZ == LENGTH(X); this is the fastest
+   execution if you have the memory for it.
+
+   For matrices and N-D arrays, Y = MEDFILT1(X,N,[],DIM) or 
+   Y = MEDFILT1(X,N,BLKSZ,DIM) operates along the dimension DIM.
+
+   See also MEDIAN, FILTER, SGOLAYFILT, and MEDFILT2 in the Image
+   Processing Toolbox.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="FilterSignal.html" class="code" title="function [signal,params]=FilterSignal(rawsignal,name,params)">FilterSignal</a>	function filtSignal = FilterSignal(rawSignal, filterType, filterParams)</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function y = medfilt1D(x, n, blksz)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function y = medfilt1(x, n, blksz, DIM)</a>
+0002 <span class="comment">%MEDFILT1  One dimensional median filter.</span>
+0003 <span class="comment">%   Y = MEDFILT1(X,N) returns the output of the order N, one dimensional</span>
+0004 <span class="comment">%   median filtering of X.  Y is the same size as X; for the edge points,</span>
+0005 <span class="comment">%   zeros are assumed to the left and right of X.  If X is a matrix,</span>
+0006 <span class="comment">%   then MEDFILT1 operates along the columns of X.</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%   If you do not specify N, MEDFILT1 uses a default of N = 3.</span>
+0009 <span class="comment">%   For N odd, Y(k) is the median of X( k-(N-1)/2 : k+(N-1)/2 ).</span>
+0010 <span class="comment">%   For N even, Y(k) is the median of X( k-N/2 : k+N/2-1 ).</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">%   Y = MEDFILT1(X,N,BLKSZ) uses a for-loop to compute BLKSZ (&quot;block size&quot;)</span>
+0013 <span class="comment">%   output samples at a time.  Use this option with BLKSZ &lt;&lt; LENGTH(X) if</span>
+0014 <span class="comment">%   you are low on memory (MEDFILT1 uses a working matrix of size</span>
+0015 <span class="comment">%   N x BLKSZ).  By default, BLKSZ == LENGTH(X); this is the fastest</span>
+0016 <span class="comment">%   execution if you have the memory for it.</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">%   For matrices and N-D arrays, Y = MEDFILT1(X,N,[],DIM) or</span>
+0019 <span class="comment">%   Y = MEDFILT1(X,N,BLKSZ,DIM) operates along the dimension DIM.</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">%   See also MEDIAN, FILTER, SGOLAYFILT, and MEDFILT2 in the Image</span>
+0022 <span class="comment">%   Processing Toolbox.</span>
+0023 
+0024 <span class="comment">%   Author(s): L. Shure and T. Krauss, 8-3-93</span>
+0025 <span class="comment">%   Copyright 1988-2002 The MathWorks, Inc.</span>
+0026 <span class="comment">%   $Revision: 1.2 $  $Date: 2005-08-01 16:34:10 -0600 (Mon, 01 Aug 2005) $</span>
+0027 
+0028 <span class="comment">% Validate number of input arguments</span>
+0029 error(nargchk(1, 4, nargin));
+0030 <span class="keyword">if</span> nargin &lt; 2, n = []; <span class="keyword">end</span>
+0031 <span class="keyword">if</span> nargin &lt; 3, blksz = []; <span class="keyword">end</span>
+0032 <span class="keyword">if</span> nargin &lt; 4, DIM = []; <span class="keyword">end</span>
+0033 
+0034 <span class="comment">% Check if the input arguments are valid</span>
+0035 <span class="keyword">if</span> isempty(n)
+0036   n = 3;
+0037 <span class="keyword">end</span>
+0038 
+0039 <span class="keyword">if</span> ~isempty(DIM) &amp; DIM &gt; ndims(x)
+0040     error(<span class="string">'Dimension specified exceeds the dimensions of X.'</span>)
+0041 <span class="keyword">end</span>
+0042 
+0043 <span class="comment">% Reshape x into the right dimension.</span>
+0044 <span class="keyword">if</span> isempty(DIM)
+0045     <span class="comment">% Work along the first non-singleton dimension</span>
+0046     [x, nshifts] = shiftdim(x);
+0047 <span class="keyword">else</span>
+0048     <span class="comment">% Put DIM in the first (row) dimension (this matches the order</span>
+0049     <span class="comment">% that the built-in filter function uses)</span>
+0050     perm = [DIM,1:DIM-1,DIM+1:ndims(x)];
+0051     x = permute(x, perm);
+0052 <span class="keyword">end</span>
+0053 
+0054 <span class="comment">% Verify that the block size is valid.</span>
+0055 siz = size(x);
+0056 <span class="keyword">if</span> isempty(blksz),
+0057     blksz = siz(1); <span class="comment">% siz(1) is the number of rows of x (default)</span>
+0058 <span class="keyword">else</span>
+0059     blksz = blksz(:);
+0060 <span class="keyword">end</span>
+0061 
+0062 <span class="comment">% Initialize y with the correct dimension</span>
+0063 y = zeros(siz); 
+0064 
+0065 <span class="comment">% Call medfilt1D (vector)</span>
+0066 <span class="keyword">for</span> i = 1:prod(siz(2:end)),
+0067     y(:,i) = <a href="#_sub1" class="code" title="subfunction y = medfilt1D(x, n, blksz)">medfilt1D</a>(x(:,i), n, blksz);
+0068 <span class="keyword">end</span>
+0069 
+0070 <span class="comment">% Convert y to the original shape of x</span>
+0071 <span class="keyword">if</span> isempty(DIM)
+0072     y = shiftdim(y, -nshifts);
+0073 <span class="keyword">else</span>
+0074     y = ipermute(y, perm);
+0075 <span class="keyword">end</span>
+0076 
+0077 
+0078 <span class="comment">%-------------------------------------------------------------------</span>
+0079 <span class="comment">%                       Local Function</span>
+0080 <span class="comment">%-------------------------------------------------------------------</span>
+0081 <a name="_sub1" href="#_subfunctions" class="code">function y = medfilt1D(x, n, blksz)</a>
+0082 <span class="comment">%MEDFILT1D  One dimensional median filter.</span>
+0083 <span class="comment">%</span>
+0084 <span class="comment">% Inputs:</span>
+0085 <span class="comment">%   x     - vector</span>
+0086 <span class="comment">%   n     - order of the filter</span>
+0087 <span class="comment">%   blksz - block size</span>
+0088 
+0089 nx = length(x);
+0090 <span class="keyword">if</span> rem(n, 2) ~= 1    <span class="comment">% n even</span>
+0091     m = n / 2;
+0092 <span class="keyword">else</span>
+0093     m = (n - 1) / 2;
+0094 <span class="keyword">end</span>
+0095 X = [zeros(m, 1); x; zeros(m, 1)];
+0096 y = zeros(nx, 1);
+0097 
+0098 <span class="comment">% Work in chunks to save memory</span>
+0099 indr = (0:n-1)';
+0100 indc = 1:nx;
+0101 <span class="keyword">for</span> i=1:blksz:nx
+0102     ind = indc(ones(1, n),i:min(i + blksz - 1, nx)) + <span class="keyword">...</span>
+0103           indr(:, ones(1, min(i + blksz - 1, nx) - i + 1));
+0104     xx = reshape(X(ind), n, min(i + blksz - 1, nx) - i + 1);
+0105     y(i:min(i + blksz - 1, nx)) = median(xx, 1);
+0106 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

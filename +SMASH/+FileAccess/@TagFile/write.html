@@ -1,0 +1,215 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of write</title>
+  <meta name="keywords" content="write">
+  <meta name="description" content="write Write tagged block">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="../../index.html">+SMASH</a> &gt; <a href="../index.html">+FileAccess</a> &gt; <a href="index.html">@TagFile</a> &gt; write.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+FileAccess/@TagFile&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>write
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>write Write tagged block</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function varargout=write(object,tag,data,overwrite) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> write Write tagged block
+
+ This method writes a text block using a specified tag.
+    write(object,tag,data);
+ The block format is determined automatically from the data type.
+    -Two-dimensional numeric and logical arrays are written directly.
+    -Table objects are written as comma-separated columns.
+    -Character arrays and cell arrays of characters are written as raw text.
+    -Flat structures are written as &quot;name = value&quot; pairs.
+ 
+ By default, this method will not write block data if the specified tag is
+ already in use.  Passing an additional argument:
+    write(object,tag,data,'-overwrite');
+ overrides this behavior.
+
+ See also <a href="TagFile.html" class="code" title="">TagFile</a>, <a href="probe.html" class="code" title="function varargout=probe(object)">probe</a>, <a href="write.html" class="code" title="function varargout=write(object,tag,data,overwrite)">write</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="probe.html" class="code" title="function varargout=probe(object)">probe</a>	probe Probe tagged file</li><li><a href="read.html" class="code" title="function out=read(object,tag,format)">read</a>	read Read tagged block</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% write Write tagged block</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This method writes a text block using a specified tag.</span>
+0004 <span class="comment">%    write(object,tag,data);</span>
+0005 <span class="comment">% The block format is determined automatically from the data type.</span>
+0006 <span class="comment">%    -Two-dimensional numeric and logical arrays are written directly.</span>
+0007 <span class="comment">%    -Table objects are written as comma-separated columns.</span>
+0008 <span class="comment">%    -Character arrays and cell arrays of characters are written as raw text.</span>
+0009 <span class="comment">%    -Flat structures are written as &quot;name = value&quot; pairs.</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% By default, this method will not write block data if the specified tag is</span>
+0012 <span class="comment">% already in use.  Passing an additional argument:</span>
+0013 <span class="comment">%    write(object,tag,data,'-overwrite');</span>
+0014 <span class="comment">% overrides this behavior.</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% See also TagFile, probe, write</span>
+0017 <span class="comment">%</span>
+0018 
+0019 <span class="comment">%</span>
+0020 <span class="comment">% created October 16, 2018 by Daniel Dolan (Sandia National Laboratories)</span>
+0021 <span class="comment">%</span>
+0022 
+0023 <a name="_sub0" href="#_subfunctions" class="code">function varargout=write(object,tag,data,overwrite)</a>
+0024 
+0025 <span class="comment">% manage input</span>
+0026 assert(nargin &gt;= 3,<span class="string">'ERROR: insufficient input'</span>);
+0027 assert(ischar(tag),<span class="string">'ERROR: invalid tag'</span>);
+0028 
+0029 <span class="keyword">if</span> (nargin &lt; 4) || isempty(overwrite)
+0030     overwrite=false;
+0031 <span class="keyword">else</span>
+0032     assert(strcmpi(overwrite,<span class="string">'-overwrite'</span>),<span class="keyword">...</span>
+0033         <span class="string">'ERROR: invalid overwrite value'</span>);    
+0034     overwrite=true;
+0035 <span class="keyword">end</span>
+0036 
+0037 <span class="comment">% manage overwrite</span>
+0038 list=<a href="probe.html" class="code" title="function varargout=probe(object)">probe</a>(object);
+0039 conflict=false;
+0040 <span class="keyword">for</span> n=1:numel(list)
+0041     <span class="keyword">if</span> strcmp(list{n},tag)        
+0042         assert(overwrite,<span class="string">'ERROR: tag already in use'</span>);
+0043         conflict=true;
+0044     <span class="keyword">end</span>
+0045 <span class="keyword">end</span>
+0046 
+0047 <span class="comment">% write data to a temporary file</span>
+0048 <span class="keyword">if</span> islogical(data)
+0049     data=int8(data);
+0050 <span class="keyword">end</span>
+0051 
+0052 ExcerptFile=tempname();
+0053 excerpt=fopen(ExcerptFile,<span class="string">'w'</span>);
+0054 CU1=onCleanup(@() fclose(excerpt));
+0055 <span class="keyword">if</span> isnumeric(data) || islogical(data)
+0056     assert(ismatrix(data) &amp;&amp; isreal(data),<span class="keyword">...</span>
+0057         <span class="string">'ERROR: tag files only support 2D real numeric arrays'</span>);
+0058     column=size(data,2);
+0059     format=repmat(<span class="string">'%g '</span>,[1 column]);
+0060     format=[format <span class="string">'\n'</span>];
+0061     fprintf(excerpt,format,transpose(data));
+0062 <span class="keyword">elseif</span> istable(data)
+0063     writetable(data,ExcerptFile);
+0064 <span class="keyword">elseif</span> ischar(data) || iscellstr(data)
+0065     <span class="keyword">if</span> ischar(data)
+0066         data=cellstr(data);
+0067     <span class="keyword">end</span>
+0068     fprintf(excerpt,<span class="string">'%s\n'</span>,data{:});
+0069 <span class="keyword">elseif</span> isstruct(data)    
+0070     assert(isscalar(data),<span class="keyword">...</span>
+0071         <span class="string">'ERROR: tag files do not support structure arrays'</span>);
+0072     name=fieldnames(data);
+0073     <span class="keyword">for</span> n=1:numel(name)
+0074         fprintf(excerpt,<span class="string">'%s = '</span>,name{n});
+0075         value=data.(name{n});                
+0076         <span class="keyword">if</span> islogical(value)
+0077             assert(isscalar(value),<span class="keyword">...</span>
+0078                 <span class="string">'ERROR: pair blocks cannot use logical arrays'</span>);
+0079             <span class="keyword">if</span> value
+0080                 fprintf(excerpt,<span class="string">'true'</span>);
+0081             <span class="keyword">else</span>
+0082                 fprintf(excerpt,<span class="string">'false'</span>);
+0083             <span class="keyword">end</span>
+0084         <span class="keyword">elseif</span> isnumeric(value)
+0085             value=reshape(value,1,[]);
+0086             N=numel(value);
+0087             value=sprintf(<span class="string">'%g '</span>,value);
+0088             <span class="keyword">if</span> N &gt; 1
+0089                 value=[<span class="string">'['</span> value <span class="string">']'</span>]; <span class="comment">%#ok&lt;AGROW&gt;</span>
+0090             <span class="keyword">end</span>
+0091             fprintf(excerpt,value);
+0092         <span class="keyword">elseif</span> ischar(value) || iscellstr(value) <span class="comment">%#ok&lt;*ISCLSTR&gt;</span>
+0093             <span class="keyword">if</span> iscellstr(value)
+0094                 value=char(value);
+0095                 value(:,end+1)=<span class="string">' '</span>; <span class="comment">%#ok&lt;AGROW&gt;</span>
+0096             <span class="keyword">end</span>
+0097             value=reshape(value,1,[]);
+0098             fprintf(excerpt,value);            
+0099         <span class="keyword">else</span>
+0100             error(<span class="string">'ERROR: pair blocks do not support &quot;%s&quot; fields'</span>,<span class="keyword">...</span>
+0101                 class(data));
+0102         <span class="keyword">end</span>
+0103         fprintf(excerpt,<span class="string">'\n'</span>);
+0104     <span class="keyword">end</span>
+0105 <span class="keyword">else</span>
+0106     error(<span class="string">'ERROR: tag files do not support &quot;%s&quot; data'</span>,class(data));
+0107 <span class="keyword">end</span>
+0108 
+0109 <span class="comment">% merge temporary and existing files</span>
+0110 fclose(excerpt);
+0111 excerpt=fopen(ExcerptFile,<span class="string">'r'</span>);
+0112 new={};
+0113 <span class="keyword">while</span> ~feof(excerpt)
+0114     new{end+1}=fgetl(excerpt); <span class="comment">%#ok&lt;AGROW&gt;</span>
+0115 <span class="keyword">end</span>
+0116 fclose(excerpt);
+0117 
+0118 excerpt=fopen(ExcerptFile,<span class="string">'w'</span>);
+0119 
+0120 temp=<a href="read.html" class="code" title="function out=read(object,tag,format)">read</a>(object,<span class="string">'-header'</span>);
+0121 <span class="keyword">if</span> ~isempty(temp)
+0122     fprintf(excerpt,<span class="string">'%s\n'</span>,temp{:});
+0123 <span class="keyword">end</span>
+0124 
+0125 list=<a href="probe.html" class="code" title="function varargout=probe(object)">probe</a>(object);
+0126 <span class="keyword">for</span> n=1:numel(list)
+0127     <span class="keyword">if</span> n &gt; 1
+0128         fprintf(excerpt,<span class="string">'\n'</span>);
+0129     <span class="keyword">end</span>
+0130     fprintf(excerpt,<span class="string">'[%s]\n'</span>,list{n});
+0131     <span class="keyword">if</span> strcmp(list{n},tag)
+0132         fprintf(excerpt,<span class="string">'%s\n'</span>,new{:});
+0133     <span class="keyword">else</span>
+0134         data=<a href="read.html" class="code" title="function out=read(object,tag,format)">read</a>(object,list{n},<span class="string">'raw'</span>);
+0135         fprintf(excerpt,<span class="string">'%s\n'</span>,data{:});
+0136     <span class="keyword">end</span>
+0137 <span class="keyword">end</span>
+0138 
+0139 <span class="keyword">if</span> ~conflict
+0140     fprintf(excerpt,<span class="string">'\n[%s]\n'</span>,tag);
+0141     fprintf(excerpt,<span class="string">'%s\n'</span>,new{:});
+0142 <span class="keyword">end</span>
+0143 
+0144 <span class="comment">% move merged file onto original</span>
+0145 target=fullfile(object.PathName,object.FileName);
+0146 copyfile(ExcerptFile,target,<span class="string">'f'</span>);
+0147 
+0148 <span class="comment">% manage output</span>
+0149 <span class="keyword">if</span> nargout &gt; 0
+0150     varargout{1}=new;
+0151 <span class="keyword">end</span>
+0152 
+0153 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

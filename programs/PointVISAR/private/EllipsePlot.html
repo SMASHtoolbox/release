@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of EllipsePlot</title>
+  <meta name="keywords" content="EllipsePlot">
+  <meta name="description" content="EllipsePlot : add an ellipse to an axes">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">PointVISAR</a> &gt; <a href="index.html">private</a> &gt; EllipsePlot.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/PointVISAR/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>EllipsePlot
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>EllipsePlot : add an ellipse to an axes</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function varargout = EllipsePlot(params, mode, AxesHandle, numpoints) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> EllipsePlot : add an ellipse to an axes
+ created 1/3/2005 by Daniel Dolan
+ store and overwrite modes</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="EllipseFittingGUI.html" class="code" title="function func = EllipseFittingGUI(recordData)">EllipseFittingGUI</a>	ELLIPSEFITTINGGUI - Generates a GUI for user to update Ellipse parameters</li><li><a href="PointVISARGUI.html" class="code" title="function fig=PointVISARGUI(data)">PointVISARGUI</a>	PointVISARGUI</li><li><a href="ReadEditRecordGUI.html" class="code" title="function fig=ReadEditRecordGUI(record)">ReadEditRecordGUI</a>	read/edit records for PointVISARGUI</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% EllipsePlot : add an ellipse to an axes</span>
+0002 <span class="comment">% created 1/3/2005 by Daniel Dolan</span>
+0003 <span class="comment">% store and overwrite modes</span>
+0004 <span class="comment">%</span>
+0005 <a name="_sub0" href="#_subfunctions" class="code">function varargout = EllipsePlot(params, mode, AxesHandle, numpoints)</a>
+0006 
+0007 <span class="comment">% input check</span>
+0008 <span class="keyword">if</span> nargin &lt; 1
+0009     params = [];
+0010 <span class="keyword">end</span>
+0011 <span class="keyword">if</span> nargin &lt; 2
+0012     mode = <span class="string">''</span>;
+0013 <span class="keyword">end</span>
+0014 <span class="keyword">if</span> nargin &lt; 3
+0015     AxesHandle = [];
+0016 <span class="keyword">end</span>
+0017 <span class="keyword">if</span> nargin &lt; 4
+0018     numpoints = [];
+0019 <span class="keyword">end</span>
+0020 
+0021 <span class="comment">% default values</span>
+0022 <span class="keyword">if</span> isempty(params)
+0023     params = [0 0 1 1 0];
+0024 <span class="keyword">end</span>
+0025 <span class="keyword">if</span> isempty(mode)
+0026     mode = <span class="string">'overwrite'</span>;
+0027 <span class="keyword">end</span>
+0028 <span class="keyword">if</span> isempty(AxesHandle)
+0029     AxesHandle = gca;
+0030 <span class="keyword">end</span>
+0031 <span class="keyword">if</span> isempty(numpoints)
+0032     numpoints = 200;
+0033 <span class="keyword">end</span>
+0034 
+0035 <span class="comment">% extract ellipse parameters</span>
+0036 x0 = params(1);
+0037 y0 = params(2);
+0038 Ax = params(3);
+0039 Ay = params(4);
+0040 epsilon = params(5);
+0041 
+0042 theta = linspace(0, 2 * pi, numpoints);
+0043 
+0044 x = x0 + Ax * cos(theta);
+0045 y = y0 + Ay * sin(theta - epsilon);
+0046 
+0047 axes(AxesHandle);
+0048 LineHandle = line(x, y, <span class="string">'Color'</span>, [0 0 0],<span class="string">'LineWidth'</span>,2);
+0049 
+0050 <span class="keyword">switch</span> mode
+0051     <span class="keyword">case</span> <span class="string">'overwrite'</span>
+0052         hl = findobj(AxesHandle, <span class="string">'Tag'</span>, <span class="string">'EllipsePlot'</span>);
+0053         delete(hl);   
+0054     <span class="keyword">case</span> <span class="string">'store'</span>
+0055         <span class="comment">% do nothing</span>
+0056     <span class="keyword">otherwise</span>
+0057         error(<span class="string">'Unknown mode'</span>);
+0058 <span class="keyword">end</span>
+0059 
+0060 set(LineHandle, <span class="string">'Tag'</span>, <span class="string">'EllipsePlot'</span>, <span class="string">'UserData'</span>, params);
+0061 
+0062 <span class="keyword">if</span> nargout &gt; 0
+0063     varargout{1} = LineHandle;
+0064 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,160 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of ZDAS</title>
+  <meta name="keywords" content="ZDAS">
+  <meta name="description" content="%">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../index.html">SMASHtoolbox</a> &gt; <a href="../index.html">+SMASH</a> &gt; <a href="index.html">+FileAccess</a> &gt; ZDAS.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../index.html"><img alt="<" border="0" src="../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+FileAccess&nbsp;<img alt=">" border="0" src="../../../../right.png"></a></td></tr></table>-->
+
+<h1>ZDAS
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>%</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function varargout=ZDAS(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function name=generate_name(shot,location,source)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">%</span>
+0002 
+0003 <span class="comment">%%</span>
+0004 <a name="_sub0" href="#_subfunctions" class="code">function varargout=ZDAS(varargin)</a>
+0005 
+0006 <span class="comment">%% handle input</span>
+0007 assert((nargin&gt;0),<span class="string">'ERROR: invalid number of inputs'</span>);
+0008 
+0009 <span class="keyword">if</span> ischar(varargin{1})
+0010     local=varargin{1};
+0011     assert(exist(local,<span class="string">'dir'</span>),<span class="string">'ERROR: invalid local directory'</span>);    
+0012     network=<span class="string">''</span>;
+0013     <span class="keyword">if</span> (nargin==2) &amp;&amp; ischar(varargin{2})
+0014         network=varargin{2};      
+0015         assert(exist(network,<span class="string">'dir'</span>),<span class="string">'ERROR: invalid network directory'</span>);
+0016     <span class="keyword">end</span>
+0017     location=struct(<span class="string">'local'</span>,local,<span class="string">'network'</span>,network);
+0018     setappdata(0,<span class="string">'ZDAS'</span>,location);
+0019     <span class="keyword">return</span>
+0020 <span class="keyword">elseif</span> isnumeric(varargin{1}) &amp;&amp; round(varargin{1})==varargin{1}
+0021     shot=round(varargin{1});    
+0022 <span class="keyword">else</span>
+0023     error(<span class="string">'ERROR: invalid shot number'</span>);    
+0024 <span class="keyword">end</span>
+0025 
+0026 <span class="keyword">if</span> (nargin&lt;2) || isempty(varargin{2})
+0027     source=<span class="string">'cmdas'</span>;
+0028 <span class="keyword">else</span>
+0029     source=varargin{2};
+0030 <span class="keyword">end</span>
+0031 <span class="keyword">switch</span> lower(source)
+0032     <span class="keyword">case</span> {<span class="string">'c'</span>,<span class="string">'cmdas'</span>}
+0033         source=<span class="string">'c'</span>;
+0034     <span class="keyword">case</span> {<span class="string">'t'</span>,<span class="string">'tcwagon'</span>}
+0035         source=<span class="string">'t'</span>;
+0036     <span class="keyword">case</span> {<span class="string">'j'</span>,<span class="string">'jkmoore'</span>}
+0037         source=<span class="string">'j'</span>;
+0038     <span class="keyword">case</span> {<span class="string">'s'</span>,<span class="string">'saturn'</span>}
+0039         source=<span class="string">'s'</span>;
+0040     <span class="keyword">otherwise</span>
+0041         error(<span class="string">'ERROR: invalid source name'</span>);
+0042 <span class="keyword">end</span>    
+0043 
+0044 
+0045 <span class="keyword">if</span> (nargin&lt;3) 
+0046     label={};
+0047 <span class="keyword">else</span>
+0048     label=varargin{3};
+0049 <span class="keyword">end</span>
+0050 <span class="keyword">if</span> ischar(label)
+0051     label={label};
+0052 <span class="keyword">elseif</span> iscell(label) &amp;&amp; all(cellfun(@ischar,label))
+0053     <span class="comment">% do nothing</span>
+0054 <span class="keyword">else</span>
+0055     error(<span class="string">'ERROR: invalid label input'</span>);
+0056 <span class="keyword">end</span>
+0057 
+0058 <span class="comment">%% look for file</span>
+0059 <span class="keyword">if</span> isappdata(0,<span class="string">'ZDAS'</span>)
+0060     location=getappdata(0,<span class="string">'ZDAS'</span>); 
+0061 <span class="keyword">else</span>
+0062     error(<span class="string">'ERROR: ZDAS location is undefined'</span>);
+0063 <span class="keyword">end</span>
+0064 
+0065 
+0066 <span class="comment">%% handle output</span>
+0067 
+0068 
+0069 <span class="keyword">end</span>
+0070 
+0071 <span class="comment">%% file name generator</span>
+0072 <a name="_sub1" href="#_subfunctions" class="code">function name=generate_name(shot,location,source)</a>
+0073 
+0074 <span class="comment">% locate file</span>
+0075 <span class="keyword">switch</span> source
+0076     <span class="keyword">case</span> <span class="string">'c'</span>
+0077         filename=sprintf(<span class="string">'pbfa2z_%d.hdf'</span>,shot);
+0078         name=fullfile(location.local,filename);
+0079         <span class="keyword">if</span> exist(name,<span class="string">'file'</span>)
+0080            <span class="keyword">return</span> 
+0081         <span class="keyword">end</span>
+0082         name=fullfile(location.network,filename);
+0083         <span class="keyword">if</span> exist(name,<span class="string">'file'</span>)
+0084             <span class="keyword">return</span>
+0085         <span class="keyword">end</span>        
+0086     <span class="keyword">case</span> <span class="string">'t'</span>
+0087         filename=sprintf(<span class="string">'pbfa2z_%d_tcwagon.hdf'</span>,shot);
+0088         name=fullfile(location.local,<span class="string">'Z'</span>,filename);
+0089         <span class="keyword">if</span> exist(name,<span class="string">'file'</span>)
+0090            <span class="keyword">return</span> 
+0091         <span class="keyword">end</span>
+0092         name=fullfile(location.network,<span class="string">'scratch'</span>,filename);
+0093         <span class="keyword">if</span> exist(name,<span class="string">'file'</span>)
+0094             <span class="keyword">return</span>
+0095         <span class="keyword">end</span>               
+0096     <span class="keyword">case</span> <span class="string">'j'</span>
+0097         filename=sprintf(<span class="string">'pbfa2z_%d_jkmoore.hdf'</span>,shot);
+0098         name=fullfile(location.local,<span class="string">'Z'</span>,signalfilename);
+0099         <span class="keyword">if</span> exist(name,<span class="string">'file'</span>)
+0100            <span class="keyword">return</span> 
+0101         <span class="keyword">end</span>
+0102     <span class="keyword">case</span> <span class="string">'s'</span>
+0103         filename=sprintf(<span class="string">'Saturn_0%d.hdf'</span>,shot);
+0104         name=fullfile(location.local,<span class="string">'Saturn_data'</span>,<span class="string">'signal_data'</span>,filename);
+0105         <span class="keyword">if</span> exist(name,<span class="string">'file'</span>)
+0106             <span class="keyword">return</span>
+0107         <span class="keyword">end</span>             
+0108 <span class="keyword">end</span>
+0109 error(<span class="string">'ERROR: unable to locate ZDAS file'</span>);
+0110 
+0111 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of autoscale</title>
+  <meta name="keywords" content="autoscale">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="../../index.html">+SMASH</a> &gt; <a href="../index.html">+MUI</a> &gt; <a href="index.html">@Figure</a> &gt; autoscale.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+MUI/@Figure&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>autoscale
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function autoscale(object,mode) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="detoggle.html" class="code" title="function detoggle(object)">detoggle</a>	determine number of active toggles</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="Figure.html" class="code" title="">Figure</a>	Figure class</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function callback(src,varargin)</a></li><li><a href="#_sub2" class="code">function ButtonUp(varargin)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function autoscale(object,mode)</a>
+0002 
+0003 <span class="keyword">switch</span> mode
+0004     <span class="keyword">case</span> <span class="string">'create'</span>
+0005         h=uitoggletool(<span class="string">'Parent'</span>,object.ToolBar,<span class="keyword">...</span>
+0006             <span class="string">'Tag'</span>,<span class="string">'AutoScale'</span>,<span class="string">'ToolTipString'</span>,<span class="string">'Auto scale'</span>,<span class="keyword">...</span>
+0007             <span class="string">'Cdata'</span>,local_graphic(<span class="string">'AutoScaleIcon'</span>),<span class="string">'Separator'</span>,<span class="string">'off'</span>,<span class="keyword">...</span>
+0008             <span class="string">'ClickedCallback'</span>,@<a href="#_sub1" class="code" title="subfunction callback(src,varargin)">callback</a>);
+0009         object.ToolButton.AutoScale=h;
+0010     <span class="keyword">case</span> <span class="string">'hide'</span>
+0011         set(object.Button.AutoScale,<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+0012     <span class="keyword">case</span> <span class="string">'show'</span>
+0013         set(object.Button.AutoScale,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0014 <span class="keyword">end</span>
+0015 
+0016 <span class="comment">%%</span>
+0017     <a name="_sub1" href="#_subfunctions" class="code">function callback(src,varargin)</a>
+0018         state=get(src,<span class="string">'State'</span>);
+0019         <a href="detoggle.html" class="code" title="function detoggle(object)">detoggle</a>(object);
+0020         fig=object.Handle;
+0021         <span class="keyword">if</span> strcmpi(state,<span class="string">'on'</span>)
+0022             haxes=findobj(fig,<span class="string">'Type'</span>,<span class="string">'axes'</span>);
+0023             <span class="keyword">if</span> numel(haxes)==1
+0024                 set(haxes,<span class="string">'XLimMode'</span>,<span class="string">'auto'</span>,<span class="string">'YLimMode'</span>,<span class="string">'auto'</span>);
+0025                 <span class="keyword">return</span>
+0026             <span class="keyword">end</span>
+0027             set(src,<span class="string">'State'</span>,<span class="string">'on'</span>);
+0028             set(object.Handle,<span class="string">'Pointer'</span>,<span class="string">'crosshair'</span>,<span class="keyword">...</span>
+0029                 <span class="string">'WindowButtonUpFcn'</span>,@<a href="#_sub2" class="code" title="subfunction ButtonUp(varargin)">ButtonUp</a>);
+0030         <span class="keyword">end</span>
+0031     <span class="keyword">end</span>
+0032 
+0033 <span class="comment">%%</span>
+0034     <a name="_sub2" href="#_subfunctions" class="code">function ButtonUp(varargin)        </a>
+0035         selection=get(gcbf,<span class="string">'SelectionType'</span>);
+0036         <span class="keyword">if</span> strcmpi(selection,<span class="string">'extend'</span>)
+0037             haxes=findobj(gcbf,<span class="string">'Type'</span>,<span class="string">'axes'</span>);
+0038             <a href="detoggle.html" class="code" title="function detoggle(object)">detoggle</a>(object);
+0039         <span class="keyword">else</span>
+0040             haxes=get(gcbf,<span class="string">'CurrentAxes'</span>);
+0041         <span class="keyword">end</span>        
+0042         <span class="keyword">for</span> k=1:numel(haxes)
+0043             tag=get(haxes(k),<span class="string">'Tag'</span>);
+0044             <span class="keyword">if</span>  strcmp(tag,<span class="string">'legend'</span>) || strcmp(tag,<span class="string">'colorbar'</span>)
+0045                 <span class="keyword">return</span>
+0046             <span class="keyword">end</span>
+0047             set(haxes(k),<span class="string">'XLimMode'</span>,<span class="string">'auto'</span>,<span class="string">'YLimMode'</span>,<span class="string">'auto'</span>);
+0048         <span class="keyword">end</span>                
+0049     <span class="keyword">end</span>
+0050 
+0051 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

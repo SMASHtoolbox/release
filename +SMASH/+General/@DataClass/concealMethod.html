@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of concealMethod</title>
+  <meta name="keywords" content="concealMethod">
+  <meta name="description" content="hideMethod Add method(s) to the ConcealedMethod list">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="../../index.html">+SMASH</a> &gt; <a href="../index.html">+General</a> &gt; <a href="index.html">@DataClass</a> &gt; concealMethod.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+General/@DataClass&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>concealMethod
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>hideMethod Add method(s) to the ConcealedMethod list</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function object=concealMethod(object,varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> hideMethod Add method(s) to the ConcealedMethod list
+
+ Usage:
+    &gt;&gt; object=hideMethod(object,name1,name2,...);
+
+ See also <a href="DataClass.html" class="code" title="">DataClass</a>, <a href="revealMethod.html" class="code" title="function object=revealMethod(object,varargin)">revealMethod</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="DataClass.html" class="code" title="">DataClass</a>	This class defines core properties and methods for objects that store</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% hideMethod Add method(s) to the ConcealedMethod list</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% Usage:</span>
+0004 <span class="comment">%    &gt;&gt; object=hideMethod(object,name1,name2,...);</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% See also DataClass, revealMethod</span>
+0007 <span class="comment">%</span>
+0008 
+0009 <span class="comment">%</span>
+0010 <span class="comment">% created November 14, 2013 by Daniel Dolan (Sandia National Laboratories)</span>
+0011 <span class="comment">%</span>
+0012 <a name="_sub0" href="#_subfunctions" class="code">function object=concealMethod(object,varargin)</a>
+0013 
+0014 <span class="keyword">for</span> m=1:numel(varargin)
+0015     <span class="keyword">if</span> ~ismethod(object,varargin{m})
+0016         error(<span class="string">'ERROR: invalid method specified'</span>);
+0017     <span class="keyword">end</span>
+0018     flag=true;
+0019     <span class="keyword">for</span> n=1:numel(object.ConcealedMethods)
+0020         <span class="keyword">if</span> strcmp(varargin{m},object.ConcealedMethods{n})
+0021             flag=false;
+0022             <span class="keyword">break</span>
+0023         <span class="keyword">end</span>
+0024     <span class="keyword">end</span>
+0025     <span class="keyword">if</span> flag
+0026         object.ConcealedMethods{end+1}=varargin{m};
+0027     <span class="keyword">end</span>    
+0028 <span class="keyword">end</span>
+0029 
+0030 object.ConcealedMethods=sort(object.ConcealedMethods);
+0031 
+0032 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

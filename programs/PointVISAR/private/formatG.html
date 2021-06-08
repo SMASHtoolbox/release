@@ -1,0 +1,69 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of formatG</title>
+  <meta name="keywords" content="formatG">
+  <meta name="description" content="FORMATG   Returns a format string using %g compatible with">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">PointVISAR</a> &gt; <a href="index.html">private</a> &gt; formatG.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/PointVISAR/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>formatG
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>FORMATG   Returns a format string using %g compatible with</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function [format, width] = formatG(sigfigs) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> FORMATG   Returns a format string using %g compatible with
+           a column containing N significant figures
+ format = formatG(3) returns
+ created 8/5/2004 by Daniel Dolan</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="EditBoxNum2Str.html" class="code" title="function func=EditBoxNum2Str(number)">EditBoxNum2Str</a>	</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [format, width] = formatG(sigfigs)</a>
+0002 <span class="comment">% FORMATG   Returns a format string using %g compatible with</span>
+0003 <span class="comment">%           a column containing N significant figures</span>
+0004 <span class="comment">% format = formatG(3) returns</span>
+0005 <span class="comment">% created 8/5/2004 by Daniel Dolan</span>
+0006 
+0007 <span class="keyword">if</span> nargin &lt; 1
+0008     sigfigs = [];
+0009 <span class="keyword">end</span>
+0010 <span class="keyword">if</span> isempty(sigfigs)
+0011     sigfigs = 3;
+0012 <span class="keyword">end</span>
+0013 
+0014 <span class="comment">% Characters needed to display signs, decimal point, and zeros</span>
+0015 minwidth = 7;
+0016 space = 1; <span class="comment">% extra space to ensure column separation</span>
+0017 width = sigfigs + minwidth + space;
+0018 
+0019 format = [<span class="string">'%'</span> num2str(width) <span class="string">'.'</span> num2str(sigfigs) <span class="string">'g'</span>];</pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

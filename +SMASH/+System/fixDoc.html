@@ -1,0 +1,171 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of fixDoc</title>
+  <meta name="keywords" content="fixDoc">
+  <meta name="description" content="fixDoc Fix custom documentation display">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../index.html">SMASHtoolbox</a> &gt; <a href="../index.html">+SMASH</a> &gt; <a href="index.html">+System</a> &gt; fixDoc.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../index.html"><img alt="<" border="0" src="../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+System&nbsp;<img alt=">" border="0" src="../../../../right.png"></a></td></tr></table>-->
+
+<h1>fixDoc
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>fixDoc Fix custom documentation display</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function fixDoc(mode) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> fixDoc Fix custom documentation display
+
+ This function changes how MATLAB displays custom documentation.  Prior to
+ release 2013b, function/class/package documentation produced outside of
+ the MathWorks was displayed in the MATLAB web browser.  More recent
+ releases display custom documentation in MATLAB's help browser along with
+ standard documentation.  All hyperlinks in custom documentation now
+ create new browser tabs, preventing forward/backward browsing and
+ eventually making the help browser unusable.  Standard documentation
+ hyperlinks do *not* create extra browser tabs, so many users may not have
+ noticed the change.
+
+ Calling this function enables the pre-2013b behavior of displaying
+ custom documentation in the MATLAB web browser.
+     &gt;&gt; fixDoc;
+ Documentation hyperlinks open documents in the same tab, and
+ documentation calls are displayed in the active tab.  New tabs are
+ only created when the user presses the &quot;+&quot; sign at the top of the
+ browser.
+ 
+ NOTE: this function modifies the &quot;helpwin.m&quot; file in the root MATLAB
+ directory.  The modification persists between MATLAB sessions.  To
+ restore the default behavior:
+    &gt;&gt; fixDoc('restore');
+
+ See also doc</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% fixDoc Fix custom documentation display</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This function changes how MATLAB displays custom documentation.  Prior to</span>
+0004 <span class="comment">% release 2013b, function/class/package documentation produced outside of</span>
+0005 <span class="comment">% the MathWorks was displayed in the MATLAB web browser.  More recent</span>
+0006 <span class="comment">% releases display custom documentation in MATLAB's help browser along with</span>
+0007 <span class="comment">% standard documentation.  All hyperlinks in custom documentation now</span>
+0008 <span class="comment">% create new browser tabs, preventing forward/backward browsing and</span>
+0009 <span class="comment">% eventually making the help browser unusable.  Standard documentation</span>
+0010 <span class="comment">% hyperlinks do *not* create extra browser tabs, so many users may not have</span>
+0011 <span class="comment">% noticed the change.</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">% Calling this function enables the pre-2013b behavior of displaying</span>
+0014 <span class="comment">% custom documentation in the MATLAB web browser.</span>
+0015 <span class="comment">%     &gt;&gt; fixDoc;</span>
+0016 <span class="comment">% Documentation hyperlinks open documents in the same tab, and</span>
+0017 <span class="comment">% documentation calls are displayed in the active tab.  New tabs are</span>
+0018 <span class="comment">% only created when the user presses the &quot;+&quot; sign at the top of the</span>
+0019 <span class="comment">% browser.</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">% NOTE: this function modifies the &quot;helpwin.m&quot; file in the root MATLAB</span>
+0022 <span class="comment">% directory.  The modification persists between MATLAB sessions.  To</span>
+0023 <span class="comment">% restore the default behavior:</span>
+0024 <span class="comment">%    &gt;&gt; fixDoc('restore');</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">% See also doc</span>
+0027 <span class="comment">%</span>
+0028 
+0029 <span class="comment">%</span>
+0030 <span class="comment">% created September 14, 2015 by Daniel Dolan (Sandia National Laboratories)</span>
+0031 <span class="comment">%</span>
+0032 <a name="_sub0" href="#_subfunctions" class="code">function fixDoc(mode)</a>
+0033 
+0034 <span class="comment">% manage input</span>
+0035 <span class="keyword">if</span> (nargin&lt;1) || isempty(mode)
+0036     mode=<span class="string">'fix'</span>;
+0037 <span class="keyword">end</span>
+0038 assert(ischar(mode),<span class="string">'ERROR: invalid mode requested'</span>);
+0039 
+0040 <span class="comment">%</span>
+0041 original=which(<span class="string">'helpwin'</span>);
+0042 [location,~,~]=fileparts(original);
+0043 backup=fullfile(location,<span class="string">'helpwin_backup.m'</span>);
+0044 
+0045 <span class="comment">% make sure this isn't Windows</span>
+0046 <span class="keyword">if</span> ispc
+0047     warning(<span class="string">'SMASH:System'</span>,<span class="string">'Windows will not let this command work'</span>);
+0048     fprintf(<span class="string">'To manually fix documentation display:\n'</span>);
+0049     fprintf(<span class="string">'\t-Open the file: \n\t\t%s\n'</span>,original);
+0050     fprintf(<span class="string">'\t-Find the command &quot;web(htmlFile, ''-helpbrowser'')&quot;\n'</span>);
+0051     fprintf(<span class="string">'\t\tThis will be near the end, in the displayFile function \n'</span>);
+0052     fprintf(<span class="string">'\t-Replace the command with &quot;web(htmlFile)&quot;\n'</span>);    
+0053     <span class="keyword">return</span>
+0054 <span class="keyword">end</span>
+0055 
+0056 <span class="comment">% restore mode</span>
+0057 <span class="keyword">if</span> strcmpi(mode,<span class="string">'restore'</span>)
+0058     <span class="keyword">if</span> exist(backup,<span class="string">'file'</span>)
+0059         movefile(backup,original,<span class="string">'f'</span>);
+0060         fprintf(<span class="string">'&quot;helpwin.m&quot; file restored\n'</span>);
+0061     <span class="keyword">end</span>
+0062     clear(<span class="string">'helpwin'</span>);
+0063     <span class="keyword">return</span>
+0064 <span class="keyword">end</span>
+0065 
+0066 <span class="comment">% fix mode</span>
+0067 assert(strcmpi(mode,<span class="string">'fix'</span>),<span class="string">'ERROR: invalid mode requested'</span>);
+0068 copyfile(original,backup,<span class="string">'f'</span>);
+0069 
+0070 copy=fullfile(location,<span class="string">'helpwin_copy.m'</span>);
+0071 fidA=fopen(original,<span class="string">'r'</span>);
+0072 fidB=fopen(copy,<span class="string">'w'</span>);
+0073 
+0074 found=false;
+0075 <span class="keyword">while</span> ~feof(fidA)
+0076     temp=fgetl(fidA);
+0077     <span class="keyword">if</span> strcmp(strtrim(temp),<span class="string">'web(htmlFile, ''-helpbrowser'');'</span>)
+0078         fprintf(fidB,<span class="string">'%% Modification on %s\n'</span>,datestr(now));
+0079         fprintf(fidB,<span class="string">'%% %s\n'</span>,temp);
+0080         fprintf(fidB,<span class="string">'%s\n'</span>,<span class="string">'web(htmlFile);'</span>);
+0081         found=true;
+0082     <span class="keyword">else</span>
+0083         fprintf(fidB,<span class="string">'%s\n'</span>,temp);
+0084     <span class="keyword">end</span>
+0085 <span class="keyword">end</span>
+0086 
+0087 fclose(fidA);
+0088 fclose(fidB);
+0089 
+0090 <span class="keyword">if</span> found
+0091     movefile(copy,original,<span class="string">'f'</span>);
+0092     fprintf(<span class="string">'&quot;helpwin.m&quot; file modified\n'</span>);
+0093     clear(<span class="string">'helpwin'</span>);
+0094 <span class="keyword">else</span>
+0095     fprintf(<span class="string">'Modification already made or not required\n'</span>);
+0096     delete(copy);
+0097 <span class="keyword">end</span>
+0098 
+0099 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

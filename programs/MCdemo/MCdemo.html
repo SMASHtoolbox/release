@@ -1,0 +1,178 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of MCdemo</title>
+  <meta name="keywords" content="MCdemo">
+  <meta name="description" content="This program demonstrates Monte Carlo integration to estimate the value">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="index.html">MCdemo</a> &gt; MCdemo.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../index.html"><img alt="<" border="0" src="../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/MCdemo&nbsp;<img alt=">" border="0" src="../../../../right.png"></a></td></tr></table>-->
+
+<h1>MCdemo
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>This program demonstrates Monte Carlo integration to estimate the value</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function varargout=MCdemo(maxiter) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> This program demonstrates Monte Carlo integration to estimate the value
+ of pi.  When called without input:
+    MCdemo();
+ the program launches a graphical interface for demonstrating random
+ points drawn inside a square.  The ratio of points inside a nested
+ circle approaches pi/4 as the number of draws goes to infinity.
+ Demonstration begins with the &quot;Start&quot; menu and continues until the
+ &quot;Pause&quot;/&quot;Reset&quot; menus are selected or 1 million samples are drawn.
+
+ Passing an integer input:
+    MCdemo(N);
+ bypasses the graphical interface and prints the result in the command
+ window.  Estimates can also be returned as an output value.
+    estimate=MCdemo(N);</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function runMC(varargin)</a></li><li><a href="#_sub2" class="code">function pauseMC(varargin)</a></li><li><a href="#_sub3" class="code">function resetMC(varargin)</a></li><li><a href="#_sub4" class="code">function exitMC(varargin)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% This program demonstrates Monte Carlo integration to estimate the value</span>
+0002 <span class="comment">% of pi.  When called without input:</span>
+0003 <span class="comment">%    MCdemo();</span>
+0004 <span class="comment">% the program launches a graphical interface for demonstrating random</span>
+0005 <span class="comment">% points drawn inside a square.  The ratio of points inside a nested</span>
+0006 <span class="comment">% circle approaches pi/4 as the number of draws goes to infinity.</span>
+0007 <span class="comment">% Demonstration begins with the &quot;Start&quot; menu and continues until the</span>
+0008 <span class="comment">% &quot;Pause&quot;/&quot;Reset&quot; menus are selected or 1 million samples are drawn.</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% Passing an integer input:</span>
+0011 <span class="comment">%    MCdemo(N);</span>
+0012 <span class="comment">% bypasses the graphical interface and prints the result in the command</span>
+0013 <span class="comment">% window.  Estimates can also be returned as an output value.</span>
+0014 <span class="comment">%    estimate=MCdemo(N);</span>
+0015 <span class="comment">%</span>
+0016 
+0017 <span class="comment">%</span>
+0018 <span class="comment">% created January 23, 2018 by Daniel Dolan (Sandia National Laboratories)</span>
+0019 <span class="comment">%</span>
+0020 <a name="_sub0" href="#_subfunctions" class="code">function varargout=MCdemo(maxiter)</a>
+0021 
+0022 <span class="comment">%%</span>
+0023 <span class="keyword">if</span> (nargin &gt; 0) &amp;&amp; isnumeric(maxiter)    
+0024     assert(SMASH.General.testNumber(maxiter,<span class="string">'integer'</span>,<span class="string">'positive'</span>,<span class="string">'notzero'</span>),<span class="keyword">...</span>
+0025         <span class="string">'ERROR: invalid number of draws'</span>);
+0026     temp=2*rand(maxiter,2)-1;
+0027     keep=sum(temp.^2,2) &lt; 1;
+0028     estimate=sum(keep)/size(keep,1)*4;
+0029     <span class="keyword">if</span> nargout == 0
+0030         fprintf(<span class="string">'estimate=%.9f\n'</span>,estimate);
+0031         fprintf(<span class="string">'      pi=%.9f\n'</span>,pi);
+0032     <span class="keyword">else</span>
+0033         varargout{1}=estimate;        
+0034     <span class="keyword">end</span>
+0035     <span class="keyword">return</span>
+0036 <span class="keyword">end</span>
+0037 
+0038 maxiter=1e6;
+0039 
+0040 <span class="comment">%%</span>
+0041 fig=figure(<span class="string">'MenuBar'</span>,<span class="string">'none'</span>,<span class="string">'Name'</span>,<span class="string">'Monte Carlo demonstration'</span>,<span class="keyword">...</span>
+0042     <span class="string">'IntegerHandle'</span>,<span class="string">'off'</span>,<span class="string">'HandleVisibility'</span>,<span class="string">'callback'</span>);
+0043 
+0044 radius=1;
+0045 theta=linspace(0,2*pi,500);
+0046 x=radius*cos(theta);
+0047 y=radius*sin(theta);
+0048 haxes=axes(fig,<span class="string">'Box'</span>,<span class="string">'on'</span>,<span class="string">'XTick'</span>,[],<span class="string">'YTick'</span>,[]);
+0049 plot(haxes,x,y,<span class="string">'k'</span>)
+0050 axis(haxes,<span class="string">'equal'</span>);
+0051 axis(haxes,<span class="string">'square'</span>);
+0052 haxes.XTick=[];
+0053 haxes.YTick=[];
+0054 title(haxes,cell(3,1));
+0055 
+0056 
+0057 hpoint(1)=line(haxes,<span class="string">'Marker'</span>,<span class="string">'.'</span>,<span class="string">'LineStyle'</span>,<span class="string">'none'</span>,<span class="string">'Color'</span>,<span class="string">'r'</span>,<span class="keyword">...</span>
+0058     <span class="string">'XData'</span>,nan(maxiter,1),<span class="string">'YData'</span>,nan(maxiter,1));
+0059 hpoint(2)=line(haxes,<span class="string">'Marker'</span>,<span class="string">'.'</span>,<span class="string">'LineStyle'</span>,<span class="string">'none'</span>,<span class="string">'Color'</span>,<span class="string">'b'</span>,<span class="keyword">...</span>
+0060     <span class="string">'XData'</span>,nan(maxiter,1),<span class="string">'YData'</span>,nan(maxiter,1));
+0061 iteration=[];
+0062 start=1;
+0063 count=[1 1];
+0064 label=cell(3,1);
+0065 label{3}=sprintf(<span class="string">'pi value    = %.9f'</span>,pi);
+0066 wait=true;
+0067 
+0068 hm=uimenu(fig,<span class="string">'Label'</span>,<span class="string">'Program'</span>);
+0069 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Start'</span>,<span class="string">'Callback'</span>,@<a href="#_sub1" class="code" title="subfunction runMC(varargin)">runMC</a>);
+0070     <a name="_sub1" href="#_subfunctions" class="code">function runMC(varargin)</a>
+0071         wait=false;
+0072         <span class="keyword">for</span> iteration=start:maxiter
+0073             <span class="keyword">if</span> wait
+0074                 <span class="keyword">return</span>
+0075             <span class="keyword">end</span>
+0076             new=2*rand(1,2)-1;
+0077             <span class="keyword">if</span> hypot(new(1),new(2)) &lt; radius
+0078                 count(1)=count(1)+1;
+0079                 hpoint(1).XData(count(1))=new(1);
+0080                 hpoint(1).YData(count(1))=new(2);
+0081             <span class="keyword">else</span>
+0082                 count(2)=count(2)+1;
+0083                 hpoint(2).XData(count(2))=new(1);
+0084                 hpoint(2).YData(count(2))=new(2);
+0085             <span class="keyword">end</span>
+0086             label{1}=sprintf(<span class="string">'%d points inside out of %d samples'</span>,count(1),iteration);
+0087             label{2}=sprintf(<span class="string">'pi estimate = %.9f'</span>,4*count(1)/iteration);
+0088             title(haxes,label);
+0089             drawnow();
+0090         <span class="keyword">end</span>
+0091     <span class="keyword">end</span>
+0092 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Pause'</span>,<span class="string">'Callback'</span>,@<a href="#_sub2" class="code" title="subfunction pauseMC(varargin)">pauseMC</a>);
+0093     <a name="_sub2" href="#_subfunctions" class="code">function pauseMC(varargin)</a>
+0094         start=iteration;
+0095         wait=true;
+0096     <span class="keyword">end</span>
+0097 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Reset'</span>,<span class="string">'Callback'</span>,@<a href="#_sub3" class="code" title="subfunction resetMC(varargin)">resetMC</a>);
+0098     <a name="_sub3" href="#_subfunctions" class="code">function resetMC(varargin)</a>
+0099         wait=true;
+0100         <span class="keyword">for</span> n=1:2
+0101             hpoint(n).XData(:)=nan;
+0102             hpoint(n).YData(:)=nan;
+0103         <span class="keyword">end</span>
+0104         start=1;
+0105         count=[1 1];
+0106     <span class="keyword">end</span>
+0107 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Exit'</span>,<span class="string">'Callback'</span>,@<a href="#_sub4" class="code" title="subfunction exitMC(varargin)">exitMC</a>,<span class="string">'Separator'</span>,<span class="string">'on'</span>)
+0108     <a name="_sub4" href="#_subfunctions" class="code">function exitMC(varargin)</a>
+0109         <a href="#_sub2" class="code" title="subfunction pauseMC(varargin)">pauseMC</a>();
+0110         choice=questdlg(<span class="string">'Are you sure?'</span>,<span class="string">'Exit'</span>,<span class="string">'yes'</span>,<span class="string">'no'</span>,<span class="string">'no'</span>);
+0111         <span class="keyword">if</span> strcmpi(choice,<span class="string">'yes'</span>)
+0112             delete(fig);
+0113         <span class="keyword">end</span>
+0114     <span class="keyword">end</span>
+0115 
+0116 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

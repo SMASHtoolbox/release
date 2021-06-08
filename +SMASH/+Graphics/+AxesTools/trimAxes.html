@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of trimAxes</title>
+  <meta name="keywords" content="trimAxes">
+  <meta name="description" content="trimAxes Trim graphic objects to current axes limits">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="../../index.html">+SMASH</a> &gt; <a href="../index.html">+Graphics</a> &gt; <a href="index.html">+AxesTools</a> &gt; trimAxes.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+Graphics/+AxesTools&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>trimAxes
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>trimAxes Trim graphic objects to current axes limits</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function trimAxes(target) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> trimAxes Trim graphic objects to current axes limits
+
+ This function trims lines and images within an axes to the current (x,y)
+ limits.
+    trimAxes(); % trim current axes
+    trimAxes(target); % trim axes specitied by &quot;target&quot;
+
+ See also SMASH.Graphics</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% trimAxes Trim graphic objects to current axes limits</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This function trims lines and images within an axes to the current (x,y)</span>
+0004 <span class="comment">% limits.</span>
+0005 <span class="comment">%    trimAxes(); % trim current axes</span>
+0006 <span class="comment">%    trimAxes(target); % trim axes specitied by &quot;target&quot;</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% See also SMASH.Graphics</span>
+0009 <span class="comment">%</span>
+0010 
+0011 <span class="comment">%</span>
+0012 <span class="comment">% created May 29, 2017 by Daniel Dolan (Sandia National Laboratories)</span>
+0013 <span class="comment">%</span>
+0014 <a name="_sub0" href="#_subfunctions" class="code">function trimAxes(target)</a>
+0015 
+0016 <span class="comment">% manage input</span>
+0017 <span class="keyword">if</span> (nargin &lt; 1) || isempty(target)
+0018     target=gca;
+0019 <span class="keyword">end</span>
+0020 assert(ishandle(target) &amp;&amp; strcmp(get(target,<span class="string">'Type'</span>),<span class="string">'axes'</span>),<span class="keyword">...</span>
+0021     <span class="string">'ERROR: invalid target axes'</span>)
+0022 
+0023 <span class="comment">% determine current bounds</span>
+0024 xb=get(target,<span class="string">'XLim'</span>);
+0025 yb=get(target,<span class="string">'YLim'</span>);
+0026 
+0027 child=get(target,<span class="string">'Children'</span>);
+0028 <span class="keyword">for</span> n=1:numel(child)
+0029     <span class="keyword">switch</span> get(child(n),<span class="string">'Type'</span>)
+0030         <span class="keyword">case</span> <span class="string">'line'</span>
+0031             x=get(child(n),<span class="string">'XData'</span>);
+0032             y=get(child(n),<span class="string">'YData'</span>);
+0033             keep=(x &gt;= xb(1)) &amp; (x &lt;= xb(2)) &amp; (y &gt;= yb(1)) &amp; (y &lt;= yb(2));
+0034             set(child(n),<span class="string">'XData'</span>,x(keep),<span class="string">'YData'</span>,y(keep));
+0035         <span class="keyword">case</span> <span class="string">'image'</span>
+0036             x=get(child(n),<span class="string">'XData'</span>);
+0037             y=get(child(n),<span class="string">'YData'</span>);
+0038             z=get(child(n),<span class="string">'CData'</span>);
+0039             xkeep=(x &gt;= xb(1)) &amp; (x &lt;= xb(2));
+0040             ykeep=(y &gt;= yb(1)) &amp; (y &lt;= yb(2));
+0041             set(child(n),<span class="string">'XData'</span>,x(xkeep),<span class="string">'YData'</span>,y(ykeep),<span class="keyword">...</span>
+0042                 <span class="string">'CData'</span>,z(ykeep,xkeep));
+0043         <span class="keyword">case</span> <span class="string">'patch'</span>
+0044             x=get(child(n),<span class="string">'XData'</span>);
+0045             y=get(child(n),<span class="string">'YData'</span>);
+0046             z=get(child(n),<span class="string">'ZData'</span>);
+0047             c=get(child(n),<span class="string">'CData'</span>);
+0048             v=get(child(n),<span class="string">'Vertices'</span>);
+0049             xkeep=(x &gt;= xb(1)) &amp; (x &lt;= xb(2));
+0050             ykeep=(y &gt;= yb(1)) &amp; (y &lt;= yb(2));
+0051             keep=(xkeep &amp; ykeep);
+0052             set(child(n),<span class="string">'XData'</span>,x(keep),<span class="string">'YData'</span>,y(keep),<span class="keyword">...</span>
+0053                 <span class="string">'XData'</span>,z,<span class="string">'CData'</span>,c(keep),<span class="string">'Vertices'</span>,v(keep,:));
+0054     <span class="keyword">end</span>
+0055 <span class="keyword">end</span>
+0056 
+0057 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of IterativeEllipseFit</title>
+  <meta name="keywords" content="IterativeEllipseFit">
+  <meta name="description" content="EllipseFit : Fit an ellipse to (x,y) data">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">PointVISAR</a> &gt; <a href="index.html">private</a> &gt; IterativeEllipseFit.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/PointVISAR/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>IterativeEllipseFit
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>EllipseFit : Fit an ellipse to (x,y) data</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function [params, fval, exitflag, output] = IterativeEllipseFit(x, y,guess, fixed, options) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> EllipseFit : Fit an ellipse to (x,y) data
+ created 3/6/2005 by Daniel Dolan
+
+ Usage:
+ params = IterativeEllipseFit(x, y);          % use default guess
+        = IterativeEllipseFit(x, y, guess);   % user specified guess
+        = IterativeEllipseFit(x, y, guess, fixed);   % hold some parameters fixed
+        = IterativeEllipseFit(x, y, guess, fixed, options); % specify optimization parameters
+ x and y are required for the function to operate.  If no guess value is
+ given, the program generates a guess using DirectEllipseFit.  Fixed
+ parameters may be set by specifying an array of ones and zeros, where
+ ones correspond to fixed parameters.  For example, fixed=[1 1 0 0 0]
+ implies that the x0 and y0 parameters are fixed during the optimization.
+ The final argument, options, is a structure used by fminsearch.  See the
+ documentation for optimset for more information.
+
+ [params,fval,exitflag,output]=IterativeEllipseFit(...); % returns some
+ extra information with params.  The residual error at the end of
+ optimization is given by fval, the exit status by exitflag, and output
+ data (# of iterations, etc.) by output.  See the documenation for
+ fminsearch for more information.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="DirectEllipseFit.html" class="code" title="function [params1, params2] = DirectEllipseFit(x, y)">DirectEllipseFit</a>	DirectEllipseFit : direct ellipse fitting</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="EllipseFittingGUI.html" class="code" title="function func = EllipseFittingGUI(recordData)">EllipseFittingGUI</a>	ELLIPSEFITTINGGUI - Generates a GUI for user to update Ellipse parameters</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function func = Residual(varparam, x, y, fixparam, fixed)</a></li><li><a href="#_sub2" class="code">function func = ParamMerge(varparam, fixparam, fixed)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% EllipseFit : Fit an ellipse to (x,y) data</span>
+0002 <span class="comment">% created 3/6/2005 by Daniel Dolan</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% Usage:</span>
+0005 <span class="comment">% params = IterativeEllipseFit(x, y);          % use default guess</span>
+0006 <span class="comment">%        = IterativeEllipseFit(x, y, guess);   % user specified guess</span>
+0007 <span class="comment">%        = IterativeEllipseFit(x, y, guess, fixed);   % hold some parameters fixed</span>
+0008 <span class="comment">%        = IterativeEllipseFit(x, y, guess, fixed, options); % specify optimization parameters</span>
+0009 <span class="comment">% x and y are required for the function to operate.  If no guess value is</span>
+0010 <span class="comment">% given, the program generates a guess using DirectEllipseFit.  Fixed</span>
+0011 <span class="comment">% parameters may be set by specifying an array of ones and zeros, where</span>
+0012 <span class="comment">% ones correspond to fixed parameters.  For example, fixed=[1 1 0 0 0]</span>
+0013 <span class="comment">% implies that the x0 and y0 parameters are fixed during the optimization.</span>
+0014 <span class="comment">% The final argument, options, is a structure used by fminsearch.  See the</span>
+0015 <span class="comment">% documentation for optimset for more information.</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">% [params,fval,exitflag,output]=IterativeEllipseFit(...); % returns some</span>
+0018 <span class="comment">% extra information with params.  The residual error at the end of</span>
+0019 <span class="comment">% optimization is given by fval, the exit status by exitflag, and output</span>
+0020 <span class="comment">% data (# of iterations, etc.) by output.  See the documenation for</span>
+0021 <span class="comment">% fminsearch for more information.</span>
+0022 <span class="comment">%</span>
+0023 <a name="_sub0" href="#_subfunctions" class="code">function [params, fval, exitflag, output] = IterativeEllipseFit(x, y, </a><span class="keyword">...</span>
+0024     guess, fixed, options)
+0025 
+0026 <span class="comment">% input checking</span>
+0027 <span class="keyword">if</span> nargin &lt; 3
+0028     guess = [];
+0029 <span class="keyword">end</span>
+0030 
+0031 <span class="keyword">if</span> nargin &lt; 4
+0032     fixed = [];
+0033 <span class="keyword">end</span>
+0034 
+0035 <span class="keyword">if</span> nargin &lt; 5
+0036     options = [];
+0037 <span class="keyword">end</span>
+0038 
+0039 <span class="comment">% default values</span>
+0040 <span class="keyword">if</span> isempty(guess) 
+0041     guess = <a href="DirectEllipseFit.html" class="code" title="function [params1, params2] = DirectEllipseFit(x, y)">DirectEllipseFit</a>(x, y);
+0042     fprintf(<span class="string">'Calling direct fit...'</span>);
+0043 <span class="keyword">end</span>
+0044 
+0045 <span class="keyword">if</span> isempty(fixed)
+0046     fixed = zeros(size(guess));
+0047 <span class="keyword">end</span>
+0048 <span class="keyword">if</span> isnumeric(fixed)
+0049     fixed = logical(fixed);
+0050 <span class="keyword">end</span>
+0051 <span class="keyword">if</span> numel(guess) ~= numel(fixed)
+0052     error(<span class="string">'Incompatible size for guess and fixed arrays'</span>);
+0053 <span class="keyword">end</span>
+0054 
+0055 <span class="keyword">if</span> isempty(options)
+0056     N = numel(guess) - sum(fixed); <span class="comment">% number of adjustable parameters</span>
+0057     options = optimset(<span class="string">'TolX'</span>, 1e-6, <span class="string">'TolFun'</span>, 1e-6, <span class="string">'MaxFunEvals'</span>, <span class="keyword">...</span>
+0058         1000*N, <span class="string">'MaxIter'</span>, 1000*N);
+0059 <span class="keyword">end</span>
+0060 
+0061 <span class="comment">% convert data to column vectors</span>
+0062 x = x(:);
+0063 y = y(:);
+0064 
+0065 <span class="comment">% setup variable and fixed parameter arrays</span>
+0066 fixparam = guess(fixed);
+0067 varparam = guess(~fixed);
+0068 
+0069 <span class="comment">% Check if x is a double</span>
+0070 <span class="comment">% if ~isa(x, 'double')</span>
+0071 <span class="comment">%    x = double(x);</span>
+0072 <span class="comment">% end</span>
+0073 
+0074 <span class="comment">% if ~isa(y, 'double')</span>
+0075 <span class="comment">%    y = double(y);</span>
+0076 <span class="comment">% end</span>
+0077 
+0078 varparam = double(varparam);
+0079 
+0080 <span class="comment">% fit ellipse to normalized data</span>
+0081 [varparam, fval, exitflag, output] = fminsearch(<span class="keyword">...</span>
+0082     @<a href="#_sub1" class="code" title="subfunction func = Residual(varparam, x, y, fixparam, fixed)">Residual</a>, varparam, options, x, y, fixparam, fixed);
+0083 
+0084 <span class="comment">% merge variable and fixed parameters</span>
+0085 params = <a href="#_sub2" class="code" title="subfunction func = ParamMerge(varparam, fixparam, fixed)">ParamMerge</a>(varparam, fixparam, fixed);
+0086  
+0087 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0088 <a name="_sub1" href="#_subfunctions" class="code">function func = Residual(varparam, x, y, fixparam, fixed)</a>
+0089 
+0090 param = <a href="#_sub2" class="code" title="subfunction func = ParamMerge(varparam, fixparam, fixed)">ParamMerge</a>(varparam, fixparam, fixed);
+0091 x0 = param(1);
+0092 y0 = param(2);
+0093 Ax = param(3);
+0094 Ay = param(4);
+0095 epsilon = param(5);
+0096 
+0097 <span class="comment">% physical parameter bounds</span>
+0098 <span class="keyword">if</span> (Ax &lt;= 0)|(Ay &lt;= 0)
+0099     func = inf;
+0100 <span class="keyword">end</span>
+0101 
+0102 <span class="comment">% conic parameters: boa=(b/a), etc...</span>
+0103 boa = 2 * (Ax / Ay) * sin(epsilon);
+0104 coa = (Ax / Ay)^2;
+0105 doa = -2 * x0 - boa * y0;
+0106 eoa = -2 * coa * y0 - boa * x0;
+0107 foa = x0^2 + boa * x0 * y0 + coa * y0^2 - Ax^2 * cos(epsilon)^2;
+0108 
+0109 func = x.^2 + boa * x .* y + coa * y.^2 + doa * x + eoa * y + foa;
+0110 
+0111 <span class="comment">%xn = (x - x0) / Ax;</span>
+0112 <span class="comment">%yn = (y - y0) / Ay;</span>
+0113 <span class="comment">%func= xn.^2 + 2 * xn.* yn * sin(epsilon) + yn.^2 - cos(epsilon)^2;</span>
+0114 
+0115 func = sum(func.^2) / numel(x);
+0116 
+0117 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0118 <span class="comment">% merge variable and fixed parameters in proper order</span>
+0119 <a name="_sub2" href="#_subfunctions" class="code">function func = ParamMerge(varparam, fixparam, fixed)</a>
+0120 
+0121 func = zeros(size(fixed));
+0122 ivar = 1;
+0123 ifix = 1;
+0124 <span class="keyword">for</span> ii=1:length(fixed)
+0125     <span class="keyword">if</span> fixed(ii)
+0126         func(ii) = fixparam(ifix);
+0127         ifix = ifix + 1;
+0128     <span class="keyword">else</span>
+0129         func(ii) = varparam(ivar);
+0130         ivar = ivar + 1;
+0131     <span class="keyword">end</span>
+0132 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

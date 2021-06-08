@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of extract_structure</title>
+  <meta name="keywords" content="extract_structure">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../../index.html">SMASHtoolbox</a> &gt; <a href="../../../index.html">+SMASH</a> &gt; <a href="../../index.html">+FileAccess</a> &gt; <a href="../index.html">@SDAfile</a> &gt; <a href="index.html">private</a> &gt; extract_structure.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../../index.html"><img alt="<" border="0" src="../../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+FileAccess/@SDAfile/private&nbsp;<img alt=">" border="0" src="../../../../../../right.png"></a></td></tr></table>-->
+
+<h1>extract_structure
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>function data=extract_structure(archive,setname) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="extract_cell.html" class="code" title="function data=extract_cell(archive,setname)">extract_cell</a>	</li><li><a href="extract_character.html" class="code" title="function data=extract_character(archive,setname)">extract_character</a>	</li><li><a href="extract_function.html" class="code" title="function data=extract_function(archive,setname)">extract_function</a>	transcribe archive data to a MAT file</li><li><a href="extract_logical.html" class="code" title="function data=extract_logical(archive,setname)">extract_logical</a>	</li><li><a href="extract_numeric.html" class="code" title="function data=extract_numeric(archive,setname)">extract_numeric</a>	</li><li><a href="extract_object.html" class="code" title="function object=extract_object(archive,setname)">extract_object</a>	</li><li><a href="extract_structure.html" class="code" title="function data=extract_structure(archive,setname)">extract_structure</a>	</li><li><a href="readAttribute.html" class="code" title="function value=readAttribute(file,location,name)">readAttribute</a>	readAttribute Read HDF5 attribute</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="extract_cell.html" class="code" title="function data=extract_cell(archive,setname)">extract_cell</a>	</li><li><a href="extract_object.html" class="code" title="function object=extract_object(archive,setname)">extract_object</a>	</li><li><a href="extract_structure.html" class="code" title="function data=extract_structure(archive,setname)">extract_structure</a>	</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function data=extract_structure(archive,setname)</a>
+0002 
+0003 file=archive.ArchiveFile;
+0004 
+0005 <span class="comment">% extract field names</span>
+0006 name=cell(0);
+0007 temp=<a href="readAttribute.html" class="code" title="function value=readAttribute(file,location,name)">readAttribute</a>(file,setname,<span class="string">'FieldNames'</span>);
+0008 <span class="keyword">while</span> ~isempty(temp)
+0009     [new,~,~,next]=sscanf(temp,<span class="string">'%s'</span>,1);
+0010     <span class="keyword">if</span> ~isempty(new)
+0011         name{end+1}=new; <span class="comment">%#ok&lt;AGROW&gt;</span>
+0012     <span class="keyword">end</span>
+0013     temp=temp(next:end);
+0014 <span class="keyword">end</span>
+0015 
+0016 data=struct();
+0017 <span class="keyword">for</span> k=1:numel(name)
+0018     <span class="comment">%if strcmpi(name{k},'ROIselection')</span>
+0019     <span class="comment">%    keyboard</span>
+0020     <span class="comment">%end</span>
+0021     local=[setname <span class="string">'/'</span> name{k}];
+0022     <span class="keyword">switch</span> <a href="readAttribute.html" class="code" title="function value=readAttribute(file,location,name)">readAttribute</a>(file,local,<span class="string">'RecordType'</span>)
+0023         <span class="keyword">case</span> <span class="string">'numeric'</span>
+0024             data.(name{k})=<a href="extract_numeric.html" class="code" title="function data=extract_numeric(archive,setname)">extract_numeric</a>(archive,local);
+0025         <span class="keyword">case</span> <span class="string">'logical'</span>
+0026             data.(name{k})=<a href="extract_logical.html" class="code" title="function data=extract_logical(archive,setname)">extract_logical</a>(archive,local);
+0027         <span class="keyword">case</span> <span class="string">'character'</span>
+0028             data.(name{k})=<a href="extract_character.html" class="code" title="function data=extract_character(archive,setname)">extract_character</a>(archive,local);
+0029         <span class="keyword">case</span> <span class="string">'function'</span>
+0030             data.(name{k})=<a href="extract_function.html" class="code" title="function data=extract_function(archive,setname)">extract_function</a>(archive,local);
+0031         <span class="keyword">case</span> <span class="string">'structure'</span>
+0032             data.(name{k})=<a href="extract_structure.html" class="code" title="function data=extract_structure(archive,setname)">extract_structure</a>(archive,local);
+0033         <span class="keyword">case</span> <span class="string">'structures'</span>
+0034             raw=<a href="extract_cell.html" class="code" title="function data=extract_cell(archive,setname)">extract_cell</a>(archive,local);
+0035             temp=repmat(raw{1},size(raw));
+0036             <span class="keyword">for</span> n=2:numel(raw)
+0037                 temp(n)=raw{n};
+0038             <span class="keyword">end</span>
+0039             data.(name{k})=temp;
+0040         <span class="keyword">case</span> <span class="string">'cell'</span>
+0041             data.(name{k})=<a href="extract_cell.html" class="code" title="function data=extract_cell(archive,setname)">extract_cell</a>(archive,local);
+0042         <span class="keyword">case</span> <span class="string">'object'</span>
+0043             data.(name{k})=<a href="extract_object.html" class="code" title="function object=extract_object(archive,setname)">extract_object</a>(archive,local);
+0044         <span class="keyword">case</span> <span class="string">'objects'</span>
+0045             temp=<a href="extract_cell.html" class="code" title="function data=extract_cell(archive,setname)">extract_cell</a>(archive,local);
+0046             data.(name{k})=repmat(temp{1},size(temp));
+0047             <span class="keyword">for</span> n=1:numel(temp)
+0048                 data.(name{k})(n)=temp{n};
+0049             <span class="keyword">end</span>
+0050         <span class="keyword">otherwise</span>
+0051             error(<span class="string">'ERROR: invalid record type'</span>);
+0052     <span class="keyword">end</span>
+0053 <span class="keyword">end</span>
+0054 
+0055 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

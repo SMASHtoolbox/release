@@ -1,0 +1,168 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of read</title>
+  <meta name="keywords" content="read">
+  <meta name="description" content="read Read worksheet data">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="../../index.html">+SMASH</a> &gt; <a href="../index.html">+FileAccess</a> &gt; <a href="index.html">@Spreadsheet</a> &gt; read.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+FileAccess/@Spreadsheet&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>read
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>read Read worksheet data</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function [data,sheet]=read(object,sheet) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> read Read worksheet data
+
+ This method reads all data from one worksheet.
+    data=read(object,sheet);
+ The input &quot;sheet&quot; should be omitted when reading text files; omitting this
+ input in an Excel file automatically references the first worksheet.
+ Worksheets can be specified by name ('Sheet1') or numeric index (1).
+
+ The output &quot;data&quot; is a cell array of character strings.  Empty cells at
+ the top and left side of the worksheet are kept to maintain proper
+ indexing: the first row of &quot;data&quot; *always* matches the first row of the
+ worksheet.  Empty columns on the bottom and right side of the worksheet
+ are removed.
+
+ Requesting a second output:
+    [data,sheet]=read(object,sheet);
+ returns the name of the worksheet that was read from.  An empty character
+ string is returned when reading text files.
+
+ See also <a href="Spreadsheet.html" class="code" title="">Spreadsheet</a>, <a href="extract.html" class="code" title="function selection=extract(object,varargin)">extract</a>, <a href="view.html" class="code" title="function varargout=view(object,varargin)">view</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="view.html" class="code" title="function varargout=view(object,varargin)">view</a>	view View worksheet data</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% read Read worksheet data</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This method reads all data from one worksheet.</span>
+0004 <span class="comment">%    data=read(object,sheet);</span>
+0005 <span class="comment">% The input &quot;sheet&quot; should be omitted when reading text files; omitting this</span>
+0006 <span class="comment">% input in an Excel file automatically references the first worksheet.</span>
+0007 <span class="comment">% Worksheets can be specified by name ('Sheet1') or numeric index (1).</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% The output &quot;data&quot; is a cell array of character strings.  Empty cells at</span>
+0010 <span class="comment">% the top and left side of the worksheet are kept to maintain proper</span>
+0011 <span class="comment">% indexing: the first row of &quot;data&quot; *always* matches the first row of the</span>
+0012 <span class="comment">% worksheet.  Empty columns on the bottom and right side of the worksheet</span>
+0013 <span class="comment">% are removed.</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% Requesting a second output:</span>
+0016 <span class="comment">%    [data,sheet]=read(object,sheet);</span>
+0017 <span class="comment">% returns the name of the worksheet that was read from.  An empty character</span>
+0018 <span class="comment">% string is returned when reading text files.</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% See also Spreadsheet, extract, view</span>
+0021 <span class="comment">%</span>
+0022 
+0023 <span class="comment">%</span>
+0024 <span class="comment">% created January 23, 2019 by Daniel Dolan (Sandia National Laboratories)</span>
+0025 <span class="comment">%</span>
+0026 <a name="_sub0" href="#_subfunctions" class="code">function [data,sheet]=read(object,sheet)</a>
+0027 
+0028 <span class="comment">% read data</span>
+0029 <span class="keyword">switch</span> lower(object.Extension)
+0030     <span class="keyword">case</span> {<span class="string">'.xls'</span> <span class="string">'.xlsx'</span>}
+0031         list=object.Sheet;
+0032         <span class="keyword">if</span> (nargin &lt; 2) || isempty(sheet)
+0033             sheet=list{1};
+0034         <span class="keyword">elseif</span> isnumeric(sheet)
+0035             assert(any(sheet == 1:numel(list)),<span class="string">'ERROR: invalid sheet index'</span>);
+0036             sheet=list{sheet};
+0037         <span class="keyword">else</span>
+0038             assert(ischar(sheet),<span class="string">'ERROR: invalid sheet name'</span>);
+0039             match=false;
+0040             <span class="keyword">for</span> k=1:numel(list)
+0041                 <span class="keyword">if</span> strcmp(sheet,list{k})
+0042                     match=true;
+0043                     <span class="keyword">break</span>
+0044                 <span class="keyword">end</span>
+0045             <span class="keyword">end</span>
+0046             assert(match,<span class="string">'ERROR: sheet not found'</span>);
+0047         <span class="keyword">end</span>
+0048         [~,~,data]=xlsread(object.FullName,sheet);
+0049         <span class="comment">%data=readcell(object.FullName,spreadsheetImportOptions('Sheet',sheet));</span>
+0050     <span class="keyword">otherwise</span>
+0051         assert(nargin == 1,<span class="string">'ERROR: sheets not supported in this file type'</span>);
+0052         <span class="keyword">try</span>
+0053             data=readtable(object.Fullname,<span class="string">'ReadVariableNames'</span>,false);
+0054         <span class="keyword">catch</span> ME
+0055             throwAsCaller(ME);
+0056         <span class="keyword">end</span>
+0057         data=table2cell(data);
+0058         sheet=<span class="string">''</span>;
+0059 <span class="keyword">end</span>
+0060 
+0061 <span class="comment">% process data</span>
+0062 columns=size(data,2);
+0063 <span class="keyword">while</span> size(data,1) &gt; 0
+0064     empty=true;
+0065     <span class="keyword">for</span> m=1:columns
+0066         <span class="keyword">if</span> ~isnan(data{<span class="keyword">end</span>,m})
+0067             empty=false;
+0068             <span class="keyword">break</span>
+0069         <span class="keyword">end</span>
+0070     <span class="keyword">end</span>
+0071     <span class="keyword">if</span> empty
+0072         data=data(1:end-1,:);
+0073     <span class="keyword">else</span>
+0074         <span class="keyword">break</span>
+0075     <span class="keyword">end</span>
+0076 <span class="keyword">end</span>
+0077 
+0078 rows=size(data,1);
+0079 <span class="keyword">while</span> size(data,2) &gt; 0
+0080     empty=true;
+0081     <span class="keyword">for</span> n=1:rows
+0082         <span class="keyword">if</span> ~isnan(data{n,end})
+0083             empty=false;
+0084             <span class="keyword">break</span>
+0085         <span class="keyword">end</span>
+0086     <span class="keyword">end</span>
+0087     <span class="keyword">if</span> empty
+0088         data=data(:,1:end-1);
+0089     <span class="keyword">else</span>
+0090         <span class="keyword">break</span>
+0091     <span class="keyword">end</span>
+0092 <span class="keyword">end</span>
+0093 
+0094 <span class="keyword">for</span> k=1:numel(data)
+0095     <span class="keyword">if</span> isnan(data{k})
+0096         data{k}=<span class="string">''</span>;
+0097     <span class="keyword">elseif</span> isnumeric(data{k})
+0098         data{k}=num2str(data{k});
+0099     <span class="keyword">end</span>
+0100 <span class="keyword">end</span>
+0101 
+0102 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

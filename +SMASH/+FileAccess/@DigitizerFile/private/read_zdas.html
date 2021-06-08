@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of read_zdas</title>
+  <meta name="keywords" content="read_zdas">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../../index.html">SMASHtoolbox</a> &gt; <a href="../../../index.html">+SMASH</a> &gt; <a href="../../index.html">+FileAccess</a> &gt; <a href="../index.html">@DigitizerFile</a> &gt; <a href="index.html">private</a> &gt; read_zdas.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../../index.html"><img alt="<" border="0" src="../../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+FileAccess/@DigitizerFile/private&nbsp;<img alt=">" border="0" src="../../../../../../right.png"></a></td></tr></table>-->
+
+<h1>read_zdas
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>function [signal,time]=read_zdas(filename,signal_name) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">%</span>
+0002 <a name="_sub0" href="#_subfunctions" class="code">function [signal,time]=read_zdas(filename,signal_name)</a>
+0003 
+0004 file_id = hdfh(<span class="string">'open'</span>,filename,<span class="string">'read'</span>,0);
+0005 status = hdfv(<span class="string">'start'</span>,file_id);
+0006 vgroup_ref = 4;
+0007 vdata_ref = 9;
+0008 
+0009 vgroup_id = hdfv(<span class="string">'attach'</span>,file_id,vgroup_ref,<span class="string">'r'</span>);
+0010 count = hdfv(<span class="string">'ntagrefs'</span>,vgroup_id);
+0011 ndatasets = count/8;
+0012 <span class="keyword">for</span> i=0:ndatasets-1
+0013     vdata_id = hdfvs(<span class="string">'attach'</span>,file_id,vdata_ref+8*i,<span class="string">'r'</span>);
+0014     n = hdfvs(<span class="string">'elts'</span>,vdata_id);
+0015     status = hdfvs(<span class="string">'setfields'</span>,vdata_id,<span class="string">'NAME'</span>);
+0016     [name,count] = hdfvs(<span class="string">'read'</span>,vdata_id,n);
+0017     name = char(name{1});
+0018     <span class="keyword">if</span> strcmp(name,signal_name)     
+0019         vdata_id = hdfvs(<span class="string">'attach'</span>,file_id,(vdata_ref+5)+8*i,<span class="string">'r'</span>);
+0020         n = hdfvs(<span class="string">'elts'</span>,vdata_id);
+0021         status = hdfvs(<span class="string">'setfields'</span>,vdata_id,<span class="string">'TMIN'</span>);
+0022         [tmin,count] = hdfvs(<span class="string">'read'</span>,vdata_id,n);
+0023         tmin = tmin{1};
+0024         vdata_id = hdfvs(<span class="string">'attach'</span>,file_id,(vdata_ref+6)+8*i,<span class="string">'r'</span>);
+0025         n = hdfvs(<span class="string">'elts'</span>,vdata_id);
+0026         status = hdfvs(<span class="string">'setfields'</span>,vdata_id,<span class="string">'TMAX'</span>);
+0027         [tmax,count] = hdfvs(<span class="string">'read'</span>,vdata_id,n);
+0028         tmax = tmax{1};
+0029         vdata_id = hdfvs(<span class="string">'attach'</span>,file_id,(vdata_ref+7)+8*i,<span class="string">'r'</span>);
+0030         n = hdfvs(<span class="string">'elts'</span>,vdata_id);
+0031         status = hdfvs(<span class="string">'setfields'</span>,vdata_id,<span class="string">'DATA'</span>);
+0032         [amplitude,count] = hdfvs(<span class="string">'read'</span>,vdata_id,n);
+0033         amplitude = amplitude{1};
+0034         time = linspace(tmin,tmax,n);
+0035         <span class="comment">%ta = cat(2,time',amplitude');</span>
+0036         time=time(:);
+0037         signal=amplitude(:);
+0038         status = hdfv(<span class="string">'end'</span>,file_id);
+0039         status = hdfh(<span class="string">'close'</span>,file_id);
+0040         hdfml(<span class="string">'closeall'</span>);
+0041         <span class="keyword">return</span>
+0042     <span class="keyword">end</span>
+0043 <span class="keyword">end</span>
+0044 status = hdfv(<span class="string">'end'</span>,file_id);
+0045 status = hdfh(<span class="string">'close'</span>,file_id);
+0046 hdfml(<span class="string">'closeall'</span>);
+0047 error(<span class="string">'ERROR: requested signal not found'</span>);
+0048 
+0049 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

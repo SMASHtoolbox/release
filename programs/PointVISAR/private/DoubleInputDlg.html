@@ -1,0 +1,163 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of DoubleInputDlg</title>
+  <meta name="keywords" content="DoubleInputDlg">
+  <meta name="description" content="DoubleInputDlg : special form of inputdlg for double precision numbers">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">PointVISAR</a> &gt; <a href="index.html">private</a> &gt; DoubleInputDlg.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/PointVISAR/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>DoubleInputDlg
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>DoubleInputDlg : special form of inputdlg for double precision numbers</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function func=DoubleInputDlg(prompt,title,default,sigfigs) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> DoubleInputDlg : special form of inputdlg for double precision numbers
+
+ Like inputdlg, this function generates a dialog box with a number of
+ fields for data input.  The number of fields is specified by the number
+ of prompts specified by the user.  The output of this function is a cell
+ array of doubles.  Default values may be specified by a numeric or cell array that
+ is less than or equal to the number of prompts; if more default values
+ are specified, they will be ignored.  The output of this function matches
+ the type type of the default input; if no default is specified, output
+ is returned as a numeric array.
+
+ Usage:
+ answer=DoubleInputDlg(prompt,title);
+ answer=DoubleInputDlg(prompt,title,default);
+ answer=DoubleInputDlg(prompt,title,default,sigfigs);</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="FixedG.html" class="code" title="function func=FixedG(number,sigfigs)">FixedG</a>	print a number to a string with specified sigfigs</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="FringeDialog.html" class="code" title="function FringeDialog(data)">FringeDialog</a>	Displays a modal dialog where the user can modify fringes.</li><li><a href="ReadEditRecordGUI.html" class="code" title="function fig=ReadEditRecordGUI(record)">ReadEditRecordGUI</a>	read/edit records for PointVISARGUI</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function func=ExtractData(data,element)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% DoubleInputDlg : special form of inputdlg for double precision numbers</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% Like inputdlg, this function generates a dialog box with a number of</span>
+0004 <span class="comment">% fields for data input.  The number of fields is specified by the number</span>
+0005 <span class="comment">% of prompts specified by the user.  The output of this function is a cell</span>
+0006 <span class="comment">% array of doubles.  Default values may be specified by a numeric or cell array that</span>
+0007 <span class="comment">% is less than or equal to the number of prompts; if more default values</span>
+0008 <span class="comment">% are specified, they will be ignored.  The output of this function matches</span>
+0009 <span class="comment">% the type type of the default input; if no default is specified, output</span>
+0010 <span class="comment">% is returned as a numeric array.</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% Usage:</span>
+0013 <span class="comment">% answer=DoubleInputDlg(prompt,title);</span>
+0014 <span class="comment">% answer=DoubleInputDlg(prompt,title,default);</span>
+0015 <span class="comment">% answer=DoubleInputDlg(prompt,title,default,sigfigs);</span>
+0016 
+0017 <a name="_sub0" href="#_subfunctions" class="code">function func=DoubleInputDlg(prompt,title,default,sigfigs)</a>
+0018 
+0019 <span class="comment">% input checking</span>
+0020 <span class="keyword">if</span> nargin&lt;1
+0021     prompt={};
+0022 <span class="keyword">end</span>
+0023 <span class="keyword">if</span> nargin&lt;2
+0024     title=<span class="string">'DoubleInputDlg'</span>;
+0025 <span class="keyword">end</span>
+0026 <span class="keyword">if</span> nargin&lt;3
+0027     default=[];
+0028 <span class="keyword">end</span>
+0029 <span class="keyword">if</span> nargin&lt;4
+0030     sigfigs=[];
+0031 <span class="keyword">end</span>
+0032 
+0033 <span class="comment">% standard values for empty input</span>
+0034 <span class="keyword">if</span> isempty(prompt)
+0035     prompt{1}=<span class="string">'Input:'</span>;
+0036 <span class="keyword">end</span>
+0037 <span class="keyword">if</span> isempty(sigfigs)
+0038     sigfigs=6;
+0039 <span class="keyword">end</span>
+0040 
+0041 <span class="comment">% prepare default values for inputdlg</span>
+0042 NumDefault=numel(default);
+0043 <span class="keyword">for</span> ii=1:length(prompt)
+0044     <span class="keyword">if</span> ii&gt;NumDefault
+0045         DefaultInput{ii}=<span class="string">''</span>;
+0046         <span class="keyword">continue</span>
+0047     <span class="keyword">end</span>    
+0048     temp=<a href="#_sub1" class="code" title="subfunction func=ExtractData(data,element)">ExtractData</a>(default,ii);
+0049     DefaultInput{ii}=sscanf(<a href="FixedG.html" class="code" title="function func=FixedG(number,sigfigs)">FixedG</a>(temp,sigfigs),<span class="string">'%s'</span>);
+0050 <span class="keyword">end</span>
+0051 
+0052 NumLines=1;
+0053 answer=inputdlg(prompt,title,NumLines,DefaultInput);
+0054 <span class="keyword">if</span> isempty(answer) <span class="comment">% user pressed cancel/closed window</span>
+0055     func=default;
+0056     <span class="keyword">return</span>
+0057 <span class="keyword">end</span>
+0058 
+0059 <span class="comment">% extract results from dialog</span>
+0060 <span class="keyword">for</span> ii=1:length(answer)
+0061     <span class="comment">%temp=str2double(answer{ii});</span>
+0062     temp=sscanf(answer{ii},<span class="string">'%g'</span>);
+0063     <span class="keyword">if</span> isempty(temp)
+0064          msg{1}=[prompt{ii} <span class="string">' input '''</span> answer{ii} <span class="string">''' is invalid.'</span>];
+0065          msg{2}=[<span class="string">'Previous value of '</span> DefaultInput{ii} <span class="string">' used instead.'</span>];
+0066          temp=<a href="#_sub1" class="code" title="subfunction func=ExtractData(data,element)">ExtractData</a>(default,ii);
+0067          handle=warndlg(msg,[<span class="string">'Warning: invalid input for '</span> title]);
+0068          uiwait(handle)
+0069     <span class="keyword">end</span>
+0070     <span class="comment">%if isnan(temp)</span>
+0071         <span class="comment">%msg{1}=[prompt{ii} ' input ''' answer{ii} ''' is not a number.'];</span>
+0072         <span class="comment">%if isempty(DefaultInput{ii})</span>
+0073         <span class="comment">%    %msg{2}=['Value set to 0--proceed with caution!'];</span>
+0074         <span class="comment">%    %temp=0;</span>
+0075         <span class="comment">%else</span>
+0076         <span class="comment">%    msg{2}=['Previous value of ' DefaultInput{ii} ' used instead.'];</span>
+0077         <span class="comment">%    temp=ExtractData(default,ii);</span>
+0078         <span class="comment">%end</span>
+0079         <span class="comment">%handle=warndlg(msg,['Warning: invalid input for ' title]);</span>
+0080         <span class="comment">%uiwait(handle)</span>
+0081     <span class="comment">%end</span>
+0082     result(ii)=temp;
+0083 <span class="keyword">end</span>
+0084 
+0085 <span class="keyword">if</span> iscell(default)
+0086     func=num2cell(result);
+0087 <span class="keyword">else</span>
+0088     func=result;
+0089 <span class="keyword">end</span>
+0090 
+0091 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0092 <a name="_sub1" href="#_subfunctions" class="code">function func=ExtractData(data,element)</a>
+0093 
+0094 <span class="keyword">if</span> isnumeric(data)
+0095     func=data(element);
+0096 <span class="keyword">end</span>
+0097 
+0098 <span class="keyword">if</span> iscell(data)
+0099     func=data{element};
+0100 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

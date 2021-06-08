@@ -1,0 +1,358 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of datadlg</title>
+  <meta name="keywords" content="datadlg">
+  <meta name="description" content="datadlg: create a data dialog box">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">SIRHEN</a> &gt; <a href="index.html">private</a> &gt; datadlg.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/SIRHEN/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>datadlg
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>datadlg: create a data dialog box</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function answer=datadlg(name,label,default,button,options) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> datadlg: create a data dialog box
+
+ This function is provides a flexible dialog box for data entry, similar
+ to inputdlg.  
+ Usage:
+  &gt;&gt; answer=datadlg(name,label,default,button,options);
+
+ Cell arrays passed to the datadlg create edit boxes for user input.
+ Example:
+  &gt;&gt; label={'Parameter 1:','Parameter 2:'};
+  &gt;&gt; default={'1','2'};
+  &gt;&gt; answer=datadlg('Set parameters',label,default);
+
+ Unlike inputdlg, customizable buttons may be created at the bottom of the
+ dialog box; by default, two buttons ('OK' and 'Cancel') are generated.
+ User-defined callbacks may be assigned to each button to access, format,
+ and apply data from the dialog box.  Button labels and callbacks are
+ passing by a structured array (button) as the fourth input.  The callback
+ functions should access and update the data structure stored in
+ 'UserData' of the dialog box. The fields of this structure define the
+ edit handles (array) and current/previous field values (cell array).
+ Refer examples datadlg_exA.m and datadlg_exB.m for further information.
+ 
+ Dialog options are defined by passing a structure as the fifth input.
+   options.style: 'normal' or 'modal' (default)
+   options.minwidth: minimum edit box width in characters (default is 20)
+   options.root: root object handle (default is 0)
+   options.location: dialog location relative to root object (default is
+   'center').  Valid choices are 'north', 'south', 'east', 'west', 'northeast',
+   'northweast', 'southeast', 'southwest', and 'center'.
+   options.fontname: font name (default set by sysetm)
+   options.fontsize: font size in points (default set by system)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="AnalysisScreen.html" class="code" title="function fig=AnalysisScreen(prevfig)">AnalysisScreen</a>	allocate mising input</li><li><a href="DisplayOptions_old.html" class="code" title="function DisplayOptions(varargin)">DisplayOptions_old</a>	handle input</li><li><a href="GeneralOptions.html" class="code" title="function GeneralOptions(varargin)">GeneralOptions</a>	handle input</li><li><a href="SelectionScreen.html" class="code" title="function fig=SelectionScreen(prevfig)">SelectionScreen</a>	allocate mising input</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function movedlg(dlg,target,location)</a></li><li><a href="#_sub2" class="code">function defaultOK(varargin)</a></li><li><a href="#_sub3" class="code">function defaultCancel(varargin)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% datadlg: create a data dialog box</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This function is provides a flexible dialog box for data entry, similar</span>
+0004 <span class="comment">% to inputdlg.</span>
+0005 <span class="comment">% Usage:</span>
+0006 <span class="comment">%  &gt;&gt; answer=datadlg(name,label,default,button,options);</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% Cell arrays passed to the datadlg create edit boxes for user input.</span>
+0009 <span class="comment">% Example:</span>
+0010 <span class="comment">%  &gt;&gt; label={'Parameter 1:','Parameter 2:'};</span>
+0011 <span class="comment">%  &gt;&gt; default={'1','2'};</span>
+0012 <span class="comment">%  &gt;&gt; answer=datadlg('Set parameters',label,default);</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% Unlike inputdlg, customizable buttons may be created at the bottom of the</span>
+0015 <span class="comment">% dialog box; by default, two buttons ('OK' and 'Cancel') are generated.</span>
+0016 <span class="comment">% User-defined callbacks may be assigned to each button to access, format,</span>
+0017 <span class="comment">% and apply data from the dialog box.  Button labels and callbacks are</span>
+0018 <span class="comment">% passing by a structured array (button) as the fourth input.  The callback</span>
+0019 <span class="comment">% functions should access and update the data structure stored in</span>
+0020 <span class="comment">% 'UserData' of the dialog box. The fields of this structure define the</span>
+0021 <span class="comment">% edit handles (array) and current/previous field values (cell array).</span>
+0022 <span class="comment">% Refer examples datadlg_exA.m and datadlg_exB.m for further information.</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">% Dialog options are defined by passing a structure as the fifth input.</span>
+0025 <span class="comment">%   options.style: 'normal' or 'modal' (default)</span>
+0026 <span class="comment">%   options.minwidth: minimum edit box width in characters (default is 20)</span>
+0027 <span class="comment">%   options.root: root object handle (default is 0)</span>
+0028 <span class="comment">%   options.location: dialog location relative to root object (default is</span>
+0029 <span class="comment">%   'center').  Valid choices are 'north', 'south', 'east', 'west', 'northeast',</span>
+0030 <span class="comment">%   'northweast', 'southeast', 'southwest', and 'center'.</span>
+0031 <span class="comment">%   options.fontname: font name (default set by sysetm)</span>
+0032 <span class="comment">%   options.fontsize: font size in points (default set by system)</span>
+0033 
+0034 <span class="comment">% created 12/01/2009 by Daniel Dolan</span>
+0035 <a name="_sub0" href="#_subfunctions" class="code">function answer=datadlg(name,label,default,button,options)</a>
+0036 
+0037 <span class="comment">% handle input</span>
+0038 <span class="keyword">if</span> (nargin&lt;1) || isempty(name)
+0039     name=<span class="string">'Data Dialog'</span>;
+0040 <span class="keyword">end</span>
+0041 
+0042 <span class="keyword">if</span> (nargin&lt;2) || isempty(label)
+0043     label={<span class="string">'Parameter:'</span>};
+0044 <span class="keyword">end</span>
+0045 
+0046 <span class="keyword">if</span> (nargin&lt;3) || isempty(default)
+0047     default={<span class="string">''</span>};
+0048 <span class="keyword">end</span>
+0049 
+0050 <span class="keyword">if</span> (nargin&lt;4) || isempty(button)
+0051     button(1).label=<span class="string">'OK'</span>;
+0052     button(1).callback=@<a href="#_sub2" class="code" title="subfunction defaultOK(varargin)">defaultOK</a>;
+0053     button(2).label=<span class="string">'Cancel'</span>;
+0054     button(2).callback=@<a href="#_sub3" class="code" title="subfunction defaultCancel(varargin)">defaultCancel</a>;
+0055 <span class="keyword">end</span>
+0056 
+0057 <span class="keyword">if</span> (nargin&lt;5) || isempty(options)
+0058     options=struct();
+0059 <span class="keyword">end</span>
+0060 field=<span class="string">'style'</span>;
+0061 <span class="keyword">if</span> ~isfield(options,field) || isempty(options.(field))
+0062     options.(field)=<span class="string">'modal'</span>;
+0063 <span class="keyword">end</span>
+0064 field=<span class="string">'minwidth'</span>;
+0065 <span class="keyword">if</span> ~isfield(options,field) || isempty(options.(field))
+0066     options.(field)=20; <span class="comment">% characters</span>
+0067 <span class="keyword">end</span>
+0068 field=<span class="string">'root'</span>;
+0069 <span class="keyword">if</span> ~isfield(options,field) || isempty(options.(field))
+0070     options.(field)=0; <span class="comment">% root object (the screen)</span>
+0071 <span class="keyword">end</span>
+0072 field=<span class="string">'location'</span>;
+0073 <span class="keyword">if</span> ~isfield(options,field) || isempty(options.(field))
+0074     options.(field)=<span class="string">'center'</span>; 
+0075 <span class="keyword">end</span>
+0076 field=<span class="string">'fontname'</span>;
+0077 <span class="keyword">if</span> ~isfield(options,field) || isempty(options.(field))
+0078     options.(field)=get(0,<span class="string">'DefaultUIcontrolFontName'</span>); 
+0079 <span class="keyword">end</span>
+0080 field=<span class="string">'fontsize'</span>;
+0081 <span class="keyword">if</span> ~isfield(options,field) || isempty(options.(field))
+0082     options.(field)=get(0,<span class="string">'DefaultUIcontrolFontSize'</span>); 
+0083 <span class="keyword">end</span>
+0084 
+0085 <span class="comment">% error checking</span>
+0086 <span class="keyword">if</span> ~iscell(label) || ~iscell(default)
+0087     error(<span class="string">'ERROR: label and default must be cell arrays'</span>);
+0088 <span class="keyword">end</span>
+0089 Nlabel=numel(label);
+0090 Ndefault=numel(default);
+0091 <span class="keyword">if</span> Nlabel==Ndefault
+0092     <span class="comment">% do nothing</span>
+0093 <span class="keyword">elseif</span> Nlabel==1
+0094     default=default(1);
+0095 <span class="keyword">elseif</span> numel(default)==1
+0096     default=repmat(default(1),size(label));
+0097 <span class="keyword">else</span>
+0098     error(<span class="string">'ERROR: unable to match label and default arrays'</span>);
+0099 <span class="keyword">end</span>
+0100 
+0101 <span class="comment">% create and size dialog</span>
+0102 fig=figure(<span class="string">'NumberTitle'</span>,<span class="string">'off'</span>,<span class="string">'Name'</span>,name,<span class="keyword">...</span>
+0103     <span class="string">'Menubar'</span>,<span class="string">'none'</span>,<span class="string">'Toolbar'</span>,<span class="string">'none'</span>,<span class="keyword">...</span>
+0104     <span class="string">'Resize'</span>,<span class="string">'off'</span>,<span class="string">'Units'</span>,<span class="string">'characters'</span>,<span class="keyword">...</span>
+0105     <span class="string">'ToolBar'</span>,<span class="string">'none'</span>,<span class="string">'MenuBar'</span>,<span class="string">'none'</span>,<span class="keyword">...</span>
+0106     <span class="string">'IntegerHandle'</span>,<span class="string">'off'</span>,<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+0107 hgap=1.00; <span class="comment">% horizontal gap [characters]</span>
+0108 vgap=0.50; <span class="comment">% vertical gap [characters]</span>
+0109 temp=uicontrol(<span class="string">'Units'</span>,<span class="string">'characters'</span>);
+0110 <span class="keyword">try</span>
+0111     set(temp,<span class="string">'FontName'</span>,options.fontname,<span class="string">'FontSize'</span>,options.fontsize);
+0112 <span class="keyword">catch</span>
+0113     fprintf(<span class="string">'Invalid font options (%s %g) ignored\n'</span>,options.fontname,options.fontize);
+0114 <span class="keyword">end</span>
+0115 fontname=get(temp,<span class="string">'FontName'</span>);
+0116 fontsize=get(temp,<span class="string">'FontSize'</span>);
+0117 
+0118 set(temp,<span class="string">'Style'</span>,<span class="string">'text'</span>);
+0119 textpos=zeros(1,4);
+0120 Ntext=numel(label);
+0121 <span class="keyword">for</span> n=1:Ntext
+0122     nchar=numel(label{n});
+0123     set(temp,<span class="string">'String'</span>,repmat(<span class="string">'M'</span>,[1 nchar]));
+0124     extent=get(temp,<span class="string">'Extent'</span>);
+0125     textpos(3)=max([textpos(3) extent(3)]);
+0126     textpos(4)=max([textpos(4) extent(4)]);
+0127 <span class="keyword">end</span>
+0128 
+0129 set(temp,<span class="string">'Style'</span>,<span class="string">'edit'</span>);
+0130 editpos=zeros(1,4);
+0131 set(temp,<span class="string">'String'</span>,repmat(<span class="string">'M'</span>,[1 options.minwidth]));
+0132 extent=get(temp,<span class="string">'Extent'</span>);
+0133 editpos(3)=extent(3);
+0134 editpos(4)=1.50*extent(4);
+0135 
+0136 set(temp,<span class="string">'Style'</span>,<span class="string">'pushbutton'</span>);
+0137 buttonpos=zeros(1,4);
+0138 Nbutton=numel(button);
+0139 <span class="keyword">for</span> n=1:Nbutton
+0140     nchar=numel(button(n).label);
+0141     set(temp,<span class="string">'String'</span>,repmat(<span class="string">'M'</span>,[1 nchar]));
+0142     extent=get(temp,<span class="string">'Extent'</span>);
+0143     buttonpos(3)=max([buttonpos(3) extent(3)]);
+0144     buttonpos(4)=max([buttonpos(4) 1.50*extent(4)]);
+0145 <span class="keyword">end</span>
+0146 
+0147 delete(temp);
+0148 figwidth=max([textpos(3) editpos(3)])+2*hgap;
+0149 figwidth=max([figwidth Nbutton*(buttonpos(3)+hgap)+hgap]);
+0150 figheight=Ntext*(vgap+textpos(4)+editpos(4))+buttonpos(4)+2*vgap;
+0151 set(fig,<span class="string">'Position'</span>,[0 0 figwidth figheight]);
+0152 <a href="#_sub1" class="code" title="subfunction movedlg(dlg,target,location)">movedlg</a>(fig,options.root,options.location);
+0153 
+0154 <span class="comment">% create text and edit boxes</span>
+0155 textpos(1)=hgap;
+0156 textpos(2)=figheight-vgap;
+0157 textpos(3)=figwidth-2*hgap;
+0158 editpos([1 3])=textpos([1 3]);
+0159 edit=zeros(Ntext,1);
+0160 textbg=get(fig,<span class="string">'Color'</span>);
+0161 editbg=<span class="string">'w'</span>;
+0162 <span class="keyword">for</span> n=1:Ntext
+0163     textpos(2)=textpos(2)-textpos(4);
+0164     uicontrol(<span class="string">'Style'</span>,<span class="string">'text'</span>,<span class="string">'String'</span>,label{n},<span class="keyword">...</span>
+0165         <span class="string">'Units'</span>,<span class="string">'characters'</span>,<span class="string">'Position'</span>,textpos,<span class="keyword">...</span>
+0166         <span class="string">'BackgroundColor'</span>,textbg,<span class="string">'HorizontalAlignment'</span>,<span class="string">'left'</span>,<span class="keyword">...</span>
+0167         <span class="string">'FontName'</span>,fontname,<span class="string">'FontSize'</span>,fontsize);
+0168     editpos(2)=textpos(2)-editpos(4);
+0169     edit(n)=uicontrol(<span class="string">'Style'</span>,<span class="string">'edit'</span>,<span class="string">'String'</span>,default{n},<span class="keyword">...</span>
+0170         <span class="string">'Units'</span>,<span class="string">'characters'</span>,<span class="string">'Position'</span>,editpos,<span class="keyword">...</span>
+0171         <span class="string">'BackgroundColor'</span>,editbg,<span class="string">'HorizontalAlignment'</span>,<span class="string">'left'</span>,<span class="keyword">...</span>
+0172         <span class="string">'FontName'</span>,fontname,<span class="string">'FontSize'</span>,fontsize);
+0173     textpos(2)=editpos(2)-vgap;
+0174 <span class="keyword">end</span>
+0175 
+0176 <span class="comment">% create buttons</span>
+0177 buttonpos(1)=figwidth-Nbutton*(buttonpos(3)+hgap);
+0178 buttonpos(2)=vgap;
+0179 <span class="keyword">for</span> n=1:Nbutton
+0180     uicontrol(<span class="string">'Style'</span>,<span class="string">'pushbutton'</span>,<span class="string">'String'</span>,button(n).label,<span class="keyword">...</span>
+0181         <span class="string">'Units'</span>,<span class="string">'characters'</span>,<span class="string">'Position'</span>,buttonpos,<span class="keyword">...</span>
+0182         <span class="string">'FontName'</span>,fontname,<span class="string">'FontSize'</span>,fontsize,<span class="keyword">...</span>
+0183         <span class="string">'Callback'</span>,button(n).callback);
+0184     buttonpos(1)=buttonpos(1)+buttonpos(3)+hgap;
+0185 <span class="keyword">end</span>
+0186 
+0187 <span class="comment">% store data in figure</span>
+0188 data.edit=edit;
+0189 data.previous=default;
+0190 data.current=default;
+0191 set(fig,<span class="string">'UserData'</span>,data);
+0192 
+0193 <span class="comment">% finish up and wait for user input</span>
+0194 set(fig,<span class="string">'Visible'</span>,<span class="string">'on'</span>,<span class="string">'HandleVisibility'</span>,<span class="string">'Callback'</span>);
+0195 <span class="keyword">if</span> strcmp(options.style,<span class="string">'modal'</span>)
+0196     set(fig,<span class="string">'WindowStyle'</span>,options.style);
+0197 <span class="keyword">end</span>
+0198 uiwait(fig);
+0199 <span class="keyword">if</span> ishandle(fig)
+0200     data=get(fig,<span class="string">'UserData'</span>);
+0201     answer=data.current;
+0202     delete(fig);
+0203 <span class="keyword">else</span>
+0204     answer={};
+0205 <span class="keyword">end</span>
+0206 
+0207 <span class="comment">%%%%%%%%%%%%%%%%%%%%%</span>
+0208 <span class="comment">% utility functions %</span>
+0209 <span class="comment">%%%%%%%%%%%%%%%%%%%%%</span>
+0210 <a name="_sub1" href="#_subfunctions" class="code">function movedlg(dlg,target,location)</a>
+0211 
+0212 <span class="keyword">if</span> (nargin&lt;1) || isempty(location)
+0213     location=<span class="string">'center'</span>;
+0214 <span class="keyword">end</span>
+0215 
+0216 <span class="comment">% determine absolute figure position</span>
+0217 units=get(target,<span class="string">'Units'</span>);
+0218 set(target,<span class="string">'Units'</span>,<span class="string">'pixels'</span>);
+0219 <span class="keyword">if</span> target==0
+0220    targetpos=get(target,<span class="string">'MonitorPositions'</span>);
+0221    targetpos=targetpos(1,:);
+0222 <span class="keyword">else</span>
+0223     targetpos=get(target,<span class="string">'Position'</span>);
+0224 <span class="keyword">end</span>
+0225 set(target,<span class="string">'Units'</span>,units);
+0226 
+0227 <span class="comment">% position dialog relative to figure</span>
+0228 units=get(dlg,<span class="string">'Units'</span>) ;
+0229 set(dlg,<span class="string">'Units'</span>,<span class="string">'pixels'</span>);
+0230 dlgpos=get(dlg,<span class="string">'Position'</span>);
+0231 x=targetpos(1)+(targetpos(3)-dlgpos(3))*[0 1/2 1];
+0232 y=targetpos(2)+(targetpos(4)-dlgpos(4))*[0 1/2 1];
+0233 <span class="keyword">switch</span> lower(location)
+0234     <span class="keyword">case</span> <span class="string">'north'</span>
+0235         dlgpos(1:2)=[x(2) y(3)];
+0236     <span class="keyword">case</span> <span class="string">'south'</span>
+0237         dlgpos(1:2)=[x(2) y(1)];
+0238     <span class="keyword">case</span> <span class="string">'east'</span>
+0239         dlgpos(1:2)=[x(1) y(2)];
+0240     <span class="keyword">case</span> <span class="string">'west'</span>
+0241         dlgpos(1:2)=[x(3) y(2)];
+0242     <span class="keyword">case</span> <span class="string">'northeast'</span>
+0243         dlgpos(1:2)=[x(3) y(3)];
+0244     <span class="keyword">case</span> <span class="string">'northwest'</span>
+0245         dlgpos(1:2)=[x(1) y(3)];
+0246     <span class="keyword">case</span> <span class="string">'southeast'</span>
+0247         dlgpos(1:2)=[x(3) y(1)];
+0248     <span class="keyword">case</span> <span class="string">'southwest'</span>
+0249         dlgpos(1:2)=[x(1) y(1)];
+0250     <span class="keyword">case</span> <span class="string">'center'</span>
+0251         dlgpos(1:2)=[x(2) y(2)];
+0252     <span class="keyword">otherwise</span> 
+0253         error(<span class="string">'ERROR: %s is not a valid location'</span>,location);
+0254 <span class="keyword">end</span>
+0255 set(dlg,<span class="string">'Position'</span>,dlgpos);
+0256 set(dlg,<span class="string">'Units'</span>,units);
+0257 
+0258 <span class="comment">%%%%%%%%%%%%%%%%%%%%%</span>
+0259 <span class="comment">% default callbacks %</span>
+0260 <span class="comment">%%%%%%%%%%%%%%%%%%%%%</span>
+0261 <a name="_sub2" href="#_subfunctions" class="code">function defaultOK(varargin)</a>
+0262 fig=gcbf;
+0263 uiresume(fig);
+0264 data=get(fig,<span class="string">'UserData'</span>);
+0265 data.current=cell(size(data.edit));
+0266 <span class="keyword">for</span> n=1:numel(data.edit)
+0267     temp=get(data.edit(n),<span class="string">'String'</span>);
+0268     <span class="comment">%data.current{n}=sscanf(temp,'%s');</span>
+0269     data.current{n}=temp;
+0270 <span class="keyword">end</span>
+0271 set(fig,<span class="string">'UserData'</span>,data);
+0272 
+0273 <a name="_sub3" href="#_subfunctions" class="code">function defaultCancel(varargin)</a>
+0274 fig=gcbf;
+0275 uiresume(fig);
+0276 data=get(fig,<span class="string">'UserData'</span>);
+0277 data.current={};
+0278 set(fig,<span class="string">'UserData'</span>,data);</pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

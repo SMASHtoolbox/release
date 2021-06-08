@@ -1,0 +1,131 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of aboutTHRIVE</title>
+  <meta name="keywords" content="aboutTHRIVE">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">THRIVE</a> &gt; <a href="index.html">private</a> &gt; aboutTHRIVE.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/THRIVE/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>aboutTHRIVE
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function varargout=aboutTHRIVE(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="custom_uicontrol.html" class="code" title="function [h,pos]=custom_uicontrol(varargin)">custom_uicontrol</a>	customized uicontrol function</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="EllipseScreen.html" class="code" title="function fig=EllipseScreen(oldfig)">EllipseScreen</a>	allocate mising input</li><li><a href="LoadScreen.html" class="code" title="function fig=LoadScreen(oldfig)">LoadScreen</a>	LoadScreen:</li><li><a href="QuadratureScreen.html" class="code" title="function fig=QuadratureScreen(oldfig)">QuadratureScreen</a>	this function needs to be significantly revised. Entry into the figure</li><li><a href="ResultsScreen.html" class="code" title="function fig=ResultsScreen(oldfig)">ResultsScreen</a>	ResultsScreen:</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function varargout=aboutTHRIVE(varargin)</a>
+0002 
+0003 mode=<span class="string">'window'</span>;
+0004 rootfig=[];
+0005 <span class="keyword">switch</span> nargin
+0006     <span class="keyword">case</span> 1
+0007         mode=varargin{1};
+0008     <span class="keyword">case</span> 3
+0009         rootfig=varargin{3};
+0010 <span class="keyword">end</span>               
+0011 
+0012 name=<span class="string">'THRIVE (THRee-Interferometer VElocimetry)'</span>;
+0013 <span class="comment">%codever='1.2';</span>
+0014 <span class="comment">%releasedate='July 2016';</span>
+0015 codever=<span class="string">'1.3'</span>;
+0016 releasedate=<span class="string">'November 2016'</span>;
+0017 <span class="keyword">switch</span> mode
+0018     <span class="keyword">case</span> <span class="string">'name'</span>
+0019         varargout{1}=name;
+0020         varargout{2}=codever;
+0021         varargout{3}=releasedate;
+0022     <span class="keyword">otherwise</span>
+0023         <span class="comment">% generate window</span>
+0024         tag=<span class="string">'THRIVE_AboutScreen'</span>;
+0025         fig=findall(0,<span class="string">'Type'</span>,<span class="string">'figure'</span>,<span class="string">'Tag'</span>,tag);
+0026         <span class="keyword">if</span> isempty(fig);
+0027             fig=figure(<span class="string">'Name'</span>,name,<span class="string">'NumberTitle'</span>,<span class="string">'off'</span>,<span class="string">'Resize'</span>,<span class="string">'off'</span>,<span class="keyword">...</span>
+0028                 <span class="string">'Units'</span>,<span class="string">'pixels'</span>,<span class="string">'Menubar'</span>,<span class="string">'none'</span>,<span class="string">'Toolbar'</span>,<span class="string">'none'</span>,<span class="keyword">...</span>
+0029                 <span class="string">'Tag'</span>,tag,<span class="string">'Color'</span>,[1 1 1],<span class="keyword">...</span>
+0030                 <span class="string">'IntegerHandle'</span>,<span class="string">'off'</span>,<span class="string">'HandleVisibility'</span>,<span class="string">'Callback'</span>);
+0031         <span class="keyword">else</span>
+0032             figure(fig);
+0033             <span class="keyword">return</span>
+0034         <span class="keyword">end</span>        
+0035         <span class="comment">% render logo</span>
+0036         load SandiaLogo.mat
+0037         Ly=size(SandiaLogo,1);
+0038         Lx=size(SandiaLogo,2);
+0039         ha=axes(<span class="string">'Parent'</span>,fig);
+0040         imagesc(SandiaLogo,<span class="string">'Parent'</span>,ha);
+0041         axis(ha,<span class="string">'image'</span>);
+0042         axis(ha,<span class="string">'off'</span>);       
+0043         imsize=[Lx Ly];
+0044         set(ha,<span class="string">'Units'</span>,<span class="string">'pixels'</span>,<span class="string">'Position'</span>,[0 0 imsize]);
+0045         pos=get(ha,<span class="string">'Position'</span>);
+0046         
+0047         <span class="comment">% text description</span>
+0048         pos(1)=pos(1)+pos(3);
+0049         pos(3)=2*pos(3);
+0050         hc=<a href="custom_uicontrol.html" class="code" title="function [h,pos]=custom_uicontrol(varargin)">custom_uicontrol</a>(fig,<span class="string">'Style'</span>,<span class="string">'text'</span>);        
+0051         set(hc,<span class="string">'Units'</span>,<span class="string">'pixels'</span>,<span class="string">'Position'</span>,pos);
+0052         message={};
+0053         message{end+1}=[<span class="keyword">...</span>
+0054             <span class="string">'This program calculates velocity and position data from three-interferometer velocimetry measurements.'</span>];        
+0055         message{end+1}=<span class="string">''</span>;
+0056         message{end+1}=sprintf(<span class="string">'version %s (%s)'</span>,codever,releasedate);
+0057         message{end+1}=<span class="string">'created by Daniel Dolan'</span>;
+0058         message{end+2}=<span class="string">''</span>;
+0059         message=textwrap(hc,message);
+0060         set(hc,<span class="string">'String'</span>,message);
+0061         extent=get(hc,<span class="string">'Extent'</span>);
+0062         pos(4)=extent(4);
+0063         set(hc,<span class="string">'Position'</span>,pos);
+0064         set(hc,<span class="string">'BackgroundColor'</span>,get(fig,<span class="string">'Color'</span>));
+0065         
+0066         <span class="comment">% size the window</span>
+0067         figpos=get(fig,<span class="string">'Position'</span>);
+0068         figpos(3)=pos(1)+pos(3);
+0069         figpos(4)=pos(4);        
+0070         set(fig,<span class="string">'Position'</span>,figpos);        
+0071         <span class="keyword">if</span> ishandle(rootfig)
+0072             units=get(rootfig,<span class="string">'Units'</span>);
+0073             set(rootfig,<span class="string">'Units'</span>,<span class="string">'pixels'</span>);
+0074             rootpos=get(rootfig,<span class="string">'Position'</span>);
+0075             figpos(1)=rootpos(1)+(rootpos(3)-figpos(3))/2;
+0076             figpos(2)=rootpos(2)+(rootpos(4)-figpos(4))/2;
+0077             set(fig,<span class="string">'Position'</span>,figpos,<span class="string">'Units'</span>,units);
+0078         <span class="keyword">end</span>
+0079         
+0080         <span class="comment">% reposition the logo</span>
+0081         pos=get(ha,<span class="string">'Position'</span>);
+0082         pos(2)=figpos(4)-pos(4);
+0083         set(ha,<span class="string">'Position'</span>,pos);
+0084 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

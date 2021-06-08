@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of app2class</title>
+  <meta name="keywords" content="app2class">
+  <meta name="description" content="app2class Convert App Designer file to a class definition">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="../../index.html">+SMASH</a> &gt; <a href="../index.html">+System</a> &gt; <a href="index.html">+convert</a> &gt; app2class.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+System/+convert&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>app2class
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>app2class Convert App Designer file to a class definition</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function app2class(source,target) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> app2class Convert App Designer file to a class definition
+
+ This function converts a *.mlapp file (as created by the App Designer) to
+ a *.m class definition.
+    app2class(source); 
+ Omitting the input &quot;source&quot; prompts the user to select a *.mlapp file.
+
+ The converted class file is saved in the current directory by default,
+ overwriting any existing file with that name.  The file can also be
+ written to a specified location:
+    app2class(source,target);
+ 
+ See also SMASH.System.convert</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% app2class Convert App Designer file to a class definition</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This function converts a *.mlapp file (as created by the App Designer) to</span>
+0004 <span class="comment">% a *.m class definition.</span>
+0005 <span class="comment">%    app2class(source);</span>
+0006 <span class="comment">% Omitting the input &quot;source&quot; prompts the user to select a *.mlapp file.</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% The converted class file is saved in the current directory by default,</span>
+0009 <span class="comment">% overwriting any existing file with that name.  The file can also be</span>
+0010 <span class="comment">% written to a specified location:</span>
+0011 <span class="comment">%    app2class(source,target);</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">% See also SMASH.System.convert</span>
+0014 <span class="comment">%</span>
+0015 
+0016 <span class="comment">%</span>
+0017 <span class="comment">% created February 10, 2019 by Daniel Dolan (Sandia National Laboratories)</span>
+0018 <span class="comment">%</span>
+0019 <a name="_sub0" href="#_subfunctions" class="code">function app2class(source,target)</a>
+0020 
+0021 <span class="keyword">if</span> verLessThan(<span class="string">'matlab'</span>, <span class="string">'8.4'</span>)
+0022     error(<span class="string">'ERROR: this function requires MATLAB release 2014b or later'</span>);
+0023 <span class="keyword">end</span>
+0024 
+0025 <span class="comment">% manage input</span>
+0026 <span class="keyword">if</span> (nargin &lt; 1) || isempty(source)
+0027     [source,location]=uigetfile({<span class="string">'*.mlapp; *.MLAPP'</span> <span class="string">'MATLAB apps'</span>},<span class="keyword">...</span>
+0028         <span class="string">'Select MATLAB app file'</span>);
+0029     <span class="keyword">if</span> isempty(source)
+0030         <span class="keyword">return</span>
+0031     <span class="keyword">end</span>
+0032     source=fullfile(location,source);
+0033 <span class="keyword">else</span>
+0034     assert(exist(source,<span class="string">'file'</span>) == 2,<span class="string">'ERROR: requested app not found'</span>);
+0035 <span class="keyword">end</span>
+0036 [~,short,ext]=fileparts(source);
+0037 assert(strcmpi(ext,<span class="string">'.mlapp'</span>),<span class="string">'ERROR: invalid app name'</span>);
+0038 
+0039 <span class="keyword">if</span> (nargin &lt; 2) || isempty(target)
+0040     target=fullfile(pwd,[short <span class="string">'.m'</span>]);    
+0041 <span class="keyword">else</span>
+0042     [~,~,ext]=fileparts(target);
+0043     assert(strcmpi(ext,<span class="string">'.m'</span>),<span class="string">'ERROR: invalid class file name'</span>);
+0044 <span class="keyword">end</span>
+0045 [location,~,~]=fileparts(target);
+0046 <span class="keyword">if</span> ~isempty(location) &amp;&amp; (exist(location,<span class="string">'dir'</span>) ~= 7)
+0047     mkdir(location);
+0048 <span class="keyword">end</span>
+0049 <span class="keyword">try</span>
+0050     fid=fopen(target,<span class="string">'w'</span>);
+0051 <span class="keyword">catch</span>
+0052     error(<span class="string">'ERROR: invalid target file'</span>);
+0053 <span class="keyword">end</span>
+0054 
+0055 <span class="comment">% extract class definition</span>
+0056 command=sprintf(<span class="string">'type(''%s'')'</span>,source);
+0057 code=evalc(command);
+0058 fprintf(fid,<span class="string">'%c'</span>,code);
+0059 fclose(fid);
+0060 
+0061 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

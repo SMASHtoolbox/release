@@ -1,0 +1,467 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of FringeDialog</title>
+  <meta name="keywords" content="FringeDialog">
+  <meta name="description" content="Displays a modal dialog where the user can modify fringes.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">PointVISAR</a> &gt; <a href="index.html">private</a> &gt; FringeDialog.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/PointVISAR/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>FringeDialog
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>Displays a modal dialog where the user can modify fringes.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function FringeDialog(data) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Displays a modal dialog where the user can modify fringes.
+ FringeDlg returns RecordData with the modified fringes.
+ The dialog will display two lists, one for Add Fringes, and one for
+ Subtract Fringes.  The user can click on buttons to create new fringes or
+ remove fringes.
+ The defaultValue that is passed in will be used as the default value when
+ the user creates a new fringe.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="ActiveRecord.html" class="code" title="function active=ActiveRecord(data)">ActiveRecord</a>	determine active PointVISAR record</li><li><a href="DoubleInputDlg.html" class="code" title="function func=DoubleInputDlg(prompt,title,default,sigfigs)">DoubleInputDlg</a>	DoubleInputDlg : special form of inputdlg for double precision numbers</li><li><a href="PointVISARGUI.html" class="code" title="function fig=PointVISARGUI(data)">PointVISARGUI</a>	PointVISARGUI</li><li><a href="VisarAnalysis.html" class="code" title="function record = VisarAnalysis(record, varargin)">VisarAnalysis</a>	VisarAnalysis Provides a gateway to different stages of Visar</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="PointVISARGUI.html" class="code" title="function fig=PointVISARGUI(data)">PointVISARGUI</a>	PointVISARGUI</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function [jumps,selection]=CurrentJumps(src)</a></li><li><a href="#_sub2" class="code">function UpdateDialog()</a></li><li><a href="#_sub3" class="code">function UpdateMainGUI()</a></li><li><a href="#_sub4" class="code">function NewBtnCallback(src,varargin)</a></li><li><a href="#_sub5" class="code">function EditBtnCallback(src,varargin)</a></li><li><a href="#_sub6" class="code">function DeleteBtnCallback(src,varargin)</a></li><li><a href="#_sub7" class="code">function SetFringeWidth(src,varargin)</a></li><li><a href="#_sub8" class="code">function ExitDialog(src,varargin)</a></li><li><a href="#_sub9" class="code">function RecordSelectCallback(src,eventdata)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% Displays a modal dialog where the user can modify fringes.</span>
+0002 <span class="comment">% FringeDlg returns RecordData with the modified fringes.</span>
+0003 <span class="comment">% The dialog will display two lists, one for Add Fringes, and one for</span>
+0004 <span class="comment">% Subtract Fringes.  The user can click on buttons to create new fringes or</span>
+0005 <span class="comment">% remove fringes.</span>
+0006 <span class="comment">% The defaultValue that is passed in will be used as the default value when</span>
+0007 <span class="comment">% the user creates a new fringe.</span>
+0008 
+0009 <span class="comment">% created 1/6/2005 by Ed Kaltenbach (ARA)</span>
+0010 <span class="comment">% edited 7/1/2005 by Daniel Dolan (Sandia)</span>
+0011 <span class="comment">% updated 2/15/2007 by Daniel Dolan</span>
+0012 
+0013 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0014 <a name="_sub0" href="#_subfunctions" class="code">function FringeDialog(data)</a>
+0015 
+0016 fig=findall(0,<span class="string">'Tag'</span>,<span class="string">'PointVISAR:Fringes'</span>);
+0017 <span class="keyword">if</span> ishandle(fig) <span class="comment">% active GUI if present</span>
+0018     figure(fig);
+0019     select=findobj(fig,<span class="string">'Tag'</span>,<span class="string">'RecordSelect'</span>);
+0020 <span class="keyword">else</span> <span class="comment">% create the GUI</span>
+0021     <span class="comment">% spacing parameters (characters)</span>
+0022     dx=5;
+0023     dy=1;
+0024     ControlHeight=2;
+0025     PanelWidth=30;
+0026     PanelHeight=25;
+0027     ButtonWidth=10;
+0028     ButtonHeight=2;
+0029     FigWidth=2*PanelWidth+3*dx;
+0030     FigHeight=PanelHeight+2*ControlHeight+4*dy;
+0031     <span class="comment">% create figure</span>
+0032     fig=figure(<span class="string">'Visible'</span>,<span class="string">'off'</span>,<span class="keyword">...</span>
+0033         <span class="string">'MenuBar'</span>,<span class="string">'none'</span>,<span class="string">'Toolbar'</span>,<span class="string">'none'</span>,<span class="keyword">...</span>
+0034         <span class="string">'Tag'</span>,<span class="string">'PointVISAR:Fringes'</span>,<span class="string">'Resize'</span>,<span class="string">'off'</span>,<span class="keyword">...</span>
+0035         <span class="string">'NumberTitle'</span>,<span class="string">'off'</span>,<span class="string">'Name'</span>,<span class="string">'Add/remove fringes'</span>,<span class="keyword">...</span>
+0036         <span class="string">'Units'</span>,<span class="string">'characters'</span>,<span class="string">'Position'</span>,[0 0 FigWidth FigHeight],<span class="keyword">...</span>
+0037         <span class="string">'CloseRequestFcn'</span>,@<a href="#_sub8" class="code" title="subfunction ExitDialog(src,varargin)">ExitDialog</a>);
+0038     movegui(fig,<span class="string">'center'</span>);
+0039     figure(fig);
+0040     figpos=get(fig,<span class="string">'Position'</span>);
+0041     <span class="comment">% create record selection popup</span>
+0042     x0=dx;
+0043     y0=figpos(4)-dy-ControlHeight;
+0044     width=figpos(3)-2*dx;
+0045     height=ControlHeight;
+0046     select=uicontrol(<span class="string">'Style'</span>,<span class="string">'popup'</span>,<span class="keyword">...</span>
+0047         <span class="string">'Tag'</span>,<span class="string">'RecordSelect'</span>,<span class="string">'String'</span>,<span class="string">' '</span>,<span class="keyword">...</span>
+0048         <span class="string">'FontName'</span>,<span class="string">'fixed'</span>,<span class="keyword">...</span>
+0049         <span class="string">'Callback'</span>,@<a href="#_sub9" class="code" title="subfunction RecordSelectCallback(src,eventdata)">RecordSelectCallback</a>,<span class="keyword">...</span>
+0050         <span class="string">'Units'</span>,<span class="string">'characters'</span>,<span class="string">'Position'</span>,[x0 y0 width height]);
+0051     <span class="comment">% create add fringe panel</span>
+0052     x0=dx;
+0053     y0=figpos(4)-dy-ControlHeight-dy-PanelHeight;
+0054     addPanel=uipanel(<span class="string">'Title'</span>,<span class="string">'Add Fringes'</span>,<span class="string">'Tag'</span>,<span class="string">'AddPanel'</span>,<span class="keyword">...</span>
+0055         <span class="string">'Units'</span>,<span class="string">'characters'</span>,<span class="string">'Position'</span>, [x0 y0 PanelWidth PanelHeight]);
+0056     AddButton(1)=uicontrol(<span class="string">'Parent'</span>,addPanel,<span class="string">'Style'</span>,<span class="string">'pushbutton'</span>,<span class="keyword">...</span>
+0057         <span class="string">'Tag'</span>,<span class="string">'AddDelete'</span>,<span class="string">'String'</span>,<span class="string">'Delete'</span>,<span class="keyword">...</span>
+0058         <span class="string">'FontName'</span>,<span class="string">'fixed'</span>,<span class="keyword">...</span>
+0059         <span class="string">'Units'</span>,<span class="string">'characters'</span>,<span class="string">'Callback'</span>,@<a href="#_sub6" class="code" title="subfunction DeleteBtnCallback(src,varargin)">DeleteBtnCallback</a>);
+0060     extent=get(AddButton(1),<span class="string">'Extent'</span>);
+0061     width=1.25*extent(3);
+0062     gap=(PanelWidth-3*width)/4;
+0063     x0=PanelWidth-gap-width;
+0064     y0=dy;
+0065     height=ControlHeight;
+0066     set(AddButton(1),<span class="string">'Position'</span>,[x0 y0 width height]);
+0067     AddButton(2)=uicontrol(<span class="string">'Parent'</span>,addPanel,<span class="string">'Style'</span>,<span class="string">'pushbutton'</span>,<span class="keyword">...</span>
+0068         <span class="string">'Tag'</span>,<span class="string">'AddEdit'</span>,<span class="string">'String'</span>,<span class="string">'Edit'</span>,<span class="keyword">...</span>
+0069         <span class="string">'FontName'</span>,<span class="string">'fixed'</span>,<span class="keyword">...</span>
+0070         <span class="string">'Units'</span>,<span class="string">'characters'</span>,<span class="string">'Callback'</span>,@<a href="#_sub5" class="code" title="subfunction EditBtnCallback(src,varargin)">EditBtnCallback</a>);
+0071     x0=x0-gap-width;
+0072     set(AddButton(2),<span class="string">'Position'</span>,[x0 y0 width height]);
+0073     AddButton(3)=uicontrol(<span class="string">'Parent'</span>,addPanel,<span class="string">'Style'</span>,<span class="string">'pushbutton'</span>,<span class="keyword">...</span>
+0074         <span class="string">'Tag'</span>,<span class="string">'AddNew'</span>,<span class="string">'String'</span>,<span class="string">'New'</span>,<span class="keyword">...</span>
+0075         <span class="string">'Units'</span>,<span class="string">'characters'</span>,<span class="string">'Callback'</span>,@<a href="#_sub4" class="code" title="subfunction NewBtnCallback(src,varargin)">NewBtnCallback</a>);
+0076     x0=x0-gap-width;
+0077     set(AddButton(3),<span class="string">'Position'</span>,[x0 y0 width height]);
+0078     x0=2;
+0079     y0=y0+ControlHeight+dy;
+0080     width=PanelWidth-2*x0;
+0081     height=PanelHeight-y0-2*dy;
+0082     addList = uicontrol(<span class="string">'Parent'</span>,addPanel,<span class="keyword">...</span>
+0083         <span class="string">'Style'</span>,<span class="string">'listbox'</span>,<span class="string">'Tag'</span>,<span class="string">'AddList'</span>,<span class="keyword">...</span>
+0084         <span class="string">'Max'</span>,0,<span class="string">'Min'</span>,1,<span class="string">'BackgroundColor'</span>, [1 1 1],<span class="keyword">...</span>
+0085         <span class="string">'FontName'</span>,<span class="string">'fixed'</span>,<span class="keyword">...</span>
+0086         <span class="string">'Units'</span>,<span class="string">'characters'</span>,<span class="string">'Position'</span>,[x0 y0 width height]);
+0087     children=[addList AddButton(end:-1:1)];
+0088     set(addPanel,<span class="string">'Children'</span>,children(end:-1:1));
+0089     <span class="comment">% create subtract fringe panel</span>
+0090     x0=dx+PanelWidth+dx;
+0091     y0=figpos(4)-dy-ControlHeight-dy-PanelHeight;
+0092     subtractPanel=uipanel(<span class="string">'Title'</span>,<span class="string">'Subtract Fringes'</span>,<span class="string">'Tag'</span>,<span class="string">'SubtractPanel'</span>,<span class="keyword">...</span>
+0093         <span class="string">'Units'</span>,<span class="string">'characters'</span>,<span class="string">'Position'</span>, [x0 y0 PanelWidth PanelHeight]);
+0094 
+0095     SubtractButton(1)=uicontrol(<span class="string">'Parent'</span>,subtractPanel,<span class="string">'Style'</span>,<span class="string">'pushbutton'</span>,<span class="keyword">...</span>
+0096         <span class="string">'Tag'</span>,<span class="string">'SubtractDelete'</span>,<span class="string">'String'</span>,<span class="string">'Delete'</span>,<span class="keyword">...</span>
+0097         <span class="string">'Units'</span>,<span class="string">'characters'</span>,<span class="string">'Callback'</span>,@<a href="#_sub6" class="code" title="subfunction DeleteBtnCallback(src,varargin)">DeleteBtnCallback</a>);
+0098     extent=get(SubtractButton(1),<span class="string">'Extent'</span>);
+0099     width=1.25*extent(3);
+0100     gap=(PanelWidth-3*width)/4;
+0101     x0=PanelWidth-gap-width;
+0102     y0=dy;
+0103     height=ControlHeight;
+0104     set(SubtractButton(1),<span class="string">'Position'</span>,[x0 y0 width height]);
+0105 
+0106     SubtractButton(2)=uicontrol(<span class="string">'Parent'</span>,subtractPanel,<span class="string">'Style'</span>,<span class="string">'pushbutton'</span>,<span class="keyword">...</span>
+0107         <span class="string">'Tag'</span>,<span class="string">'SubtractEdit'</span>,<span class="string">'String'</span>,<span class="string">'Edit'</span>,<span class="keyword">...</span>
+0108         <span class="string">'Units'</span>,<span class="string">'characters'</span>,<span class="string">'Callback'</span>,@<a href="#_sub5" class="code" title="subfunction EditBtnCallback(src,varargin)">EditBtnCallback</a>);
+0109     x0=x0-gap-width;
+0110     set(SubtractButton(2),<span class="string">'Position'</span>,[x0 y0 width height]);
+0111 
+0112     SubtractButton(3)=uicontrol(<span class="string">'Parent'</span>,subtractPanel,<span class="string">'Style'</span>,<span class="string">'pushbutton'</span>,<span class="keyword">...</span>
+0113         <span class="string">'Tag'</span>,<span class="string">'SubtractNew'</span>,<span class="string">'String'</span>,<span class="string">'New'</span>,<span class="keyword">...</span>
+0114         <span class="string">'Units'</span>,<span class="string">'characters'</span>,<span class="string">'Callback'</span>,@<a href="#_sub4" class="code" title="subfunction NewBtnCallback(src,varargin)">NewBtnCallback</a>);
+0115     x0=x0-gap-width;
+0116     set(SubtractButton(3),<span class="string">'Position'</span>,[x0 y0 width height]);
+0117 
+0118     x0=2;
+0119     y0=y0+ControlHeight+dy;
+0120     width=PanelWidth-2*x0;
+0121     height=PanelHeight-y0-2*dy;
+0122     subtractList = uicontrol(<span class="string">'Parent'</span>,subtractPanel,<span class="keyword">...</span>
+0123         <span class="string">'Style'</span>,<span class="string">'listbox'</span>,<span class="string">'Tag'</span>,<span class="string">'SubtractList'</span>,<span class="keyword">...</span>
+0124         <span class="string">'Max'</span>,0,<span class="string">'Min'</span>,1,<span class="string">'BackgroundColor'</span>, [1 1 1],<span class="keyword">...</span>
+0125         <span class="string">'Units'</span>,<span class="string">'characters'</span>,<span class="string">'Position'</span>,[x0 y0 width height]);
+0126 
+0127     children=[subtractList SubtractButton(end:-1:1)];
+0128     set(subtractPanel,<span class="string">'Children'</span>,children(end:-1:1));
+0129 
+0130     <span class="comment">% fringe width button</span>
+0131     x0=dx;
+0132     y0=dy;
+0133     setwidth=uicontrol(<span class="string">'Style'</span>,<span class="string">'pushbutton'</span>,<span class="keyword">...</span>
+0134         <span class="string">'String'</span>,<span class="string">'Set width'</span>,<span class="string">'Tag'</span>,<span class="string">'width'</span>,<span class="string">'Units'</span>,<span class="string">'characters'</span>);
+0135     extent=get(setwidth,<span class="string">'Extent'</span>);
+0136     width=1.25*extent(3);
+0137     set(setwidth,<span class="string">'Position'</span>,[x0 y0 width ControlHeight]);
+0138     set(setwidth,<span class="string">'Callback'</span>,@<a href="#_sub7" class="code" title="subfunction SetFringeWidth(src,varargin)">SetFringeWidth</a>);
+0139 
+0140     <span class="comment">% ok/cancel buttons at the bottom</span>
+0141     y0=dy;
+0142     cancel=uicontrol(<span class="string">'Style'</span>,<span class="string">'pushbutton'</span>,<span class="keyword">...</span>
+0143         <span class="string">'String'</span>,<span class="string">'Cancel'</span>,<span class="string">'Tag'</span>,<span class="string">'cancel'</span>,<span class="string">'Units'</span>,<span class="string">'characters'</span>);
+0144     extent=get(cancel,<span class="string">'Extent'</span>);
+0145     width=1.25*extent(3);
+0146     x0=figpos(3)-dx-width;
+0147     set(cancel,<span class="string">'Position'</span>,[x0 y0 width ControlHeight]);
+0148 
+0149     ok=uicontrol(<span class="string">'Style'</span>,<span class="string">'pushbutton'</span>,<span class="keyword">...</span>
+0150         <span class="string">'String'</span>,<span class="string">'Ok'</span>,<span class="string">'Tag'</span>,<span class="string">'ok'</span>,<span class="string">'Units'</span>,<span class="string">'characters'</span>);
+0151     x0=x0-dx/2-width;
+0152     set(ok,<span class="string">'Position'</span>,[x0 y0 width ControlHeight]);
+0153     set([ok cancel],<span class="string">'Callback'</span>,@<a href="#_sub8" class="code" title="subfunction ExitDialog(src,varargin)">ExitDialog</a>);
+0154 
+0155     children=[select addPanel subtractPanel setwidth ok cancel];
+0156     set(fig,<span class="string">'Children'</span>,children(end:-1:1));
+0157     
+0158 <span class="keyword">end</span>
+0159 
+0160 <span class="comment">% store needed info and update dialog</span>
+0161 <span class="keyword">for</span> ii=1:numel(data)
+0162     DialogData{ii}.AddJumps=data{ii}.AddJumps;
+0163     DialogData{ii}.OldAddJumps=data{ii}.AddJumps;
+0164     DialogData{ii}.SubtractJumps=data{ii}.SubtractJumps;
+0165     DialogData{ii}.OldSubtractJumps=data{ii}.SubtractJumps;
+0166     DialogData{ii}.JumpWidth=data{ii}.JumpWidth;
+0167     label{ii}=[<span class="string">'Record #'</span> num2str(ii,<span class="string">'%d'</span>) <span class="string">':  '</span> data{ii}.Label];
+0168 <span class="keyword">end</span>
+0169 set(select,<span class="string">'String'</span>,label,<span class="string">'Value'</span>,<a href="ActiveRecord.html" class="code" title="function active=ActiveRecord(data)">ActiveRecord</a>(data));
+0170 set(fig,<span class="string">'UserData'</span>,DialogData,<span class="string">'HandleVisibility'</span>,<span class="string">'callback'</span>);
+0171 
+0172 <a href="#_sub2" class="code" title="subfunction UpdateDialog()">UpdateDialog</a>;
+0173 
+0174 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0175 <a name="_sub1" href="#_subfunctions" class="code">function [jumps,selection]=CurrentJumps(src)</a>
+0176 
+0177 <span class="comment">%mainfig=findall(0,'Type','figure','Tag','PointVISAR:Fringes');</span>
+0178 jumps=get(src,<span class="string">'UserData'</span>);
+0179 h=findobj(src,<span class="string">'Tag'</span>,<span class="string">'RecordSelect'</span>);
+0180 selection=get(h,<span class="string">'Value'</span>);
+0181      
+0182 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%</span>
+0183 <a name="_sub2" href="#_subfunctions" class="code">function UpdateDialog()</a>
+0184 
+0185 dlg=findall(0,<span class="string">'Type'</span>,<span class="string">'figure'</span>,<span class="string">'Tag'</span>,<span class="string">'PointVISAR:Fringes'</span>);
+0186 
+0187 <span class="comment">% extract jumps for the selected record</span>
+0188 [jumps,selection]=<a href="#_sub1" class="code" title="subfunction [jumps,selection]=CurrentJumps(src)">CurrentJumps</a>(dlg);
+0189 jumps=jumps{selection};
+0190 
+0191 <span class="comment">% display add jumps</span>
+0192 addUiList = findobj(dlg, <span class="string">'Tag'</span>, <span class="string">'AddList'</span>);
+0193 label={};
+0194 add=jumps.AddJumps;
+0195 <span class="keyword">for</span> ii=1:numel(add)
+0196     label{ii}=num2str(add(ii));
+0197 <span class="keyword">end</span>
+0198 set(addUiList,<span class="string">'String'</span>,label);
+0199 
+0200 <span class="comment">% display subtract jumps</span>
+0201 subUiList = findobj(dlg, <span class="string">'Tag'</span>, <span class="string">'SubtractList'</span>);
+0202 label={};
+0203 subtract=jumps.SubtractJumps;
+0204 <span class="keyword">for</span> ii=1:numel(subtract)
+0205     label{ii}=num2str(subtract(ii));
+0206 <span class="keyword">end</span>
+0207 set(subUiList,<span class="string">'String'</span>,label);
+0208 
+0209 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0210 <a name="_sub3" href="#_subfunctions" class="code">function UpdateMainGUI()</a>
+0211 
+0212 dlg=findall(0,<span class="string">'Type'</span>,<span class="string">'figure'</span>,<span class="string">'Tag'</span>,<span class="string">'PointVISAR:Fringes'</span>);
+0213 DialogData=get(dlg,<span class="string">'UserData'</span>);
+0214 main=findall(0,<span class="string">'Type'</span>,<span class="string">'figure'</span>,<span class="string">'Tag'</span>,<span class="string">'PointVISAR'</span>);
+0215 data=get(main,<span class="string">'UserData'</span>);
+0216 
+0217 popup=findobj(dlg,<span class="string">'Tag'</span>,<span class="string">'RecordSelect'</span>);
+0218 current=get(popup,<span class="string">'Value'</span>);
+0219 
+0220 data{current}.AddJumps=DialogData{current}.AddJumps;
+0221 data{current}.SubtractJumps=DialogData{current}.SubtractJumps;
+0222 data{current}.JumpWidth=DialogData{current}.JumpWidth;
+0223 data{current}=<a href="VisarAnalysis.html" class="code" title="function record = VisarAnalysis(record, varargin)">VisarAnalysis</a>(data{current},<span class="string">'QuadratureSignals'</span>,<span class="string">'Velocity'</span>);
+0224 
+0225 <a href="PointVISARGUI.html" class="code" title="function fig=PointVISARGUI(data)">PointVISARGUI</a>(data);
+0226 figure(dlg);
+0227 
+0228 <span class="comment">%%%%%%%%%%%%%</span>
+0229 <span class="comment">% callbacks %</span>
+0230 <span class="comment">%%%%%%%%%%%%%</span>
+0231 
+0232 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0233 <a name="_sub4" href="#_subfunctions" class="code">function NewBtnCallback(src,varargin)</a>
+0234 
+0235 dlg=ancestor(src,<span class="string">'figure'</span>);
+0236 mode=get(src,<span class="string">'Tag'</span>);
+0237 <span class="keyword">switch</span> mode
+0238     <span class="keyword">case</span> <span class="string">'AddNew'</span>
+0239         prompt{1}=<span class="string">'Enter fringe addition time: '</span>;
+0240         prompt{2}=<span class="string">'Number of fringes to add: '</span>;
+0241         default={[] 1};
+0242         uiList=findobj(dlg,<span class="string">'Tag'</span>,<span class="string">'AddList'</span>);
+0243         field=<span class="string">'AddJumps'</span>;
+0244     <span class="keyword">case</span> <span class="string">'SubtractNew'</span>
+0245         prompt{1}=<span class="string">'Enter fringe subtraction time: '</span>;
+0246         prompt{2}=<span class="string">'Number of fringes to subtract: '</span>;
+0247         default={[] 1};
+0248         prompt{1}=<span class="string">'Enter new subraction fringe'</span>;
+0249         uiList=findobj(dlg,<span class="string">'Tag'</span>,<span class="string">'SubtractList'</span>);
+0250         field=<span class="string">'SubtractJumps'</span>;
+0251 <span class="keyword">end</span>
+0252 answer=<a href="DoubleInputDlg.html" class="code" title="function func=DoubleInputDlg(prompt,title,default,sigfigs)">DoubleInputDlg</a>(prompt,<span class="string">'New Fringe'</span>,default);
+0253 newTime=answer{1};  
+0254 numFringe=floor(answer{2});
+0255 <span class="keyword">if</span> numFringe&lt;1
+0256     numFringe=1;
+0257 <span class="keyword">end</span>
+0258 <span class="comment">%newTime=repmat(newTime,[1 numFringe]);</span>
+0259 
+0260 <span class="comment">% check if user clicked &quot;cancel&quot;</span>
+0261 <span class="keyword">if</span> isempty(newTime)
+0262     <span class="keyword">return</span>
+0263 <span class="keyword">end</span>
+0264     
+0265 <span class="comment">% add time(s) to list and sort</span>
+0266 [jumps,selection]=<a href="#_sub1" class="code" title="subfunction [jumps,selection]=CurrentJumps(src)">CurrentJumps</a>(dlg);
+0267 temp=jumps{selection}.(field);
+0268 <span class="keyword">for</span> ii=1:numFringe
+0269     temp(end+1)=newTime;
+0270 <span class="keyword">end</span>
+0271 <span class="comment">%temp=[temp newTime];</span>
+0272 temp=sort(temp);
+0273 jumps{selection}.(field)=temp;
+0274 
+0275 set(dlg,<span class="string">'UserData'</span>,jumps);
+0276 
+0277 <a href="#_sub2" class="code" title="subfunction UpdateDialog()">UpdateDialog</a>;
+0278 <a href="#_sub3" class="code" title="subfunction UpdateMainGUI()">UpdateMainGUI</a>;
+0279 
+0280 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0281 <a name="_sub5" href="#_subfunctions" class="code">function EditBtnCallback(src,varargin)</a>
+0282 
+0283 dlg=ancestor(src,<span class="string">'figure'</span>);
+0284 mode=get(src,<span class="string">'Tag'</span>);
+0285 <span class="keyword">switch</span> mode
+0286     <span class="keyword">case</span> <span class="string">'AddEdit'</span>
+0287         prompt{1}=<span class="string">'Edit addition fringe'</span>;
+0288         uiList=findobj(dlg,<span class="string">'Tag'</span>,<span class="string">'AddList'</span>);
+0289         field=<span class="string">'AddJumps'</span>;
+0290     <span class="keyword">case</span> <span class="string">'SubtractEdit'</span>
+0291         prompt{1}=<span class="string">'Edit subtraction fringe'</span>;
+0292         uiList=findobj(dlg,<span class="string">'Tag'</span>,<span class="string">'SubtractList'</span>);
+0293         field=<span class="string">'SubtractJumps'</span>;
+0294 <span class="keyword">end</span>
+0295 
+0296 target=get(uiList,<span class="string">'Value'</span>);
+0297 [jumps,selection]=<a href="#_sub1" class="code" title="subfunction [jumps,selection]=CurrentJumps(src)">CurrentJumps</a>(dlg);
+0298 temp=jumps{selection}.(field);
+0299 <span class="keyword">if</span> isempty(temp)
+0300     <span class="keyword">return</span>
+0301 <span class="keyword">end</span>
+0302 value=temp(target);
+0303 
+0304 newTime=<a href="DoubleInputDlg.html" class="code" title="function func=DoubleInputDlg(prompt,title,default,sigfigs)">DoubleInputDlg</a>(prompt,<span class="string">'Edit Fringe'</span>,value);    
+0305 <span class="keyword">if</span> isempty(newTime) <span class="comment">% see if user choose cancel</span>
+0306     <span class="keyword">return</span>
+0307 <span class="keyword">end</span>
+0308     
+0309 <span class="comment">% update jump list and sort</span>
+0310 temp(target)=newTime;
+0311 temp=sort(temp);
+0312 jumps{selection}.(field)=temp;
+0313 
+0314 set(dlg,<span class="string">'UserData'</span>,jumps);
+0315 <a href="#_sub2" class="code" title="subfunction UpdateDialog()">UpdateDialog</a>;
+0316 
+0317 <span class="comment">% update fringe display for the user's benefit</span>
+0318 <a href="#_sub3" class="code" title="subfunction UpdateMainGUI()">UpdateMainGUI</a>;
+0319 
+0320 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0321 <a name="_sub6" href="#_subfunctions" class="code">function DeleteBtnCallback(src,varargin)</a>
+0322 
+0323 dlg=ancestor(src,<span class="string">'figure'</span>);
+0324 mode=get(src,<span class="string">'Tag'</span>);
+0325 <span class="keyword">switch</span> mode
+0326     <span class="keyword">case</span> <span class="string">'AddDelete'</span>
+0327         uiList=findobj(dlg,<span class="string">'Tag'</span>,<span class="string">'AddList'</span>);
+0328         field=<span class="string">'AddJumps'</span>;
+0329         verb=<span class="string">' added '</span>;
+0330     <span class="keyword">case</span> <span class="string">'SubtractDelete'</span>
+0331         uiList=findobj(dlg,<span class="string">'Tag'</span>,<span class="string">'SubtractList'</span>);
+0332         field=<span class="string">'SubtractJumps'</span>;
+0333         verb=<span class="string">' subtracted '</span>;
+0334 <span class="keyword">end</span>
+0335 
+0336 target=get(uiList,<span class="string">'Value'</span>);
+0337 [jumps,selection]=<a href="#_sub1" class="code" title="subfunction [jumps,selection]=CurrentJumps(src)">CurrentJumps</a>(dlg);
+0338 temp=jumps{selection}.(field);
+0339 <span class="keyword">if</span> isempty(temp)
+0340     <span class="keyword">return</span>
+0341 <span class="keyword">end</span>
+0342 value=temp(target);
+0343 
+0344 <span class="comment">% make sure user wants to delete the fringe</span>
+0345 prompt{1}=[<span class="string">'Delete the fringe'</span> verb <span class="string">'at t='</span> num2str(value) <span class="string">'?'</span>];
+0346 answer=questdlg(prompt,<span class="string">'Delete fringe?'</span>);
+0347 <span class="comment">%if strcmp(lower(answer),'yes') % delete the fringe</span>
+0348 <span class="keyword">if</span> strcmpi(answer,<span class="string">'yes'</span>) <span class="comment">% delete the fringe</span>
+0349     temp(target)=[];
+0350     jumps{selection}.(field)=temp;
+0351 <span class="keyword">else</span>
+0352     <span class="keyword">return</span>
+0353 <span class="keyword">end</span>
+0354 
+0355 set(uiList,<span class="string">'Value'</span>,1);
+0356 set(dlg,<span class="string">'UserData'</span>,jumps);
+0357 <a href="#_sub2" class="code" title="subfunction UpdateDialog()">UpdateDialog</a>;
+0358 
+0359 <span class="comment">% update fringe display for the user's benefit</span>
+0360 <a href="#_sub3" class="code" title="subfunction UpdateMainGUI()">UpdateMainGUI</a>;
+0361 
+0362 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0363 <a name="_sub7" href="#_subfunctions" class="code">function SetFringeWidth(src,varargin)</a>
+0364 
+0365 dlg=ancestor(src,<span class="string">'figure'</span>);
+0366 selection=get(findobj(dlg,<span class="string">'Tag'</span>,<span class="string">'RecordSelect'</span>),<span class="string">'Value'</span>);
+0367 data=get(dlg,<span class="string">'UserData'</span>);
+0368 
+0369 OldWidth=data{selection}.JumpWidth;
+0370 NewWidth=<a href="DoubleInputDlg.html" class="code" title="function func=DoubleInputDlg(prompt,title,default,sigfigs)">DoubleInputDlg</a>(<span class="string">'Enter the fringe width (10-90%):'</span>,<span class="string">'Fringe Width'</span>,OldWidth);    
+0371 <span class="keyword">if</span> isempty(NewWidth) <span class="comment">% see if user choose cancel</span>
+0372     <span class="keyword">return</span>
+0373 <span class="keyword">end</span>
+0374 
+0375 <span class="comment">% update record</span>
+0376 data{selection}.JumpWidth=NewWidth;
+0377 set(dlg,<span class="string">'UserData'</span>,data);
+0378 <a href="#_sub3" class="code" title="subfunction UpdateMainGUI()">UpdateMainGUI</a>;
+0379 
+0380 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0381 <a name="_sub8" href="#_subfunctions" class="code">function ExitDialog(src,varargin)</a>
+0382 
+0383 dlg=ancestor(src,<span class="string">'figure'</span>);
+0384 main=findall(0,<span class="string">'Type'</span>,<span class="string">'figure'</span>,<span class="string">'Tag'</span>,<span class="string">'PointVISAR'</span>);
+0385 choice=get(src,<span class="string">'Tag'</span>);
+0386 <span class="keyword">if</span> strcmp(choice,<span class="string">'ok'</span>) <span class="comment">% user chose Ok button</span>
+0387     delete(dlg);
+0388     figure(main);
+0389     <span class="keyword">return</span>
+0390 <span class="keyword">end</span>
+0391 
+0392 <span class="comment">% see if the user is serious about cancel</span>
+0393 prompt{1}=<span class="string">'All fringe alterations will be lost! Continue?'</span>;
+0394 answer=questdlg(prompt,<span class="string">'Cancel fringes'</span>);
+0395 <span class="keyword">if</span> strcmpi(answer,<span class="string">'yes'</span>)
+0396     DialogData=get(dlg,<span class="string">'UserData'</span>);
+0397     data=get(main,<span class="string">'UserData'</span>);
+0398     <span class="keyword">for</span> ii=1:numel(data)
+0399         data{ii}.AddJumps=DialogData{ii}.OldAddJumps;
+0400         data{ii}.SubtractJumps=DialogData{ii}.OldSubtractJumps;
+0401         data{ii}=<a href="VisarAnalysis.html" class="code" title="function record = VisarAnalysis(record, varargin)">VisarAnalysis</a>(data{ii},<span class="string">'QuadratureSignals'</span>,<span class="string">'Velocity'</span>);
+0402         <a href="PointVISARGUI.html" class="code" title="function fig=PointVISARGUI(data)">PointVISARGUI</a>(data);
+0403     <span class="keyword">end</span>
+0404     delete(dlg);
+0405 <span class="keyword">else</span>
+0406     <span class="keyword">return</span>
+0407 <span class="keyword">end</span>
+0408 
+0409 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0410 <a name="_sub9" href="#_subfunctions" class="code">function RecordSelectCallback(src,eventdata)</a>
+0411 
+0412 <a href="#_sub2" class="code" title="subfunction UpdateDialog()">UpdateDialog</a>;</pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,481 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of QuadratureScreen</title>
+  <meta name="keywords" content="QuadratureScreen">
+  <meta name="description" content="QuadratureScreen:">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../../index.html">THRIVE</a> &gt; <a href="../index.html">private</a> &gt; <a href="index.html">old</a> &gt; QuadratureScreen.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../../index.html"><img alt="<" border="0" src="../../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/THRIVE/private/old&nbsp;<img alt=">" border="0" src="../../../../../../right.png"></a></td></tr></table>-->
+
+<h1>QuadratureScreen
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>QuadratureScreen:</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>function fig=QuadratureScreen(oldfig) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> QuadratureScreen:</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="DirectEllipseFit.html" class="code" title="function [params1,params2]=DirectEllipseFit(x,y)">DirectEllipseFit</a>	DirectEllipseFit : direct ellipse fitting</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function fig=createGUI(varargin)</a></li><li><a href="#_sub2" class="code">function ResizeFcn(src,varargin)</a></li><li><a href="#_sub3" class="code">function GenerateQuadrature(src,varargin)</a></li><li><a href="#_sub4" class="code">function PreviousButton(src,varargin)</a></li><li><a href="#_sub5" class="code">function NextButton(src,varargin)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% QuadratureScreen:</span>
+0002 
+0003 <span class="comment">%</span>
+0004 <a name="_sub0" href="#_subfunctions" class="code">function fig=QuadratureScreen(oldfig)</a>
+0005 
+0006 <span class="comment">% allocate mising input</span>
+0007 <span class="keyword">if</span> nargin&lt;1
+0008     oldfig=<span class="string">''</span>;
+0009 <span class="keyword">end</span>
+0010 
+0011 <span class="comment">% create figure (if necessary)</span>
+0012 tag=<span class="string">'THRIVE_QuadratureScreen'</span>;
+0013 fig=findall(0,<span class="string">'Type'</span>,<span class="string">'figure'</span>,<span class="string">'Tag'</span>,tag);
+0014 <span class="keyword">if</span> isempty(fig)
+0015     fig=<a href="#_sub1" class="code" title="subfunction fig=createGUI(varargin)">createGUI</a>(<span class="string">'Tag'</span>,tag);
+0016 <span class="keyword">end</span>
+0017 
+0018 <span class="comment">% determine how figure was called</span>
+0019 <span class="keyword">if</span> isempty(oldfig)
+0020     <span class="keyword">return</span>
+0021 <span class="keyword">end</span>
+0022 <span class="keyword">switch</span> get(oldfig,<span class="string">'Tag'</span>);
+0023     <span class="keyword">case</span> {<span class="string">'THRIVE_LoadScreen'</span>,<span class="string">'THRIVE_EllipseScreen'</span>}
+0024         <span class="comment">% get load screen handles</span>
+0025         srcfig=findall(0,<span class="string">'Type'</span>,<span class="string">'figure'</span>,<span class="string">'Tag'</span>,<span class="string">'THRIVE_LoadScreen'</span>);
+0026         hsrc=guihandles(srcfig);        
+0027         <span class="comment">% characterize quadrature ellipse</span>
+0028         tbound(1)=get(hsrc.CharacterizationTime1,<span class="string">'UserData'</span>);
+0029         tbound(2)=get(hsrc.CharacterizationTime2,<span class="string">'UserData'</span>);        
+0030         time=get(hsrc.D1,<span class="string">'XData'</span>);
+0031         ii=(time&gt;=min(tbound)) &amp; (time&lt;=max(tbound));
+0032         D1=get(hsrc.D1,<span class="string">'YData'</span>);  D1=D1(ii);        
+0033         D2=get(hsrc.D2,<span class="string">'YData'</span>);  D2=D2(ii);       
+0034         D3=get(hsrc.D3,<span class="string">'YData'</span>);  D3=D3(ii);
+0035         choice=findall(hsrc.CharacterizationMenu,<span class="string">'Checked'</span>,<span class="string">'on'</span>);                      
+0036         <span class="keyword">switch</span> get(choice,<span class="string">'Tag'</span>)
+0037             <span class="keyword">case</span> <span class="string">'ideal'</span>
+0038                 baseline=[0 0 0]; <span class="comment">% B1 B2 B3</span>
+0039                 amplitude=[1 1 1]; <span class="comment">% A1 A2 A3</span>
+0040                 beta=[120 120]; <span class="comment">% betaplus betaminus</span>
+0041                 ratio=[1 1]; <span class="comment">% R12 R13</span>
+0042             <span class="keyword">case</span> <span class="string">'ellipse'</span>
+0043                 prev=findall(0,<span class="string">'Type'</span>,<span class="string">'figure'</span>,<span class="string">'Tag'</span>,<span class="string">'THRIVE_EllipseScreen'</span>);
+0044                 hprev=guihandles(prev);
+0045                 baseline(1)=ReadEditBox(hprev.D1baseline);
+0046                 baseline(1)=ReadEditBox(hprev.D1baseline);
+0047                 baseline(2)=ReadEditBox(hprev.D2baseline);
+0048                 baseline(3)=ReadEditBox(hprev.D3baseline);
+0049                 amplitude(1)=ReadEditBox(hprev.D1amplitude);
+0050                 amplitude(2)=ReadEditBox(hprev.D2amplitude);
+0051                 amplitude(3)=ReadEditBox(hprev.D3amplitude);
+0052                 beta(1)=ReadEditBox(hprev.betaplus);
+0053                 beta(2)=ReadEditBox(hprev.betaminus);
+0054                 ratio(1)=ReadEditBox(hprev.R12);
+0055                 ratio(2)=ReadEditBox(hprev.R13);
+0056             <span class="keyword">case</span> <span class="string">'beamblock'</span>
+0057                 <span class="comment">% TBD</span>
+0058         <span class="keyword">end</span>
+0059         beta=beta*(pi/180); <span class="comment">% convert degrees to radians</span>
+0060         [Dx,Dy]=QuadratureReduction(D1,D2,D3,baseline,amplitude,ratio,beta);
+0061         fitparams=<a href="DirectEllipseFit.html" class="code" title="function [params1,params2]=DirectEllipseFit(x,y)">DirectEllipseFit</a>(Dx,Dy);
+0062         <span class="comment">% store analysis and fit parameters</span>
+0063         h=guihandles(fig);
+0064         data=get(h.ControlPanel,<span class="string">'UserData'</span>);
+0065         data.baseline=baseline;
+0066         data.amplitude=amplitude;
+0067         data.ratio=ratio;
+0068         data.beta=beta;
+0069         data.fitparams=fitparams;
+0070         set(h.ControlPanel,<span class="string">'UserData'</span>,data);
+0071         <span class="comment">% update screen</span>
+0072         set(h.HorizontalCenter,<span class="string">'String'</span>,num2str(fitparams(1)/fitparams(3)*100,<span class="string">'%+.2f'</span>));
+0073         set(h.VerticalCenter,<span class="string">'String'</span>,num2str(fitparams(2)/fitparams(4)*100,<span class="string">'%+.2f'</span>));
+0074         set(h.AspectRatio,<span class="string">'String'</span>,num2str(fitparams(3)/fitparams(4)*100,<span class="string">'%.2f'</span>));
+0075         set(h.QuadratureError,<span class="string">'String'</span>,num2str(fitparams(5)*(180/pi),<span class="string">'%+.2f'</span>)); 
+0076         <a href="#_sub3" class="code" title="subfunction GenerateQuadrature(src,varargin)">GenerateQuadrature</a>(fig);        
+0077     <span class="keyword">case</span> <span class="string">'THRIVE_ResultsScreen'</span>
+0078         <span class="comment">% do something</span>
+0079 <span class="keyword">end</span>
+0080 MatchFigures(oldfig,fig);
+0081 figure(fig);
+0082 
+0083 <span class="comment">%%%%%%%%%%%%%%</span>
+0084 <span class="comment">% create GUI %</span>
+0085 <span class="comment">%%%%%%%%%%%%%%</span>
+0086 <a name="_sub1" href="#_subfunctions" class="code">function fig=createGUI(varargin)</a>
+0087 
+0088 <span class="comment">% probe primary monitor size</span>
+0089 monpos=get(0,<span class="string">'MonitorPositions'</span>);
+0090 monpos=monpos(1,:);
+0091 monLx=monpos(3)+monpos(1)-1;
+0092 monLy=monpos(4)+monpos(2)-1;
+0093 
+0094 <span class="comment">% create figure</span>
+0095 name=aboutTHRIVE(<span class="string">'name'</span>);
+0096 fig=MinimalFigure(<span class="string">'Visible'</span>,<span class="string">'off'</span>,<span class="string">'units'</span>,<span class="string">'pixels'</span>,<span class="keyword">...</span>
+0097     <span class="string">'NumberTitle'</span>,<span class="string">'off'</span>,<span class="string">'Name'</span>,name,<span class="string">'IntegerHandle'</span>,<span class="string">'off'</span>,<span class="keyword">...</span>
+0098     varargin{:});
+0099 [h,pos]=textlabel(fig,[0 0],repmat(<span class="string">'M'</span>,[1 80]));
+0100 delete(h);
+0101 data.Lx=pos(3);
+0102 data.Ly=0.80*monLy;
+0103 x0=(monLx-data.Lx)/2;
+0104 y0=(monLy-data.Ly)/2;
+0105 set(fig,<span class="string">'Position'</span>,[x0 y0 data.Lx data.Ly]);
+0106 
+0107 data.ymargin=0.5*pos(4);
+0108 data.xmargin=data.ymargin;
+0109 data.ygap=data.ymargin/4;
+0110 
+0111 <span class="comment">% create uimenus</span>
+0112 hm=uimenu(fig,<span class="string">'Label'</span>,<span class="string">'Program'</span>);
+0113 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Start over'</span>,<span class="keyword">...</span>
+0114     <span class="string">'Tag'</span>,<span class="string">'StartOver'</span>,<span class="string">'Callback'</span>,@StartOver);
+0115 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Exit'</span>,<span class="string">'Separator'</span>,<span class="string">'on'</span>,<span class="string">'Callback'</span>,<span class="string">'close(gcbf)'</span>);
+0116 
+0117 hm=uimenu(fig,<span class="string">'Label'</span>,<span class="string">'Help'</span>);
+0118 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'About THRIVE'</span>,<span class="string">'Callback'</span>,{@aboutTHRIVE,fig});
+0119 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Quadrature signals'</span>,<span class="string">'Callback'</span>,@HelpWindow);
+0120 
+0121 <span class="comment">% create control panel</span>
+0122 hpanel(1)=custom_uipanel(<span class="string">'Parent'</span>,fig,<span class="string">'Tag'</span>,<span class="string">'ControlPanel'</span>);
+0123 number0=<span class="string">' +0.00000E+00 '</span>;
+0124 data.ellipse=[];
+0125 
+0126 labelA={<span class="string">'Horizontal centering (%)='</span>,<span class="string">'Vertical centering (%)='</span>};
+0127 [maxchar,kmaxA]=max(cellfun(@numel,labelA));
+0128 labelB={<span class="string">'Aspect ratio (%)='</span>,<span class="string">'Quadrature error (deg)='</span>};
+0129 [maxchar,kmaxB]=max(cellfun(@numel,labelB));
+0130 
+0131 pos(1)=data.xmargin;
+0132 pos(2)=0;
+0133 [h,pos]=textlabel(hpanel(1),pos,labelA{kmaxA},<span class="keyword">...</span>
+0134     <span class="string">'String'</span>,labelA{1},<span class="string">'HorizontalAlignment'</span>,<span class="string">'right'</span>);
+0135 pos(1)=pos(1)+pos(3);
+0136 [h,pos]=textlabel(hpanel(1),pos,number0,<span class="keyword">...</span>
+0137     <span class="string">'Tag'</span>,<span class="string">'HorizontalCenter'</span>,<span class="string">'String'</span>,0,<span class="string">'HorizontalAlignment'</span>,<span class="string">'left'</span>);
+0138 pos(1)=pos(1)+pos(3);
+0139 [h,pos]=textlabel(hpanel(1),pos,labelB{kmaxB},<span class="keyword">...</span>
+0140     <span class="string">'String'</span>,labelB{1},<span class="string">'HorizontalAlignment'</span>,<span class="string">'right'</span>);
+0141 pos(1)=pos(1)+pos(3);
+0142 [h,pos]=textlabel(hpanel(1),pos,number0,<span class="keyword">...</span>
+0143     <span class="string">'Tag'</span>,<span class="string">'AspectRatio'</span>,<span class="string">'String'</span>,100,<span class="string">'HorizontalAlignment'</span>,<span class="string">'left'</span>);
+0144 
+0145 pos(1)=data.xmargin;
+0146 pos(2)=pos(2)-data.ygap-pos(4);
+0147 [h,pos]=textlabel(hpanel(1),pos,labelA{kmaxA},<span class="keyword">...</span>
+0148     <span class="string">'String'</span>,labelA{2},<span class="string">'HorizontalAlignment'</span>,<span class="string">'right'</span>);
+0149 pos(1)=pos(1)+pos(3);
+0150 [h,pos]=textlabel(hpanel(1),pos,number0,<span class="keyword">...</span>
+0151     <span class="string">'Tag'</span>,<span class="string">'VerticalCenter'</span>,<span class="string">'String'</span>,0,<span class="string">'HorizontalAlignment'</span>,<span class="string">'left'</span>);
+0152 pos(1)=pos(1)+pos(3);
+0153 [h,pos]=textlabel(hpanel(1),pos,labelB{kmaxB},<span class="keyword">...</span>
+0154     <span class="string">'String'</span>,labelB{2},<span class="string">'HorizontalAlignment'</span>,<span class="string">'right'</span>);
+0155 pos(1)=pos(1)+pos(3);
+0156 [h,pos]=textlabel(hpanel(1),pos,number0,<span class="keyword">...</span>
+0157     <span class="string">'Tag'</span>,<span class="string">'QuadratureError'</span>,<span class="string">'String'</span>,0,<span class="string">'HorizontalAlignment'</span>,<span class="string">'left'</span>);
+0158 
+0159 pos(1)=data.xmargin;
+0160 pos(2)=pos(2)-data.ygap-pos(4);
+0161 [h,pos]=textlabel(hpanel(1),pos,<span class="string">'Display range: '</span>);
+0162 pos(1)=pos(1)+pos(3);
+0163 value=1;
+0164 [h,pos]=radiobutton(hpanel(1),pos,<span class="string">'Characterization'</span>,<span class="keyword">...</span>
+0165     <span class="string">'Tag'</span>,<span class="string">'DisplayCharacterization'</span>,<span class="string">'Callback'</span>,@<a href="#_sub3" class="code" title="subfunction GenerateQuadrature(src,varargin)">GenerateQuadrature</a>,<span class="keyword">...</span>
+0166     <span class="string">'Value'</span>,value,<span class="string">'UserData'</span>,value);
+0167 pos(1)=pos(1)+pos(3);
+0168 value=0;
+0169 [h,pos]=radiobutton(hpanel(1),pos,<span class="string">'Experiment'</span>,<span class="keyword">...</span>
+0170     <span class="string">'Tag'</span>,<span class="string">'DisplayExperiment'</span>,<span class="string">'Callback'</span>,@<a href="#_sub3" class="code" title="subfunction GenerateQuadrature(src,varargin)">GenerateQuadrature</a>,<span class="keyword">...</span>
+0171     <span class="string">'Value'</span>,value,<span class="string">'UserData'</span>,value);
+0172 
+0173 panelpos=get(hpanel(1),<span class="string">'Position'</span>);
+0174 offset=abs(pos(2));
+0175 panelpos(4)=pos(4)+offset+2*data.ymargin;
+0176 hc=get(hpanel(1),<span class="string">'Children'</span>);
+0177 right=0;
+0178 <span class="keyword">for</span> k=1:numel(hc)
+0179     pos=get(hc(k),<span class="string">'Position'</span>);
+0180     pos(2)=pos(2)+offset+data.ymargin;
+0181     set(hc(k),<span class="string">'Position'</span>,pos);
+0182     right=max([right pos(1)+pos(3)]);
+0183 <span class="keyword">end</span>
+0184 panelpos(3)=right+data.xmargin;
+0185 set(hpanel(1),<span class="string">'Position'</span>,panelpos,<span class="string">'UserData'</span>,data);
+0186 
+0187 <span class="comment">% create plot panel</span>
+0188 hpanel(2)=custom_uipanel(<span class="string">'Parent'</span>,fig,<span class="string">'Tag'</span>,<span class="string">'PlotPanel'</span>);
+0189 set(hpanel(2),<span class="string">'BorderType'</span>,<span class="string">'line'</span>);
+0190 ha=axes(<span class="string">'Parent'</span>,hpanel(2),<span class="string">'Tag'</span>,<span class="string">'QuadraturePlot'</span>,<span class="keyword">...</span>
+0191     <span class="string">'Units'</span>,<span class="string">'normalized'</span>,<span class="string">'OuterPosition'</span>,[0 0 1 1],<span class="keyword">...</span>
+0192     <span class="string">'Box'</span>,<span class="string">'on'</span>);
+0193 line(<span class="string">'Parent'</span>,ha,<span class="string">'Tag'</span>,<span class="string">'data1'</span>);
+0194 line(<span class="string">'Parent'</span>,ha,<span class="string">'Tag'</span>,<span class="string">'data2'</span>);
+0195 
+0196 choice={<span class="string">'Signals'</span>,<span class="string">'Ellipse'</span>};
+0197 value=2;
+0198 popupmenu(hpanel(2),[],choice,<span class="keyword">...</span>
+0199     <span class="string">'Tag'</span>,<span class="string">'PlotSelect'</span>,<span class="string">'Callback'</span>,@<a href="#_sub3" class="code" title="subfunction GenerateQuadrature(src,varargin)">GenerateQuadrature</a>,<span class="keyword">...</span>
+0200     <span class="string">'Value'</span>,value,<span class="string">'UserData'</span>,value);
+0201 
+0202 h=uicontrol(<span class="string">'Parent'</span>,hpanel(2),<span class="string">'Tag'</span>,<span class="string">'ClonePlot'</span>,<span class="keyword">...</span>
+0203     <span class="string">'String'</span>,<span class="string">' clone '</span>,<span class="string">'Callback'</span>,@ClonePlot,<span class="string">'Units'</span>,<span class="string">'pixels'</span>,<span class="keyword">...</span>
+0204     <span class="string">'ToolTipString'</span>,<span class="string">'Clone plot to separate window'</span>);
+0205 extent=get(h,<span class="string">'Extent'</span>);
+0206 set(h,<span class="string">'Position'</span>,extent);
+0207 
+0208 <span class="comment">% create next/previous buttons</span>
+0209 h=custom_uicontrol(<span class="string">'Parent'</span>,fig,<span class="string">'Style'</span>,<span class="string">'pushbutton'</span>,<span class="keyword">...</span>
+0210     <span class="string">'Tag'</span>,<span class="string">'Previous'</span>,<span class="string">'String'</span>,<span class="string">' &lt; Previous '</span>,<span class="string">'Callback'</span>,@<a href="#_sub4" class="code" title="subfunction PreviousButton(src,varargin)">PreviousButton</a>);
+0211 pos=get(h,<span class="string">'Position'</span>);
+0212 h=custom_uicontrol(<span class="string">'Parent'</span>,fig,<span class="string">'Style'</span>,<span class="string">'pushbutton'</span>,<span class="keyword">...</span>
+0213     <span class="string">'Tag'</span>,<span class="string">'Next'</span>,<span class="string">'String'</span>,<span class="string">' Next &gt; '</span>,<span class="string">'Callback'</span>,@<a href="#_sub5" class="code" title="subfunction NextButton(src,varargin)">NextButton</a>);
+0214 set(h,<span class="string">'Position'</span>,pos);
+0215 custom_uicontrol(<span class="string">'Parent'</span>,fig,<span class="string">'Style'</span>,<span class="string">'text'</span>,<span class="keyword">...</span>
+0216     <span class="string">'Tag'</span>,<span class="string">'GUIlabel'</span>,<span class="string">'String'</span>,<span class="string">'Quadrature signals'</span>,<span class="string">'FontWeight'</span>,<span class="string">'bold'</span>,<span class="keyword">...</span>
+0217     <span class="string">'BackgroundColor'</span>,get(fig,<span class="string">'Color'</span>));
+0218 
+0219 <span class="comment">% final items</span>
+0220 set(fig,<span class="string">'ResizeFcn'</span>,@<a href="#_sub2" class="code" title="subfunction ResizeFcn(src,varargin)">ResizeFcn</a>);
+0221 NudgeTextBoxes(fig);
+0222 
+0223 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0224 <span class="comment">% figure resize function %</span>
+0225 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0226 <a name="_sub2" href="#_subfunctions" class="code">function ResizeFcn(src,varargin)</a>
+0227 
+0228 <span class="comment">% get handles and data</span>
+0229 fig=ancestor(src,<span class="string">'figure'</span>);
+0230 h=guihandles(fig);
+0231 data=get(h.ControlPanel,<span class="string">'UserData'</span>);
+0232 
+0233 <span class="comment">% enforce mininum dimensions</span>
+0234 units=get(fig,<span class="string">'Units'</span>);
+0235 set(fig,<span class="string">'Units'</span>,<span class="string">'pixels'</span>);
+0236 figpos=get(fig,<span class="string">'Position'</span>);
+0237 <span class="keyword">if</span> figpos(3)&lt;data.Lx
+0238     figpos(3)=data.Lx;
+0239 <span class="keyword">end</span>
+0240 <span class="keyword">if</span> figpos(4)&lt;data.Ly
+0241     dy=data.Ly-figpos(4);
+0242     figpos(2)=figpos(2)-dy;
+0243     figpos(4)=data.Ly;
+0244 <span class="keyword">end</span>
+0245 set(fig,<span class="string">'Position'</span>,figpos,<span class="string">'Units'</span>,units);
+0246 
+0247 <span class="comment">% position control panel</span>
+0248 pos=get(h.ControlPanel,<span class="string">'Position'</span>);
+0249 pos(1)=0;
+0250 pos(2)=figpos(4)-pos(4);
+0251 pos(3)=figpos(3);
+0252 set(h.ControlPanel,<span class="string">'Position'</span>,pos);
+0253 y2=pos(2);
+0254 
+0255 <span class="comment">% position next/previous buttons (fixed height)</span>
+0256 pos=get(h.Previous,<span class="string">'Position'</span>);
+0257 y0=pos(2);
+0258 pos(1)=2*data.xmargin;
+0259 pos(2)=data.ymargin;
+0260 set(h.Previous,<span class="string">'Position'</span>,pos);
+0261 left=pos(1)+pos(3);
+0262 
+0263 pos=get(h.Next,<span class="string">'Position'</span>);
+0264 pos(1)=figpos(3)-2*data.xmargin-pos(3);
+0265 pos(2)=data.ymargin;
+0266 set(h.Next,<span class="string">'Position'</span>,pos);
+0267 right=pos(1);
+0268 
+0269 <span class="comment">% position GUI label</span>
+0270 pos=get(h.GUIlabel,<span class="string">'Position'</span>);
+0271 pos(1)=left;
+0272 pos(2)=pos(2)-y0+data.ymargin;
+0273 pos(3)=right-left;
+0274 set(h.GUIlabel,<span class="string">'Position'</span>,pos);
+0275 y1=pos(2)+pos(4)+data.ymargin;
+0276 
+0277 <span class="comment">% position plot panel</span>
+0278 pos(1)=0;
+0279 pos(2)=y1;
+0280 pos(3)=figpos(3);
+0281 pos(4)=y2-y1;
+0282 set(h.PlotPanel,<span class="string">'Position'</span>,pos);
+0283 
+0284 <span class="comment">% position plot select popup</span>
+0285 panelpos=get(h.PlotPanel,<span class="string">'Position'</span>);
+0286 border=get(h.PlotPanel,<span class="string">'BorderWidth'</span>);
+0287 pos=get(h.PlotSelect,<span class="string">'Position'</span>);
+0288 pos(1)=border;
+0289 pos(2)=panelpos(4)-pos(4)-border;
+0290 set(h.PlotSelect,<span class="string">'Position'</span>,pos);
+0291 
+0292 <span class="comment">% position clone plot button</span>
+0293 panelpos=get(h.PlotPanel,<span class="string">'Position'</span>);
+0294 border=get(h.PlotPanel,<span class="string">'BorderWidth'</span>);
+0295 pos=get(h.ClonePlot,<span class="string">'Position'</span>);
+0296 pos(1)=panelpos(3)-pos(3)-border;
+0297 pos(2)=panelpos(4)-pos(4)-border;
+0298 set(h.ClonePlot,<span class="string">'Position'</span>,pos);
+0299 
+0300 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0301 <span class="comment">% quadrature generation callback %</span>
+0302 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0303 <a name="_sub3" href="#_subfunctions" class="code">function GenerateQuadrature(src,varargin)</a>
+0304 
+0305 <span class="comment">% get handles</span>
+0306 fig=ancestor(src,<span class="string">'figure'</span>);
+0307 h=guihandles(fig);
+0308 
+0309 <span class="comment">% verify state change and update radio buttons</span>
+0310 srctype=get(src,<span class="string">'Type'</span>);
+0311 <span class="keyword">if</span> strcmp(srctype,<span class="string">'uicontrol'</span>)
+0312     oldvalue=get(src,<span class="string">'UserData'</span>);
+0313     <span class="keyword">switch</span> get(src,<span class="string">'Tag'</span>)
+0314         <span class="keyword">case</span> <span class="string">'DisplayCharacterization'</span>
+0315             set(src,<span class="string">'Value'</span>,1);
+0316             <span class="keyword">if</span> oldvalue==1 <span class="comment">% no change</span>
+0317                 <span class="keyword">return</span>
+0318             <span class="keyword">end</span>
+0319             set(h.DisplayExperiment,<span class="string">'Value'</span>,0,<span class="string">'UserData'</span>,0);
+0320             set(src,<span class="string">'UserData'</span>,1);
+0321         <span class="keyword">case</span> <span class="string">'DisplayExperiment'</span>
+0322             set(src,<span class="string">'Value'</span>,1);
+0323             <span class="keyword">if</span> oldvalue==1 <span class="comment">% no change</span>
+0324                 <span class="keyword">return</span>
+0325             <span class="keyword">end</span>
+0326             set(h.DisplayCharacterization,<span class="string">'Value'</span>,0,<span class="string">'UserData'</span>,0);
+0327             set(src,<span class="string">'UserData'</span>,1);
+0328         <span class="keyword">case</span> <span class="string">'PlotSelect'</span>
+0329             value=get(src,<span class="string">'Value'</span>);
+0330             <span class="keyword">if</span> oldvalue==value <span class="comment">% no change</span>
+0331                 <span class="keyword">return</span>
+0332             <span class="keyword">end</span>
+0333             set(src,<span class="string">'UserData'</span>,value);
+0334     <span class="keyword">end</span>
+0335 <span class="keyword">end</span>
+0336 
+0337 <span class="comment">% extract data from load screen</span>
+0338 srcfig=findall(0,<span class="string">'Type'</span>,<span class="string">'figure'</span>,<span class="string">'Tag'</span>,<span class="string">'THRIVE_LoadScreen'</span>);
+0339 hsrc=guihandles(srcfig);
+0340 <span class="keyword">if</span> get(h.DisplayCharacterization,<span class="string">'Value'</span>)==1
+0341     tbound(1)=get(hsrc.CharacterizationTime1,<span class="string">'UserData'</span>);
+0342     tbound(2)=get(hsrc.CharacterizationTime2,<span class="string">'UserData'</span>);
+0343 <span class="keyword">else</span>
+0344     tbound(1)=get(hsrc.ExperimentTime1,<span class="string">'UserData'</span>);
+0345     tbound(2)=get(hsrc.ExperimentTime2,<span class="string">'UserData'</span>);
+0346 <span class="keyword">end</span>
+0347 time=get(hsrc.D1,<span class="string">'XData'</span>);
+0348 ii=(time&gt;=min(tbound)) &amp; (time&lt;=max(tbound));
+0349 time=time(ii);
+0350 D1=get(hsrc.D1,<span class="string">'YData'</span>);   D1=D1(ii);
+0351 D2=get(hsrc.D2,<span class="string">'YData'</span>);   D2=D2(ii);
+0352 D3=get(hsrc.D3,<span class="string">'YData'</span>);   D3=D3(ii);
+0353 
+0354 <span class="comment">% calculate quadrature signals</span>
+0355 data=get(h.ControlPanel,<span class="string">'UserData'</span>);
+0356 [Dx,Dy]=QuadratureReduction(D1,D2,D3,<span class="keyword">...</span>
+0357     data.baseline,data.amplitude,data.ratio,data.beta);
+0358 
+0359 <span class="comment">% update screen</span>
+0360 value=get(h.PlotSelect,<span class="string">'Value'</span>);
+0361 label=get(h.PlotSelect,<span class="string">'String'</span>);
+0362 <span class="keyword">switch</span> lower(label{value})
+0363     <span class="keyword">case</span> <span class="string">'signals'</span>
+0364         set(h.QuadraturePlot,<span class="keyword">...</span>
+0365             <span class="string">'DataAspectRatioMode'</span>,<span class="string">'auto'</span>,<span class="string">'PlotBoxAspectRatioMode'</span>,<span class="string">'auto'</span>);
+0366         set(h.data1,<span class="string">'XData'</span>,time,<span class="string">'YData'</span>,Dx,<span class="keyword">...</span>
+0367             <span class="string">'Color'</span>,[0 0 1],<span class="string">'Marker'</span>,<span class="string">'none'</span>,<span class="keyword">...</span>
+0368             <span class="string">'LineStyle'</span>,<span class="string">'-'</span>,<span class="string">'LineWidth'</span>,0.5);
+0369         set(h.data2,<span class="string">'XData'</span>,time,<span class="string">'YData'</span>,Dy,<span class="keyword">...</span>
+0370             <span class="string">'Color'</span>,[0 0.5 0],<span class="string">'Marker'</span>,<span class="string">'none'</span>,<span class="keyword">...</span>
+0371             <span class="string">'LineStyle'</span>,<span class="string">'-'</span>,<span class="string">'LineWidth'</span>,0.5);
+0372         xlabel(h.QuadraturePlot,<span class="string">'Time'</span>);
+0373         ylabel(h.QuadraturePlot,<span class="string">'Quadrature signals'</span>);
+0374         clean_legend([h.data1 h.data2],<span class="string">'Dx'</span>,<span class="string">'Dy'</span>,<span class="string">'Location'</span>,<span class="string">'best'</span>);
+0375     <span class="keyword">case</span> <span class="string">'ellipse'</span>
+0376         set(h.QuadraturePlot,<span class="keyword">...</span>
+0377             <span class="string">'DataAspectRatio'</span>,[1 1 1],<span class="string">'PlotBoxAspectRatio'</span>,[1 1 1]);
+0378         color=[0 1 0];              
+0379         set(h.data1,<span class="string">'XData'</span>,Dx,<span class="string">'YData'</span>,Dy,<span class="keyword">...</span>
+0380             <span class="string">'Marker'</span>,<span class="string">'o'</span>,<span class="string">'LineStyle'</span>,<span class="string">'none'</span>,<span class="string">'MarkerSize'</span>,4,<span class="keyword">...</span>
+0381             <span class="string">'MarkerEdgeColor'</span>,color,<span class="string">'MarkerFaceColor'</span>,color);
+0382         params=data.fitparams;      
+0383         Nfit=500;
+0384         phi=linspace(0,2*pi,Nfit);
+0385         xfit=params(1)+params(3)*cos(phi);
+0386         yfit=params(2)+params(4)*sin(phi-params(5));
+0387         set(h.data2,<span class="string">'XData'</span>,xfit,<span class="string">'YData'</span>,yfit,<span class="keyword">...</span>
+0388             <span class="string">'Color'</span>,[0 0 0],<span class="string">'Marker'</span>,<span class="string">'none'</span>,<span class="string">'LineWidth'</span>,2);
+0389         <span class="comment">%,'LineStyle','--','LineWidth',2);</span>
+0390         xlabel(h.QuadraturePlot,<span class="string">'Dx'</span>);
+0391         ylabel(h.QuadraturePlot,<span class="string">'Dy'</span>);        
+0392         clean_legend([h.data1 h.data2],<span class="string">'data'</span>,<span class="string">'fit'</span>,<span class="string">'Location'</span>,<span class="string">'best'</span>);        
+0393 <span class="keyword">end</span>
+0394 
+0395 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0396 <span class="comment">% previous button callback %</span>
+0397 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0398 <a name="_sub4" href="#_subfunctions" class="code">function PreviousButton(src,varargin)</a>
+0399 
+0400 fig=ancestor(src,<span class="string">'figure'</span>);
+0401 
+0402 srcfig=findall(0,<span class="string">'Type'</span>,<span class="string">'figure'</span>,<span class="string">'Tag'</span>,<span class="string">'THRIVE_LoadScreen'</span>);
+0403 hsrc=guihandles(srcfig);
+0404 choice=findall(hsrc.CharacterizationMenu,<span class="string">'Checked'</span>,<span class="string">'on'</span>);
+0405 <span class="keyword">switch</span> get(choice,<span class="string">'Tag'</span>)
+0406     <span class="keyword">case</span> <span class="string">'ideal'</span>
+0407         LoadScreen(fig);
+0408     <span class="keyword">case</span> <span class="string">'ellipse'</span>
+0409         EllipseScreen(fig);
+0410     <span class="keyword">case</span> <span class="string">'beamblock'</span>
+0411         <span class="comment">%</span>
+0412 <span class="keyword">end</span>
+0413 set(fig,<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+0414 
+0415 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0416 <span class="comment">% next button callback %</span>
+0417 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0418 <a name="_sub5" href="#_subfunctions" class="code">function NextButton(src,varargin)</a>
+0419 
+0420 <span class="comment">% get handles</span>
+0421 fig=ancestor(src,<span class="string">'figure'</span>);
+0422 <span class="comment">%h=guihandles(fig);</span>
+0423 
+0424 <span class="comment">% update current screen</span>
+0425 <span class="comment">%set(h.DisplayCharacterization,'Value',0,'UserData',0);</span>
+0426 <span class="comment">%set(h.DisplayExperiment,'Value',1,'UserData',0);</span>
+0427 <span class="comment">%set(h.PlotSelect,'Value',1);</span>
+0428 <span class="comment">%GenerateQuadrature(fig);</span>
+0429 
+0430 <span class="comment">% move to next screen</span>
+0431 ResultsScreen(fig);
+0432 set(fig,<span class="string">'Visible'</span>,<span class="string">'off'</span>);</pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

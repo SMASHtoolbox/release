@@ -1,0 +1,90 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of update</title>
+  <meta name="keywords" content="update">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../../index.html">SMASHtoolbox</a> &gt; <a href="../../../index.html">+SMASH</a> &gt; <a href="../../index.html">+Graphics</a> &gt; <a href="../index.html">+PlotTools</a> &gt; <a href="index.html">@AlternatingLine</a> &gt; update.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../../index.html"><img alt="<" border="0" src="../../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+Graphics/+PlotTools/@AlternatingLine&nbsp;<img alt=">" border="0" src="../../../../../../right.png"></a></td></tr></table>-->
+
+<h1>update
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>function update(object) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="AlternatingLine.html" class="code" title="">AlternatingLine</a>	This class creates lines with alternating color.  This effect is created</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function update(object)</a>
+0002 
+0003 assert(isvalid(object),<span class="string">'ERROR: object cannot be updated'</span>);
+0004 <span class="keyword">if</span> isempty(object.Group)
+0005     <span class="keyword">return</span>
+0006 <span class="keyword">end</span>
+0007 
+0008 <span class="comment">% verify (x,y) data</span>
+0009 x=object.XData(:);
+0010 y=object.YData(:);
+0011 <span class="keyword">if</span> numel(x)==numel(y)
+0012     <span class="comment">% do nothing</span>
+0013 <span class="keyword">elseif</span> numel(x)==1
+0014     x=repmat(x,[numel(y) 1]);
+0015 <span class="keyword">elseif</span> numel(y)==1
+0016     y=repmat(y,[numel(x) 1]);
+0017 <span class="keyword">else</span>
+0018     set(object.Group,<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+0019     <span class="keyword">return</span>
+0020 <span class="keyword">end</span>
+0021 
+0022 <span class="keyword">if</span> numel(x)&gt;0
+0023     set(object.Group,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0024 <span class="keyword">else</span>
+0025     set(object.Group,<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+0026 <span class="keyword">end</span>
+0027 
+0028 <span class="comment">% apply data</span>
+0029 h=get(object.Group,<span class="string">'Children'</span>);
+0030 h=h(end:-1:1); 
+0031 
+0032 set(h,<span class="string">'XData'</span>,x);
+0033 set(h,<span class="string">'YData'</span>,y);
+0034 
+0035 set(h(1),<span class="string">'Color'</span>,object.BackgroundColor,<span class="string">'LineStyle'</span>,<span class="string">'-'</span>);
+0036 set(h(2),<span class="string">'Color'</span>,object.ForegroundColor,<span class="keyword">...</span>
+0037     <span class="string">'LineStyle'</span>,object.ForegroundStyle);
+0038 
+0039 set(h,<span class="string">'LineWidth'</span>,object.LineWidth);
+0040 
+0041 set(h,<span class="string">'Visible'</span>,object.Visible);
+0042 
+0043 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

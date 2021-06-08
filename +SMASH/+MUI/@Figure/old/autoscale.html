@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of autoscale</title>
+  <meta name="keywords" content="autoscale">
+  <meta name="description" content="handle input">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../../index.html">SMASHtoolbox</a> &gt; <a href="../../../index.html">+SMASH</a> &gt; <a href="../../index.html">+MUI</a> &gt; <a href="../index.html">@Figure</a> &gt; <a href="index.html">old</a> &gt; autoscale.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../../index.html"><img alt="<" border="0" src="../../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+MUI/@Figure/old&nbsp;<img alt=">" border="0" src="../../../../../../right.png"></a></td></tr></table>-->
+
+<h1>autoscale
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>handle input</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>function autoscale(fig,state) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> handle input</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="WindowButton.html" class="code" title="function WindowButton(fig,operation)">WindowButton</a>	WindowButton : store/reset window button state and pointers</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="MinimalFigure.html" class="code" title="function varargout=MinimalFigure(varargin)">MinimalFigure</a>	MinimalFigure: create a minimalistic figure useful for GUIs</li><li><a href="ROIstatistics.html" class="code" title="function ROIstatistics(varargin)">ROIstatistics</a>	ROIstatistics : activate region of interest statistics for a figure</li><li><a href="WindowButton.html" class="code" title="function WindowButton(fig,operation)">WindowButton</a>	WindowButton : store/reset window button state and pointers</li><li><a href="clone.html" class="code" title="function clone(varargin)">clone</a>	clone : selectively clone axes to its own figure</li><li><a href="figure_old.html" class="code" title="function varargout=figure(varargin)">figure_old</a>	mui.figure : create a MUI figure</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function callback(varargin)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function autoscale(fig,state)</a>
+0002 
+0003 <span class="comment">% handle input</span>
+0004 <span class="keyword">if</span> nargin&lt;2
+0005     error(<span class="string">'ERROR: figure handle and state input are required'</span>);
+0006 <span class="keyword">end</span>
+0007 
+0008 
+0009 
+0010 
+0011 
+0012 
+0013 <span class="comment">% determine if more than one axes is present</span>
+0014 haxes=findobj(fig,<span class="string">'Type'</span>,<span class="string">'axes'</span>);
+0015 <span class="keyword">if</span> numel(haxes)==1
+0016     axis(haxes,<span class="string">'auto'</span>);
+0017     <span class="keyword">return</span>
+0018 <span class="keyword">end</span>
+0019 
+0020 <span class="keyword">switch</span> lower(state)
+0021     <span class="keyword">case</span> <span class="string">'on'</span>
+0022         <a href="WindowButton.html" class="code" title="function WindowButton(fig,operation)">WindowButton</a>(fig,<span class="string">'store'</span>);
+0023         set(fig,<span class="string">'Pointer'</span>,<span class="string">'crosshair'</span>,<span class="keyword">...</span>
+0024             <span class="string">'WindowButtonDownFcn'</span>,<span class="string">''</span>,<span class="keyword">...</span>
+0025             <span class="string">'WindowButtonUpFcn'</span>,@<a href="#_sub1" class="code" title="subfunction callback(varargin)">callback</a>,<span class="keyword">...</span>
+0026             <span class="string">'WindowButtonMotionFcn'</span>,<span class="string">''</span>);
+0027     <span class="keyword">case</span> <span class="string">'off'</span>
+0028         <a href="WindowButton.html" class="code" title="function WindowButton(fig,operation)">WindowButton</a>(fig,<span class="string">'recall'</span>);
+0029     <span class="keyword">otherwise</span>
+0030         error(<span class="string">'ERROR: %s is an invalid auto scale state'</span>,mode);
+0031 <span class="keyword">end</span>    
+0032 
+0033 <span class="keyword">end</span>
+0034 
+0035 <a name="_sub1" href="#_subfunctions" class="code">function callback(varargin)</a>
+0036 
+0037 <span class="comment">% verify click occured on an axes object</span>
+0038 fig=gcbf;
+0039 ha=get(fig,<span class="string">'CurrentAxes'</span>);
+0040 hc=get(fig,<span class="string">'CurrentObject'</span>);
+0041 hc=ancestor(hc,<span class="string">'axes'</span>);
+0042 <span class="keyword">if</span> ha~=hc
+0043     <span class="keyword">return</span>
+0044 <span class="keyword">end</span>
+0045 
+0046 <span class="comment">% autoscale one or more axes objets</span>
+0047 selection=get(fig,<span class="string">'SelectionType'</span>);
+0048 <span class="keyword">switch</span> lower(selection)
+0049     <span class="keyword">case</span> <span class="string">'normal'</span>
+0050         axis(ha,<span class="string">'auto'</span>);
+0051     <span class="keyword">case</span> <span class="string">'extend'</span>        
+0052         haxes=findobj(fig,<span class="string">'Type'</span>,<span class="string">'axes'</span>);
+0053         N=numel(haxes);
+0054         <span class="keyword">for</span> ii=1:N
+0055             axis(haxes(ii),<span class="string">'auto'</span>);
+0056         <span class="keyword">end</span>
+0057 <span class="keyword">end</span>
+0058 zoom(fig,<span class="string">'reset'</span>);
+0059 
+0060 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

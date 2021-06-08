@@ -1,0 +1,147 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of set_colormap</title>
+  <meta name="keywords" content="set_colormap">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">SIRHEN</a> &gt; <a href="index.html">private</a> &gt; set_colormap.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/SIRHEN/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>set_colormap
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function set_colormap(haxes,map,invertmap) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="AnalysisScreen.html" class="code" title="function fig=AnalysisScreen(prevfig)">AnalysisScreen</a>	allocate mising input</li><li><a href="SelectionScreen.html" class="code" title="function fig=SelectionScreen(prevfig)">SelectionScreen</a>	allocate mising input</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function map=red(numcolors)</a></li><li><a href="#_sub2" class="code">function map=green(numcolors)</a></li><li><a href="#_sub3" class="code">function map=blue(numcolors)</a></li><li><a href="#_sub4" class="code">function map=rainbow(numcolors,gamma)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function set_colormap(haxes,map,invertmap)</a>
+0002 
+0003 N=256;
+0004 <span class="keyword">try</span> 
+0005     map=feval(map,N);    
+0006 <span class="keyword">catch</span>
+0007     map=colormap(<span class="string">'default'</span>);
+0008 <span class="keyword">end</span>
+0009 <span class="keyword">if</span> strcmp(invertmap,<span class="string">'yes'</span>)
+0010     map=map(end:-1:1,:);
+0011 <span class="keyword">end</span>
+0012 
+0013 colormap(haxes,map)
+0014 
+0015 <span class="keyword">end</span>
+0016 
+0017 <span class="comment">% red color map (inspired by IDL)</span>
+0018 <a name="_sub1" href="#_subfunctions" class="code">function map=red(numcolors)</a>
+0019 
+0020 N=linspace(1,numcolors,3);
+0021 N=round(diff(N));
+0022 <a href="#_sub1" class="code" title="subfunction map=red(numcolors)">red</a>=[linspace(0,1,N(1)) linspace(1,1,N(2))];
+0023 <a href="#_sub2" class="code" title="subfunction map=green(numcolors)">green</a>=[linspace(0,0,N(1)) linspace(0,1,N(2))];
+0024 <a href="#_sub3" class="code" title="subfunction map=blue(numcolors)">blue</a>=[linspace(0,0,N(1)) linspace(0,1,N(2))];
+0025 
+0026 map=[<a href="#_sub1" class="code" title="subfunction map=red(numcolors)">red</a>(:) <a href="#_sub2" class="code" title="subfunction map=green(numcolors)">green</a>(:) <a href="#_sub3" class="code" title="subfunction map=blue(numcolors)">blue</a>(:)];
+0027  
+0028 <span class="keyword">end</span>
+0029 
+0030 <span class="comment">% green color map (inspired by IDL)</span>
+0031 <a name="_sub2" href="#_subfunctions" class="code">function map=green(numcolors)</a>
+0032 
+0033 N=linspace(1,numcolors,3);
+0034 N=round(diff(N));
+0035 <a href="#_sub1" class="code" title="subfunction map=red(numcolors)">red</a>=[linspace(0,0,N(1)) linspace(0,1,N(2))];
+0036 <a href="#_sub2" class="code" title="subfunction map=green(numcolors)">green</a>=[linspace(0,0.5,N(1)) linspace(0.5,1,N(2))];
+0037 <a href="#_sub3" class="code" title="subfunction map=blue(numcolors)">blue</a>=[linspace(0,0,N(1)) linspace(0,1,N(2))];
+0038 
+0039 map=[<a href="#_sub1" class="code" title="subfunction map=red(numcolors)">red</a>(:) <a href="#_sub2" class="code" title="subfunction map=green(numcolors)">green</a>(:) <a href="#_sub3" class="code" title="subfunction map=blue(numcolors)">blue</a>(:)];
+0040  
+0041 <span class="keyword">end</span>
+0042 
+0043 <span class="comment">% blue color map (inspired by IDL)</span>
+0044 <a name="_sub3" href="#_subfunctions" class="code">function map=blue(numcolors)</a>
+0045 
+0046 N=linspace(1,numcolors,3);
+0047 N=round(diff(N));
+0048 <a href="#_sub1" class="code" title="subfunction map=red(numcolors)">red</a>=[linspace(0,0,N(1)) linspace(0,1,N(2))];
+0049 <a href="#_sub2" class="code" title="subfunction map=green(numcolors)">green</a>=[linspace(0,0,N(1)) linspace(0,1,N(2))];
+0050 <a href="#_sub3" class="code" title="subfunction map=blue(numcolors)">blue</a>=[linspace(0,1,N(1)) linspace(1,1,N(2))];
+0051 
+0052 map=[<a href="#_sub1" class="code" title="subfunction map=red(numcolors)">red</a>(:) <a href="#_sub2" class="code" title="subfunction map=green(numcolors)">green</a>(:) <a href="#_sub3" class="code" title="subfunction map=blue(numcolors)">blue</a>(:)];
+0053  
+0054 <span class="keyword">end</span>
+0055 
+0056 <a name="_sub4" href="#_subfunctions" class="code">function map=rainbow(numcolors,gamma)</a>
+0057 
+0058 <span class="keyword">if</span> (nargin&lt;2) || isempty(gamma)
+0059     gamma=0.80;
+0060 <span class="keyword">end</span>
+0061 
+0062 <span class="comment">%wavelength=linspace(400,700,numcolors);</span>
+0063 wavelength=linspace(700,400,numcolors);
+0064 [<a href="#_sub1" class="code" title="subfunction map=red(numcolors)">red</a>,<a href="#_sub2" class="code" title="subfunction map=green(numcolors)">green</a>,<a href="#_sub3" class="code" title="subfunction map=blue(numcolors)">blue</a>]=deal(zeros(size(wavelength)));
+0065 
+0066 index=(wavelength&gt;=380) &amp; (wavelength&lt;=440);
+0067 <a href="#_sub1" class="code" title="subfunction map=red(numcolors)">red</a>(index)=-1*(wavelength(index)-440)/(440-380);
+0068 <a href="#_sub2" class="code" title="subfunction map=green(numcolors)">green</a>(index)=0;
+0069 <a href="#_sub3" class="code" title="subfunction map=blue(numcolors)">blue</a>(index)=1;
+0070 
+0071 index=(wavelength&gt;=440) &amp; (wavelength&lt;=490);
+0072 <a href="#_sub1" class="code" title="subfunction map=red(numcolors)">red</a>(index)=0;
+0073 <a href="#_sub2" class="code" title="subfunction map=green(numcolors)">green</a>(index)=(wavelength(index)-440)/(490-440);
+0074 <a href="#_sub3" class="code" title="subfunction map=blue(numcolors)">blue</a>(index)=1;
+0075 
+0076 index=(wavelength&gt;=490) &amp; (wavelength&lt;=510);
+0077 <a href="#_sub1" class="code" title="subfunction map=red(numcolors)">red</a>(index)=0;
+0078 <a href="#_sub2" class="code" title="subfunction map=green(numcolors)">green</a>(index)=1;
+0079 <a href="#_sub3" class="code" title="subfunction map=blue(numcolors)">blue</a>(index)=-1*(wavelength(index)-510)/(510-490);
+0080 
+0081 index=(wavelength&gt;=510) &amp; (wavelength&lt;=580);
+0082 <a href="#_sub1" class="code" title="subfunction map=red(numcolors)">red</a>(index)=(wavelength(index)-510)/(580-510);
+0083 <a href="#_sub2" class="code" title="subfunction map=green(numcolors)">green</a>(index)=1;
+0084 <a href="#_sub3" class="code" title="subfunction map=blue(numcolors)">blue</a>(index)=0;
+0085 
+0086 index=(wavelength&gt;=580) &amp; (wavelength&lt;=645);
+0087 <a href="#_sub1" class="code" title="subfunction map=red(numcolors)">red</a>(index)=1;
+0088 <a href="#_sub2" class="code" title="subfunction map=green(numcolors)">green</a>(index)=-1*(wavelength(index)-645)/(645-580);
+0089 <a href="#_sub3" class="code" title="subfunction map=blue(numcolors)">blue</a>(index)=0;
+0090 
+0091 index=(wavelength&gt;=645) &amp; (wavelength&lt;=780);
+0092 <a href="#_sub1" class="code" title="subfunction map=red(numcolors)">red</a>(index)=1;
+0093 <a href="#_sub2" class="code" title="subfunction map=green(numcolors)">green</a>(index)=0;
+0094 <a href="#_sub3" class="code" title="subfunction map=blue(numcolors)">blue</a>(index)=0;
+0095 
+0096 map=[<a href="#_sub1" class="code" title="subfunction map=red(numcolors)">red</a>(:) <a href="#_sub2" class="code" title="subfunction map=green(numcolors)">green</a>(:) <a href="#_sub3" class="code" title="subfunction map=blue(numcolors)">blue</a>(:)];
+0097 map=map.^gamma;
+0098 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

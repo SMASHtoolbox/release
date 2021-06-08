@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of PointVISAR</title>
+  <meta name="keywords" content="PointVISAR">
+  <meta name="description" content="PointVISAR : VISAR analysis program">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="index.html">PointVISAR</a> &gt; PointVISAR.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../index.html"><img alt="<" border="0" src="../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/PointVISAR&nbsp;<img alt=">" border="0" src="../../../../right.png"></a></td></tr></table>-->
+
+<h1>PointVISAR
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>PointVISAR : VISAR analysis program</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function varargout=PointVISAR(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> PointVISAR : VISAR analysis program
+ 
+ For more information, type PointVISAR -help</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% PointVISAR : VISAR analysis program</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% For more information, type PointVISAR -help</span>
+0004 
+0005 <span class="comment">% created 4/11/2006 by Daniel Dolan</span>
+0006 <span class="comment">% last modified 1/24/2007 by Daniel Dolan</span>
+0007 <span class="comment">% last modified 4/24/2011 by Daniel Dolan</span>
+0008 
+0009 <a name="_sub0" href="#_subfunctions" class="code">function varargout=PointVISAR(varargin)</a>
+0010 
+0011 <span class="comment">% separate flags from file names</span>
+0012 file={};
+0013 arg={};
+0014 <span class="keyword">for</span> ii=1:nargin
+0015     <span class="keyword">if</span> strcmp(varargin{ii}(1),<span class="string">'-'</span>)
+0016         arg{end+1}=varargin{ii}(2:end);
+0017     <span class="keyword">else</span>
+0018         file{end+1}=varargin{ii};
+0019     <span class="keyword">end</span>
+0020 <span class="keyword">end</span>
+0021 
+0022 <span class="comment">% interpret input flags</span>
+0023 mode=<span class="string">'gui'</span>; <span class="comment">% default</span>
+0024 <span class="keyword">for</span> ii=1:numel(arg)
+0025     <span class="keyword">switch</span> lower(arg{ii})
+0026         <span class="keyword">case</span> {<span class="string">'batch'</span>,<span class="string">'console'</span>,<span class="string">'gui'</span>}
+0027             mode=arg{ii};
+0028         <span class="keyword">case</span> <span class="string">'help'</span>         
+0029             CommandLineHelp;
+0030             mode=<span class="string">'help'</span>;
+0031             <span class="keyword">break</span>
+0032         <span class="keyword">otherwise</span>
+0033             fprintf(<span class="string">'\n Invalid flag entered! '</span>);
+0034             fprintf(<span class="string">'Type ''PointVISAR -help'' for valid input options. \n\n'</span>);
+0035     <span class="keyword">end</span>
+0036 <span class="keyword">end</span>
+0037 
+0038 <span class="keyword">if</span> strcmp(mode,<span class="string">'batch'</span>)
+0039     mode=<span class="string">'console'</span>;
+0040 <span class="keyword">end</span>
+0041 
+0042 <span class="keyword">if</span> isempty(file) &amp;&amp; strcmp(mode,<span class="string">'console'</span>)
+0043     [filename,pathname]=uigetfile(<span class="string">'*.*'</span>,<span class="string">'Select configuration file'</span>);
+0044     <span class="keyword">if</span> isnumeric(filename) <span class="comment">% user pressed cancel</span>
+0045         file=[];
+0046     <span class="keyword">else</span>
+0047         file={fullfile(pathname,filename)};
+0048     <span class="keyword">end</span>
+0049 <span class="keyword">end</span>
+0050 
+0051 
+0052 <span class="comment">% parse and analyze configuation file(s) if present</span>
+0053 VisarData={};
+0054 <span class="keyword">for</span> ii=1:numel(file)
+0055     temp=LoadConfig(file{ii});
+0056     VisarData=[VisarData temp];
+0057 <span class="keyword">end</span>
+0058 
+0059 <span class="comment">% default settings</span>
+0060 <span class="comment">%setappdata(0,'UseNativeSystemDialog',false);</span>
+0061 
+0062 <span class="comment">% output analysis based on chosen mode</span>
+0063 fig=[];
+0064 <span class="keyword">switch</span> lower(mode)
+0065     <span class="keyword">case</span> <span class="string">'gui'</span>
+0066         fig=findall(0,<span class="string">'Type'</span>,<span class="string">'figure'</span>,<span class="string">'Tag'</span>,<span class="string">'PointVISAR'</span>);
+0067         <span class="keyword">if</span> ishandle(fig) <span class="comment">% program is already running</span>
+0068             fprintf(<span class="string">'Unable to launch PointVISAR--program already running!\n'</span>);
+0069             <span class="keyword">return</span>
+0070         <span class="keyword">end</span>
+0071         fig=PointVISARGUI(VisarData);
+0072     <span class="keyword">case</span> <span class="string">'console'</span>
+0073         <span class="keyword">for</span> ii=1:numel(VisarData)   
+0074             outputfile=VisarData{ii}.OutputFile;
+0075             <span class="keyword">if</span> isempty(outputfile)
+0076                 label=VisarData{ii}.Label;
+0077                 <span class="keyword">if</span> isempty(label)
+0078                     outputfile=strcat(<span class="string">'Record-'</span>,num2str(ii),<span class="string">'.out'</span>);
+0079                 <span class="keyword">else</span>
+0080                     outputfile=[VisarData{ii}.Label <span class="string">'.out'</span>];
+0081                 <span class="keyword">end</span>
+0082             <span class="keyword">end</span>
+0083             VisarData{ii}.OutputFile=outputfile;
+0084             SaveSignals(VisarData{ii});
+0085         <span class="keyword">end</span>      
+0086 <span class="keyword">end</span>
+0087 
+0088 <span class="comment">% function output</span>
+0089 <span class="keyword">if</span> isdeployed || nargout&gt;=1
+0090     varargout{1}=fig;
+0091 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

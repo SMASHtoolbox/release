@@ -1,0 +1,224 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of slice</title>
+  <meta name="keywords" content="slice">
+  <meta name="description" content="SLICE  Generate slices (lineouts) of ImageGroup objects">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="../../index.html">+SMASH</a> &gt; <a href="../index.html">+ImageAnalysis</a> &gt; <a href="index.html">@ImageGroup</a> &gt; slice.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+ImageAnalysis/@ImageGroup&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>slice
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>SLICE  Generate slices (lineouts) of ImageGroup objects</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function varargout=slice(object,coordinate,value) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> SLICE  Generate slices (lineouts) of ImageGroup objects
+
+ This function slices an Image object at a specified grid location.
+    &gt;&gt; result=slice(object,coordinate,value);
+ The input &quot;coordinate&quot;  should be 'Grid1' or 'Grid2'; &quot;value&quot; can only be
+ one location within that grid (at the moment).  If these inputs are omitted,
+ the user will be prompted to select them.  The output of this method is a
+ SignalGroup object; slices are plotted in a new figure when no output is
+ specified.
+
+ See also <a href="ImageGroup.html" class="code" title="">ImageGroup</a>, SMASH.SignalAnalysis.SignalGroup</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="limit.html" class="code" title="function varargout=limit(object,bound1,bound2,units)">limit</a>	LIMIT Limit object to a region of interest</li><li><a href="split.html" class="code" title="function varargout=split(object,imageNumbers)">split</a>	SPLIT Divide ImageGroup into Image objects</li><li><a href="view.html" class="code" title="function varargout=view(object,mode,target)">view</a>	VIEW ImageGroup visualization</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function pullValue(src,varargin)</a></li><li><a href="#_sub2" class="code">function value=SelectValue(coordinate,object)</a></li><li><a href="#_sub3" class="code">function MoveSliceGuide(varargin)</a></li><li><a href="#_sub4" class="code">function ButtonDown(varargin)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% SLICE  Generate slices (lineouts) of ImageGroup objects</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This function slices an Image object at a specified grid location.</span>
+0004 <span class="comment">%    &gt;&gt; result=slice(object,coordinate,value);</span>
+0005 <span class="comment">% The input &quot;coordinate&quot;  should be 'Grid1' or 'Grid2'; &quot;value&quot; can only be</span>
+0006 <span class="comment">% one location within that grid (at the moment).  If these inputs are omitted,</span>
+0007 <span class="comment">% the user will be prompted to select them.  The output of this method is a</span>
+0008 <span class="comment">% SignalGroup object; slices are plotted in a new figure when no output is</span>
+0009 <span class="comment">% specified.</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% See also ImageGroup, SMASH.SignalAnalysis.SignalGroup</span>
+0012 <span class="comment">%</span>
+0013 
+0014 <span class="comment">%</span>
+0015 <span class="comment">% created November 25, 2013 by Daniel Dolan (Sandia National Laboratories)</span>
+0016 <span class="comment">% modified January 29, 2016 by Sean Grant (Sandia National Laboratories/UT)</span>
+0017 <span class="comment">%   - modified from Image method</span>
+0018 <a name="_sub0" href="#_subfunctions" class="code">function varargout=slice(object,coordinate,value)</a>
+0019 
+0020 NImages=object.NumberImages;
+0021 
+0022 <span class="comment">% handle input</span>
+0023 <span class="keyword">if</span> (nargin&lt;2) || isempty(coordinate)
+0024     coordinate=questdlg(<span class="string">'Choose slice coordinate'</span>,<span class="string">'Slice coordinate'</span>,<span class="keyword">...</span>
+0025         <span class="string">' Grid1 '</span>,<span class="string">' Grid2 '</span>,<span class="string">' cancel '</span>,<span class="string">' Grid1 '</span>);
+0026     coordinate=strtrim(coordinate);
+0027     <span class="keyword">if</span> strcmp(coordinate,<span class="string">'cancel'</span>)
+0028         <span class="keyword">return</span>
+0029     <span class="keyword">end</span>
+0030 <span class="keyword">elseif</span> ~strcmpi(coordinate,<span class="string">'Grid2'</span>) &amp;&amp; ~strcmpi(coordinate,<span class="string">'Grid1'</span>)
+0031     error(<span class="string">'ERROR: %s is an invalid coordinate'</span>,coordinate);
+0032 <span class="keyword">end</span>
+0033 
+0034 <span class="keyword">if</span> (nargin&lt;3) || isempty(value) <span class="comment">% prompt user to select slices</span>
+0035     
+0036     <span class="comment">% prompt for Image to visualize during selection</span>
+0037     fig=SMASH.MUI.Dialog;
+0038     fig.Name=<span class="string">'Image Selection'</span>;
+0039     fig.Hidden=true; <span class="comment">% temporarily hide dialog for speed</span>
+0040     
+0041     choices=num2cell(1:NImages);
+0042     addblock(fig,<span class="string">'popup'</span>,<span class="string">'Select Image Number:'</span>,choices); <span class="comment">% popup menu block</span>
+0043 
+0044     h=addblock(fig,<span class="string">'button'</span>,<span class="string">' OK '</span>); <span class="comment">% button block</span>
+0045     set(h,<span class="string">'Callback'</span>,@<a href="#_sub1" class="code" title="subfunction pullValue(src,varargin)">pullValue</a>); <span class="comment">% button probes dialog state and closes it</span>
+0046 
+0047     fig.Hidden=false; <span class="comment">% reveal finished dialog</span>
+0048     waitfor(h);
+0049     
+0050     <span class="comment">% call selection on designated Image</span>
+0051     temp=cell(NImages,1);
+0052     [temp{:}]=<a href="split.html" class="code" title="function varargout=split(object,imageNumbers)">split</a>(object);
+0053     value=<a href="#_sub2" class="code" title="subfunction value=SelectValue(coordinate,object)">SelectValue</a>(coordinate,temp{str2double(frame)});     
+0054 <span class="keyword">else</span>
+0055     assert(numel(value)==1,<span class="string">'Error: Only one value is currently supported'</span>);
+0056 <span class="keyword">end</span>   
+0057 
+0058 <span class="comment">% calculate slices</span>
+0059 label=cell(1,NImages);
+0060 [x,y,z]=<a href="limit.html" class="code" title="function varargout=limit(object,bound1,bound2,units)">limit</a>(object);
+0061 <span class="keyword">switch</span> lower(coordinate)
+0062     <span class="keyword">case</span> <span class="string">'grid1'</span>
+0063         Grid=y;
+0064         Data=nan(numel(y),NImages);
+0065         <span class="keyword">for</span> k=1:NImages
+0066             Data(:,k)=interp2(object.Grid1,object.Grid2,object.Data(:,:,k),<span class="keyword">...</span>
+0067                 value,Grid);
+0068             label{k}=sprintf(<span class="string">'%s'</span>,object.Legend{k});
+0069         <span class="keyword">end</span>               
+0070         result=SMASH.SignalAnalysis.SignalGroup(y,Data);
+0071         result.GridLabel=object.Grid2Label;
+0072     <span class="keyword">case</span> <span class="string">'grid2'</span>
+0073         Grid=x;
+0074         Data=zeros(NImages,numel(x));
+0075         <span class="keyword">for</span> k=1:NImages
+0076             Data(k,:)=interp2(object.Grid1,object.Grid2,object.Data(:,:,k),<span class="keyword">...</span>
+0077                 Grid,value);
+0078             label{k}=sprintf(<span class="string">'%s'</span>,object.Legend{k});
+0079         <span class="keyword">end</span>
+0080         result=SMASH.SignalAnalysis.SignalGroup(x,transpose(Data));
+0081         result.GridLabel=object.Grid1Label;
+0082 <span class="keyword">end</span>
+0083 result.DataLabel=object.DataLabel;
+0084 result.GraphicOptions.Title=sprintf(<span class="string">'%s=%g slice of &quot;%s&quot;'</span>,coordinate,value,object.Name);
+0085 result.Legend=label;
+0086 
+0087 <span class="comment">% handle output</span>
+0088 <span class="keyword">if</span> nargout==0
+0089     <a href="view.html" class="code" title="function varargout=view(object,mode,target)">view</a>(result);
+0090 <span class="keyword">end</span>
+0091 
+0092 <span class="keyword">if</span> nargout==1
+0093     varargout{1}=result;
+0094 <span class="keyword">end</span>
+0095 
+0096 <span class="keyword">if</span> nargout==2 <span class="comment">% this mode is undocumented</span>
+0097     varargout{1}=coordinate;
+0098     varargout{2}=z;
+0099 <span class="keyword">end</span>
+0100 
+0101 <span class="comment">%% Callbacks</span>
+0102 
+0103 <a name="_sub1" href="#_subfunctions" class="code">function pullValue(src,varargin)</a>
+0104     frame=probe(fig);delete(fig);
+0105 <span class="keyword">end</span>
+0106 
+0107 <span class="keyword">end</span>
+0108 
+0109 <span class="comment">%%</span>
+0110 <a name="_sub2" href="#_subfunctions" class="code">function value=SelectValue(coordinate,object)</a>
+0111 
+0112 <span class="comment">% create selection interface</span>
+0113 h=<a href="view.html" class="code" title="function varargout=view(object,mode,target)">view</a>(object,<span class="string">'show'</span>); <span class="comment">% should make this 'snapshot' if that gets made.</span>
+0114 title(h.axes,<span class="string">'Choose slice: '</span>);
+0115 <span class="keyword">switch</span> lower(coordinate)
+0116     <span class="keyword">case</span> <span class="string">'grid1'</span>
+0117         Grid2=ylim(h.axes);
+0118         Grid1=nan(size(Grid2));
+0119     <span class="keyword">case</span> <span class="string">'grid2'</span>
+0120         Grid1=xlim(h.axes);
+0121         Grid2=nan(size(Grid1));         
+0122 <span class="keyword">end</span>
+0123 hline=line(<span class="string">'Parent'</span>,h.axes,<span class="string">'XData'</span>,Grid1,<span class="string">'YData'</span>,Grid2,<span class="keyword">...</span>
+0124     <span class="string">'Color'</span>,<span class="string">'m'</span>,<span class="keyword">...</span>
+0125     <span class="string">'Tag'</span>,<span class="string">'SliceGuide'</span>);
+0126 
+0127 fig=ancestor(h.axes,<span class="string">'figure'</span>);
+0128 set(fig,<span class="string">'WindowButtonMotionFcn'</span>,@<a href="#_sub3" class="code" title="subfunction MoveSliceGuide(varargin)">MoveSliceGuide</a>);
+0129 set(h.image,<span class="string">'ButtonDownFcn'</span>,@<a href="#_sub4" class="code" title="subfunction ButtonDown(varargin)">ButtonDown</a>);
+0130 set(hline,<span class="string">'ButtonDownFcn'</span>,@<a href="#_sub4" class="code" title="subfunction ButtonDown(varargin)">ButtonDown</a>);
+0131     <a name="_sub3" href="#_subfunctions" class="code">function MoveSliceGuide(varargin)</a>
+0132         pos=get(h.axes,<span class="string">'CurrentPoint'</span>);
+0133         Grid1=repmat(min(max(pos(1,1),min(xlim(h.axes))),max(xlim(h.axes))),[1 2]);
+0134         Grid2=repmat(min(max(pos(1,2),min(ylim(h.axes))),max(ylim(h.axes))),[1 2]);
+0135         <span class="keyword">switch</span> lower(coordinate)
+0136             <span class="keyword">case</span> <span class="string">'grid1'</span>
+0137                 Grid2=ylim(h.axes);
+0138                 temp=sprintf(<span class="string">'Choose slice: %s = %g'</span>,object.Grid1Label,Grid1(1));
+0139             <span class="keyword">case</span> <span class="string">'grid2'</span>               
+0140                 Grid1=xlim(h.axes);
+0141                 temp=sprintf(<span class="string">'Choose slice: %s = %g'</span>,object.Grid2Label,Grid2(1));
+0142         <span class="keyword">end</span>        
+0143         set(hline,<span class="string">'Xdata'</span>,Grid1,<span class="string">'YData'</span>,Grid2);
+0144         title(h.axes,temp);
+0145     <span class="keyword">end</span>
+0146 
+0147     <a name="_sub4" href="#_subfunctions" class="code">function ButtonDown(varargin)        </a>
+0148         set(hline,<span class="string">'Tag'</span>,<span class="string">'SliceLine'</span>);            
+0149     <span class="keyword">end</span>
+0150         
+0151 <span class="comment">% wait for user to click on image (which changes the slice guide tag)</span>
+0152 waitfor(hline,<span class="string">'Tag'</span>);
+0153 <span class="keyword">switch</span> lower(coordinate)
+0154     <span class="keyword">case</span> <span class="string">'grid1'</span>
+0155         value=get(hline,<span class="string">'XData'</span>);
+0156     <span class="keyword">case</span> <span class="string">'grid2'</span>
+0157         value=get(hline,<span class="string">'YData'</span>);
+0158 <span class="keyword">end</span>
+0159 value=value(1);
+0160 
+0161 delete(fig);
+0162 
+0163 <span class="keyword">end</span>
+0164 
+0165</pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

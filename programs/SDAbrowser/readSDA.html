@@ -1,0 +1,198 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of readSDA</title>
+  <meta name="keywords" content="readSDA">
+  <meta name="description" content="readSDA Read archive records">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="index.html">SDAbrowser</a> &gt; readSDA.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../index.html"><img alt="<" border="0" src="../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/SDAbrowser&nbsp;<img alt=">" border="0" src="../../../../right.png"></a></td></tr></table>-->
+
+<h1>readSDA
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>readSDA Read archive records</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function varargout=readSDA(filename,record) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> readSDA Read archive records
+
+ This function reads records from a Sandia Data Archive (SDA) file.
+ Individual records are accessed by their label.
+    variable=readSDA(filename,label);
+    [variable,type,description]=readSDA(filename,label);
+ Label wildcards are permitted and may return multiple variables (with
+ types and descriptions, if requested) as a cell array.
+
+ Calling this function with no output:
+    readSDA(filename,label); % load a specific record
+    readSDA(filename,'*'); % load all records
+ loads data records as variables in the calling workspace.  These
+ variables are named after the archive labels as closely as possible,
+ subject to MATLAB variable restrictions (e.g., spaces are convereted to
+ underscores).  WARNING: this approach overwrites existing variables using
+ the same name!
+ 
+ 
+ NOTE: SDA files can contain primitive/compound records (numeric, etc.) as
+ well as external records, such as data files.  These files are exported
+ from the archive instead of loaded into MATLAB.
+
+ See also <a href="probeSDA.html" class="code" title="function varargout=probeSDA(filename)">probesda</a>, <a href="writeSDA.html" class="code" title="function writeSDA(filename,label,varargin)">writeSDA</a>, <a href="SDAbrowser.html" class="code" title="function varargout=SDAbrowser(filename)">SDAbrowser</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function name=convertName(name)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% readSDA Read archive records</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This function reads records from a Sandia Data Archive (SDA) file.</span>
+0004 <span class="comment">% Individual records are accessed by their label.</span>
+0005 <span class="comment">%    variable=readSDA(filename,label);</span>
+0006 <span class="comment">%    [variable,type,description]=readSDA(filename,label);</span>
+0007 <span class="comment">% Label wildcards are permitted and may return multiple variables (with</span>
+0008 <span class="comment">% types and descriptions, if requested) as a cell array.</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% Calling this function with no output:</span>
+0011 <span class="comment">%    readSDA(filename,label); % load a specific record</span>
+0012 <span class="comment">%    readSDA(filename,'*'); % load all records</span>
+0013 <span class="comment">% loads data records as variables in the calling workspace.  These</span>
+0014 <span class="comment">% variables are named after the archive labels as closely as possible,</span>
+0015 <span class="comment">% subject to MATLAB variable restrictions (e.g., spaces are convereted to</span>
+0016 <span class="comment">% underscores).  WARNING: this approach overwrites existing variables using</span>
+0017 <span class="comment">% the same name!</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% NOTE: SDA files can contain primitive/compound records (numeric, etc.) as</span>
+0021 <span class="comment">% well as external records, such as data files.  These files are exported</span>
+0022 <span class="comment">% from the archive instead of loaded into MATLAB.</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">% See also probesda, writeSDA, SDAbrowser</span>
+0025 <span class="comment">%</span>
+0026 
+0027 <span class="comment">%</span>
+0028 <span class="comment">% created February 3, 2017 by Daniel Dolan (Sandia National Laboratories)</span>
+0029 <span class="comment">%</span>
+0030 <a name="_sub0" href="#_subfunctions" class="code">function varargout=readSDA(filename,record)</a>
+0031 
+0032 <span class="comment">% manage input</span>
+0033 assert(nargin &gt;= 1,<span class="string">'ERROR: no archive file specified'</span>);
+0034 <span class="keyword">try</span>
+0035     archive=SMASH.FileAccess.SDAfile(filename);
+0036 <span class="keyword">catch</span> 
+0037     error(<span class="string">'ERROR: invalid archive file'</span>);
+0038 <span class="keyword">end</span>
+0039 
+0040 <span class="keyword">if</span> nargin &lt; 2
+0041     record=<span class="string">'*'</span>;
+0042 <span class="keyword">end</span>
+0043 assert(ischar(record),<span class="string">'ERROR: invalid record name'</span>);
+0044 
+0045 
+0046 <span class="comment">% read requested record(s)</span>
+0047 [label,type,description]=probe(archive,record);
+0048 <span class="keyword">if</span> isempty(label)
+0049     error(<span class="string">'ERROR: invalid record requested'</span>);
+0050 <span class="keyword">elseif</span> any(regexp(record,<span class="string">'*'</span>))
+0051     <span class="comment">% allow loose matches</span>
+0052 <span class="keyword">elseif</span> numel(label) &gt; 1
+0053     keep=false(size(label));
+0054     <span class="keyword">for</span> m=1:numel(label)
+0055         <span class="keyword">if</span> strcmp(label{m},record)
+0056             keep(m)=true;
+0057             <span class="keyword">break</span>
+0058         <span class="keyword">end</span>
+0059     <span class="keyword">end</span>
+0060     assert(any(keep),<span class="string">'ERROR: no exact record match.  Use wildcards to read partial matches'</span>);
+0061     label=label(keep);   
+0062 <span class="keyword">end</span>
+0063 
+0064 variable=cell(size(label));
+0065 <span class="keyword">for</span> m=1:numel(label)
+0066     <span class="keyword">switch</span> type{m}
+0067         <span class="keyword">case</span> <span class="string">'file'</span>
+0068             export(archive,label{m});
+0069             variable{m}=fullfile(pwd,label{m});
+0070             fprintf(<span class="string">'Exporting archived file : %s\n'</span>,label{m});
+0071         <span class="keyword">case</span> <span class="string">'split'</span>
+0072             error(<span class="string">'ERROR: split files cannot be read into MATLAB'</span>);
+0073         <span class="keyword">otherwise</span>
+0074             variable{m}=extract(archive,label{m});
+0075     <span class="keyword">end</span>
+0076 <span class="keyword">end</span>
+0077 
+0078 <span class="comment">% manage output</span>
+0079 <span class="keyword">if</span> nargout==0
+0080     <span class="keyword">for</span> m=1:numel(variable)
+0081         <span class="keyword">switch</span>(type{m})
+0082             <span class="keyword">case</span> {<span class="string">'file'</span> <span class="string">'split'</span>}
+0083                 <span class="keyword">continue</span>
+0084             <span class="keyword">otherwise</span>
+0085                 name=<a href="#_sub1" class="code" title="subfunction name=convertName(name)">convertName</a>(label{m});                
+0086         <span class="keyword">end</span>
+0087         <span class="keyword">if</span> isempty(name)
+0088             name=sprintf(<span class="string">'SDArecord%d'</span>,m);
+0089         <span class="keyword">end</span>
+0090         assignin(<span class="string">'caller'</span>,name,variable{m});
+0091     <span class="keyword">end</span>
+0092 <span class="keyword">else</span>
+0093     <span class="keyword">if</span> numel(variable)==1
+0094         variable=variable{1};
+0095         type=type{1};
+0096         description=description{1};
+0097     <span class="keyword">end</span>
+0098     varargout{1}=variable;
+0099     varargout{2}=type;
+0100     varargout{3}=description;
+0101 <span class="keyword">end</span>
+0102 
+0103 <span class="keyword">end</span>
+0104 
+0105 <a name="_sub1" href="#_subfunctions" class="code">function name=convertName(name)</a>
+0106 
+0107 <span class="keyword">for</span> m=1:numel(name)
+0108     <span class="keyword">if</span> isvarname(name(m))
+0109         <span class="keyword">break</span>
+0110     <span class="keyword">end</span>
+0111 <span class="keyword">end</span>
+0112 name=name(m:end);
+0113 
+0114 keep=true(size(name));
+0115 <span class="keyword">for</span> m=1:numel(name)
+0116     <span class="keyword">if</span> isvarname(name(1:m))
+0117         <span class="keyword">continue</span>
+0118     <span class="keyword">elseif</span> name(m) == <span class="string">' '</span>
+0119         name(m)=<span class="string">'_'</span>;
+0120     <span class="keyword">else</span>
+0121         keep(m)=false;
+0122     <span class="keyword">end</span>
+0123 <span class="keyword">end</span>
+0124 name=name(keep);
+0125 
+0126 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

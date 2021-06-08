@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of ValidFilename</title>
+  <meta name="keywords" content="ValidFilename">
+  <meta name="description" content="ValidFilename : determine if a string is a valid file name">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">PointVISAR</a> &gt; <a href="index.html">private</a> &gt; ValidFilename.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/PointVISAR/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>ValidFilename
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>ValidFilename : determine if a string is a valid file name</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function func=ValidFilename(filename) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> ValidFilename : determine if a string is a valid file name
+ (multi-platform)
+
+
+ Created 1/24/2007 by Daniel Dolan</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="OSenforcer.html" class="code" title="function out=OSenforcer(in)">OSenforcer</a>	OSenforcer : enforce operating system separators</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% ValidFilename : determine if a string is a valid file name</span>
+0002 <span class="comment">% (multi-platform)</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% Created 1/24/2007 by Daniel Dolan</span>
+0006 
+0007 <a name="_sub0" href="#_subfunctions" class="code">function func=ValidFilename(filename)</a>
+0008 
+0009 func=true;
+0010 forbiddenA={<span class="string">'?'</span>,<span class="string">'*'</span>,<span class="string">'|'</span>,<span class="string">'&quot;'</span>,<span class="string">''''</span>,<span class="string">'&lt;'</span>,<span class="string">'&gt;'</span>,<span class="string">'['</span>,<span class="string">']'</span>,<span class="string">'+'</span>,<span class="string">'='</span>,<span class="string">','</span>,<span class="string">';'</span>,<span class="string">':'</span>,<span class="string">'\'</span>,<span class="string">'/'</span>};
+0011 forbiddenB={<span class="string">'?'</span>,<span class="string">'*'</span>,<span class="string">'|'</span>,<span class="string">'&quot;'</span>,<span class="string">''''</span>,<span class="string">'&lt;'</span>,<span class="string">'&gt;'</span>,<span class="string">'['</span>,<span class="string">']'</span>,<span class="string">'+'</span>,<span class="string">'='</span>,<span class="string">','</span>,<span class="string">';'</span>,<span class="string">':'</span>};
+0012 first=double(filename(1));
+0013 <span class="keyword">if</span> (first&gt;=65 &amp;&amp; first&lt;=90) || (first&gt;=97 &amp;&amp; first&lt;=122) <span class="comment">% first character is a letter</span>
+0014     <span class="keyword">for</span> ii=1:numel(forbiddenA)
+0015         <span class="keyword">if</span> any(filename==forbiddenA{ii})
+0016             func=false;
+0017             <span class="keyword">return</span>
+0018         <span class="keyword">end</span>
+0019     <span class="keyword">end</span>
+0020 <span class="keyword">elseif</span> filename(1)==<span class="string">'.'</span> <span class="comment">% may be relative file name</span>
+0021     filename=<a href="OSenforcer.html" class="code" title="function out=OSenforcer(in)">OSenforcer</a>(filename);
+0022     [pathname,filename,ext]=fileparts(filename);
+0023     <span class="keyword">if</span> isempty(pathname) <span class="comment">% not a relative file name</span>
+0024         func=false;
+0025         <span class="keyword">return</span>
+0026     <span class="keyword">end</span>
+0027     filename=[filename ext];
+0028     <span class="keyword">for</span> ii=1:numel(forbiddenA)
+0029         <span class="keyword">if</span> any(filename==forbiddenA{ii})
+0030             func=false;
+0031             <span class="keyword">return</span>
+0032         <span class="keyword">end</span> 
+0033     <span class="keyword">end</span>
+0034     <span class="keyword">for</span> ii=1:numel(forbiddenB)
+0035         <span class="keyword">if</span> any(pathname==forbiddenB{ii})
+0036             func=false;
+0037             <span class="keyword">return</span>
+0038         <span class="keyword">end</span>
+0039     <span class="keyword">end</span>
+0040 <span class="keyword">else</span> <span class="comment">% can't be a valid file</span>
+0041     func=false;
+0042     <span class="keyword">return</span>
+0043 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

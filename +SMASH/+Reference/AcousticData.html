@@ -1,0 +1,220 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of AcousticData</title>
+  <meta name="keywords" content="AcousticData">
+  <meta name="description" content="UNDER CONSTRUCTION">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../index.html">SMASHtoolbox</a> &gt; <a href="../index.html">+SMASH</a> &gt; <a href="index.html">+Reference</a> &gt; AcousticData.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../index.html"><img alt="<" border="0" src="../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+Reference&nbsp;<img alt=">" border="0" src="../../../../right.png"></a></td></tr></table>-->
+
+<h1>AcousticData
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>UNDER CONSTRUCTION</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function varargout=AcousticData(pattern) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> UNDER CONSTRUCTION
+ AcousticData Look up acoustic data
+
+ This function provides acoustic data for various materials.  The calling
+ syntax is:
+    [data,name]=AcousticData(pattern);
+ where the input &quot;pattern&quot; is search pattern.  Data from any material
+ matching this pattern is returned as function outputs or printed in the
+ command window (if no output is requested). If no pattern is specified,
+ the user is prompted to select a material from an interactive dialog box.
+
+ The output &quot;data&quot; is a four-column array.  The first column contains
+ longitudinal sound speed (km/s), while the second column contains transverse
+ sound speed (km/s); NaN values in the second column indicate that transverse
+ sound speed data is not available, which is the case for all
+ liquids/gasses and some solid materials.  The third column is the
+ material density (g/cc) associated the the sound speed data.  The
+ fourth column is the associated temperature (C), if available.
+
+ The output &quot;name&quot; is a cell array of names for all materials that match
+ the search pattern (or the interactively selected material).  Each match
+ corresponds to one row of the &quot;speed&quot; array.  Generic patterns, such as
+ 'steel', match a number of material entries, so users should verify that
+ the requested sound speed matches the alloy/composition/condition of
+ interest.
+
+ See also SMASH.Reference</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function index=chooseMaterial(material,group)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% UNDER CONSTRUCTION</span>
+0002 <span class="comment">% AcousticData Look up acoustic data</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% This function provides acoustic data for various materials.  The calling</span>
+0005 <span class="comment">% syntax is:</span>
+0006 <span class="comment">%    [data,name]=AcousticData(pattern);</span>
+0007 <span class="comment">% where the input &quot;pattern&quot; is search pattern.  Data from any material</span>
+0008 <span class="comment">% matching this pattern is returned as function outputs or printed in the</span>
+0009 <span class="comment">% command window (if no output is requested). If no pattern is specified,</span>
+0010 <span class="comment">% the user is prompted to select a material from an interactive dialog box.</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% The output &quot;data&quot; is a four-column array.  The first column contains</span>
+0013 <span class="comment">% longitudinal sound speed (km/s), while the second column contains transverse</span>
+0014 <span class="comment">% sound speed (km/s); NaN values in the second column indicate that transverse</span>
+0015 <span class="comment">% sound speed data is not available, which is the case for all</span>
+0016 <span class="comment">% liquids/gasses and some solid materials.  The third column is the</span>
+0017 <span class="comment">% material density (g/cc) associated the the sound speed data.  The</span>
+0018 <span class="comment">% fourth column is the associated temperature (C), if available.</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% The output &quot;name&quot; is a cell array of names for all materials that match</span>
+0021 <span class="comment">% the search pattern (or the interactively selected material).  Each match</span>
+0022 <span class="comment">% corresponds to one row of the &quot;speed&quot; array.  Generic patterns, such as</span>
+0023 <span class="comment">% 'steel', match a number of material entries, so users should verify that</span>
+0024 <span class="comment">% the requested sound speed matches the alloy/composition/condition of</span>
+0025 <span class="comment">% interest.</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">% See also SMASH.Reference</span>
+0028 
+0029 <span class="comment">%</span>
+0030 <span class="comment">% created June 4, 2019 by Daniel Dolan (Sandia National Laboratories)</span>
+0031 <span class="comment">%</span>
+0032 <a name="_sub0" href="#_subfunctions" class="code">function varargout=AcousticData(pattern)</a>
+0033 
+0034 <span class="comment">%% store data for quick access</span>
+0035 <span class="keyword">persistent</span> data material group
+0036 <span class="keyword">if</span> isempty(data)
+0037     fprintf(<span class="string">'Loading acoustic data...'</span>);
+0038     data=nan(0,4); <span class="comment">% T cL cT rho</span>
+0039     material={};
+0040     group=[];
+0041     location=fileparts(mfilename(<span class="string">'fullpath'</span>));
+0042     source=fullfile(location,<span class="string">'data'</span>,<span class="string">'AcousticData.xlsx'</span>);
+0043     sheet={<span class="string">'Solids'</span> <span class="string">'Plastics'</span> <span class="string">'Rubber'</span> <span class="string">'Liquids'</span> <span class="string">'Body Tissue'</span> <span class="string">'Gasses'</span>};
+0044     <span class="keyword">for</span> k=1:numel(sheet)
+0045         [~,~,raw]=xlsread(source,sheet{k},<span class="string">''</span>,<span class="string">'basic'</span>);
+0046         start=1;
+0047         <span class="keyword">for</span> m=1:size(raw,1)
+0048             <span class="keyword">if</span> strncmp(raw{m,1},sheet{k},numel(sheet{k}))
+0049                 start=m+1;
+0050                 <span class="keyword">break</span>
+0051             <span class="keyword">end</span>
+0052         <span class="keyword">end</span>
+0053         raw=raw(start:<span class="keyword">end</span>,:);
+0054         name=raw(:,1);
+0055         keep=true(size(name));
+0056         <span class="keyword">for</span> m=1:numel(name)
+0057             <span class="keyword">if</span> isnan(name{m})
+0058                 keep(m)=false;
+0059             <span class="keyword">end</span>
+0060         <span class="keyword">end</span>
+0061         name=name(keep);        
+0062         <span class="keyword">switch</span> sheet{k}
+0063             <span class="keyword">case</span> {<span class="string">'Solids'</span> <span class="string">'Plastics'</span> }
+0064                 block=raw(keep,[2 3 5 11]);
+0065             <span class="keyword">case</span> {<span class="string">'Rubber'</span>}
+0066                 block=raw(keep,[2 3 3 5]);
+0067                 <span class="keyword">for</span> m=1:size(block,1)
+0068                     block{m,3}=nan;
+0069                 <span class="keyword">end</span>
+0070             <span class="keyword">case</span> {<span class="string">'Liquids'</span> <span class="string">'Gasses'</span>}
+0071                 block=raw(keep,[2 3 3 6]);
+0072                 <span class="keyword">for</span> m=1:size(block,1)
+0073                     block{m,3}=nan;
+0074                 <span class="keyword">end</span>
+0075             <span class="keyword">case</span> <span class="string">'Body Tissue'</span>
+0076                 block=raw(keep,[2 2 2 3]);
+0077                 <span class="keyword">for</span> m=1:size(block,1)
+0078                     block{m,1}=nan;
+0079                     block{m,3}=nan;
+0080                 <span class="keyword">end</span>
+0081         <span class="keyword">end</span>
+0082         <span class="comment">% fix table quirks</span>
+0083         <span class="keyword">for</span> m=1:size(block,1)
+0084             name{m}=strtrim(name{m});
+0085             <span class="keyword">if</span> isnumeric(block{m,1})
+0086                 <span class="keyword">continue</span>
+0087             <span class="keyword">end</span>
+0088             temp=strtrim(block{m,1});
+0089             <span class="keyword">if</span> isempty(temp)
+0090                 block{m,1}=nan;
+0091                 <span class="keyword">continue</span>
+0092             <span class="keyword">end</span>            
+0093             value=sscanf(temp,<span class="string">'%g'</span>,1);
+0094             <span class="keyword">if</span> strcmpi(temp(end),<span class="string">'K'</span>)
+0095                 block{m,1}=value-273.15;
+0096             <span class="keyword">elseif</span> strcmpi(temp(end),<span class="string">'F'</span>)
+0097                 block{m,1}=(value-32)/1.80;
+0098             <span class="keyword">else</span>
+0099                 <span class="keyword">try</span>
+0100                     block{m,1}=sscanf(temp,<span class="string">'%g'</span>,1);
+0101                 <span class="keyword">catch</span>
+0102                     error(<span class="string">'ERROR: unable to read temperature for &quot;%s&quot;'</span>,name{m});
+0103                 <span class="keyword">end</span>
+0104             <span class="keyword">end</span>            
+0105         <span class="keyword">end</span>
+0106         data=[data; cell2mat(block)]; <span class="comment">%#ok&lt;AGROW&gt;</span>
+0107         material=[material; name]; <span class="comment">%#ok&lt;AGROW&gt;</span>
+0108         group=[group; repmat(k,size(name))]; <span class="comment">%#ok&lt;AGROW&gt;</span>
+0109     <span class="keyword">end</span>
+0110     data=data(:,[2 3 4 1]); <span class="comment">% [cL cT rho0 T0]</span>
+0111     fprintf(<span class="string">'complete (%d records)\n'</span>,numel(material));
+0112 <span class="keyword">end</span>   
+0113 
+0114 <span class="comment">%% manage input</span>
+0115 <span class="keyword">if</span> (nargin == 0) || isempty(pattern)
+0116     error(<span class="string">'ERROR: interactive selection is not ready'</span>);
+0117     <span class="comment">%index=chooseMaterial(material,group);</span>
+0118 <span class="keyword">else</span>
+0119     assert(ischar(pattern),<span class="string">'ERROR: invalid search pattern'</span>);
+0120     index=SMASH.General.matchPattern(material,pattern);
+0121     index=find(index);
+0122     assert(~isempty(index),<span class="string">'ERROR: search pattern does not match any material'</span>);
+0123 <span class="keyword">end</span>
+0124 
+0125 <span class="comment">%% manage output</span>
+0126 <span class="keyword">if</span> nargout == 0
+0127     temp=data(index,:);
+0128     temp=table(material(index),temp(:,1),temp(:,2),temp(:,3),temp(:,4),<span class="keyword">...</span>
+0129         <span class="string">'VariableNames'</span>,{<span class="string">'Material'</span> <span class="string">'Longitudinal'</span> <span class="string">'Transverse'</span> <span class="string">'Density'</span> <span class="string">'Temperature'</span>});
+0130     disp(temp);
+0131 <span class="keyword">else</span>
+0132     varargout{1}=data(index,:);
+0133     varargout{2}=material(index);
+0134 <span class="keyword">end</span>
+0135 
+0136 <span class="keyword">end</span>
+0137 
+0138 <span class="comment">%%</span>
+0139 <a name="_sub1" href="#_subfunctions" class="code">function index=chooseMaterial(material,group)</a>
+0140 
+0141 master=1:numel(material);
+0142 
+0143 <span class="comment">% create dialog box...</span>
+0144 
+0145 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,160 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of DirectEllipseFit</title>
+  <meta name="keywords" content="DirectEllipseFit">
+  <meta name="description" content="DirectEllipseFit : direct ellipse fitting">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">THRIVE</a> &gt; <a href="index.html">private</a> &gt; DirectEllipseFit.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/THRIVE/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>DirectEllipseFit
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>DirectEllipseFit : direct ellipse fitting</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function [params1,params2]=DirectEllipseFit(x,y) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> DirectEllipseFit : direct ellipse fitting
+ created 4/5/2005 by Daniel Dolan
+
+ Usage:
+ params=DirectEllipseFit(x,y);
+
+ This function provides a direct (non-iterative) ellipse fit for a series
+ of (x,y) data.  The core opertion of the function is based on the MATLAB
+ routines listed in a conference paper by Halir and Flusser (BibTeX entry
+ listed below.  The only differnece between this function is some minor
+ input checking and the calculation of parametric ellipse parameters.
+
+@inproceedings{HalirCGV1998,
+   Author = {Halir, R. and Flusser, J.},
+   Title = {Numerically stable direct least squares fitting of ellipses},
+   BookTitle = {6th International Conference on Computer Graphics and Visualization},
+   Editor = {Skala, V.},
+   Address= {Plzen, Czech Republic},
+   Publisher = {University of West Bohemia Press},
+   Volume = {1},
+   Pages = {125-132},
+   Year = {1998} }</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="EllipseScreen.html" class="code" title="function fig=EllipseScreen(oldfig)">EllipseScreen</a>	allocate mising input</li><li><a href="QuadratureScreen.html" class="code" title="function fig=QuadratureScreen(oldfig)">QuadratureScreen</a>	this function needs to be significantly revised. Entry into the figure</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% DirectEllipseFit : direct ellipse fitting</span>
+0002 <span class="comment">% created 4/5/2005 by Daniel Dolan</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% Usage:</span>
+0005 <span class="comment">% params=DirectEllipseFit(x,y);</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% This function provides a direct (non-iterative) ellipse fit for a series</span>
+0008 <span class="comment">% of (x,y) data.  The core opertion of the function is based on the MATLAB</span>
+0009 <span class="comment">% routines listed in a conference paper by Halir and Flusser (BibTeX entry</span>
+0010 <span class="comment">% listed below.  The only differnece between this function is some minor</span>
+0011 <span class="comment">% input checking and the calculation of parametric ellipse parameters.</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">%@inproceedings{HalirCGV1998,</span>
+0014 <span class="comment">%   Author = {Halir, R. and Flusser, J.},</span>
+0015 <span class="comment">%   Title = {Numerically stable direct least squares fitting of ellipses},</span>
+0016 <span class="comment">%   BookTitle = {6th International Conference on Computer Graphics and Visualization},</span>
+0017 <span class="comment">%   Editor = {Skala, V.},</span>
+0018 <span class="comment">%   Address= {Plzen, Czech Republic},</span>
+0019 <span class="comment">%   Publisher = {University of West Bohemia Press},</span>
+0020 <span class="comment">%   Volume = {1},</span>
+0021 <span class="comment">%   Pages = {125-132},</span>
+0022 <span class="comment">%   Year = {1998} }</span>
+0023 <span class="comment">%</span>
+0024 <a name="_sub0" href="#_subfunctions" class="code">function [params1,params2]=DirectEllipseFit(x,y)</a>
+0025 
+0026 <span class="comment">% input checking</span>
+0027 <span class="keyword">if</span> nargin&lt;2
+0028     error(<span class="string">'x and y data input is needed!'</span>);
+0029 <span class="keyword">end</span>
+0030 <span class="keyword">if</span> numel(x)~=numel(y)
+0031     error(<span class="string">'Incompatible data: x and y have same number of elements'</span>);
+0032 <span class="keyword">end</span>
+0033 
+0034 <span class="comment">% define default output</span>
+0035 [params1,params2]=deal(repmat(nan,[1 6]));
+0036 
+0037 <span class="comment">% ensure column data vectors</span>
+0038 x=x(:);
+0039 y=y(:);
+0040 
+0041 <span class="comment">% verbatim from Halier and Flusser</span>
+0042 <span class="keyword">try</span>
+0043 D1 = [x .^ 2, x .* y, y .^ 2]; <span class="comment">% quadratic part of the design matrix</span>
+0044 D2 = [x, y, ones(size(x))]; <span class="comment">% linear part of the design matrix</span>
+0045 S1 = D1' * D1; <span class="comment">% quadratic part of the scatter matrix</span>
+0046 S2 = D1' * D2; <span class="comment">% combined part of the scatter matrix</span>
+0047 S3 = D2' * D2; <span class="comment">% linear part of the scatter matrix</span>
+0048 T = - inv(S3) * S2'; <span class="comment">% for getting a2 from a1</span>
+0049 M = S1 + S2 * T; <span class="comment">% reduced scatter matrix</span>
+0050 M = [M(3, :) ./ 2; - M(2, :); M(1, :) ./ 2]; <span class="comment">% premultiply by inv(C1)</span>
+0051 [evec, eval] = eig(M); <span class="comment">% solve eigensystem</span>
+0052 cond = 4 * evec(1, :) .* evec(3, :) - evec(2, :) .^ 2; <span class="comment">% evaluate aÕCa</span>
+0053 a1 = evec(:, find(cond &gt; 0)); <span class="comment">% eigenvector for min. pos. eigenvalue</span>
+0054 <span class="keyword">catch</span>
+0055     <span class="keyword">return</span>
+0056 <span class="keyword">end</span>
+0057 
+0058 <span class="keyword">if</span> isempty(a1) || ~isreal(cond)
+0059     <span class="keyword">return</span>
+0060 <span class="keyword">end</span>
+0061 a = [a1; T * a1]; <span class="comment">% ellipse coefficients</span>
+0062 
+0063 <span class="comment">% sign check</span>
+0064 <span class="keyword">if</span> (a(1)&lt;0) || (a(3)&lt;0)
+0065     a=-a;
+0066 <span class="keyword">end</span>
+0067 
+0068 <span class="comment">% define specific parameter variables for clarity</span>
+0069 params2=a;
+0070 <span class="comment">%params2=params2/params2(1);</span>
+0071 <span class="comment">%params2=params2/params2(1);</span>
+0072 f=params2(6);
+0073 e=params2(5);
+0074 d=params2(4);
+0075 c=params2(3);
+0076 b=params2(2);
+0077 a=params2(1);
+0078 discrim=b^2-4*a*c;
+0079 <span class="keyword">if</span> discrim&gt;=0
+0080     error(<span class="string">'This is NOT an ellipse'</span>);
+0081 <span class="keyword">end</span>
+0082 
+0083 <span class="comment">% conversion to parametric ellipse parameters</span>
+0084 epsilon=asin(b/sqrt(4*a*c));
+0085 
+0086 x0=-(e*b-2*c*d)/discrim;
+0087 y0=-(b*d-2*a*e)/discrim;
+0088 
+0089 Ax=sec(epsilon)*sqrt(x0^2+(b/a)*x0*y0+(c/a)*y0^2-(f/a));
+0090 Ay=sec(epsilon)*sqrt((a/c)*x0^2+(b/c)*x0*y0+y0^2-(f/c));
+0091 
+0092 params1=[x0 y0 Ax Ay epsilon];</pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

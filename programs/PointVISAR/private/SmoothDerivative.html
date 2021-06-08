@@ -1,0 +1,213 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of SmoothDerivative</title>
+  <meta name="keywords" content="SmoothDerivative">
+  <meta name="description" content="SmoothDerivative : calculate a smooth derivative using the Savitzky-Golay">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">PointVISAR</a> &gt; <a href="index.html">private</a> &gt; SmoothDerivative.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/PointVISAR/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>SmoothDerivative
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>SmoothDerivative : calculate a smooth derivative using the Savitzky-Golay</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function varargout=SmoothDerivative(params,y,x) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> SmoothDerivative : calculate a smooth derivative using the Savitzky-Golay
+ method
+ 
+ Usage: 
+
+ params=[order numpoints]
+
+ [dydy,ysmooth]=SmoothDerivative(params,y,x); % standard form
+
+ params=SmoothDerivative(params); % verify parameter set</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="VisarAnalysis.html" class="code" title="function record = VisarAnalysis(record, varargin)">VisarAnalysis</a>	VisarAnalysis Provides a gateway to different stages of Visar</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function weight=SGweight(order,numpoints,kr)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% SmoothDerivative : calculate a smooth derivative using the Savitzky-Golay</span>
+0002 <span class="comment">% method</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% Usage:</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% params=[order numpoints]</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% [dydy,ysmooth]=SmoothDerivative(params,y,x); % standard form</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% params=SmoothDerivative(params); % verify parameter set</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">%</span>
+0013 
+0014 <span class="comment">% created 1/7/2008 by Daniel Dolan</span>
+0015 <span class="comment">% updated 1/16/2008 by Daniel Dolan</span>
+0016 <span class="comment">%   -added matrix scaling to improve condition number</span>
+0017 <a name="_sub0" href="#_subfunctions" class="code">function varargout=SmoothDerivative(params,y,x) </a>
+0018 
+0019 <span class="comment">% allocate missing input variables</span>
+0020 <span class="keyword">if</span> nargin&lt;1
+0021     params=[];
+0022 <span class="keyword">end</span>
+0023 <span class="keyword">if</span> nargin&lt;2
+0024     y=[];
+0025 <span class="keyword">end</span>
+0026 <span class="keyword">if</span> nargin&lt;3
+0027     x=[];
+0028 <span class="keyword">end</span>
+0029 
+0030 <span class="comment">% interpret parameters: [deriv order numpoints]</span>
+0031 order=[];
+0032 numpoints=[];
+0033 params=round(abs(params));
+0034 
+0035 Nparams=numel(params);
+0036 <span class="keyword">if</span> Nparams&gt;0
+0037     order=params(1);
+0038 <span class="keyword">end</span>
+0039 <span class="keyword">if</span> Nparams&gt;1
+0040     numpoints=params(2);
+0041 <span class="keyword">end</span>
+0042 
+0043 paramchange=false;
+0044 <span class="keyword">if</span> isempty(order) || order&lt;1
+0045     order=1;
+0046     paramchange=true;
+0047 <span class="keyword">end</span>
+0048 <span class="keyword">if</span> isempty(numpoints) || (numpoints&lt;=order)
+0049     numpoints=order+2;
+0050     paramchange=true;
+0051 <span class="keyword">end</span>
+0052 <span class="keyword">if</span> rem(numpoints,2)==0 <span class="comment">% even number of points</span>
+0053     numpoints=numpoints+1; <span class="comment">% move to odd number</span>
+0054     paramchange=true;
+0055 <span class="keyword">end</span>
+0056 params=[order numpoints];
+0057  
+0058 <span class="comment">% generate convolution weights</span>
+0059 jr=floor((numpoints+1)/2);
+0060 w=<a href="#_sub1" class="code" title="subfunction weight=SGweight(order,numpoints,kr)">SGweight</a>(order,numpoints,jr);
+0061 <span class="keyword">if</span> nargin&lt;2 <span class="comment">% no data given</span>
+0062     varargout{1}=params;
+0063     varargout{2}=w(1:2,end:-1:1);
+0064     <span class="keyword">return</span>
+0065 <span class="keyword">end</span>
+0066 
+0067 <span class="comment">% notify user of parameter change</span>
+0068 <span class="keyword">if</span> paramchange
+0069     fprintf(<span class="string">'Derivative parameters set to [%d %d] for consistency\n'</span>,<span class="keyword">...</span>
+0070         [order numpoints]);
+0071 <span class="keyword">end</span>
+0072 
+0073 <span class="comment">% identify boundary points</span>
+0074 N=numel(y);
+0075 nskip=(numpoints+1)/2;
+0076 skip=[1:nskip (N-nskip):N];
+0077 
+0078 <span class="comment">% % begin binomial filter testing %</span>
+0079 <span class="comment">% Np=(numpoints-1)/2;</span>
+0080 <span class="comment">% b=1;</span>
+0081 <span class="comment">% for k=2:Np</span>
+0082 <span class="comment">%     b=conv(b,[1 2 1]/4);</span>
+0083 <span class="comment">% end</span>
+0084 <span class="comment">%</span>
+0085 <span class="comment">% if isempty(x)</span>
+0086 <span class="comment">%     dx=1;</span>
+0087 <span class="comment">% elseif numel(x)==1</span>
+0088 <span class="comment">%     dx=x;</span>
+0089 <span class="comment">% else</span>
+0090 <span class="comment">%     dx=(max(x)-min(x))/(numel(x)-1);</span>
+0091 <span class="comment">% end</span>
+0092 <span class="comment">% bd=conv(b,[1 0 -1]/2);</span>
+0093 <span class="comment">% varargout{1}=conv2(y,bd,'same')/dx;</span>
+0094 <span class="comment">% varargout{1}(skip)=nan;</span>
+0095 <span class="comment">%</span>
+0096 <span class="comment">% varargout{2}=conv2(y,b,'same');</span>
+0097 <span class="comment">% varargout{2}(skip)=nan;</span>
+0098 <span class="comment">%</span>
+0099 <span class="comment">% return</span>
+0100 <span class="comment">% % end binomial filter testing %</span>
+0101 
+0102 <span class="comment">% perform convolution</span>
+0103 varargout{1}=conv2(y,w(2,end:-1:1),<span class="string">'same'</span>); <span class="comment">% smoothed derivative</span>
+0104 <span class="keyword">if</span> isempty(x)
+0105     dx=1;
+0106 <span class="keyword">elseif</span> numel(x)==1
+0107     dx=x;
+0108 <span class="keyword">else</span>
+0109     dx=(max(x)-min(x))/(numel(x)-1);
+0110 <span class="keyword">end</span>
+0111 varargout{1}=varargout{1}/dx; <span class="comment">% derivative scaling</span>
+0112 varargout{1}(skip)=nan;
+0113 
+0114 <span class="keyword">if</span> nargout&gt;1
+0115     varargout{2}=conv2(y,w(1,end:-1:1),<span class="string">'same'</span>); <span class="comment">% smoothed data</span>
+0116     varargout{2}(skip)=nan;
+0117 <span class="keyword">end</span>
+0118 
+0119 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0120 <span class="comment">% Savitzky-Golay weight generator %</span>
+0121 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0122 <a name="_sub1" href="#_subfunctions" class="code">function weight=SGweight(order,numpoints,kr)</a>
+0123 
+0124 <span class="keyword">if</span> (nargin&lt;3) || isempty(kr)
+0125     kr=ceil(numpoints/2);
+0126 <span class="keyword">end</span>
+0127 
+0128 <span class="comment">% [jj,kk]=meshgrid(1:numpoints,1:(order+1));</span>
+0129 <span class="comment">% L=(jj-jr).^(kk-1);</span>
+0130 <span class="comment">% R=zeros(order+1,order+1);</span>
+0131 <span class="comment">% for ii=1:(order+1)</span>
+0132 <span class="comment">%     temp=(jj-jr).^(ii+kk-2);</span>
+0133 <span class="comment">%     R(:,ii)=sum(temp,2);</span>
+0134 <span class="comment">% end</span>
+0135 <span class="comment">% weight=(R\L).*factorial(kk-1);</span>
+0136 
+0137 N=numpoints;
+0138 M=order+1;
+0139 
+0140 [n,k]=ndgrid(1:M,1:N);
+0141 L=((k-kr)/N).^(n-1);
+0142 
+0143 R=zeros(order+1,order+1);
+0144 k=((1:N)-kr)/N;
+0145 <span class="keyword">for</span> n=1:M
+0146     <span class="keyword">for</span> m=1:M
+0147         R(n,m)=sum(k.^(n+m-2));
+0148     <span class="keyword">end</span>
+0149 <span class="keyword">end</span>
+0150 
+0151 <span class="comment">%fprintf('rcond(R)=%g\n',rcond(R));</span>
+0152 weight=R\L;
+0153 <span class="keyword">for</span> q=0:order
+0154     weight(q+1,:)=weight(q+1,:)*factorial(q)/N^q;
+0155 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

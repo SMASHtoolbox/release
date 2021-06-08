@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of read</title>
+  <meta name="keywords" content="read">
+  <meta name="description" content="read Read from database file">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="../../index.html">+SMASH</a> &gt; <a href="../index.html">+FileAccess</a> &gt; <a href="index.html">@SimpleDatabase</a> &gt; read.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+FileAccess/@SimpleDatabase&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>read
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>read Read from database file</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function data=read(object) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> read Read from database file
+
+ This method reads all records from the database file into a structure
+ array.
+    &gt;&gt; data=read(object);
+
+ See also <a href="SimpleDatabase.html" class="code" title="">SimpleDatabase</a>, <a href="write.html" class="code" title="function write(object,data)">write</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="probe.html" class="code" title="function varargout=probe(object)">probe</a>	probe Probe database file</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="add.html" class="code" title="function add(object,record)">add</a>	add Add to the database file</li><li><a href="remove.html" class="code" title="function remove(object,varargin)">remove</a>	remove Remove record(s) from the database file</li><li><a href="sort.html" class="code" title="function sort(object,name,direction)">sort</a>	sort Sort database records</li><li><a href="view.html" class="code" title="function view(object,index)">view</a>	view Display one or more records</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% read Read from database file</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This method reads all records from the database file into a structure</span>
+0004 <span class="comment">% array.</span>
+0005 <span class="comment">%    &gt;&gt; data=read(object);</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% See also SimpleDatabase, write</span>
+0008 <span class="comment">%</span>
+0009 
+0010 <span class="comment">%</span>
+0011 <span class="comment">% created May 30, 2014 by Daniel Dolan (Sandia National Laboratories)</span>
+0012 <span class="comment">%</span>
+0013 <a name="_sub0" href="#_subfunctions" class="code">function data=read(object)</a>
+0014 
+0015 <span class="comment">% extract records from database body</span>
+0016 [param,~,body]=<a href="probe.html" class="code" title="function varargout=probe(object)">probe</a>(object);
+0017 
+0018 start=regexp(body,param.Label{1});
+0019 stop=start(2:end)-1;
+0020 stop(end+1)=numel(body);
+0021 record=cell(param.NumberRecords,1);
+0022 <span class="keyword">for</span> m=1:param.NumberRecords
+0023     record{m}=body(start(m):stop(m));        
+0024 <span class="keyword">end</span>
+0025 
+0026 <span class="comment">% transfer records to structure</span>
+0027 tempData=struct();
+0028 <span class="keyword">for</span> m=1:param.NumberRecords
+0029     <span class="keyword">for</span> n=1:param.NumberFields        
+0030         [~,start]=regexp(record{m},param.Label{n});
+0031         start=start+1;
+0032         <span class="keyword">if</span> n&lt;param.NumberFields
+0033             stop=regexp(record{m},param.Label{n+1});
+0034             stop=stop-1;
+0035         <span class="keyword">else</span>
+0036             stop=numel(record{m});
+0037         <span class="keyword">end</span>
+0038         value=record{m}(start:stop);
+0039         <span class="keyword">switch</span> param.DataType{n}
+0040             <span class="keyword">case</span> <span class="string">'character'</span>
+0041                 value=strtrim(value);
+0042             <span class="keyword">case</span> <span class="string">'logical'</span>
+0043                 value=sscanf(value,<span class="string">'%d'</span>);
+0044                 value=logical(value);
+0045             <span class="keyword">case</span> <span class="string">'numeric'</span>
+0046                 value=sscanf(value,<span class="string">'%g'</span>);
+0047         <span class="keyword">end</span>
+0048         tempData.(param.Name{n})=value;
+0049     <span class="keyword">end</span>
+0050     <span class="keyword">if</span> m==1
+0051         data=repmat(tempData,param.NumberRecords,1);
+0052     <span class="keyword">else</span>
+0053         data(m)=tempData;
+0054     <span class="keyword">end</span>
+0055 <span class="keyword">end</span>
+0056 
+0057 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

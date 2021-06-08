@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of uitable_test</title>
+  <meta name="keywords" content="uitable_test">
+  <meta name="description" content="UNDER CONSTRUCTION">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../../index.html">SMASHtoolbox</a> &gt; <a href="../../../index.html">+SMASH</a> &gt; <a href="../../index.html">+SignalAnalysis</a> &gt; <a href="../index.html">@STFT</a> &gt; <a href="index.html">development</a> &gt; uitable_test.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../../index.html"><img alt="<" border="0" src="../../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+SignalAnalysis/@STFT/development&nbsp;<img alt=">" border="0" src="../../../../../../right.png"></a></td></tr></table>-->
+
+<h1>uitable_test
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>UNDER CONSTRUCTION</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>function uitable_test(data,label) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> UNDER CONSTRUCTION</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function cellEditCallback(source,eventdata)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% UNDER CONSTRUCTION</span>
+0002 <a name="_sub0" href="#_subfunctions" class="code">function uitable_test(data,label)</a>
+0003 
+0004 <span class="comment">% handle input</span>
+0005 <span class="keyword">if</span> (nargin&lt;1) || isempty(data)
+0006     data=randn(100,4);
+0007     temp=1:size(data,1);
+0008     data(:,1)=temp(:);
+0009 <span class="keyword">end</span>
+0010 columns=size(data,2);
+0011 
+0012 <span class="keyword">if</span> (nargin&lt;2) || isempty(label);
+0013     label=cell(1,columns);
+0014     <span class="keyword">for</span> m=1:columns
+0015         label{m}=sprintf(<span class="string">'Column %d'</span>,m);
+0016     <span class="keyword">end</span>
+0017 <span class="keyword">end</span>
+0018 label{1}=<span class="string">'Row'</span>;
+0019 
+0020 <span class="comment">% size testing</span>
+0021 fig=figure;
+0022 h=uicontrol(<span class="string">'Style'</span>,<span class="string">'text'</span>);
+0023 columnwidth=cell(1,columns);
+0024 fulllabel=<span class="string">''</span>;
+0025 <span class="keyword">for</span> m=1:columns    
+0026     temp=sprintf(<span class="string">'%s   '</span>,label{m});
+0027     fulllabel=[fulllabel temp];
+0028     set(h,<span class="string">'String'</span>,temp);
+0029     extent=get(h,<span class="string">'Extent'</span>);
+0030     columnwidth{m}=extent(3);
+0031     rowheight=extent(4);
+0032 <span class="keyword">end</span>
+0033 delete(h);
+0034 <span class="comment">%fulllabel(1:5)=' ';</span>
+0035 
+0036 t=uitable(<span class="string">'Parent'</span>,fig,<span class="string">'Data'</span>,data,<span class="keyword">...</span>
+0037     <span class="string">'RowName'</span>,<span class="string">''</span>,<span class="string">'ColumnName'</span>,<span class="string">''</span>,<span class="keyword">...</span>
+0038     <span class="string">'ColumnWidth'</span>,columnwidth);
+0039 set(t,<span class="string">'ColumnEdit'</span>,true);
+0040 format={<span class="string">'char'</span>};
+0041 set(t,<span class="string">'ColumnFormat'</span>,repmat(format,[1 columns]));
+0042 position=get(t,<span class="string">'Position'</span>);
+0043 extent=get(t,<span class="string">'Extent'</span>);
+0044 position(3)=extent(3);
+0045 position(4)=10*rowheight;
+0046 <span class="comment">%position(3)=position(3)+25; % make room for the vertical slider</span>
+0047 set(t,<span class="string">'Position'</span>,position);
+0048 set(t,<span class="string">'CellEditCallback'</span>,@<a href="#_sub1" class="code" title="subfunction cellEditCallback(source,eventdata)">cellEditCallback</a>);
+0049 
+0050 
+0051 y0=position(2)+position(4);
+0052 h=uicontrol(<span class="string">'Style'</span>,<span class="string">'text'</span>,<span class="string">'String'</span>,fulllabel);
+0053 extent=get(h,<span class="string">'Extent'</span>);
+0054 position=[position(1) y0 extent(3) extent(4)];
+0055 set(h,<span class="string">'Position'</span>,position,<span class="keyword">...</span>
+0056     <span class="string">'BackgroundColor'</span>,get(fig,<span class="string">'Color'</span>));
+0057 
+0058 <span class="keyword">end</span>
+0059 
+0060 <a name="_sub1" href="#_subfunctions" class="code">function cellEditCallback(source,eventdata)</a>
+0061 
+0062 new=sscanf(eventdata.EditData,<span class="string">'%g'</span>,1);
+0063 <span class="keyword">if</span> isempty(new)
+0064     <span class="keyword">return</span>
+0065 <span class="keyword">end</span>
+0066 
+0067 new=sprintf(<span class="string">'%+#g'</span>,new);
+0068 <span class="comment">%data=source.Data;</span>
+0069 
+0070 
+0071 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

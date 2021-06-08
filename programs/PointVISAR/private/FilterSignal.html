@@ -1,0 +1,125 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of FilterSignal</title>
+  <meta name="keywords" content="FilterSignal">
+  <meta name="description" content="function filtSignal = FilterSignal(rawSignal, filterType, filterParams)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">PointVISAR</a> &gt; <a href="index.html">private</a> &gt; FilterSignal.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/PointVISAR/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>FilterSignal
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function filtSignal = FilterSignal(rawSignal, filterType, filterParams)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function [signal,params]=FilterSignal(rawsignal,name,params) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">function filtSignal = FilterSignal(rawSignal, filterType, filterParams)
+FILTERSIGNAL Applies the specified filter with the given parameters.
+   Applies a filter to the raw signal data based on the filter name and
+   the corresponding parameters. Returns the filtered signal.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="medfilt1.html" class="code" title="function y = medfilt1(x, n, blksz, DIM)">medfilt1</a>	MEDFILT1  One dimensional median filter.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="ReadEditRecordGUI.html" class="code" title="function fig=ReadEditRecordGUI(record)">ReadEditRecordGUI</a>	read/edit records for PointVISARGUI</li><li><a href="VisarAnalysis.html" class="code" title="function record = VisarAnalysis(record, varargin)">VisarAnalysis</a>	VisarAnalysis Provides a gateway to different stages of Visar</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">%function filtSignal = FilterSignal(rawSignal, filterType, filterParams)</span>
+0002 <a name="_sub0" href="#_subfunctions" class="code">function [signal,params]=FilterSignal(rawsignal,name,params)</a>
+0003 <span class="comment">%FILTERSIGNAL Applies the specified filter with the given parameters.</span>
+0004 <span class="comment">%   Applies a filter to the raw signal data based on the filter name and</span>
+0005 <span class="comment">%   the corresponding parameters. Returns the filtered signal.</span>
+0006 
+0007 <span class="comment">% Check that the raw signal is a vector</span>
+0008 <span class="comment">% if ~isvector(rawSignal)</span>
+0009 <span class="comment">%    error('ERROR: FilterSignal - Raw signal is not a vector.');</span>
+0010 <span class="comment">% end</span>
+0011 
+0012 <span class="comment">% input check</span>
+0013 <span class="keyword">if</span> nargin&lt;1
+0014     rawsignal=[];
+0015 <span class="keyword">end</span>
+0016 <span class="keyword">if</span> nargin&lt;2
+0017     name=[];
+0018 <span class="keyword">end</span>
+0019 <span class="keyword">if</span> nargin&lt;3
+0020     params=[];
+0021 <span class="keyword">end</span>
+0022 
+0023 <span class="comment">% default values</span>
+0024 <span class="keyword">if</span> isempty(name)
+0025     name=<span class="string">'none'</span>; 
+0026 <span class="keyword">end</span>
+0027 
+0028 <span class="comment">% error checks</span>
+0029 <span class="keyword">if</span> ~ischar(name)
+0030     error(<span class="string">'ERROR: FilterSignal - Filter name is not a string.'</span>);
+0031 <span class="keyword">end</span>
+0032 <span class="comment">%if ~isnumeric(params)</span>
+0033 <span class="comment">%    error('ERROR: FilterSignal- Filter parameters are not numeric.');</span>
+0034 <span class="comment">%end</span>
+0035     
+0036 <span class="comment">% Apply the filter based on the name</span>
+0037 <span class="keyword">switch</span> lower(name)
+0038     <span class="keyword">case</span> <span class="string">'mean'</span>
+0039         <span class="keyword">if</span> isempty(params) <span class="comment">% default parameter</span>
+0040             params=3;
+0041         <span class="keyword">end</span>
+0042         <span class="keyword">if</span> isempty(rawsignal)
+0043             signal=[];
+0044         <span class="keyword">else</span>
+0045             kernel=ones(params,1);
+0046             kernel=kernel/sum(kernel);
+0047             signal=conv2(rawsignal(:), kernel(:),<span class="string">'same'</span>);
+0048         <span class="keyword">end</span>
+0049     <span class="keyword">case</span> <span class="string">'median'</span>
+0050         <span class="keyword">if</span> isempty(params) <span class="comment">% default parameter</span>
+0051             params=3;
+0052         <span class="keyword">end</span>
+0053         <span class="keyword">if</span> isempty(rawsignal)
+0054             signal=[];
+0055         <span class="keyword">else</span>
+0056             signal=<a href="medfilt1.html" class="code" title="function y = medfilt1(x, n, blksz, DIM)">medfilt1</a>(rawsignal(:), params(1));
+0057         <span class="keyword">end</span>
+0058     <span class="keyword">case</span> <span class="string">'convolution'</span>
+0059         <span class="keyword">if</span> isempty(params) <span class="comment">% default parameters</span>
+0060             params=[1 1 1];
+0061         <span class="keyword">end</span>
+0062         kernel=params/sum(params); <span class="comment">% normalization</span>
+0063         <span class="keyword">if</span> isempty(rawsignal)
+0064             signal=[];
+0065         <span class="keyword">else</span>
+0066             signal=conv2(rawsignal(:),kernel(:),<span class="string">'same'</span>);
+0067         <span class="keyword">end</span> 
+0068     <span class="keyword">case</span> <span class="string">'savitsky-golay'</span>
+0069         <span class="comment">% under construction</span>
+0070     <span class="keyword">case</span> {<span class="string">''</span>,<span class="string">'none'</span>} <span class="comment">% do nothing, no filtering needed</span>
+0071         signal = rawsignal;
+0072     <span class="keyword">otherwise</span>
+0073         error(<span class="string">'ERROR: FilterSignal - Unknown filter name.'</span>);
+0074 <span class="keyword">end</span>
+0075 signal=reshape(signal,size(rawsignal));</pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

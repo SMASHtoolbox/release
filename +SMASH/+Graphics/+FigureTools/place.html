@@ -1,0 +1,226 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of place</title>
+  <meta name="keywords" content="place">
+  <meta name="description" content="place Place figures on specific monitor">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="../../index.html">+SMASH</a> &gt; <a href="../index.html">+Graphics</a> &gt; <a href="index.html">+FigureTools</a> &gt; place.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+Graphics/+FigureTools&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>place
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>place Place figures on specific monitor</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function varargout=place(monitor,fig) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> place Place figures on specific monitor
+
+ This method places existing MATLAB figures on a particular monitor.
+    place(); % put all figures on largest monitor
+    place('largest'); % same as above
+ By default, figures are placed on the largest monitor; new figure
+ spawning and then monitor number are used in the event of a size tie.
+ The smallest monitor or a specific monitor can also be selected.
+    place('smallest');
+    place(monitor);
+
+ Specific figures can be moved to a particular monitor with an array of
+ graphic handles.
+    place(monitor,fig); % put specified figures on a particular monitor
+    place([],fig); % put specified figures on largest monitor
+ To place all figures, regardless of handle visibility, on a particular
+ monitor:
+    place(monitor,'all');
+
+ &lt;a href=&quot;matlab:SMASH.System.showExample('Place','+SMASH/+Graphics/+FigureTools')&quot;&gt;Examples&lt;/a&gt;
+
+ See also SMASH.Graphics.FigureTools, <a href="spawn.html" class="code" title="function varargout=spawn(monitor,location)">spawn</a>, SMASH.Graphics.DisplayTools.checkDisplay</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="spawn.html" class="code" title="function varargout=spawn(monitor,location)">spawn</a>	spawn Create new figure in a specific place</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="spawn.html" class="code" title="function varargout=spawn(monitor,location)">spawn</a>	spawn Create new figure in a specific place</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function value=calculateDiagonal()</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% place Place figures on specific monitor</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This method places existing MATLAB figures on a particular monitor.</span>
+0004 <span class="comment">%    place(); % put all figures on largest monitor</span>
+0005 <span class="comment">%    place('largest'); % same as above</span>
+0006 <span class="comment">% By default, figures are placed on the largest monitor; new figure</span>
+0007 <span class="comment">% spawning and then monitor number are used in the event of a size tie.</span>
+0008 <span class="comment">% The smallest monitor or a specific monitor can also be selected.</span>
+0009 <span class="comment">%    place('smallest');</span>
+0010 <span class="comment">%    place(monitor);</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% Specific figures can be moved to a particular monitor with an array of</span>
+0013 <span class="comment">% graphic handles.</span>
+0014 <span class="comment">%    place(monitor,fig); % put specified figures on a particular monitor</span>
+0015 <span class="comment">%    place([],fig); % put specified figures on largest monitor</span>
+0016 <span class="comment">% To place all figures, regardless of handle visibility, on a particular</span>
+0017 <span class="comment">% monitor:</span>
+0018 <span class="comment">%    place(monitor,'all');</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% &lt;a href=&quot;matlab:SMASH.System.showExample('Place','+SMASH/+Graphics/+FigureTools')&quot;&gt;Examples&lt;/a&gt;</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">% See also SMASH.Graphics.FigureTools, spawn, SMASH.Graphics.DisplayTools.checkDisplay</span>
+0023 <span class="comment">%</span>
+0024 
+0025 <span class="comment">%</span>
+0026 <span class="comment">% created December 15, 2017 by Daniel Dolan (Sandia National Laboratories)</span>
+0027 <span class="comment">%</span>
+0028 <a name="_sub0" href="#_subfunctions" class="code">function varargout=place(monitor,fig)</a>
+0029 
+0030 <span class="keyword">persistent</span> FigureTools
+0031 <span class="keyword">if</span> isempty(FigureTools)
+0032     FigureTools=packtools.import(<span class="string">'SMASH.Graphics.FigureTools.*'</span>);
+0033 <span class="keyword">end</span>
+0034 
+0035 <span class="comment">% manage input</span>
+0036 [list,<a href="spawn.html" class="code" title="function varargout=spawn(monitor,location)">spawn</a>]=SMASH.Graphics.DisplayTools.checkDisplay();
+0037 <span class="keyword">if</span> (nargin &lt; 1) || isempty(monitor) || strcmpi(monitor,<span class="string">'largest'</span>)
+0038     diagonal=<a href="#_sub1" class="code" title="subfunction value=calculateDiagonal()">calculateDiagonal</a>();
+0039     index=find(diagonal == max(diagonal));
+0040     <span class="keyword">if</span> numel(index) == 1
+0041         monitor=index;    
+0042     <span class="keyword">elseif</span> any(index == <a href="spawn.html" class="code" title="function varargout=spawn(monitor,location)">spawn</a>)
+0043         monitor=<a href="spawn.html" class="code" title="function varargout=spawn(monitor,location)">spawn</a>;
+0044     <span class="keyword">else</span>
+0045         monitor=index(1);
+0046     <span class="keyword">end</span>
+0047 <span class="keyword">elseif</span> strcmpi(monitor,<span class="string">'smallest'</span>)
+0048     diagonal=<a href="#_sub1" class="code" title="subfunction value=calculateDiagonal()">calculateDiagonal</a>();
+0049     index=find(diagonal == min(diagonal));
+0050     <span class="keyword">if</span> numel(index) == 1
+0051         monitor=index;
+0052     <span class="keyword">elseif</span> any(index == <a href="spawn.html" class="code" title="function varargout=spawn(monitor,location)">spawn</a>)
+0053         monitor=<a href="spawn.html" class="code" title="function varargout=spawn(monitor,location)">spawn</a>;
+0054     <span class="keyword">else</span>
+0055         monitor=index(1);
+0056     <span class="keyword">end</span>
+0057 <span class="keyword">else</span>
+0058     assert(isscalar(monitor) &amp;&amp; any(monitor == (1:numel(list))),<span class="keyword">...</span>
+0059         <span class="string">'ERROR: invalid monitor'</span>);
+0060 <span class="keyword">end</span>
+0061     <a name="_sub1" href="#_subfunctions" class="code">function value=calculateDiagonal()</a>
+0062         value=nan(size(list));
+0063         <span class="keyword">for</span> nn=1:numel(list)
+0064             value(nn)=hypot(list(nn).Size(1),list(nn).Size(2));
+0065         <span class="keyword">end</span>
+0066     <span class="keyword">end</span>
+0067 
+0068 <span class="keyword">if</span> (nargin &lt; 2) || isempty(fig)
+0069     fig=get(groot,<span class="string">'Children'</span>);
+0070 <span class="keyword">elseif</span> strcmpi(fig,<span class="string">'all'</span>)
+0071     fig=findall(groot,<span class="string">'Type'</span>,<span class="string">'figure'</span>);
+0072 <span class="keyword">else</span>
+0073     assert(all(isgraphics(fig)),<span class="string">'ERROR: invalid figure list'</span>);
+0074 <span class="keyword">end</span>
+0075 Nfig=numel(fig);
+0076 <span class="keyword">for</span> n=1:Nfig
+0077     fig(n)=ancestor(fig(n),<span class="string">'figure'</span>);
+0078 <span class="keyword">end</span>
+0079 
+0080 <span class="comment">% place figures</span>
+0081 rescale=false;
+0082 <span class="keyword">for</span> n=1:Nfig
+0083     <span class="keyword">if</span> strcmpi(fig(n).WindowStyle,<span class="string">'docked'</span>)
+0084         fig(n).WindowStyle=<span class="string">'normal'</span>;
+0085     <span class="keyword">end</span>
+0086     units=fig(n).Units;
+0087     fig(n).Units=<span class="string">'pixels'</span>;
+0088     <span class="keyword">if</span> strcmpi(fig(n).Visible,<span class="string">'on'</span>)
+0089         isVisible=true;
+0090     <span class="keyword">else</span>
+0091         isVisible=false;
+0092     <span class="keyword">end</span>
+0093     fig(n).Visible=<span class="string">'off'</span>;
+0094     <span class="comment">%</span>
+0095     <span class="keyword">if</span> any(fig(n).OuterPosition(3:4) &gt; list(monitor).Size)
+0096         rescale=true;
+0097     <span class="keyword">end</span>
+0098     center=fig(n).OuterPosition(1:2)+fig(n).OuterPosition(3:4)/2;
+0099     previous=<a href="spawn.html" class="code" title="function varargout=spawn(monitor,location)">spawn</a>;
+0100     <span class="keyword">for</span> m=1:numel(list)
+0101         <span class="keyword">if</span> all(center &gt;= list(m).Origin) &amp;&amp; all(center &lt;= list(m).Bound)
+0102             previous=m;
+0103             <span class="keyword">break</span>
+0104         <span class="keyword">end</span>
+0105     <span class="keyword">end</span>
+0106     <span class="comment">%</span>
+0107     pos=fig(n).OuterPosition;    
+0108     left=pos(1)-list(previous).Origin(1);
+0109     right=list(previous).Bound(1)-(pos(1)+pos(3));
+0110     <span class="keyword">if</span> left &gt; right
+0111         hmargin.Type=<span class="string">'right'</span>;
+0112         hmargin.Value=right;
+0113     <span class="keyword">else</span>
+0114         hmargin.Type=<span class="string">'left'</span>;
+0115         hmargin.Value=left;
+0116     <span class="keyword">end</span>
+0117     below=pos(2)-list(previous).Origin(2);
+0118     above=list(previous).Bound(2)-(pos(2)+pos(4));
+0119     <span class="keyword">if</span> below &gt; above
+0120         vmargin.Type=<span class="string">'top'</span>;
+0121         vmargin.Value=above;
+0122     <span class="keyword">else</span>
+0123         vmargin.Type=<span class="string">'bottom'</span>;
+0124         vmargin.Value=below;
+0125     <span class="keyword">end</span>
+0126     fig(n).OuterPosition(1:2)=list(monitor).Origin;
+0127     <span class="keyword">switch</span> hmargin.Type
+0128         <span class="keyword">case</span> <span class="string">'left'</span>
+0129             fig(n).OuterPosition(1)=list(monitor).Origin(1)+hmargin.Value;
+0130         <span class="keyword">case</span> <span class="string">'right'</span>
+0131             fig(n).OuterPosition(1)=list(monitor).Bound(1)<span class="keyword">...</span>
+0132                 -hmargin.Value-fig(n).OuterPosition(3);
+0133     <span class="keyword">end</span>
+0134     <span class="keyword">switch</span> vmargin.Type
+0135         <span class="keyword">case</span> <span class="string">'bottom'</span>
+0136             fig(n).OuterPosition(2)=list(monitor).Origin(2)+vmargin.Value;
+0137         <span class="keyword">case</span> <span class="string">'top'</span>
+0138             fig(n).OuterPosition(2)=list(monitor).Bound(2)<span class="keyword">...</span>
+0139                 -vmargin.Value-fig(n).OuterPosition(4);
+0140     <span class="keyword">end</span>      
+0141     fig(n).Units=units;
+0142     <span class="keyword">if</span> isVisible
+0143         fig(n).Visible=<span class="string">'on'</span>;
+0144     <span class="keyword">end</span>
+0145 <span class="keyword">end</span>
+0146 
+0147 <span class="keyword">if</span> rescale
+0148     warning(<span class="string">'FigureTools:place'</span>,<span class="keyword">...</span>
+0149         <span class="string">'Large figure(s) may be distored or off screen when placed on a smaller monitor'</span>);
+0150 <span class="keyword">end</span>
+0151 
+0152 <span class="comment">% manage input</span>
+0153 <span class="keyword">if</span> nargout &gt; 0
+0154     varargout{1}=monitor;
+0155 <span class="keyword">end</span>
+0156 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,172 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of writeFile</title>
+  <meta name="keywords" content="writeFile">
+  <meta name="description" content="WRITEFILE Write data to a file">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../index.html">SMASHtoolbox</a> &gt; <a href="../index.html">+SMASH</a> &gt; <a href="index.html">+FileAccess</a> &gt; writeFile.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../index.html"><img alt="<" border="0" src="../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+FileAccess&nbsp;<img alt=">" border="0" src="../../../../right.png"></a></td></tr></table>-->
+
+<h1>writeFile
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>WRITEFILE Write data to a file</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function writeFile(filename,varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> WRITEFILE Write data to a file
+
+ This method writes data from MATLAB to a file in 'column', 'dig', or
+ 'sda' format based on the specified file extension.  Any extension other
+ than *.dig or *.sda uses the 'column' or 'block format based on the
+ input &quot;table&quot; (numeric matrix or cell array of numeric matrices,
+ respectively).
+    &gt;&gt; writeFile('myfile.txt',table,[format],[header]); %
+ An optional format string can be passed to control how the data table is
+ written ; MATLAB's &quot;fprintf&quot; documentation describes how format strings
+ are constructed.  An optional cell array &quot;header&quot; can also be specified;
+ each element of this array is printed as a line at the beginning of the
+ file.
+
+ The 'dig' format is used for *.dig files, which requires numerical arrays
+ &quot;time&quot; and &quot;signal&quot; of the same size.
+    &gt;&gt; writeFile('myfile.dig',time,signal);
+
+ The 'sda' format is used for *.sda files, which require a text input
+ &quot;label&quot; followed by the data.
+    &gt;&gt; writeFile('myfile.sda',label,data,[description],[deflate]);
+ Description and deflate inputs are optional.
+
+ By default, users are prompted to replace single-record files that
+ already exist; existing *.sda files are appended if the requested label
+ is unique.  Existing files can be automatically overwritten by passing
+ '-overwrite' at any location after the file name.
+   &gt;&gt; writeFile(filename,'-overwrite',...);
+ The existing file is deleted before the write operation; previous records
+ in a *.sda file are discarded.
+ 
+ See also SMASH.FileAccess, fprintf, SDAfile</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% WRITEFILE Write data to a file</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This method writes data from MATLAB to a file in 'column', 'dig', or</span>
+0004 <span class="comment">% 'sda' format based on the specified file extension.  Any extension other</span>
+0005 <span class="comment">% than *.dig or *.sda uses the 'column' or 'block format based on the</span>
+0006 <span class="comment">% input &quot;table&quot; (numeric matrix or cell array of numeric matrices,</span>
+0007 <span class="comment">% respectively).</span>
+0008 <span class="comment">%    &gt;&gt; writeFile('myfile.txt',table,[format],[header]); %</span>
+0009 <span class="comment">% An optional format string can be passed to control how the data table is</span>
+0010 <span class="comment">% written ; MATLAB's &quot;fprintf&quot; documentation describes how format strings</span>
+0011 <span class="comment">% are constructed.  An optional cell array &quot;header&quot; can also be specified;</span>
+0012 <span class="comment">% each element of this array is printed as a line at the beginning of the</span>
+0013 <span class="comment">% file.</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% The 'dig' format is used for *.dig files, which requires numerical arrays</span>
+0016 <span class="comment">% &quot;time&quot; and &quot;signal&quot; of the same size.</span>
+0017 <span class="comment">%    &gt;&gt; writeFile('myfile.dig',time,signal);</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% The 'sda' format is used for *.sda files, which require a text input</span>
+0020 <span class="comment">% &quot;label&quot; followed by the data.</span>
+0021 <span class="comment">%    &gt;&gt; writeFile('myfile.sda',label,data,[description],[deflate]);</span>
+0022 <span class="comment">% Description and deflate inputs are optional.</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">% By default, users are prompted to replace single-record files that</span>
+0025 <span class="comment">% already exist; existing *.sda files are appended if the requested label</span>
+0026 <span class="comment">% is unique.  Existing files can be automatically overwritten by passing</span>
+0027 <span class="comment">% '-overwrite' at any location after the file name.</span>
+0028 <span class="comment">%   &gt;&gt; writeFile(filename,'-overwrite',...);</span>
+0029 <span class="comment">% The existing file is deleted before the write operation; previous records</span>
+0030 <span class="comment">% in a *.sda file are discarded.</span>
+0031 <span class="comment">%</span>
+0032 <span class="comment">% See also SMASH.FileAccess, fprintf, SDAfile</span>
+0033 <span class="comment">%</span>
+0034 
+0035 <span class="comment">%</span>
+0036 <span class="comment">% created October 31, 2013 by Daniel Dolan (Sandia National Laboratories)</span>
+0037 <span class="comment">% updated April 11, 2014 by Daniel Dolan</span>
+0038 <span class="comment">%    -Revised documentation, adding links</span>
+0039 <span class="comment">%</span>
+0040 <a name="_sub0" href="#_subfunctions" class="code">function writeFile(filename,varargin)</a>
+0041 
+0042 <span class="comment">% handle file name</span>
+0043 UseClipboard=false;
+0044 <span class="keyword">if</span> (nargin&lt;1) || isempty(filename)
+0045     [filename,pathname]=uiputfile({<span class="string">'*.*'</span>,<span class="string">'All files'</span>},<span class="string">'Select file'</span>);
+0046     <span class="keyword">if</span> isnumeric(filename)
+0047         error(<span class="string">'ERROR: no file selected'</span>);
+0048     <span class="keyword">end</span>
+0049     filename=fullfile(pathname,filename);
+0050 <span class="keyword">elseif</span> strcmpi(filename,<span class="string">'-clipboard'</span>)
+0051     filename=[tempname() <span class="string">'.txt'</span>];
+0052     UseClipboard=true;
+0053 <span class="keyword">end</span>
+0054 
+0055 <span class="comment">% handle overwrite mode</span>
+0056 Narg=numel(varargin);
+0057 keep=true(1,Narg);
+0058 <span class="keyword">for</span> n=1:Narg
+0059     <span class="keyword">if</span> strcmp(varargin{n},<span class="string">'-overwrite'</span>)
+0060         <span class="keyword">if</span> exist(filename,<span class="string">'file'</span>)
+0061             delete(filename);
+0062         <span class="keyword">end</span>
+0063         keep(n)=false;
+0064     <span class="keyword">end</span>
+0065 <span class="keyword">end</span>
+0066 varargin=varargin(keep);
+0067 
+0068 <span class="comment">% write file</span>
+0069 [~,~,ext]=fileparts(filename);
+0070 <span class="keyword">switch</span> lower(ext)
+0071     <span class="keyword">case</span> <span class="string">'.dig'</span>
+0072         object=SMASH.FileAccess.DIGfile(filename);
+0073         write(object,varargin{:});    
+0074     <span class="keyword">case</span> <span class="string">'.sda'</span>
+0075         object=SMASH.FileAccess.SDAfile(filename);
+0076         insert(object,varargin{:});        
+0077     <span class="keyword">otherwise</span>
+0078         <span class="keyword">if</span> isnumeric(varargin{1})
+0079             object=SMASH.FileAccess.ColumnFile(filename);
+0080         <span class="keyword">elseif</span> iscell(varargin{1})
+0081              object=SMASH.FileAccess.BlockFile(filename);
+0082         <span class="keyword">else</span>
+0083             error(<span class="string">'ERROR: invalid table input'</span>);
+0084         <span class="keyword">end</span>
+0085         write(object,varargin{:});
+0086         <span class="keyword">if</span> UseClipboard
+0087             fid=fopen(filename,<span class="string">'r'</span>);
+0088             temp=fscanf(fid,<span class="string">'%c'</span>);
+0089             fclose(fid);
+0090             clipboard(<span class="string">'copy'</span>,temp);
+0091         <span class="keyword">end</span>
+0092 <span class="keyword">end</span>
+0093 
+0094 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

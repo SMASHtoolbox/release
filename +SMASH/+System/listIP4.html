@@ -1,0 +1,165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of listIP4</title>
+  <meta name="keywords" content="listIP4">
+  <meta name="description" content="listIP4 Generate a list of private IP4 addresses">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../index.html">SMASHtoolbox</a> &gt; <a href="../index.html">+SMASH</a> &gt; <a href="index.html">+System</a> &gt; listIP4.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../index.html"><img alt="<" border="0" src="../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+System&nbsp;<img alt=">" border="0" src="../../../../right.png"></a></td></tr></table>-->
+
+<h1>listIP4
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>listIP4 Generate a list of private IP4 addresses</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function list=listIP4(request) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> listIP4 Generate a list of private IP4 addresses
+
+ This function generates a list of private IP4 addresses. Full address
+ specification uses four blocks, separated by periods, with integers,
+ integer ranges, or wildcards.
+    address=listIP4('192.168.0.*'); everything in 192.168.0
+    address=listIP4('192.168.0.0-9'); first ten addresses in 192.168.0
+
+ Partial address specification can also be used.  Missing blocks are
+ filled with information from the local host.  Suppose the local host
+ address is 192.168.0.1.
+    list=listIP4('*'); % list everything in 192.168.0.*
+    list=listIP4('*.1'); % list everything in 192.168.*.1
+ 
+ See also SMASH.System, <a href="localhost.html" class="code" title="function address=localhost()">localhost</a>, <a href="ping.html" class="code" title="function varargout=ping(address,timeout,mode)">ping</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function result=readBlock()</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% listIP4 Generate a list of private IP4 addresses</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This function generates a list of private IP4 addresses. Full address</span>
+0004 <span class="comment">% specification uses four blocks, separated by periods, with integers,</span>
+0005 <span class="comment">% integer ranges, or wildcards.</span>
+0006 <span class="comment">%    address=listIP4('192.168.0.*'); everything in 192.168.0</span>
+0007 <span class="comment">%    address=listIP4('192.168.0.0-9'); first ten addresses in 192.168.0</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% Partial address specification can also be used.  Missing blocks are</span>
+0010 <span class="comment">% filled with information from the local host.  Suppose the local host</span>
+0011 <span class="comment">% address is 192.168.0.1.</span>
+0012 <span class="comment">%    list=listIP4('*'); % list everything in 192.168.0.*</span>
+0013 <span class="comment">%    list=listIP4('*.1'); % list everything in 192.168.*.1</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% See also SMASH.System, localhost, ping</span>
+0016 <span class="comment">%</span>
+0017 
+0018 <span class="comment">%</span>
+0019 <span class="comment">% created April 20, 2017 by Daniel Dolan (Sandia National Laboratories</span>
+0020 <span class="comment">%</span>
+0021 
+0022 <a name="_sub0" href="#_subfunctions" class="code">function list=listIP4(request)</a>
+0023 
+0024 <span class="comment">% manage input</span>
+0025 errmsg=<span class="string">'ERROR: invalid request'</span>;
+0026 <span class="keyword">if</span> nargin &lt; 1
+0027     request=<span class="string">'*'</span>;
+0028 <span class="keyword">end</span>
+0029 assert(ischar(request),errmsg);
+0030 request=strtrim(request);
+0031 
+0032 <span class="comment">% scan input</span>
+0033 block={};
+0034 <span class="keyword">while</span> numel(request) &gt; 0
+0035     block{end+1}=<a href="#_sub1" class="code" title="subfunction result=readBlock()">readBlock</a>; <span class="comment">%#ok&lt;AGROW&gt;</span>
+0036 <span class="keyword">end</span>
+0037     <a name="_sub1" href="#_subfunctions" class="code">function result=readBlock() </a>
+0038         <span class="keyword">if</span> request(1)==<span class="string">'*'</span>
+0039             start=0;
+0040             stop=255;
+0041             request=request(2:end);
+0042         <span class="keyword">else</span>
+0043             [start,count,~,next]=sscanf(request,<span class="string">'%d'</span>,1);
+0044             assert(count == 1,errmsg);
+0045             request=request(next:end);
+0046             <span class="keyword">if</span> isempty(request) || request(1)==<span class="string">'.'</span>
+0047                 stop=start;
+0048             <span class="keyword">elseif</span> request(1) == <span class="string">'-'</span>                
+0049                 request=request(2:end);
+0050                 [stop,~,~,next]=sscanf(request,<span class="string">'%d'</span>,1);
+0051                 request=request(next:end);
+0052             <span class="keyword">else</span>
+0053                 error(errmsg);
+0054             <span class="keyword">end</span>
+0055         <span class="keyword">end</span>
+0056         <span class="keyword">if</span> isempty(request)
+0057             <span class="comment">% do nothing</span>
+0058         <span class="keyword">elseif</span> request(1) == <span class="string">'.'</span>
+0059             request=request(2:end);
+0060         <span class="keyword">else</span>
+0061             error(errmsg)
+0062         <span class="keyword">end</span>
+0063         result=[start stop];       
+0064     <span class="keyword">end</span>
+0065 
+0066 <span class="comment">% fill in missing blocks</span>
+0067 local=SMASH.System.localhost();
+0068 local=sscanf(local',<span class="string">'%d.%d.%d.%d'</span>);
+0069 master=cell(1,4);
+0070 <span class="keyword">for</span> k=1:4
+0071     master{k}=repmat(local(k),[1 2]);
+0072 <span class="keyword">end</span>
+0073 master=master(end:-1:1);
+0074 M=numel(master);
+0075 assert(numel(block) &lt;= M,errmsg);
+0076 
+0077 N=1;
+0078 block=block(end:-1:1);
+0079 <span class="keyword">for</span> k=1:M
+0080     <span class="keyword">if</span> numel(block) &lt; k
+0081         block{k}=master{k};
+0082     <span class="keyword">end</span>
+0083     N=N*numel(block{k}(1):block{k}(2));
+0084 <span class="keyword">end</span>
+0085 block=block(end:-1:1);
+0086 
+0087 <span class="comment">% generate list</span>
+0088 list=cell(N,1);
+0089 k=0;
+0090 <span class="keyword">for</span> m1=block{1}(1):block{1}(2)
+0091     <span class="keyword">for</span> m2=block{2}(1):block{2}(2)
+0092         <span class="keyword">for</span> m3=block{3}(1):block{3}(2)
+0093             <span class="keyword">for</span> m4=block{4}(1):block{4}(2)
+0094                 k=k+1;
+0095                 list{k}=sprintf(<span class="string">'%d.%d.%d.%d'</span>,m1,m2,m3,m4);
+0096             <span class="keyword">end</span>
+0097         <span class="keyword">end</span>
+0098     <span class="keyword">end</span>
+0099 <span class="keyword">end</span>
+0100 
+0101 
+0102 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

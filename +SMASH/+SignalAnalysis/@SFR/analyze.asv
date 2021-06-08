@@ -1,0 +1,165 @@
+% UNDER CONSTRUCTION
+
+function analyze(object,limit,clean)
+
+% use default noise if none has been specified
+noise=object.Noise;
+if isempty(noise)
+   noise=sqrt(2)*std(object.Signal)/10;
+   fprintf('Noise floor has not been specified--using default value\n');
+   fprintf('\t10%% of signal AC-RMS = %#.2g\n',noise);
+end
+UncertaintyFcn=@(A) sqrt(6/object.SampleRate/object.EffectiveTime^3)...
+    *noise./(pi*A);
+SpectralWidth=2/object.EffectiveTime;
+
+% manage input
+if (nargin < 2) || isempty(limit)
+    limit=UncertaintyFcn(noise);    
+    fprintf('Using noise floor to calculate uncertainty limit (%#.2g)\n',limit);
+else
+    assert(testNumber(limit) && (limit > 0),...
+        'ERROR: invalid uncertainty limit');
+end
+
+if (nargin < 3) || isempty(clean) || strcmpi(clean,'-clean')
+    clean=true;    
+elseif strcmpi(clean,'-noclean')
+    clean=false;
+else
+    error('ERROR: invalid clean option');
+end
+            
+% evaluate window and build lookup functions
+time=linspace(-0.5,+0.5,object.FullPoints);
+time=time(:);
+window=object.Window.Function(time);
+time=object.SampleRate*time;
+
+N2=object.TransformPoints;
+frequency=((-N2/2):(+N2/2-1))*object.SampleRate/N2;
+transform=correctedFFT(time,window,frequency(:));
+
+X=real(transform);
+temp=SMASH.SignalAnalysis.Signal(frequency,real(transform));
+temp=hilbert(temp);
+Y=imag(temp.Data);
+Y=Y*sqrt(trapz(frequency,X.^2)/trapz(frequency,Y.^2));
+
+TransformFcn=griddedInterpolant(frequency,X,'linear','nearest');
+ConjugateFcn=griddedInterpolant(frequency,Y,'linear','nearest');
+
+% manage parallel calculations
+try
+    pool=gcp('nocreate');
+    assert(~isempty(pool));
+    workers=pool.NumWorkers;
+catch
+    workers=1;
+end
+    
+% final preparations
+points=numel(object.Time);
+stop=object.FullPoints:object.StepPoints:points;
+start=stop-object.FullPoints+1;
+
+frequency=(0:(N2/2))/N2*object.SampleRate;
+frequency=frequency(:);
+
+signal=nan(object.FullPoints,workers);
+label=cell(1,workers);
+
+% create intermediate storage file
+file=sprintf('SFR%s.txt',datestr(now,30));
+if isfile(file)
+    delete(file)
+end
+fid=fopen(file,'a');
+CU=onCleanup(@() fclose(fid));
+fprintf(fid,'Time Frequency Uncertainty\n');
+
+% process signal
+step=1;
+while step <= object.TotalSteps    
+    signal(:)=nan;
+    for k=1:workers
+        index=step+k-1;
+        if 
+        left=start(index);
+        right=stop(index);
+        temp=object.Signal(left:right);
+        signal(:,k)=window.*temp;
+        tcenter=(object.Time(left)+object.Time(right))/2;
+        label{k}=SMASH.General.sigprint(tcenter,1/object.SampleRate,...
+            'Digits',3,'Convention','flexible','ForceSign',true);
+    end
+    spectrum=correctedFFT(time,signal,frequency);   
+    out=cell(1,workers);
+    parfor k=1:workers
+        if any(isnan(signal(1,k)))
+            out{k}='';
+            continue
+        end
+        out{k}=reduceSpectrum(frequency,spectrum(:,k),...
+            SpectralWidth,UncertaintyFcn,TransformFcn,ConjugateFcn,limit);        
+    end
+    for k=1:workers
+        out{k}=strrep(out{k},'time',label{k});
+        out{k}=strrep(out{k},'break','\n');
+        temp=sprintf('%s',out{k});
+        fprintf(fid,temp);
+    end
+    step=step+workers;
+end
+
+% manage output
+fclose(fid);
+fid=fopen(file,'r');
+fgets(fid);
+result=fscanf(fid,'%g %g %g',[3 inf]);
+object.LastResult=transpose(result);
+
+if clean
+    delete(file);
+end
+
+end
+
+%%
+function out=reduceSpectrum(frequency,spectrum,...
+    SpectralWidth,UncertaintyFcn,TransformFcn,ConjugateFcn,limit)
+out='';
+basis=nan(numel(frequency),2);
+fit=basis;
+scale=[];
+while true
+    P=abs2(spectrum);
+    [~,index]=max(P);
+    f0=frequency(index);
+    left=f0-SpectralWidth;
+    right=f0+SpectralWidth;
+    value=fminbnd(@residual,left,right);
+    amplitude=abs2(scale);
+    amplitude=hypot(amplitude(1),amplitude(2));
+    uncertainty=UncertaintyFcn(amplitude);
+    if uncertainty > limit
+        break
+    end
+    [value,uncertainty]=SMASH.General.sigprint(value,uncertainty,...
+        'Digits',2,'Convention','flexible','ForceSign',false);
+    out=sprintf('%stime %s %sbreak',out,value,uncertainty);        
+    spectrum=spectrum-fit;
+end
+    function chi2=residual(center)
+        W1=TransformFcn(frequency-center);
+        W2=TransformFcn(frequency+center);
+        basis(:,1)=0.5*(W1+W2)+0.5i*(W1-W2);
+        W1=ConjugateFcn(frequency-center);
+        W2=ConjugateFcn(frequency+center);
+        basis(:,2)=0.5*(W1+W2)+0.5i*(W1-W2);
+        scale=linsolve(basis,spectrum);
+        fit=basis*scale;
+        chi2=mean(abs2(fit-spectrum));
+    end
+
+end

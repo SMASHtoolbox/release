@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of STFTOptions</title>
+  <meta name="keywords" content="STFTOptions">
+  <meta name="description" content="handle input">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">SIRHEN</a> &gt; <a href="index.html">private</a> &gt; STFTOptions.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/SIRHEN/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>STFTOptions
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>handle input</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function STFTOptions(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> handle input</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="STFTOptions.html" class="code" title="function STFTOptions(varargin)">STFTOptions</a>	handle input</li><li><a href="datadlg_STFT.html" class="code" title="function answer=datadlg_STFT(name,label,default,options)">datadlg_STFT</a>	datadlg: create a data dialog box</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="AnalysisScreen.html" class="code" title="function fig=AnalysisScreen(prevfig)">AnalysisScreen</a>	allocate mising input</li><li><a href="STFTOptions.html" class="code" title="function STFTOptions(varargin)">STFTOptions</a>	handle input</li><li><a href="SelectionScreen.html" class="code" title="function fig=SelectionScreen(prevfig)">SelectionScreen</a>	allocate mising input</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function STFTOptions(varargin)</a>
+0002 
+0003 <span class="comment">% handle input</span>
+0004 fig=varargin{3};
+0005 updatefunc=varargin{4};
+0006 
+0007 <span class="comment">% access data</span>
+0008 data=get(fig,<span class="string">'UserData'</span>);
+0009 
+0010 <span class="comment">% prompt user</span>
+0011 label{1}=<span class="string">'Number time points:'</span>;
+0012 label{2}=<span class="string">'Number frequency points:'</span>;
+0013 label{3}=<span class="string">'Overlap ratio :'</span>;
+0014 label{4}=<span class="string">'Window type:'</span>;
+0015 label{5}=<span class="string">'Normalization:'</span>;
+0016 label{6}=<span class="string">'DC removal:'</span>;
+0017 options.root=fig;
+0018 options.location=<span class="string">'center'</span>;
+0019 default={data.Nduration(1), data.Nfreq(1), data.overlap, <span class="keyword">...</span>
+0020          data.window, data.normalization, data.removeDC};
+0021 answer=<a href="datadlg_STFT.html" class="code" title="function answer=datadlg_STFT(name,label,default,options)">datadlg_STFT</a>(<span class="string">'STFT parameters'</span>,label,default,options);
+0022 <span class="keyword">if</span> isempty(answer)
+0023     <span class="keyword">return</span>
+0024 <span class="keyword">end</span>
+0025 
+0026 Nduration=sscanf(answer{1},<span class="string">'%d'</span>,1);
+0027 Nfreq=sscanf(answer{2},<span class="string">'%d'</span>,1);
+0028 overlap=max(0,sscanf(answer{3},<span class="string">'%g'</span>,1));
+0029 window=sscanf(answer{4},<span class="string">'%s'</span>,1);
+0030 normalization=sscanf(answer{5},<span class="string">'%s'</span>,1);
+0031 removeDC=answer{6};
+0032 <span class="keyword">if</span> isempty(Nduration) || isempty(Nfreq) || isempty(overlap) || <span class="keyword">...</span>
+0033            isempty(window) || isempty(normalization) || isempty(removeDC)
+0034     <a href="STFTOptions.html" class="code" title="function STFTOptions(varargin)">STFTOptions</a>([],[],varargin{:});
+0035     <span class="keyword">return</span>
+0036 <span class="keyword">end</span>
+0037 
+0038 <span class="comment">% look for changes</span>
+0039 changeA=(data.Nduration~=Nduration)|(data.overlap~=overlap)|(data.Nfreq(1)~=Nfreq);
+0040 changeB=~strcmp(data.window,window)| ~strcmp(data.normalization,normalization) <span class="keyword">...</span>
+0041     | (data.removeDC~=removeDC);
+0042 <span class="keyword">if</span> changeA || changeB
+0043     data.update.fullSTFT=true;
+0044     data.update.experimentSTFT=true;
+0045     <span class="keyword">if</span> changeB
+0046         data.update.history=true;
+0047     <span class="keyword">end</span>
+0048     data.Nduration=Nduration;
+0049     data.Nfreq=Nfreq;
+0050     data.overlap=overlap;
+0051     data.window=window;
+0052     data.normalization=normalization;
+0053     data.removeDC=logical(removeDC); 
+0054     set(fig,<span class="string">'UserData'</span>,data)
+0055     feval(updatefunc,fig);
+0056 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

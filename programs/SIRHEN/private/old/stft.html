@@ -1,0 +1,386 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of stft</title>
+  <meta name="keywords" content="stft">
+  <meta name="description" content="stft : short time Fourier transform  analysis">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../../index.html">SIRHEN</a> &gt; <a href="../index.html">private</a> &gt; <a href="index.html">old</a> &gt; stft.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../../index.html"><img alt="<" border="0" src="../../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/SIRHEN/private/old&nbsp;<img alt=">" border="0" src="../../../../../../right.png"></a></td></tr></table>-->
+
+<h1>stft
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>stft : short time Fourier transform  analysis</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>function [output,tout,frequency,options]=stft(signal,time,options,localfunc) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> stft : short time Fourier transform  analysis 
+
+ This function breaks a signal into durations and calculates the frequency
+ spectrum of each duration with a FFT.  By default, the spectra are stored in
+ a 2D array (frequency X time) for image display. User defined functions
+ may also be applied to the individual spectra.
+
+ Usage:
+  &gt;&gt; [output,tout,frequency,options]=stft(signal,time,options,localfunc);
+
+ Input:
+    signal    :  signal data (required)
+    time      :  time data (optional)
+    options   :  options structure (optional)
+    localfunc :  user defined function handle (optional)
+ Valid time data are time values for each signal point or the time between
+ points (T).  Analysis options (specified by a structure field) include:
+    Nduration*    : number of analysis durations (default is 8)
+    overlap       : fractional overlap between durations (default is 0)
+    duration*     : time range of each duration
+    durationN*    : number signal points in each duration
+    skip*         : time separation between durations
+    skipN*        : number of points between durations
+    Nfreq*        : number of FFT frequency points (default is 64)
+    window        : FFT window ('boxcar','Hamming','Hann','Blackman','Kaiser')
+    removeDC      : logical value to subtract duration mean prior to FFT
+    normalization : scale spectra by 'global' (default) or 'local' maximum
+    freq_shift    : frequency shift (default is 0, additive)
+    waitbar_inc   : progress increment for waitbar updates (default is 1%)
+ Options marked with an asterisk are linked with the following rules.
+   -Nduration overides duration, durationN, skip, and skipN setttings.
+    Use overlap to refine the duration/durationN setting in combination
+    with Nduration.
+   -duration overrides durationN
+   -skip overrides skipN
+   -Nfreq may increase for consistency with durationN
+ Custom analyis can be applied to each duration by passing a
+ function handle as the fourth input argument.  The function should accept
+ two column arrays (frequency,intensity) and provide results as a
+ column array.
+
+ Output:
+    output    : 2D array containing frequency spectra or user function results on each column
+    tout      : row vector containing duration centers
+    frequency : column vector containing spectra frequency values
+    options   : structure containing actual option values (specified + default + overrides)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% stft : short time Fourier transform  analysis</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This function breaks a signal into durations and calculates the frequency</span>
+0004 <span class="comment">% spectrum of each duration with a FFT.  By default, the spectra are stored in</span>
+0005 <span class="comment">% a 2D array (frequency X time) for image display. User defined functions</span>
+0006 <span class="comment">% may also be applied to the individual spectra.</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% Usage:</span>
+0009 <span class="comment">%  &gt;&gt; [output,tout,frequency,options]=stft(signal,time,options,localfunc);</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% Input:</span>
+0012 <span class="comment">%    signal    :  signal data (required)</span>
+0013 <span class="comment">%    time      :  time data (optional)</span>
+0014 <span class="comment">%    options   :  options structure (optional)</span>
+0015 <span class="comment">%    localfunc :  user defined function handle (optional)</span>
+0016 <span class="comment">% Valid time data are time values for each signal point or the time between</span>
+0017 <span class="comment">% points (T).  Analysis options (specified by a structure field) include:</span>
+0018 <span class="comment">%    Nduration*    : number of analysis durations (default is 8)</span>
+0019 <span class="comment">%    overlap       : fractional overlap between durations (default is 0)</span>
+0020 <span class="comment">%    duration*     : time range of each duration</span>
+0021 <span class="comment">%    durationN*    : number signal points in each duration</span>
+0022 <span class="comment">%    skip*         : time separation between durations</span>
+0023 <span class="comment">%    skipN*        : number of points between durations</span>
+0024 <span class="comment">%    Nfreq*        : number of FFT frequency points (default is 64)</span>
+0025 <span class="comment">%    window        : FFT window ('boxcar','Hamming','Hann','Blackman','Kaiser')</span>
+0026 <span class="comment">%    removeDC      : logical value to subtract duration mean prior to FFT</span>
+0027 <span class="comment">%    normalization : scale spectra by 'global' (default) or 'local' maximum</span>
+0028 <span class="comment">%    freq_shift    : frequency shift (default is 0, additive)</span>
+0029 <span class="comment">%    waitbar_inc   : progress increment for waitbar updates (default is 1%)</span>
+0030 <span class="comment">% Options marked with an asterisk are linked with the following rules.</span>
+0031 <span class="comment">%   -Nduration overides duration, durationN, skip, and skipN setttings.</span>
+0032 <span class="comment">%    Use overlap to refine the duration/durationN setting in combination</span>
+0033 <span class="comment">%    with Nduration.</span>
+0034 <span class="comment">%   -duration overrides durationN</span>
+0035 <span class="comment">%   -skip overrides skipN</span>
+0036 <span class="comment">%   -Nfreq may increase for consistency with durationN</span>
+0037 <span class="comment">% Custom analyis can be applied to each duration by passing a</span>
+0038 <span class="comment">% function handle as the fourth input argument.  The function should accept</span>
+0039 <span class="comment">% two column arrays (frequency,intensity) and provide results as a</span>
+0040 <span class="comment">% column array.</span>
+0041 <span class="comment">%</span>
+0042 <span class="comment">% Output:</span>
+0043 <span class="comment">%    output    : 2D array containing frequency spectra or user function results on each column</span>
+0044 <span class="comment">%    tout      : row vector containing duration centers</span>
+0045 <span class="comment">%    frequency : column vector containing spectra frequency values</span>
+0046 <span class="comment">%    options   : structure containing actual option values (specified + default + overrides)</span>
+0047 
+0048 <span class="comment">% created April 18, 2008 by Daniel Dolan</span>
+0049 <span class="comment">% revised December 7, 2009 by Daniel Dolan</span>
+0050 <a name="_sub0" href="#_subfunctions" class="code">function [output,tout,frequency,options]=stft(signal,time,options,localfunc)</a>
+0051 
+0052 <span class="comment">% handle missing input</span>
+0053 <span class="keyword">if</span> nargin&lt;1
+0054     error(<span class="string">'ERROR: no signal input'</span>);
+0055 <span class="keyword">end</span>
+0056 
+0057 <span class="keyword">if</span> (nargin&lt;2) || isempty(time)
+0058     time=1;
+0059 <span class="keyword">end</span>
+0060 
+0061 <span class="keyword">if</span> (nargin&lt;3) || isempty(options)
+0062     options=struct();
+0063 <span class="keyword">end</span>
+0064 
+0065 <span class="keyword">if</span> (nargin&lt;4) || isempty(localfunc)
+0066     localfunc=[];
+0067 <span class="keyword">end</span>
+0068 
+0069 <span class="comment">% process input, applying defaults where necessary</span>
+0070 signal=signal(:);
+0071 Nsignal=numel(signal);
+0072 
+0073 tstart=0;
+0074 <span class="keyword">if</span> numel(time)==1 <span class="comment">% sampling interval given</span>
+0075     T=time;
+0076 <span class="keyword">else</span>
+0077     T=(time(end)-time(1))/(numel(time)-1);
+0078     tstart=time(1);
+0079 <span class="keyword">end</span>
+0080 
+0081 <span class="keyword">if</span> ~isfield(options,<span class="string">'overlap'</span>)
+0082     options.overlap=[];
+0083 <span class="keyword">end</span>
+0084 
+0085 <span class="keyword">if</span> isfield(options,<span class="string">'Nduration'</span>) <span class="comment">% specified number of durations</span>
+0086     options.Nduration=max([options.Nduration 1]);    
+0087     options.durationN=floor(Nsignal/options.Nduration);
+0088     options.duration=T*options.durationN;
+0089     options.skip=options.duration;
+0090     options.skipN=options.durationN;
+0091     <span class="keyword">if</span> options.overlap&gt;=0
+0092         options.duration=(options.overlap+1)*options.skip;
+0093         options.durationN=floor(options.duration/T);
+0094     <span class="keyword">end</span>
+0095     
+0096 <span class="keyword">else</span>
+0097     <span class="comment">% determine duration time/points</span>
+0098     <span class="keyword">if</span> isfield(options,<span class="string">'duration'</span>)
+0099         options.durationN=round(abs(options.duration)/T);        
+0100     <span class="keyword">elseif</span> isfield(options,<span class="string">'durationN'</span>)
+0101         options.durationN=round(abs(durationN));
+0102     <span class="keyword">else</span>
+0103         options.durationN=floor(Nsignal/8);
+0104     <span class="keyword">end</span>    
+0105     <span class="keyword">if</span> rem(options.durationN,2)==0
+0106         options.durationN=options.durationN+1; <span class="comment">% force odd number</span>
+0107     <span class="keyword">end</span>
+0108     options.duration=T*options.durationN;
+0109     <span class="comment">% determine skip time/points</span>
+0110     <span class="keyword">if</span> isfield(options,<span class="string">'skip'</span>)
+0111         options.skipN=ceil(abs(options.skip)/T);
+0112     <span class="keyword">elseif</span> isfield(options,<span class="string">'skipN'</span>)
+0113         options.skipN=ceil(abs(options.skipN));
+0114     <span class="keyword">else</span>
+0115         options.skipN=options.durationN;
+0116     <span class="keyword">end</span>
+0117     options.skip=T*options.skipN;
+0118     <span class="comment">% determine number of durations</span>
+0119     M=(options.durationN-1)/2;   
+0120     temp=(M+1):options.skipN:(Nsignal-M);
+0121     options.Nduration=numel(temp);       
+0122 <span class="keyword">end</span>
+0123 
+0124 Nfreq=64;
+0125 <span class="keyword">if</span> isfield(options,<span class="string">'Nfreq'</span>) 
+0126     options.Nfreq=max([Nfreq abs(options.Nfreq)]);
+0127 <span class="keyword">else</span>
+0128     options.Nfreq=Nfreq;
+0129 <span class="keyword">end</span>
+0130 options.Nfreq=max([options.Nfreq ceil(options.durationN/2)]);
+0131 options.Nfreq=pow2(nextpow2(options.Nfreq));
+0132     
+0133 <span class="keyword">if</span> ~isfield(options,<span class="string">'window'</span>) || isempty(options.window)
+0134     options.window=<span class="string">'hamming'</span>;
+0135 <span class="keyword">end</span>
+0136 <span class="keyword">if</span> ischar(options.window)
+0137     arg=(0:(options.durationN-1))/(options.durationN-1);
+0138     arg=arg(:); <span class="comment">% convert to column array</span>
+0139     <span class="keyword">switch</span> lower(options.window)
+0140         <span class="keyword">case</span> <span class="string">'gaussian'</span>
+0141             sigma=options.durationN/6; <span class="comment">% Three deviations (both directions)</span>
+0142             mid=(arg(end)+arg(0))/2;
+0143             window=exp(-(arg-mid).^2/(2*sigma^2));
+0144         <span class="keyword">case</span> <span class="string">'hamming'</span>
+0145             window=0.54-0.46*cos(2*pi*arg);
+0146         <span class="keyword">case</span> {<span class="string">'hann'</span>,<span class="string">'hanning'</span>}
+0147             window=0.50-0.50*cos(2*pi*arg);
+0148         <span class="keyword">case</span> <span class="string">'blackman'</span>
+0149             window=0.42-0.50*cos(2*pi*arg)+0.08*cos(4*pi*arg);
+0150         <span class="keyword">case</span> <span class="string">'kaiser'</span>
+0151             beta=sqrt(3)*pi; <span class="comment">% match Hamming window lobe width</span>
+0152             <span class="comment">%beta=2*sqrt(2*pi); % match Blackman window lobe width</span>
+0153             arg=sqrt(1-(2*arg-1).^2);
+0154             window=besseli(0,beta*arg)/besseli(0,beta);
+0155         <span class="keyword">case</span> {<span class="string">'boxcar'</span>,<span class="string">'rectangle'</span>,<span class="string">'flat'</span>,<span class="string">'none'</span>}
+0156             window=ones(size(arg));
+0157         <span class="keyword">otherwise</span>
+0158             error(<span class="string">'ERROR: unknown window (''%s'') specified'</span>,options.window);
+0159     <span class="keyword">end</span>
+0160 <span class="keyword">end</span>
+0161 
+0162 <span class="keyword">if</span> ~isfield(options,<span class="string">'removeDC'</span>) || isempty(options.removeDC)
+0163     options.removeDC=false;
+0164 <span class="keyword">end</span>
+0165 
+0166 <span class="keyword">if</span> ~isfield(options,<span class="string">'normalization'</span>) || isempty(options.normalization)
+0167     options.normalization=<span class="string">'global'</span>;
+0168 <span class="keyword">end</span>
+0169 
+0170 <span class="keyword">if</span> ~isfield(options,<span class="string">'freq_shift'</span>) || isempty(options.freq_shift)
+0171     options.freq_shift=0;
+0172 <span class="keyword">end</span>
+0173 
+0174 <span class="keyword">if</span> ~isfield(options,<span class="string">'waitbar_inc'</span>) || isempty(options.waitbar_inc)
+0175     options.waitbar_inc=0.01;
+0176 <span class="keyword">end</span>
+0177 
+0178 <span class="comment">% create output arrays</span>
+0179 tout=(0:(options.Nduration-1))*options.skip;
+0180 tout=tout+tstart+options.duration/2;
+0181 
+0182 frequency=0:(options.Nfreq-1);
+0183 frequency=frequency/(2*options.Nfreq*T);
+0184 frequency=frequency(:)+options.freq_shift;
+0185 <span class="comment">%reverse_findex=numel(frequency):-1:2;</span>
+0186 
+0187 <span class="keyword">if</span> isempty(localfunc)
+0188     output=repmat(nan,[options.Nfreq options.Nduration]);
+0189 <span class="keyword">else</span>
+0190     output=repmat(nan,[1 options.Nduration]);
+0191 <span class="keyword">end</span>
+0192 
+0193 <span class="comment">% sweep through the signal</span>
+0194 fraction=0;
+0195 hwait=waitbar(fraction,<span class="string">'Short Time Fourier Transform progress...'</span>,<span class="keyword">...</span>
+0196     <span class="string">'Name'</span>,<span class="string">'STFT progress'</span>,<span class="string">'CreateCancelBtn'</span>,<span class="string">'delete(gcbf)'</span>);
+0197 index=1:options.durationN;
+0198 portion=zeros(2*options.Nfreq,1);
+0199 k=0;
+0200 <span class="keyword">while</span> index(end)&lt;=numel(signal)
+0201     k=k+1;
+0202     <span class="keyword">if</span> k&gt;numel(tout)
+0203         <span class="keyword">break</span>
+0204     <span class="keyword">end</span>
+0205     temp=signal(index);
+0206     <span class="keyword">if</span> options.removeDC
+0207         temp=temp-mean(temp);
+0208     <span class="keyword">end</span>
+0209     temp=temp(:).*window;
+0210     portion(1:options.durationN)=temp;
+0211     transform=fft(portion);
+0212     intensity=transform(1:options.Nfreq);
+0213     <span class="comment">%intensity=intensity.*conj(intensity);</span>
+0214     intensity=real(intensity.*conj(intensity)); <span class="comment">% ensure real result</span>
+0215     <span class="keyword">if</span> isempty(localfunc)
+0216         output(:,k)=intensity;
+0217     <span class="keyword">else</span>
+0218         <span class="comment">%x=[-frequency(reverse_findex); frequency];</span>
+0219         <span class="comment">%y=[intensity(reverse_findex); intensity];</span>
+0220         <span class="comment">%result=feval(localfunc,x,y);</span>
+0221         result=feval(localfunc,frequency,intensity);
+0222         Nresult=size(result,1);
+0223         <span class="keyword">if</span> size(output,1)~=Nresult
+0224             output=repmat(output(1,:),[Nresult 1]);
+0225         <span class="keyword">end</span>
+0226         output(:,k)=result;
+0227     <span class="keyword">end</span>
+0228     index=index+options.skipN;
+0229     <span class="keyword">if</span> ishandle(hwait)
+0230         change=k/options.Nduration-fraction;
+0231         <span class="keyword">if</span> change&gt;=options.waitbar_inc
+0232             fraction=fraction+change;
+0233             waitbar(fraction,hwait);
+0234         <span class="keyword">end</span>
+0235     <span class="keyword">else</span>
+0236         <span class="keyword">break</span>
+0237     <span class="keyword">end</span>
+0238 <span class="keyword">end</span>
+0239 <span class="comment">% for k=1:options.Nduration</span>
+0240 <span class="comment">%     temp=signal(index);</span>
+0241 <span class="comment">%     if options.removeDC</span>
+0242 <span class="comment">%         temp=temp-mean(temp);</span>
+0243 <span class="comment">%     end</span>
+0244 <span class="comment">%     temp=temp(:).*window;</span>
+0245 <span class="comment">%     portion(1:options.durationN)=temp;</span>
+0246 <span class="comment">%     transform=fft(portion);</span>
+0247 <span class="comment">%     intensity=transform(1:options.Nfreq);</span>
+0248 <span class="comment">%     intensity=intensity.*conj(intensity);</span>
+0249 <span class="comment">%     if isempty(localfunc)</span>
+0250 <span class="comment">%         output(:,k)=intensity;</span>
+0251 <span class="comment">%     else</span>
+0252 <span class="comment">%         result=feval(localfunc,frequency,intensity);</span>
+0253 <span class="comment">%         Nresult=size(result,1);</span>
+0254 <span class="comment">%         if size(output,1)~=Nresult</span>
+0255 <span class="comment">%             output=repmat(output(1,:),[Nresult 1]);</span>
+0256 <span class="comment">%         end</span>
+0257 <span class="comment">%         output(:,k)=result;</span>
+0258 <span class="comment">%     end</span>
+0259 <span class="comment">%     index=index+options.skipN;</span>
+0260 <span class="comment">%     if ishandle(hwait)</span>
+0261 <span class="comment">%         change=k/options.Nduration-fraction;</span>
+0262 <span class="comment">%         if change&gt;=options.waitbar_inc</span>
+0263 <span class="comment">%             fraction=fraction+change;</span>
+0264 <span class="comment">%             waitbar(fraction,hwait);</span>
+0265 <span class="comment">%         end</span>
+0266 <span class="comment">%     else</span>
+0267 <span class="comment">%         break</span>
+0268 <span class="comment">%     end</span>
+0269 <span class="comment">% end</span>
+0270 <span class="keyword">if</span> ishandle(hwait)
+0271     delete(hwait);
+0272 <span class="keyword">end</span>
+0273 
+0274 <span class="keyword">if</span> isempty(localfunc)
+0275     <span class="keyword">switch</span> options.normalization
+0276         <span class="keyword">case</span> <span class="string">'global'</span>
+0277             output=output/max(output(:));
+0278         <span class="keyword">case</span> <span class="string">'local'</span>
+0279             localmax=max(output,[],1);
+0280             localmax=repmat(localmax,[size(output,1) 1]);
+0281             output=output./localmax;
+0282         <span class="keyword">otherwise</span>
+0283             <span class="comment">% do nothing</span>
+0284     <span class="keyword">end</span>
+0285 <span class="keyword">end</span>
+0286 
+0287 <span class="keyword">if</span> nargout==0
+0288     <span class="keyword">if</span> isempty(localfunc)
+0289         imagesc(time,frequency,10*log10(output));
+0290         set(gca,<span class="string">'YDir'</span>,<span class="string">'normal'</span>);
+0291     <span class="keyword">else</span>
+0292         plot(time,output);
+0293     <span class="keyword">end</span>
+0294 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

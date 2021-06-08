@@ -1,0 +1,121 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of read_yokogawa</title>
+  <meta name="keywords" content="read_yokogawa">
+  <meta name="description" content="handle input">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../../index.html">SMASHtoolbox</a> &gt; <a href="../../../index.html">+SMASH</a> &gt; <a href="../../index.html">+FileAccess</a> &gt; <a href="../index.html">@DigitizerFile</a> &gt; <a href="index.html">private</a> &gt; read_yokogawa.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../../index.html"><img alt="<" border="0" src="../../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+FileAccess/@DigitizerFile/private&nbsp;<img alt=">" border="0" src="../../../../../../right.png"></a></td></tr></table>-->
+
+<h1>read_yokogawa
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>handle input</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>function [signal,time,info,header]=read_yokogawa(filename) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> handle input</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [signal,time,info,header]=read_yokogawa(filename)</a>
+0002 
+0003 <span class="comment">% handle input</span>
+0004 <span class="keyword">if</span> (nargin&lt;1) || isempty(filename)
+0005     [fname,pname]=uigetfile(<span class="string">'*.wfm;*.WFM'</span>,<span class="string">'Choose Yokogawa WFM file'</span>);
+0006     filename=fullfile(pname,fname);
+0007 <span class="keyword">end</span>
+0008 
+0009 <span class="comment">% verify file</span>
+0010 <span class="keyword">if</span> exist(filename,<span class="string">'file'</span>)~=2
+0011     id=<span class="string">'wfmread:FileNotFound'</span>;
+0012     message=<span class="string">'File error: \n \t %s \n \t does not exist!\n'</span>;
+0013     error(id,message,filename);
+0014 <span class="keyword">end</span>
+0015 
+0016 <span class="comment">% make sure file can be opened</span>
+0017 fid=fopen(filename,<span class="string">'rb'</span>);
+0018 <span class="keyword">if</span> fid==-1
+0019     id=<span class="string">'wfmread:FileNotOpened'</span>;
+0020     message=<span class="string">'File error: \n \t %s \n \t cannot be opened!\n'</span>;
+0021     error(id,message,filename);
+0022 <span class="keyword">end</span>
+0023 
+0024 <span class="comment">% scan header for neccessary data</span>
+0025 <span class="keyword">for</span> n=1:2
+0026     header=fgetl(fid);
+0027 <span class="keyword">end</span>
+0028 [junk,count,err,next]=sscanf(header,<span class="string">'%s'</span>,1);
+0029 header=header(next:end);
+0030 
+0031 colon=find(header==<span class="string">':'</span>);
+0032 comma=find(header==<span class="string">','</span>);
+0033 <span class="keyword">if</span> numel(colon)~=numel(colon)
+0034     error(<span class="string">'ERROR: invalid header'</span>);
+0035 <span class="keyword">else</span>
+0036     Nfield=numel(colon);
+0037 <span class="keyword">end</span>
+0038 start=1;
+0039 <span class="keyword">for</span> n=1:Nfield
+0040     stop=colon(n)-1;
+0041     field=sscanf(header(start:stop),<span class="string">'%s'</span>,1);
+0042     field(field==<span class="string">'.'</span>)=<span class="string">'_'</span>;
+0043     start=colon(n)+1;
+0044     stop=comma(n)-1;
+0045     value=sscanf(header(start:stop),<span class="string">'%s'</span>,1);
+0046     info.(field)=value;
+0047     start=comma(n)+1;
+0048 <span class="keyword">end</span>
+0049 
+0050 <span class="comment">% verify and interpret header data</span>
+0051 list={<span class="string">'NR_PT'</span>,<span class="string">'PT_O'</span>,<span class="string">'XIN'</span>,<span class="string">'YMU'</span>,<span class="string">'YOF'</span>,<span class="string">'BIT'</span>,<span class="string">'BYT'</span>};
+0052 <span class="keyword">for</span> n=1:numel(list)
+0053     <span class="keyword">if</span> isfield(info,list{n})
+0054         info.(list{n})=sscanf(info.(list{n}),<span class="string">'%g'</span>);
+0055     <span class="keyword">else</span>
+0056         error(<span class="string">'ERROR: %s missing in header'</span>,list{n});
+0057     <span class="keyword">end</span>
+0058 <span class="keyword">end</span>
+0059 
+0060 
+0061 <span class="comment">% read full header and binary data</span>
+0062 fileinfo=dir(filename);
+0063 TotalBytes=fileinfo.bytes;
+0064 DataBytes=info.NR_PT*info.BYT;
+0065 HeaderBytes=TotalBytes-DataBytes;
+0066 frewind(fid);
+0067 header=fscanf(fid,<span class="string">'%c'</span>,HeaderBytes);
+0068 signal=fread(fid,DataBytes,<span class="string">'real*4'</span>);
+0069 fclose(fid);
+0070 
+0071 <span class="comment">% apply digitizer settings</span>
+0072 signal=info.YOF+info.YMU*signal;
+0073 time=transpose(0:(info.NR_PT-1));
+0074 time=info.XIN*(time-info.PT_O);</pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

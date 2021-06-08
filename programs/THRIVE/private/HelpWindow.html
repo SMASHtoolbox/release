@@ -1,0 +1,161 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of HelpWindow</title>
+  <meta name="keywords" content="HelpWindow">
+  <meta name="description" content="get handles">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">THRIVE</a> &gt; <a href="index.html">private</a> &gt; HelpWindow.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/THRIVE/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>HelpWindow
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>get handles</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function HelpWindow(src,varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> get handles</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="EllipseScreen.html" class="code" title="function fig=EllipseScreen(oldfig)">EllipseScreen</a>	allocate mising input</li><li><a href="LoadScreen.html" class="code" title="function fig=LoadScreen(oldfig)">LoadScreen</a>	LoadScreen:</li><li><a href="QuadratureScreen.html" class="code" title="function fig=QuadratureScreen(oldfig)">QuadratureScreen</a>	this function needs to be significantly revised. Entry into the figure</li><li><a href="ResultsScreen.html" class="code" title="function fig=ResultsScreen(oldfig)">ResultsScreen</a>	ResultsScreen:</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function HelpWindow(src,varargin)</a>
+0002 
+0003 <span class="comment">% get handles</span>
+0004 srcfig=ancestor(src,<span class="string">'figure'</span>);
+0005 srctag=get(srcfig,<span class="string">'Tag'</span>);
+0006 srcpos=get(srcfig,<span class="string">'Position'</span>);
+0007 
+0008 message={};
+0009 <span class="keyword">switch</span> srctag
+0010     <span class="keyword">case</span> <span class="string">'THRIVE_LoadScreen'</span>
+0011         name=<span class="string">'Loading data'</span>;
+0012         message{end+1}=<span class="string">'Loading data into THRIVE:'</span>;
+0013         message{end+1}=<span class="string">''</span>;
+0014         message{end+1}=<span class="string">'1. Specify data storage method'</span>;
+0015         message{end+1}=<span class="string">'   -&quot;Single file&quot; means a text file with four numerical columns'</span>;
+0016         message{end+1}=<span class="string">'   -&quot;Separate files&quot; means three signal files ()'</span>;
+0017         message{end+1}=<span class="string">''</span>;
+0018         message{end+1}=<span class="string">'2. Specify the file name(s)'</span>;
+0019         message{end+1}=<span class="string">'   -The &quot;select&quot; button launches a file selection dialog'</span>;
+0020         message{end+1}=<span class="string">'   -Entries may also be typed in the edit box (local path conventions apply)'</span>;
+0021         message{end+1}=<span class="string">'   -Verify the column order for single file data'</span>;
+0022         message{end+1}=<span class="string">'   -Press &quot;Load data&quot; to read data into the program'</span>;
+0023         message{end+1}=<span class="string">''</span>;
+0024         message{end+1}=<span class="string">'3. Specify the characterization time range'</span>;
+0025         message{end+1}=<span class="string">'   -Data in this region is used for ellipse fitting later on'</span>;
+0026         message{end+1}=<span class="string">'   -Left/right mouse buttons select the start and end of this region'</span>;
+0027         message{end+1}=<span class="string">''</span>;
+0028         message{end+1}=<span class="string">'4. Specify the experiment time range'</span>;
+0029         message{end+1}=<span class="string">'   -Data in this region undergoes analysis (all other data is ignored)'</span>;
+0030         message{end+1}=<span class="string">'   -Left/right mouse buttons select the start and end of this region'</span>;
+0031         message{end+1}=<span class="string">''</span>;
+0032         message{end+1}=<span class="string">'5. Press &quot;Next&quot; to continue'</span>;
+0033         message{end+1}=<span class="string">'   -Next stage depends on the &quot;Characterization&quot; menu setting'</span>;
+0034     <span class="keyword">case</span> <span class="string">'THRIVE_EllipseScreen'</span>
+0035         name=<span class="string">'Ellipse characterization'</span>;
+0036         message{end+1}=<span class="string">'Ellipse fitting in THRIVE:'</span>;
+0037         message{end+1}=<span class="string">''</span>;
+0038         message{end+1}=<span class="string">'1. Optimize the ellipse parameters'</span>;
+0039         message{end+1}=<span class="string">'   -Individual parameters can be entered manually'</span>;
+0040         message{end+1}=<span class="string">'   -&quot;Optimize parameters&quot; varies un-fixed parameters'</span>;
+0041         message{end+1}=<span class="string">'   -&quot;Guess parameters&quot; varies all parameters simultaneously, resetting fixed values'</span>;
+0042         message{end+1}=<span class="string">''</span>;
+0043         message{end+1}=<span class="string">'2. Interpret the ellipse parameters'</span>;
+0044         message{end+1}=<span class="string">'   -Scaling ratios R12 and R13 are related to the ellipse fit parameters'</span>;
+0045         message{end+1}=<span class="string">'   -The ratio values depend on a choice of root sign, which requires an assumption'</span>;
+0046         message{end+1}=<span class="string">'   -&quot;ref&gt;target&quot; implies that the ellipse contains more reference light that target light (and vice versa)'</span>;
+0047         message{end+1}=<span class="string">'   -Sign assumptions can be made individually or linked together'</span>;
+0048         message{end+1}=<span class="string">'   -For AC coupled measurements, the user can specify R12 and R13 directly'</span>;
+0049         message{end+1}=<span class="string">''</span>;
+0050         message{end+1}=<span class="string">'3. Press &quot;Next&quot; to continue to the quadrature signal screen'</span>;
+0051     <span class="keyword">case</span> <span class="string">'THRIVE_QuadratureScreen'</span>
+0052         name=<span class="string">'Quadrature signals'</span>;
+0053         message{end+1}=<span class="string">'Quadrature signals in THRIVE:'</span>;
+0054         message{end+1}=<span class="string">''</span>;
+0055         message{end+1}=<span class="string">'1. Quadrature characterization'</span>;
+0056         message{end+1}=<span class="string">'   -Deviations calculated with respect to a perfect circle'</span>;
+0057         message{end+1}=<span class="string">'   -Horizontal/vertical centering (center/amplitude) should be close to zero)'</span>;
+0058         message{end+1}=<span class="string">'   -Aspect ratio (horiztonal/vertical) should be near 100%'</span>;
+0059         message{end+1}=<span class="string">'   -Quadrature error should be near 0 degrees'</span>;
+0060         message{end+1}=<span class="string">''</span>;
+0061         message{end+1}=<span class="string">'2. Vary the display (optional)'</span>;
+0062         message{end+1}=<span class="string">'   -Data from the characterization or experiment time range can be displayed'</span>;
+0063         message{end+1}=<span class="string">'   -Quadrature results can be viewed as two signals or in ellipse format'</span>;
+0064         message{end+1}=<span class="string">''</span>;
+0065         message{end+1}=<span class="string">'3. Press &quot;Next&quot; to continue to the results screen'</span>;
+0066     <span class="keyword">case</span> <span class="string">'THRIVE_ResultsScreen'</span>
+0067         name=<span class="string">'Results'</span>;
+0068         message{end+1}=<span class="string">'THRIVE results:'</span>;
+0069         message{end+1}=<span class="string">'1. Select interferometer type'</span>;
+0070         message{end+1}=<span class="string">'   -Choose &quot;Displacement&quot; for PDV configurations'</span>;
+0071         message{end+1}=<span class="string">'   -Choose &quot;Velocity&quot; for VISAR configurations'</span>;
+0072         message{end+1}=<span class="string">''</span>;
+0073         message{end+1}=<span class="string">'2. Set analysis parameters'</span>;
+0074         message{end+1}=<span class="string">'   -The fringe constant controls scaling between the fringe shift and position/velocity'</span>;
+0075         message{end+1}=<span class="string">'   -&quot;Fit order&quot; and &quot;# points&quot; control Savitzky-Golay smoothing/differentiation of the fringe shift'</span>;
+0076         message{end+1}=<span class="string">'   -Press &quot;Update plot&quot; to apply these analysis parameters'</span>;
+0077         message{end+1}=<span class="string">''</span>;
+0078         message{end+1}=<span class="string">'3. Use the popup menu to display fringe shift, position, or velocity'</span>;
+0079         message{end+1}=<span class="string">''</span>;
+0080         message{end+1}=<span class="string">'4. Export data to a file'</span>;
+0081         message{end+1}=<span class="string">'   -File name can be entered manually or chosen with the &quot;select&quot; button'</span>;
+0082         message{end+1}=<span class="string">'   -Output variables are selected in the &quot;Export options&quot; menu'</span>;
+0083         message{end+1}=<span class="string">'   -Press the &quot;Export button&quot; to save data (no overwrite warnings given)'</span>;        
+0084 <span class="keyword">end</span>
+0085 
+0086 <span class="comment">% create help window</span>
+0087 tag=<span class="string">'THRIVE_HelpWindow'</span>;
+0088 fig=findall(0,<span class="string">'Type'</span>,<span class="string">'figure'</span>,<span class="string">'Tag'</span>,tag);
+0089 <span class="keyword">if</span> ~isempty(fig) <span class="comment">% figure already exists</span>
+0090     delete(fig);
+0091 <span class="keyword">end</span>
+0092 fig=figure(<span class="string">'Visible'</span>,<span class="string">'off'</span>,<span class="string">'Menubar'</span>,<span class="string">'none'</span>,<span class="string">'Toolbar'</span>,<span class="string">'none'</span>,<span class="keyword">...</span>
+0093     <span class="string">'Tag'</span>,tag,<span class="string">'NumberTitle'</span>,<span class="string">'off'</span>,<span class="string">'Name'</span>,name,<span class="keyword">...</span>
+0094     <span class="string">'IntegerHandle'</span>,<span class="string">'off'</span>,<span class="string">'HandleVisibility'</span>,<span class="string">'Callback'</span>,<span class="keyword">...</span>
+0095     <span class="string">'Units'</span>,<span class="string">'pixels'</span>);
+0096 
+0097 htext=uicontrol(fig,<span class="string">'Style'</span>,<span class="string">'text'</span>,<span class="string">'String'</span>,message,<span class="string">'Units'</span>,<span class="string">'pixels'</span>,<span class="keyword">...</span>
+0098     <span class="string">'HorizontalAlignment'</span>,<span class="string">'left'</span>);
+0099 <span class="comment">%[message,position]=textwrap(htext,message);</span>
+0100 extent=get(htext,<span class="string">'Extent'</span>);
+0101 <span class="comment">%set(htext,'String',message,'Position',position);</span>
+0102 <span class="comment">%set(htext,'Units','pixels');</span>
+0103 <span class="comment">%position=get(htext,'Position');</span>
+0104 <span class="comment">%position(1:2)=5;</span>
+0105 margin=5;
+0106 position=[margin margin extent(3)+margin extent(4)+margin];
+0107 set(htext,<span class="string">'Position'</span>,position,<span class="string">'BackgroundColor'</span>,get(fig,<span class="string">'Color'</span>));
+0108 
+0109 figpos=get(fig,<span class="string">'Position'</span>);
+0110 figpos(3)=position(3)+2*position(1);
+0111 figpos(4)=position(4)+2*position(2);
+0112 figpos(1)=srcpos(1)+(srcpos(3)-figpos(3))/2;
+0113 figpos(2)=srcpos(2)+(srcpos(4)-figpos(4))/2;
+0114 set(fig,<span class="string">'Position'</span>,figpos,<span class="string">'Visible'</span>,<span class="string">'on'</span>);</pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,174 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of sda2workspace</title>
+  <meta name="keywords" content="sda2workspace">
+  <meta name="description" content="sda2workspace Load archive into the current workspace">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../index.html">SMASHtoolbox</a> &gt; <a href="../index.html">+SMASH</a> &gt; <a href="index.html">+FileAccess</a> &gt; sda2workspace.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../index.html"><img alt="<" border="0" src="../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+FileAccess&nbsp;<img alt=">" border="0" src="../../../../right.png"></a></td></tr></table>-->
+
+<h1>sda2workspace
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>sda2workspace Load archive into the current workspace</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function varargout=sda2workspace(file) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> sda2workspace Load archive into the current workspace
+
+ This function loads records from an archive file (*.sda) into the current
+ workspace.  The archive can be specified manually:
+    sda2workspace(file);
+ or selected interactively.
+    sda2workspace();
+ Each variable is named after the record it's create from, as much as is
+ possible.  MATLAB has stricter requirements on variable naming than SDA
+ does for labeling, so some differences may be found.  For example, white
+ space between two strings ('my variable') is replaced with an underscore
+ ('my_variable').  A warning is issued when any invalid variable names are
+ found in the archive.
+
+ Name clashes between records and and existing variables are resolved by
+ appending the former with an underscore and number.  For example, if a
+ record labeled &quot;a&quot; is added to archive that already has a variable with
+ that label, the new variable is labelled &quot;a_1&quot;.  This function generates
+ a warning if any name clash occurs.
+
+ The outputs of this function, if requested, are the actual variable names
+ and record descriptions.
+    [actual,description]=sda2workspace(...).
+
+ See also SMASH.FileAccess, <a href="workspace2sda.html" class="code" title="function varargout=workspace2sda(file,deflate)">workspace2sda</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% sda2workspace Load archive into the current workspace</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This function loads records from an archive file (*.sda) into the current</span>
+0004 <span class="comment">% workspace.  The archive can be specified manually:</span>
+0005 <span class="comment">%    sda2workspace(file);</span>
+0006 <span class="comment">% or selected interactively.</span>
+0007 <span class="comment">%    sda2workspace();</span>
+0008 <span class="comment">% Each variable is named after the record it's create from, as much as is</span>
+0009 <span class="comment">% possible.  MATLAB has stricter requirements on variable naming than SDA</span>
+0010 <span class="comment">% does for labeling, so some differences may be found.  For example, white</span>
+0011 <span class="comment">% space between two strings ('my variable') is replaced with an underscore</span>
+0012 <span class="comment">% ('my_variable').  A warning is issued when any invalid variable names are</span>
+0013 <span class="comment">% found in the archive.</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% Name clashes between records and and existing variables are resolved by</span>
+0016 <span class="comment">% appending the former with an underscore and number.  For example, if a</span>
+0017 <span class="comment">% record labeled &quot;a&quot; is added to archive that already has a variable with</span>
+0018 <span class="comment">% that label, the new variable is labelled &quot;a_1&quot;.  This function generates</span>
+0019 <span class="comment">% a warning if any name clash occurs.</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">% The outputs of this function, if requested, are the actual variable names</span>
+0022 <span class="comment">% and record descriptions.</span>
+0023 <span class="comment">%    [actual,description]=sda2workspace(...).</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">% See also SMASH.FileAccess, workspace2sda</span>
+0026 <span class="comment">%</span>
+0027 
+0028 <span class="comment">%</span>
+0029 <span class="comment">% created November 20, 2016 by Daniel Dolan (Sandia National Laboratories)</span>
+0030 <span class="comment">%</span>
+0031 <a name="_sub0" href="#_subfunctions" class="code">function varargout=sda2workspace(file)</a>
+0032 
+0033 <span class="comment">% manage input</span>
+0034 <span class="keyword">if</span> (nargin &lt; 1) || isempty(file)
+0035     sf=SMASH.MUI.SelectFile;
+0036     sf.Title=<span class="string">'Select archive file'</span>;
+0037     sf.Filter=<span class="string">'*.sda'</span>;
+0038     sf.EnableFilter=<span class="string">'on'</span>;
+0039     sf.FileControls=<span class="string">'off'</span>;
+0040     sf.HiddenControl=<span class="string">'off'</span>;
+0041     file=launch(sf);
+0042     <span class="keyword">if</span> isnumeric(file)
+0043         <span class="keyword">return</span>
+0044     <span class="keyword">end</span>
+0045 <span class="keyword">end</span>
+0046 
+0047 <span class="comment">% read records from the archive</span>
+0048 badname=false;
+0049 clash=false;
+0050 archive=SMASH.FileAccess.SDAfile(file);
+0051 [label,~,description]=probe(archive);
+0052 <span class="keyword">for</span> m=1:numel(label)
+0053     <span class="comment">% generate valid variable name</span>
+0054     name=sprintf(<span class="string">'previous_%s'</span>,strtrim(label{m}));    
+0055     <span class="keyword">for</span> n=10:numel(name)
+0056         <span class="keyword">if</span> ~isvarname(name(1:n))
+0057             name(n)=<span class="string">'_'</span>;
+0058         <span class="keyword">end</span>
+0059     <span class="keyword">end</span>
+0060     <span class="keyword">if</span> isvarname(name(10:end))
+0061         name=name(10:end);
+0062     <span class="keyword">end</span>  
+0063     <span class="keyword">if</span> ~strcmp(name,label{m})
+0064         badname=true;
+0065     <span class="keyword">end</span>
+0066     <span class="comment">% prevent variable overwrite</span>
+0067     command=sprintf(<span class="string">'exist(''%s'',''var'')'</span>,name);
+0068     result=evalin(<span class="string">'caller'</span>,command);
+0069     <span class="keyword">if</span> result == 1
+0070         clash=true;
+0071         iteration=0;
+0072         <span class="keyword">while</span> true        
+0073             iteration=iteration+1;
+0074             new=sprintf(<span class="string">'%s_%d'</span>,name,iteration);
+0075             command=sprintf(<span class="string">'exist(''%s'',''var'')'</span>,new);
+0076             result=evalin(<span class="string">'caller'</span>,command);
+0077             <span class="keyword">if</span> result ~= 1
+0078                 name=new;
+0079                 <span class="keyword">break</span>
+0080             <span class="keyword">end</span>
+0081         <span class="keyword">end</span>
+0082     <span class="keyword">end</span>        
+0083     <span class="comment">% load record into variable</span>
+0084     temp=SMASH.FileAccess.readFile(file,<span class="string">'sda'</span>,label{m});
+0085     assignin(<span class="string">'caller'</span>,name,temp);  
+0086     label{m}=name;
+0087 <span class="keyword">end</span>
+0088 
+0089 <span class="keyword">if</span> badname
+0090      warning(<span class="string">'SDA:BadName'</span>,<span class="string">'Invalid variable name(s) detected and corrected'</span>);
+0091 <span class="keyword">end</span>
+0092 
+0093 <span class="keyword">if</span> clash
+0094     warning(<span class="string">'SDA:NameClash'</span>,<span class="string">'Variable name clash(es) detected and avoided'</span>);
+0095 <span class="keyword">end</span>
+0096 
+0097 <span class="comment">% manage output</span>
+0098 <span class="keyword">if</span> nargout &gt; 0
+0099     varargout{1}=label;
+0100     varargout{2}=description;
+0101 <span class="keyword">end</span>
+0102 
+0103 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

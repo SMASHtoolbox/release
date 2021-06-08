@@ -1,0 +1,72 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of userdir</title>
+  <meta name="keywords" content="userdir">
+  <meta name="description" content="userdir Determine user directory">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../index.html">SMASHtoolbox</a> &gt; <a href="../index.html">+SMASH</a> &gt; <a href="index.html">+System</a> &gt; userdir.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../index.html"><img alt="<" border="0" src="../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+System&nbsp;<img alt=">" border="0" src="../../../../right.png"></a></td></tr></table>-->
+
+<h1>userdir
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>userdir Determine user directory</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function location=userdir() </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> userdir Determine user directory
+
+ This function returns the home directory of the current user.
+    location=userdir();
+
+ See also <a href="hostID.html" class="code" title="function value=hostID()">hostID</a>, <a href="username.html" class="code" title="function value=username()">username</a>, <a href="userpath.html" class="code" title="function varargout=userpath()">userpath</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% userdir Determine user directory</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This function returns the home directory of the current user.</span>
+0004 <span class="comment">%    location=userdir();</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% See also hostID, username, userpath</span>
+0007 <span class="comment">%</span>
+0008 
+0009 <span class="comment">%</span>
+0010 <span class="comment">% created July 12, 2018 by Daniel Dolan (Sandia National Laboratories)</span>
+0011 <span class="comment">%</span>
+0012 <a name="_sub0" href="#_subfunctions" class="code">function location=userdir()</a>
+0013 
+0014 <span class="keyword">if</span> isunix <span class="comment">% Mac and Linux</span>
+0015     location=getenv(<span class="string">'HOME'</span>);
+0016 <span class="keyword">else</span> <span class="comment">% Windows</span>
+0017     location=[getenv(<span class="string">'HOMEDRIVE'</span>) getenv(<span class="string">'HOMEPATH'</span>)];
+0018 <span class="keyword">end</span>
+0019 
+0020 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

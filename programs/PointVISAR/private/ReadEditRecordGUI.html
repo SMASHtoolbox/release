@@ -1,0 +1,604 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of ReadEditRecordGUI</title>
+  <meta name="keywords" content="ReadEditRecordGUI">
+  <meta name="description" content="read/edit records for PointVISARGUI">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">PointVISAR</a> &gt; <a href="index.html">private</a> &gt; ReadEditRecordGUI.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/PointVISAR/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>ReadEditRecordGUI
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>read/edit records for PointVISARGUI</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function fig=ReadEditRecordGUI(record) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> read/edit records for PointVISARGUI</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="ActiveRecord.html" class="code" title="function active=ActiveRecord(data)">ActiveRecord</a>	determine active PointVISAR record</li><li><a href="DistinguishedLines.html" class="code" title="function color=DistinguishedLines(number)">DistinguishedLines</a>	</li><li><a href="DistinguishedLinesRecord.html" class="code" title="function color=DistinguishedLinesRecord(number)">DistinguishedLinesRecord</a>	Pre-2014b Matlab defaults</li><li><a href="DoubleInputDlg.html" class="code" title="function func=DoubleInputDlg(prompt,title,default,sigfigs)">DoubleInputDlg</a>	DoubleInputDlg : special form of inputdlg for double precision numbers</li><li><a href="EditBoxNum2Str.html" class="code" title="function func=EditBoxNum2Str(number)">EditBoxNum2Str</a>	</li><li><a href="EllipseFittingGUI.html" class="code" title="function func = EllipseFittingGUI(recordData)">EllipseFittingGUI</a>	ELLIPSEFITTINGGUI - Generates a GUI for user to update Ellipse parameters</li><li><a href="EllipsePlot.html" class="code" title="function varargout = EllipsePlot(params, mode, AxesHandle, numpoints)">EllipsePlot</a>	EllipsePlot : add an ellipse to an axes</li><li><a href="FilterSignal.html" class="code" title="function [signal,params]=FilterSignal(rawsignal,name,params)">FilterSignal</a>	function filtSignal = FilterSignal(rawSignal, filterType, filterParams)</li><li><a href="FourPanels.html" class="code" title="function [slider,panel]=FourPanels(varargin)">FourPanels</a>	FourPanels : create a pair of horizontal panels with slider sizing</li><li><a href="MinimalFigure.html" class="code" title="function varargout=MinimalFigure(varargin)">MinimalFigure</a>	MinimalFigure: create a minimalistic figure useful for GUIs</li><li><a href="PointVISARGUI.html" class="code" title="function fig=PointVISARGUI(data)">PointVISARGUI</a>	PointVISARGUI</li><li><a href="ReadEditRecordGUI.html" class="code" title="function fig=ReadEditRecordGUI(record)">ReadEditRecordGUI</a>	read/edit records for PointVISARGUI</li><li><a href="RecordNotesDialog.html" class="code" title="function RecordNotesDialog(record)">RecordNotesDialog</a>	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</li><li><a href="VisarAnalysis.html" class="code" title="function record = VisarAnalysis(record, varargin)">VisarAnalysis</a>	VisarAnalysis Provides a gateway to different stages of Visar</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="NewRecordGUI.html" class="code" title="function fig=NewRecordGUI(VISARtype,SignalStorage)">NewRecordGUI</a>	%%%%%%%%%%%%%%%</li><li><a href="PointVISARGUI.html" class="code" title="function fig=PointVISARGUI(data)">PointVISARGUI</a>	PointVISARGUI</li><li><a href="ReadEditRecordGUI.html" class="code" title="function fig=ReadEditRecordGUI(record)">ReadEditRecordGUI</a>	read/edit records for PointVISARGUI</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function UpdateGUI(record)</a></li><li><a href="#_sub2" class="code">function ShowBounds(record)</a></li><li><a href="#_sub3" class="code">function RecordMenuCallback(src,eventdata)</a></li><li><a href="#_sub4" class="code">function ExperimentMenuCallback(src,eventdata)</a></li><li><a href="#_sub5" class="code">function ProcessMenuCallback(src,eventdata)</a></li><li><a href="#_sub6" class="code">function ViewMenuCallback(src, eventdata)</a></li><li><a href="#_sub7" class="code">function ExitRecord(src,eventdata)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% read/edit records for PointVISARGUI</span>
+0002 
+0003 <span class="comment">%%%%%%%%%%%%%%%%</span>
+0004 <span class="comment">% main routine %</span>
+0005 <span class="comment">%%%%%%%%%%%%%%%%</span>
+0006 <a name="_sub0" href="#_subfunctions" class="code">function fig=ReadEditRecordGUI(record)</a>
+0007 
+0008 <span class="comment">% input check</span>
+0009 <span class="keyword">if</span> nargin&lt;1
+0010     record=[];
+0011 <span class="keyword">end</span>
+0012 
+0013 fig=findobj(<span class="string">'Tag'</span>,<span class="string">'PointVISAR:ReadEditRecord'</span>);
+0014 <span class="keyword">if</span> ishandle(fig) <span class="comment">% GUI already exists--make active</span>
+0015     figure(fig);
+0016 <span class="keyword">else</span> <span class="comment">% generate the figure</span>
+0017     <span class="comment">% locate main figure</span>
+0018     MainFig=findall(0,<span class="string">'Type'</span>,<span class="string">'figure'</span>,<span class="string">'Tag'</span>,<span class="string">'PointVISAR'</span>);
+0019     MainPos=get(MainFig, <span class="string">'Position'</span>);
+0020     MainUnits=get(MainFig, <span class="string">'Units'</span>);
+0021     <span class="comment">% create figure</span>
+0022     func=<a href="MinimalFigure.html" class="code" title="function varargout=MinimalFigure(varargin)">MinimalFigure</a>(<span class="string">'Tag'</span>,<span class="string">'PointVISAR:ReadEditRecord'</span>,<span class="string">'NumberTitle'</span>,<span class="string">'off'</span>,<span class="keyword">...</span>
+0023         <span class="string">'Units'</span>,MainUnits,<span class="string">'Position'</span>,MainPos,<span class="keyword">...</span>
+0024         <span class="string">'IntegerHandle'</span>,<span class="string">'off'</span>,<span class="keyword">...</span>
+0025         <span class="string">'CloseRequestFcn'</span>,@<a href="#_sub7" class="code" title="subfunction ExitRecord(src,eventdata)">ExitRecord</a>,<span class="keyword">...</span>
+0026         <span class="string">'Name'</span>,[<span class="string">'Settings for '''</span> record.Label <span class="string">''''</span>]);
+0027     <span class="comment">% create record menu</span>
+0028     RecordMenu=uimenu(<span class="string">'Label'</span>,<span class="string">'Record'</span>);
+0029     uimenu(RecordMenu,<span class="string">'Label'</span>,<span class="string">'Label'</span>,<span class="string">'Tag'</span>,<span class="string">'SetLabel'</span>,<span class="keyword">...</span>
+0030         <span class="string">'Callback'</span>,@<a href="#_sub3" class="code" title="subfunction RecordMenuCallback(src,eventdata)">RecordMenuCallback</a>);
+0031     uimenu(RecordMenu,<span class="string">'Label'</span>,<span class="string">'Notes'</span>,<span class="string">'Tag'</span>,<span class="string">'SetNotes'</span>,<span class="keyword">...</span>
+0032         <span class="string">'Callback'</span>, @<a href="#_sub3" class="code" title="subfunction RecordMenuCallback(src,eventdata)">RecordMenuCallback</a>);
+0033     uimenu(RecordMenu, <span class="string">'Label'</span>, <span class="string">'Cancel'</span>,<span class="string">'Separator'</span>, <span class="string">'on'</span>,<span class="keyword">...</span>
+0034         <span class="string">'Tag'</span>, <span class="string">'cancel'</span>, <span class="string">'Callback'</span>, @<a href="#_sub3" class="code" title="subfunction RecordMenuCallback(src,eventdata)">RecordMenuCallback</a>);
+0035     uimenu(RecordMenu, <span class="string">'Label'</span>, <span class="string">'Done'</span>, <span class="keyword">...</span>
+0036         <span class="string">'Tag'</span>, <span class="string">'done'</span>, <span class="string">'Callback'</span>, @<a href="#_sub3" class="code" title="subfunction RecordMenuCallback(src,eventdata)">RecordMenuCallback</a>);
+0037     <span class="comment">% create processing menu</span>
+0038     ProcessMenu = uimenu(<span class="string">'Label'</span>, <span class="string">'&amp;Processing'</span>, <span class="string">'Tag'</span>, <span class="string">'ProcessMenu'</span>);
+0039     FilterSubMenu=uimenu(ProcessMenu, <span class="string">'Label'</span>, <span class="string">'Filter'</span>, <span class="string">'Tag'</span>, <span class="string">'FilterMenu'</span>);
+0040     uimenu(FilterSubMenu, <span class="string">'Label'</span>, <span class="string">'None'</span>, <span class="string">'Checked'</span>, <span class="string">'on'</span>, <span class="keyword">...</span>
+0041         <span class="string">'Tag'</span>, <span class="string">'FilterNone'</span>, <span class="string">'Callback'</span>, @<a href="#_sub5" class="code" title="subfunction ProcessMenuCallback(src,eventdata)">ProcessMenuCallback</a>);
+0042     uimenu(FilterSubMenu, <span class="string">'Label'</span>, <span class="string">'Mean'</span>, <span class="keyword">...</span>
+0043         <span class="string">'Tag'</span>, <span class="string">'FilterMean'</span>, <span class="string">'Callback'</span>, @<a href="#_sub5" class="code" title="subfunction ProcessMenuCallback(src,eventdata)">ProcessMenuCallback</a>);
+0044     uimenu(FilterSubMenu, <span class="string">'Label'</span>, <span class="string">'Median'</span>, <span class="keyword">...</span>
+0045         <span class="string">'Tag'</span>, <span class="string">'FilterMedian'</span>, <span class="string">'Callback'</span>, @<a href="#_sub5" class="code" title="subfunction ProcessMenuCallback(src,eventdata)">ProcessMenuCallback</a>);
+0046     uimenu(FilterSubMenu, <span class="string">'Label'</span>, <span class="string">'Convolution'</span>, <span class="keyword">...</span>
+0047         <span class="string">'Tag'</span>, <span class="string">'FilterConvolution'</span>, <span class="string">'Callback'</span>, @<a href="#_sub5" class="code" title="subfunction ProcessMenuCallback(src,eventdata)">ProcessMenuCallback</a>);
+0048     uimenu(ProcessMenu, <span class="string">'Label'</span>, <span class="string">'Time shifting'</span>, <span class="string">'Tag'</span>, <span class="string">'SetTimeShifts'</span>, <span class="keyword">...</span>
+0049         <span class="string">'Separator'</span>, <span class="string">'on'</span>, <span class="string">'Callback'</span>, @<a href="#_sub5" class="code" title="subfunction ProcessMenuCallback(src,eventdata)">ProcessMenuCallback</a>);
+0050     uimenu(ProcessMenu, <span class="string">'Label'</span>, <span class="string">'Time scaling'</span>, <span class="string">'Tag'</span>, <span class="string">'SetTimeScale'</span>, <span class="keyword">...</span>
+0051         <span class="string">'Callback'</span>, @<a href="#_sub5" class="code" title="subfunction ProcessMenuCallback(src,eventdata)">ProcessMenuCallback</a>);
+0052     uimenu(ProcessMenu, <span class="string">'Label'</span>, <span class="string">'Signal shifting'</span>, <span class="keyword">...</span>
+0053         <span class="string">'Tag'</span>, <span class="string">'SetVerticalShifts'</span>, <span class="string">'Callback'</span>, @<a href="#_sub5" class="code" title="subfunction ProcessMenuCallback(src,eventdata)">ProcessMenuCallback</a>,<span class="keyword">...</span>
+0054         <span class="string">'Separator'</span>,<span class="string">'on'</span>);
+0055     uimenu(ProcessMenu, <span class="string">'Label'</span>, <span class="string">'Signal scaling'</span>, <span class="keyword">...</span>
+0056         <span class="string">'Tag'</span>, <span class="string">'SetSignalScaling'</span>, <span class="string">'Callback'</span>, @<a href="#_sub5" class="code" title="subfunction ProcessMenuCallback(src,eventdata)">ProcessMenuCallback</a>);
+0057     <span class="comment">% create experiment menu</span>
+0058     ExperimentMenu = uimenu(<span class="string">'Label'</span>, <span class="string">'&amp;Experiment'</span>, <span class="string">'Tag'</span>, <span class="string">'ExperimentMenu'</span>);
+0059     uimenu(ExperimentMenu, <span class="string">'Label'</span>, <span class="string">'Fringe constant (VPF)'</span>, <span class="string">'Tag'</span>, <span class="string">'SetVPF'</span>, <span class="keyword">...</span>
+0060         <span class="string">'Callback'</span>, @<a href="#_sub4" class="code" title="subfunction ExperimentMenuCallback(src,eventdata)">ExperimentMenuCallback</a>);
+0061     <span class="comment">%sub=uimenu(ExperimentMenu,'Label','Analysis');</span>
+0062     <span class="comment">%uimenu(sub,'Label','Velocity','Tag','VelocityAnalysis',...</span>
+0063     <span class="comment">%    'Callback',@ExperimentMenuCallback);</span>
+0064     <span class="comment">%uimenu(sub,'Label','Displacement','Tag','DisplacementAnalysis',...</span>
+0065     <span class="comment">%    'Callback',@ExperimentMenuCallback);</span>
+0066     <span class="comment">%uimenu(ExperimentMenu,'Label','System parameters',...</span>
+0067     <span class="comment">%    'Tag','Parameters','Callback',@ExperimentMenuCallback);</span>
+0068     uimenu(ExperimentMenu, <span class="string">'Label'</span>, <span class="string">'VISAR ellipse'</span>, <span class="keyword">...</span>
+0069         <span class="string">'Tag'</span>,<span class="string">'FitEllipse'</span>,<span class="string">'Callback'</span>, @<a href="#_sub4" class="code" title="subfunction ExperimentMenuCallback(src,eventdata)">ExperimentMenuCallback</a>);
+0070     uimenu(ExperimentMenu, <span class="string">'Label'</span>, <span class="string">'Initial velocity'</span>, <span class="keyword">...</span>
+0071         <span class="string">'Tag'</span>, <span class="string">'InitialVelocity'</span>, <span class="string">'Callback'</span>, @<a href="#_sub4" class="code" title="subfunction ExperimentMenuCallback(src,eventdata)">ExperimentMenuCallback</a>, <span class="keyword">...</span>
+0072         <span class="string">'Separator'</span>, <span class="string">'on'</span>);
+0073     uimenu(ExperimentMenu, <span class="string">'Label'</span>, <span class="string">'Initial time range'</span>, <span class="keyword">...</span>
+0074         <span class="string">'Tag'</span>, <span class="string">'InitialTime'</span>, <span class="string">'Callback'</span>, @<a href="#_sub4" class="code" title="subfunction ExperimentMenuCallback(src,eventdata)">ExperimentMenuCallback</a>);
+0075     <span class="comment">%uimenu(ExperimentMenu, 'Label', 'Ellipse time range', ...</span>
+0076     <span class="comment">%    'Tag', 'EllipseTime', 'Callback', @ExperimentMenuCallback);</span>
+0077     uimenu(ExperimentMenu, <span class="string">'Label'</span>, <span class="string">'Experiment time range'</span>, <span class="keyword">...</span>
+0078         <span class="string">'Tag'</span>, <span class="string">'ExperimentTime'</span>, <span class="string">'Callback'</span>, @<a href="#_sub4" class="code" title="subfunction ExperimentMenuCallback(src,eventdata)">ExperimentMenuCallback</a>);
+0079     <span class="comment">% create view menu</span>
+0080     ViewMenu = uimenu(<span class="string">'Label'</span>, <span class="string">'&amp;View'</span>, <span class="string">'Tag'</span>, <span class="string">'ViewMenu'</span>);
+0081     uimenu(ViewMenu, <span class="string">'Label'</span>, <span class="string">'All plots'</span>, <span class="string">'Tag'</span>, <span class="string">'all'</span>, <span class="keyword">...</span>
+0082         <span class="string">'Accelerator'</span>, <span class="string">'0'</span>, <span class="string">'Callback'</span>, @<a href="#_sub6" class="code" title="subfunction ViewMenuCallback(src, eventdata)">ViewMenuCallback</a>);
+0083     uimenu(ViewMenu, <span class="string">'Label'</span>, <span class="string">'Raw signals'</span>, <span class="string">'Tag'</span>, <span class="string">'raw'</span>, <span class="keyword">...</span>
+0084         <span class="string">'Accelerator'</span>, <span class="string">'1'</span>, <span class="string">'Callback'</span>, @<a href="#_sub6" class="code" title="subfunction ViewMenuCallback(src, eventdata)">ViewMenuCallback</a>);
+0085     uimenu(ViewMenu, <span class="string">'Label'</span>, <span class="string">'Processed signals'</span>, <span class="string">'Tag'</span>,<span class="string">'processed'</span>,<span class="keyword">...</span>
+0086         <span class="string">'Accelerator'</span>, <span class="string">'2'</span>, <span class="string">'Callback'</span>, @<a href="#_sub6" class="code" title="subfunction ViewMenuCallback(src, eventdata)">ViewMenuCallback</a>);
+0087     uimenu(ViewMenu, <span class="string">'Label'</span>, <span class="string">'Quadrature signals'</span>, <span class="string">'Tag'</span>,<span class="string">'quadrature1'</span>, <span class="keyword">...</span>
+0088         <span class="string">'Accelerator'</span>, <span class="string">'3'</span>, <span class="string">'Callback'</span>, @<a href="#_sub6" class="code" title="subfunction ViewMenuCallback(src, eventdata)">ViewMenuCallback</a>);
+0089     uimenu(ViewMenu, <span class="string">'Label'</span>, <span class="string">'Quadrature plot'</span>, <span class="string">'Tag'</span>,<span class="string">'quadrature2'</span>,<span class="keyword">...</span>
+0090         <span class="string">'Accelerator'</span>, <span class="string">'4'</span>, <span class="string">'Callback'</span>, @<a href="#_sub6" class="code" title="subfunction ViewMenuCallback(src, eventdata)">ViewMenuCallback</a>);
+0091     <span class="comment">% create panels</span>
+0092     [slider,panel]=<a href="FourPanels.html" class="code" title="function [slider,panel]=FourPanels(varargin)">FourPanels</a>(<span class="string">'Parent'</span>,func);
+0093     colors=<a href="DistinguishedLinesRecord.html" class="code" title="function color=DistinguishedLinesRecord(number)">DistinguishedLinesRecord</a>(1:4);
+0094     <span class="comment">%colors=get(0,'DefaultAxesColorOrder');</span>
+0095     <span class="comment">% create raw signals axes</span>
+0096     ii=1;
+0097     ha(ii) = axes(<span class="string">'Parent'</span>,panel(ii),<span class="string">'Tag'</span>,<span class="string">'RawSignals'</span>,<span class="string">'Box'</span>,<span class="string">'on'</span>);
+0098     xlabel(<span class="string">'Time'</span>);
+0099     ylabel(<span class="string">'Detector output'</span>);
+0100     title(<span class="string">'Raw signals'</span>, <span class="string">'FontWeight'</span>, <span class="string">'bold'</span>);
+0101     hl=[];
+0102     <span class="keyword">for</span> jj=1:record.NumSignals
+0103         hl(jj)=line(<span class="string">'XData'</span>,[],<span class="string">'YData'</span>,[],<span class="keyword">...</span>
+0104             <span class="string">'Color'</span>,colors(jj,:),<span class="string">'Tag'</span>,record.SignalLabels{jj});
+0105     <span class="keyword">end</span>
+0106     set(ha(ii),<span class="string">'UserData'</span>,hl);
+0107     <span class="comment">% create processed signals access</span>
+0108     ii=2;
+0109     ha(ii) = axes(<span class="string">'Parent'</span>,panel(ii),<span class="string">'Tag'</span>,<span class="string">'ProcessedSignals'</span>,<span class="string">'Box'</span>,<span class="string">'on'</span>);
+0110     xlabel(<span class="string">'Time'</span>);
+0111     ylabel(<span class="string">'Detector output'</span>);
+0112     title(<span class="string">'Processed signals'</span>, <span class="string">'FontWeight'</span>, <span class="string">'bold'</span>);
+0113     hl=[];
+0114     <span class="keyword">for</span> jj=1:record.NumSignals
+0115         hl(jj)=line(<span class="string">'XData'</span>,[],<span class="string">'YData'</span>,[],<span class="keyword">...</span>
+0116             <span class="string">'Color'</span>,colors(jj,:),<span class="string">'Tag'</span>,record.SignalLabels{jj});
+0117     <span class="keyword">end</span>
+0118     set(ha(ii),<span class="string">'UserData'</span>,hl);
+0119     <span class="comment">% create quadrature signals axes</span>
+0120     ii=3;
+0121     ha(ii) = axes(<span class="string">'Parent'</span>,panel(ii),<span class="string">'Tag'</span>,<span class="string">'QuadratureSignals'</span>,<span class="string">'Box'</span>,<span class="string">'on'</span>);
+0122     xlabel(<span class="string">'Time'</span>);
+0123     ylabel(<span class="string">'Reduced detector output'</span>);
+0124     title(<span class="string">'Quadrature signals'</span>, <span class="string">'FontWeight'</span>, <span class="string">'bold'</span>);
+0125     hl=[];
+0126     <span class="keyword">for</span> jj=1:2
+0127         hl(jj)=line(<span class="string">'XData'</span>,[],<span class="string">'YData'</span>,[],<span class="string">'Color'</span>,colors(jj,:));
+0128     <span class="keyword">end</span>
+0129     set(ha(ii),<span class="string">'UserData'</span>,hl);
+0130     <span class="comment">% create quadrature plot axes</span>
+0131     ii=4;
+0132     ha(ii) = axes(<span class="string">'Parent'</span>,panel(ii),<span class="keyword">...</span>
+0133         <span class="string">'Tag'</span>,<span class="string">'QuadraturePlot'</span>,<span class="string">'Box'</span>,<span class="string">'on'</span>,<span class="keyword">...</span>
+0134         <span class="string">'DataAspectRatioMode'</span>,<span class="string">'manual'</span>,<span class="string">'DataAspectRatio'</span>,[1 1 1],<span class="keyword">...</span>
+0135         <span class="string">'PlotBoxAspectRatioMode'</span>,<span class="string">'manual'</span>,<span class="string">'PlotBoxAspectRatio'</span>,[1 1 1]);
+0136     xlabel(<span class="string">'D1'</span>);
+0137     ylabel(<span class="string">'D2'</span>);
+0138     title(<span class="string">'Quadrature plot'</span>, <span class="string">'FontWeight'</span>, <span class="string">'bold'</span>);
+0139     hl=[];
+0140     hl(end+1)=line(<span class="string">'Tag'</span>,<span class="string">'QuadratureData'</span>,<span class="string">'Color'</span>,[0 0 1]);
+0141     hl(end+1)=line(<span class="string">'Tag'</span>,<span class="string">'EllipseFit'</span>,<span class="string">'Color'</span>,[0 0 0],<span class="string">'LineStyle'</span>,<span class="string">'--'</span>,<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+0142     set(hl,<span class="string">'XData'</span>,[],<span class="string">'YData'</span>,[]);
+0143     set(ha(ii),<span class="string">'UserData'</span>,hl);
+0144     grid on
+0145     <span class="comment">% general formatting</span>
+0146     set(ha,<span class="string">'Box'</span>,<span class="string">'on'</span>);
+0147     <span class="comment">% hide figure from command line users</span>
+0148     set(func,<span class="string">'HandleVisibility'</span>,<span class="string">'callback'</span>);
+0149 <span class="keyword">end</span>
+0150 
+0151 <a href="#_sub1" class="code" title="subfunction UpdateGUI(record)">UpdateGUI</a>(record);
+0152 
+0153 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0154 <a name="_sub1" href="#_subfunctions" class="code">function UpdateGUI(record)      </a>
+0155 
+0156 fig=findall(0,<span class="string">'Type'</span>,<span class="string">'figure'</span>,<span class="string">'Tag'</span>,<span class="string">'PointVISAR:ReadEditRecord'</span>);
+0157 
+0158 record = <a href="VisarAnalysis.html" class="code" title="function record = VisarAnalysis(record, varargin)">VisarAnalysis</a>(record, <span class="string">'PreProcessing'</span>, <span class="string">'QuadratureSignals'</span>);
+0159 set(fig,<span class="string">'UserData'</span>,record);
+0160 
+0161 <span class="comment">%switch record.Analysis</span>
+0162 <span class="comment">%    case 'velocity'</span>
+0163 <span class="comment">%        hm=findobj(fig,'Tag','VelocityAnalysis');</span>
+0164 <span class="comment">%        set(hm,'Checked','on');</span>
+0165 <span class="comment">%        hm=findobj(fig,'Tag','DisplacementAnalysis');</span>
+0166 <span class="comment">%        set(hm,'Checked','off');</span>
+0167 <span class="comment">%    case 'displacement'</span>
+0168 <span class="comment">%        hm=findobj(fig,'Tag','DisplacementAnalysis');</span>
+0169 <span class="comment">%        set(hm,'Checked','on');</span>
+0170 <span class="comment">%        hm=findobj(fig,'Tag','VelocityAnalysis');</span>
+0171 <span class="comment">%        set(hm,'Checked','off');</span>
+0172 <span class="comment">%end</span>
+0173 
+0174 numsignals=record.NumSignals;
+0175 <span class="comment">%initial=record.InitialTime;</span>
+0176 <span class="comment">%experiment=record.ExperimentTime;</span>
+0177 <span class="comment">%trange=[min(record.Time) max(record.Time)];</span>
+0178 
+0179 <span class="comment">% update raw signal plot</span>
+0180 h=findobj(fig,<span class="string">'Tag'</span>,<span class="string">'RawSignals'</span>);
+0181 axes(h);
+0182 hl=get(h,<span class="string">'UserData'</span>);
+0183 <span class="keyword">for</span> ii=1:numsignals
+0184     set(hl(ii),<span class="string">'XData'</span>,record.RawSignalTime{ii},<span class="string">'YData'</span>,record.RawSignal{ii});
+0185 <span class="keyword">end</span>
+0186 <span class="comment">%axis tight;</span>
+0187 legend(hl,record.SignalLabels,<span class="string">'Location'</span>,<span class="string">'Best'</span>);
+0188 
+0189 <span class="comment">% update processed signal plot</span>
+0190 h=findobj(fig,<span class="string">'Tag'</span>,<span class="string">'ProcessedSignals'</span>);
+0191 axes(h);
+0192 hl=get(h,<span class="string">'UserData'</span>);
+0193 <span class="keyword">for</span> ii=1:numsignals
+0194     set(hl(ii),<span class="string">'XData'</span>,record.SignalTime{ii},<span class="string">'YData'</span>,record.Signal{ii});
+0195 <span class="keyword">end</span>
+0196 <span class="comment">%ShowBounds(initial,experiment);</span>
+0197 <a href="#_sub2" class="code" title="subfunction ShowBounds(record)">ShowBounds</a>(record)
+0198 <span class="comment">%axis tight;</span>
+0199 legend(hl,record.SignalLabels,<span class="string">'Location'</span>,<span class="string">'Best'</span>);
+0200 
+0201 <span class="comment">% update quadrature signal plot</span>
+0202 h=findobj(fig,<span class="string">'Tag'</span>,<span class="string">'QuadratureSignals'</span>);
+0203 axes(h);
+0204 hl=get(h,<span class="string">'UserData'</span>);
+0205 <span class="keyword">for</span> ii=1:2
+0206     set(hl(ii),<span class="string">'XData'</span>,record.Time,<span class="string">'YData'</span>,record.D{ii});
+0207 <span class="keyword">end</span>
+0208 <span class="comment">%axis tight</span>
+0209 legend(hl,{<span class="string">'D1'</span>,<span class="string">'D2'</span>},<span class="string">'Location'</span>,<span class="string">'Best'</span>);
+0210 
+0211 <span class="comment">% update quadrature plot</span>
+0212 h=findobj(fig,<span class="string">'Tag'</span>,<span class="string">'QuadraturePlot'</span>);
+0213 axes(h);
+0214 hl=get(h,<span class="string">'UserData'</span>);
+0215 set(hl(1),<span class="string">'XData'</span>,record.D{1},<span class="string">'YData'</span>,record.D{2});
+0216 <span class="keyword">if</span> record.EllipseFit
+0217     <span class="comment">% make ellipse fit visible and display legend</span>
+0218     ellipseFitLine = findobj(fig, <span class="string">'Tag'</span>, <span class="string">'EllipseFit'</span>);
+0219     <span class="comment">% set(ellipseFitLine, 'XData', record.D{1}, 'YData', ...</span>
+0220     <span class="comment">%    record.D{2});</span>
+0221     set(ellipseFitLine, <span class="string">'Visible'</span>, <span class="string">'on'</span>);
+0222 
+0223     <a href="EllipsePlot.html" class="code" title="function varargout = EllipsePlot(params, mode, AxesHandle, numpoints)">EllipsePlot</a>(record.Ellipse, <span class="string">'overwrite'</span>, h);
+0224 <span class="keyword">end</span>
+0225 <span class="comment">%axis equal</span>
+0226 
+0227 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0228 <a name="_sub2" href="#_subfunctions" class="code">function ShowBounds(record)</a>
+0229 
+0230 <span class="comment">% remove old bounding lines</span>
+0231 hb=findobj(gca,<span class="string">'Tag'</span>,<span class="string">'BoundLine'</span>);
+0232 delete(hb);
+0233  
+0234 <span class="comment">% create new bounding lines as necessary</span>
+0235 hl=[];
+0236 initial=record.InitialTime;
+0237 <span class="comment">%ellipse=record.EllipseTime;</span>
+0238 experiment=record.ExperimentTime;
+0239 <span class="keyword">for</span> ii=1:2
+0240     <span class="keyword">if</span> ~isinf(initial(ii))
+0241         hl(end+1)=line(<span class="string">'XData'</span>,repmat(initial(ii),[1 2]),<span class="string">'YData'</span>,ylim,<span class="string">'LineStyle'</span>,<span class="string">'-.'</span>);
+0242     <span class="keyword">end</span>
+0243     <span class="comment">%if ~isinf(ellipse(ii))</span>
+0244     <span class="comment">%    hl(end+1)=line('XData',repmat(ellipse(ii),[1 2]),'YData',ylim,'LineStyle',':');</span>
+0245     <span class="comment">%end</span>
+0246     <span class="keyword">if</span> ~isinf(experiment(ii))
+0247         hl(end+1)=line(<span class="string">'XData'</span>,repmat(experiment(ii),[1 2]),<span class="string">'YData'</span>,ylim,<span class="string">'LineStyle'</span>,<span class="string">'--'</span>);
+0248     <span class="keyword">end</span>
+0249 <span class="keyword">end</span>
+0250 set(hl,<span class="string">'Tag'</span>,<span class="string">'BoundLine'</span>);
+0251 
+0252 <span class="comment">%%%%%%%%%%%%%%%%%%%%</span>
+0253 <span class="comment">% uimenu callbacks %</span>
+0254 <span class="comment">%%%%%%%%%%%%%%%%%%%%</span>
+0255 
+0256 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0257 <a name="_sub3" href="#_subfunctions" class="code">function RecordMenuCallback(src,eventdata)</a>
+0258 
+0259 fig=ancestor(src,<span class="string">'figure'</span>);
+0260 record=get(fig, <span class="string">'UserData'</span>);
+0261 
+0262 choice=get(src, <span class="string">'Tag'</span>);
+0263 <span class="keyword">switch</span> choice
+0264     <span class="keyword">case</span> <span class="string">'SetLabel'</span>
+0265         default = {record.Label};
+0266         NumLines = 1;
+0267         answer = inputdlg(<span class="string">'Set record label'</span>, <span class="keyword">...</span>
+0268             <span class="string">'Record label'</span>, NumLines, default);
+0269         <span class="keyword">if</span> isempty(answer) <span class="comment">% user pressed cancel</span>
+0270             <span class="keyword">return</span>
+0271         <span class="keyword">end</span>
+0272         record.Label = answer{1};
+0273         set(fig,<span class="string">'UserData'</span>,record,<span class="keyword">...</span>
+0274             <span class="string">'Name'</span>,[<span class="string">'Files/settings for '''</span> record.Label <span class="string">''''</span>]);
+0275     <span class="keyword">case</span> <span class="string">'SetNotes'</span>
+0276         <a href="RecordNotesDialog.html" class="code" title="function RecordNotesDialog(record)">RecordNotesDialog</a>(record);
+0277     <span class="keyword">case</span> <span class="string">'cancel'</span>
+0278         <a href="#_sub7" class="code" title="subfunction ExitRecord(src,eventdata)">ExitRecord</a>(src);
+0279     <span class="keyword">case</span> <span class="string">'done'</span>
+0280         record=get(fig,<span class="string">'UserData'</span>);        
+0281         record=<a href="VisarAnalysis.html" class="code" title="function record = VisarAnalysis(record, varargin)">VisarAnalysis</a>(record,<span class="string">'QuadratureSignals'</span>,<span class="string">'PostProcessing'</span>);
+0282         set(fig,<span class="string">'UserData'</span>,record);
+0283         <a href="#_sub7" class="code" title="subfunction ExitRecord(src,eventdata)">ExitRecord</a>(src);
+0284 <span class="keyword">end</span>
+0285 
+0286 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0287 <a name="_sub4" href="#_subfunctions" class="code">function ExperimentMenuCallback(src,eventdata)</a>
+0288 
+0289 fig=ancestor(src,<span class="string">'figure'</span>);
+0290 record = get(fig, <span class="string">'UserData'</span>);
+0291 
+0292 choice = get(src, <span class="string">'Tag'</span>);
+0293 <span class="keyword">switch</span> choice        
+0294     <span class="comment">%case 'VelocityAnalysis'</span>
+0295     <span class="comment">%    status=get(src,'Checked');</span>
+0296     <span class="comment">%    if strcmpi(status,'off')</span>
+0297     <span class="comment">%        record.Analysis='velocity';</span>
+0298     <span class="comment">%        UpdateGUI(record);</span>
+0299     <span class="comment">%    end</span>
+0300     <span class="comment">%case 'DisplacementAnalysis'</span>
+0301     <span class="comment">%    status=get(src,'Checked');</span>
+0302     <span class="comment">%    if strcmpi(status,'off')</span>
+0303     <span class="comment">%        record.Analysis='displacement';</span>
+0304     <span class="comment">%        UpdateGUI(record);</span>
+0305     <span class="comment">%    end</span>
+0306     <span class="comment">%case 'Parameters'</span>
+0307     <span class="comment">%    switch record.Analysis</span>
+0308     <span class="comment">%        case 'velocity'</span>
+0309     <span class="comment">%            prompt={'VPF (required):','Delay (optional):','Dispersion (optional):'};</span>
+0310     <span class="comment">%            default={record.VPF, record.Delay, record.Dispersion};</span>
+0311     <span class="comment">%            answer=DoubleInputDlg(prompt,'Parameters',default);</span>
+0312     <span class="comment">%            if isempty(answer)</span>
+0313     <span class="comment">%                return</span>
+0314     <span class="comment">%            end</span>
+0315     <span class="comment">%            record.VPF=answer{1};</span>
+0316     <span class="comment">%            record.Delay=answer{2};</span>
+0317     <span class="comment">%            record.Dispersion=answer{3};</span>
+0318     <span class="comment">%            set(fig,'UserData',record);</span>
+0319     <span class="comment">%        case 'displacement'</span>
+0320     <span class="comment">%            prompt={'Delay (required):','Wavelength (required):',...</span>
+0321     <span class="comment">%                'Dispersion (optional):','Derivative parameters (required)'};</span>
+0322     <span class="comment">%            default={record.Delay, record.Wavelength, record.Dispersion, record.DerivativeParams};</span>
+0323     <span class="comment">%            answer=DoubleInputDlg(prompt,'Parameters',default);</span>
+0324     <span class="comment">%            if isempty(answer)</span>
+0325     <span class="comment">%                return</span>
+0326     <span class="comment">%            end</span>
+0327     <span class="comment">%            record.Delay=answer{1};</span>
+0328     <span class="comment">%            record.Wavelength=answer{2};</span>
+0329     <span class="comment">%            record.Dispersion=answer{3};</span>
+0330     <span class="comment">%            record.DerivativeParams=answer{4};</span>
+0331     <span class="comment">%            set(fig,'UserData',record);</span>
+0332     <span class="comment">%    end</span>
+0333     <span class="keyword">case</span> <span class="string">'SetVPF'</span>
+0334         answer = <a href="DoubleInputDlg.html" class="code" title="function func=DoubleInputDlg(prompt,title,default,sigfigs)">DoubleInputDlg</a>({<span class="string">'VPF:'</span>}, <span class="string">'Specify VPF'</span>, record.VPF);
+0335         <span class="keyword">if</span> isempty(answer)
+0336             <span class="keyword">return</span>
+0337         <span class="keyword">end</span>
+0338         record.VPF = answer; 
+0339         set(fig,<span class="string">'UserData'</span>,record);
+0340     <span class="keyword">case</span> <span class="string">'FitEllipse'</span>
+0341         record=<a href="EllipseFittingGUI.html" class="code" title="function func = EllipseFittingGUI(recordData)">EllipseFittingGUI</a>(record);
+0342         <a href="ReadEditRecordGUI.html" class="code" title="function fig=ReadEditRecordGUI(record)">ReadEditRecordGUI</a>(record);
+0343     <span class="keyword">case</span> <span class="string">'InitialVelocity'</span>
+0344         answer = <a href="DoubleInputDlg.html" class="code" title="function func=DoubleInputDlg(prompt,title,default,sigfigs)">DoubleInputDlg</a>({<span class="string">'v0='</span>}, <span class="string">'Initial velocity'</span>, <span class="keyword">...</span>
+0345             record.InitialVelocity);
+0346         <span class="keyword">if</span> isempty(answer)
+0347             <span class="keyword">return</span>
+0348         <span class="keyword">end</span>
+0349         record.InitialVelocity = answer;
+0350         set(fig,<span class="string">'UserData'</span>,record);
+0351     <span class="keyword">case</span> <span class="string">'InitialTime'</span>
+0352         prompt = {<span class="string">'Begin time'</span>, <span class="string">'End time'</span>};
+0353         answer = <a href="DoubleInputDlg.html" class="code" title="function func=DoubleInputDlg(prompt,title,default,sigfigs)">DoubleInputDlg</a>(prompt, <span class="string">'Initial velocity duration'</span>, <span class="keyword">...</span>
+0354             record.InitialTime);
+0355         <span class="keyword">if</span> isempty(answer)
+0356             <span class="keyword">return</span>
+0357         <span class="keyword">end</span>
+0358         record.InitialTime = answer;
+0359         <a href="ReadEditRecordGUI.html" class="code" title="function fig=ReadEditRecordGUI(record)">ReadEditRecordGUI</a>(record);
+0360     <span class="comment">%case 'EllipseTime'</span>
+0361     <span class="comment">%    prompt = {'Begin time', 'End time'};</span>
+0362     <span class="comment">%    answer = DoubleInputDlg(prompt, 'Ellipse duration', ...</span>
+0363     <span class="comment">%        record.EllipseTime);</span>
+0364     <span class="comment">%    if isempty(answer)</span>
+0365     <span class="comment">%        return</span>
+0366     <span class="comment">%    end</span>
+0367     <span class="comment">%    record.EllipseTime = answer;</span>
+0368     <span class="comment">%    ReadEditRecordGUI(record);</span>
+0369     <span class="keyword">case</span> <span class="string">'ExperimentTime'</span>
+0370         prompt = {<span class="string">'Begin time'</span>, <span class="string">'End time'</span>};
+0371         answer = <a href="DoubleInputDlg.html" class="code" title="function func=DoubleInputDlg(prompt,title,default,sigfigs)">DoubleInputDlg</a>(prompt, <span class="string">'Experiment duration'</span>, <span class="keyword">...</span>
+0372             record.ExperimentTime);
+0373         <span class="keyword">if</span> isempty(answer)
+0374             <span class="keyword">return</span>
+0375         <span class="keyword">end</span>
+0376         record.ExperimentTime = answer;
+0377         <a href="ReadEditRecordGUI.html" class="code" title="function fig=ReadEditRecordGUI(record)">ReadEditRecordGUI</a>(record);
+0378 <span class="keyword">end</span>
+0379 
+0380 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0381 <a name="_sub5" href="#_subfunctions" class="code">function ProcessMenuCallback(src,eventdata)</a>
+0382 
+0383 fig=ancestor(src,<span class="string">'figure'</span>);
+0384 record=get(fig,<span class="string">'UserData'</span>);
+0385 
+0386 choice=get(src,<span class="string">'Tag'</span>);
+0387 <span class="keyword">switch</span> choice
+0388     <span class="keyword">case</span> <span class="string">'FilterNone'</span>
+0389         record.FilterName = <span class="string">''</span>;
+0390         record.FilterParams = [];
+0391     <span class="keyword">case</span> <span class="string">'FilterMean'</span>
+0392         <span class="keyword">if</span> (~strcmp(record.FilterName,<span class="string">'mean'</span>)) &amp;&amp; (~strcmp(record.FilterName,<span class="string">'median'</span>))
+0393             [temp,record.FilterParams]=<a href="FilterSignal.html" class="code" title="function [signal,params]=FilterSignal(rawsignal,name,params)">FilterSignal</a>([],<span class="string">'mean'</span>);
+0394         <span class="keyword">end</span>
+0395         record.FilterName=<span class="string">'mean'</span>;
+0396         <span class="comment">%if isempty(record.FilterParams)</span>
+0397         <span class="comment">%    [temp,record.FilterParams]=FilterSignal([],record.FilterName);</span>
+0398         <span class="comment">%end</span>
+0399         record.FilterParams=<a href="DoubleInputDlg.html" class="code" title="function func=DoubleInputDlg(prompt,title,default,sigfigs)">DoubleInputDlg</a>(<span class="string">'Mean filter neighborhood: '</span>, <span class="keyword">...</span>
+0400             <span class="string">'Mean filter'</span>,record.FilterParams); 
+0401     <span class="keyword">case</span> <span class="string">'FilterMedian'</span>
+0402         <span class="keyword">if</span> (~strcmp(record.FilterName,<span class="string">'median'</span>)) &amp;&amp; (~strcmp(record.FilterName,<span class="string">'mean'</span>))
+0403             [temp,record.FilterParams]=<a href="FilterSignal.html" class="code" title="function [signal,params]=FilterSignal(rawsignal,name,params)">FilterSignal</a>([],<span class="string">'median'</span>);
+0404         <span class="keyword">end</span>
+0405         record.FilterName=<span class="string">'median'</span>;
+0406         <span class="comment">%if isempty(record.FilterParams)</span>
+0407         <span class="comment">%    [temp,record.FilterParams]=FilterSignal([],record.FilterName);</span>
+0408         <span class="comment">%end</span>
+0409         record.FilterParams=<a href="DoubleInputDlg.html" class="code" title="function func=DoubleInputDlg(prompt,title,default,sigfigs)">DoubleInputDlg</a>(<span class="string">'Median filter neighborhood: '</span>, <span class="keyword">...</span>
+0410             <span class="string">'Median filter'</span>,record.FilterParams);
+0411     <span class="keyword">case</span> <span class="string">'FilterConvolution'</span>
+0412         <span class="keyword">if</span> ~strcmp(record.FilterName,<span class="string">'convolution'</span>)
+0413             [temp,record.FilterParams]=<a href="FilterSignal.html" class="code" title="function [signal,params]=FilterSignal(rawsignal,name,params)">FilterSignal</a>([],<span class="string">'convolution'</span>);
+0414         <span class="keyword">end</span>
+0415         record.FilterName=<span class="string">'convolution'</span>;
+0416        <span class="comment">% if isempty(record.FilterParams)</span>
+0417        <span class="comment">%     [temp,record.FilterParams]=FilterSignal([],record.FilterName);</span>
+0418        <span class="comment">% end</span>
+0419         default=<a href="EditBoxNum2Str.html" class="code" title="function func=EditBoxNum2Str(number)">EditBoxNum2Str</a>(record.FilterParams);
+0420         answer=inputdlg(<span class="string">'Enter the convolution kernel (space delimited): '</span>, <span class="keyword">...</span>
+0421             <span class="string">'Convolution filter'</span>,1,{default});
+0422         <span class="keyword">if</span> isempty(answer)
+0423             <span class="comment">% do nothing</span>
+0424         <span class="keyword">else</span>
+0425             record.FilterParams=sscanf(answer{1},<span class="string">'%g'</span>);
+0426         <span class="keyword">end</span>
+0427     <span class="keyword">case</span> <span class="string">'SetTimeShifts'</span>
+0428         answer = <a href="DoubleInputDlg.html" class="code" title="function func=DoubleInputDlg(prompt,title,default,sigfigs)">DoubleInputDlg</a>(record.SignalLabels, <span class="string">'Time shifts'</span>, <span class="keyword">...</span>
+0429             record.SignalTimeShift);
+0430         <span class="keyword">if</span> isempty(answer)
+0431             <span class="keyword">return</span>
+0432         <span class="keyword">end</span>
+0433         record.SignalTimeShift = answer;
+0434     <span class="keyword">case</span> <span class="string">'SetTimeScale'</span>
+0435         answer = <a href="DoubleInputDlg.html" class="code" title="function func=DoubleInputDlg(prompt,title,default,sigfigs)">DoubleInputDlg</a>(<span class="string">'Time scaling factor'</span>, <span class="string">'Time scaling'</span>, <span class="keyword">...</span>
+0436             record.SignalTimeScale);
+0437         <span class="keyword">if</span> isempty(answer)
+0438             <span class="keyword">return</span>
+0439         <span class="keyword">end</span>
+0440         <span class="keyword">if</span> answer&lt;=0
+0441             message{1}=<span class="string">'Error: improper time scaling factor!'</span>;
+0442             message{2}=<span class="string">'Please choose a POSITIVE number'</span>;
+0443             errordlg(message,<span class="string">'Improper scaling factor'</span>);
+0444             <a href="#_sub5" class="code" title="subfunction ProcessMenuCallback(src,eventdata)">ProcessMenuCallback</a>(src,eventdata)
+0445             <span class="keyword">return</span>
+0446         <span class="keyword">end</span>
+0447         <span class="comment">% update all time quantities</span>
+0448         <span class="keyword">for</span> jj=1:record.NumSignals
+0449             record.RawSignalTime{jj}=<span class="keyword">...</span>
+0450                 record.RawSignalTime{jj}/record.SignalTimeScale*answer;
+0451             record.SignalTimeShift(jj)=<span class="keyword">...</span>
+0452                 record.SignalTimeShift(jj)/record.SignalTimeScale*answer;
+0453         <span class="keyword">end</span>
+0454         record.TimeShift=record.TimeShift/record.SignalTimeScale*answer;
+0455         record.InitialTime=<span class="keyword">...</span>
+0456             record.InitialTime/record.SignalTimeScale*answer;
+0457         record.ExperimentTime=<span class="keyword">...</span>
+0458             record.ExperimentTime/record.SignalTimeScale*answer;
+0459         record.AddJumps=<span class="keyword">...</span>
+0460             record.AddJumps/record.SignalTimeScale*answer;
+0461         record.SubtractJumps=<span class="keyword">...</span>
+0462             record.SubtractJumps/record.SignalTimeScale*answer;   
+0463         record.SignalTimeScale = answer;
+0464         record.JumpWidth=<span class="keyword">...</span>
+0465             record.JumpWidth/record.SignalTimeScale*answer;
+0466     <span class="keyword">case</span> <span class="string">'SetVerticalShifts'</span>
+0467         answer = <a href="DoubleInputDlg.html" class="code" title="function func=DoubleInputDlg(prompt,title,default,sigfigs)">DoubleInputDlg</a>(record.SignalLabels, <span class="string">'Vertical shifts'</span>, <span class="keyword">...</span>
+0468             record.SignalVerticalShift);
+0469         <span class="keyword">if</span> isempty(answer)
+0470             <span class="keyword">return</span>
+0471         <span class="keyword">end</span>
+0472         record.SignalVerticalShift = answer;   
+0473     <span class="keyword">case</span> <span class="string">'SetSignalScaling'</span>
+0474         answer = <a href="DoubleInputDlg.html" class="code" title="function func=DoubleInputDlg(prompt,title,default,sigfigs)">DoubleInputDlg</a>(record.SignalLabels, <span class="string">'Signal scaling'</span>, <span class="keyword">...</span>
+0475             record.SignalScale);
+0476         <span class="keyword">if</span> isempty(answer)
+0477             <span class="keyword">return</span>
+0478         <span class="keyword">end</span>
+0479         record.SignalScale = answer;             
+0480 <span class="keyword">end</span>
+0481 
+0482 <span class="comment">% make sure proper menu items are checked</span>
+0483 parent=get(src,<span class="string">'Parent'</span>);
+0484 tag=get(parent,<span class="string">'Tag'</span>);
+0485 <span class="keyword">if</span> strcmp(tag,<span class="string">'FilterMenu'</span>)
+0486     children=get(parent,<span class="string">'Children'</span>);
+0487     set(children,<span class="string">'Checked'</span>,<span class="string">'off'</span>);
+0488     set(src,<span class="string">'Checked'</span>,<span class="string">'on'</span>);
+0489 <span class="keyword">end</span>
+0490 
+0491 <span class="comment">% store changes and update GUI</span>
+0492 <a href="ReadEditRecordGUI.html" class="code" title="function fig=ReadEditRecordGUI(record)">ReadEditRecordGUI</a>(record);
+0493 <span class="comment">%set(fig,'UserData',record);</span>
+0494 <span class="comment">%UpdateGUI(record);</span>
+0495 
+0496 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0497 <a name="_sub6" href="#_subfunctions" class="code">function ViewMenuCallback(src, eventdata)</a>
+0498 
+0499 choice = get(gcbo, <span class="string">'Tag'</span>);
+0500 <span class="keyword">switch</span> choice
+0501     <span class="keyword">case</span> <span class="string">'all'</span>
+0502         value = [0.5 0.5 0.5];
+0503     <span class="keyword">case</span> <span class="string">'raw'</span>
+0504         value = [1 0 0.5];
+0505     <span class="keyword">case</span> <span class="string">'processed'</span>
+0506         value = [1 1 0.5];
+0507     <span class="keyword">case</span> <span class="string">'quadrature1'</span>
+0508         value=[0 0.5 0];
+0509     <span class="keyword">case</span> <span class="string">'quadrature2'</span>
+0510         value=[0 0.5 1];
+0511 <span class="keyword">end</span>
+0512 <a href="FourPanels.html" class="code" title="function [slider,panel]=FourPanels(varargin)">FourPanels</a>(<span class="string">'SliderValue'</span>, value);
+0513 
+0514 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0515 <a name="_sub7" href="#_subfunctions" class="code">function ExitRecord(src,eventdata)</a>
+0516 
+0517 main=findall(0,<span class="string">'Type'</span>,<span class="string">'figure'</span>,<span class="string">'Tag'</span>,<span class="string">'PointVISAR'</span>);
+0518 data=get(main,<span class="string">'UserData'</span>);
+0519 active=<a href="ActiveRecord.html" class="code" title="function active=ActiveRecord(data)">ActiveRecord</a>(data);
+0520 
+0521 fig=ancestor(src,<span class="string">'figure'</span>);
+0522 record=get(fig,<span class="string">'UserData'</span>);
+0523 tag=get(src,<span class="string">'Tag'</span>);
+0524 <span class="keyword">if</span> strcmpi(tag,<span class="string">'done'</span>)
+0525     record.NewRecord=false;
+0526     <span class="keyword">if</span> isempty(record.LineColor)
+0527         record.LineColor=<a href="DistinguishedLines.html" class="code" title="function color=DistinguishedLines(number)">DistinguishedLines</a>(active);
+0528     <span class="keyword">end</span>
+0529     data{active}=record;
+0530 <span class="keyword">elseif</span> record.NewRecord
+0531     message{1}=<span class="string">'Canceling this new record will delete it'</span>;
+0532     message{2}=<span class="string">'Are you sure you want to do this?'</span>;
+0533     DlgTitle = <span class="string">'Delete new record?'</span>;
+0534     answer = questdlg(message, DlgTitle);
+0535     <span class="keyword">if</span> isnumeric(answer) || strcmpi(answer,<span class="string">'no'</span>) || strcmpi(answer,<span class="string">'cancel'</span>)
+0536         <span class="keyword">return</span>
+0537     <span class="keyword">end</span>    
+0538     data(active)=[];       
+0539     <span class="keyword">if</span> numel(data)&gt;0
+0540         data{end}.Ative=true;
+0541     <span class="keyword">end</span>
+0542 <span class="keyword">else</span>
+0543     message = <span class="string">'Discard changes and return to main window?'</span>;
+0544     DlgTitle = <span class="string">'Dischard changes?'</span>;
+0545     answer = questdlg(message, DlgTitle);
+0546     <span class="keyword">if</span> isnumeric(answer) <span class="comment">% user closed dialog window</span>
+0547         <span class="keyword">return</span>
+0548     <span class="keyword">end</span>
+0549      <span class="keyword">if</span> isnumeric(answer) || strcmpi(answer,<span class="string">'no'</span>) || strcmpi(answer,<span class="string">'cancel'</span>)
+0550         <span class="keyword">return</span>
+0551     <span class="keyword">end</span>    
+0552 <span class="keyword">end</span>
+0553 set(main,<span class="string">'Units'</span>,get(fig,<span class="string">'Units'</span>),<span class="string">'Position'</span>,get(fig,<span class="string">'Position'</span>));
+0554 delete(fig);
+0555 <a href="PointVISARGUI.html" class="code" title="function fig=PointVISARGUI(data)">PointVISARGUI</a>(data);</pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of HelpWindow</title>
+  <meta name="keywords" content="HelpWindow">
+  <meta name="description" content="get handles">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">SIRHEN</a> &gt; <a href="index.html">private</a> &gt; HelpWindow.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/SIRHEN/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>HelpWindow
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>get handles</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function HelpWindow(src,varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> get handles</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="AnalysisScreen.html" class="code" title="function fig=AnalysisScreen(prevfig)">AnalysisScreen</a>	allocate mising input</li><li><a href="SelectionScreen.html" class="code" title="function fig=SelectionScreen(prevfig)">SelectionScreen</a>	allocate mising input</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function HelpWindow(src,varargin)</a>
+0002 
+0003 <span class="comment">% get handles</span>
+0004 srcfig=ancestor(src,<span class="string">'figure'</span>);
+0005 srcunits=get(srcfig,<span class="string">'Units'</span>);
+0006 set(srcfig,<span class="string">'Units'</span>,<span class="string">'pixels'</span>);
+0007 srcpos=get(srcfig,<span class="string">'Position'</span>);
+0008 set(srcfig,<span class="string">'Units'</span>,srcunits);
+0009 
+0010 <span class="comment">% help message</span>
+0011 message={};
+0012 message{end+1}=<span class="string">''</span>;
+0013 message{end+1}=<span class="string">'Follow these steps to use the program:'</span>;
+0014 message{end+1}=<span class="string">''</span>;
+0015 message{end+1}=<span class="string">'Selection Screen:'</span>;
+0016 message{end+1}=<span class="string">'1. Load signal history from a file (Data-&gt;Load signal)'</span>;
+0017 message{end+1}=<span class="string">'2. Shift signal along time axis (Data-&gt;Shift signal)'</span>; 
+0018 message{end+1}=<span class="string">'3. Set reference time region (Data-&gt;Reference region)'</span>; 
+0019 message{end+1}=<span class="string">'4. Set experiment time region (Data-&gt;Experiment region)'</span>;
+0020 message{end+1}=<span class="string">'5. Optional adjustment of parameters (Options-&gt;General,STFT,Display)'</span>;
+0021 message{end+1}=<span class="string">'6. Click Next button to switch to Analysis Screen'</span>;
+0022 message{end+1}=<span class="string">''</span>;
+0023 message{end+1}=<span class="string">'Analysis Screen:'</span>;
+0024 message{end+1}=<span class="string">'1. Adjust calculation of velocity history (Data-&gt;Calculate history)'</span>;
+0025 message{end+1}=<span class="string">'2. Export velocity history (Data-&gt;Export history)'</span>;
+0026 message{end+1}=<span class="string">'3. Export image of STFT spectrum (Data-&gt;Export STFT image)'</span>;
+0027 message{end+1}=<span class="string">'4. Optional adjustment of parameters (Options-&gt;General,STFT,Display)'</span>;
+0028 message{end+1}=<span class="string">'5. Click Previous to switch to Selection Screen'</span>;
+0029 message{end+1}=<span class="string">''</span>;
+0030 
+0031 
+0032 <span class="comment">% create help window</span>
+0033 tag=<span class="string">'SIRHEN_HelpWindow'</span>;
+0034 fig=findall(0,<span class="string">'Type'</span>,<span class="string">'figure'</span>,<span class="string">'Tag'</span>,tag);
+0035 <span class="keyword">if</span> ~isempty(fig) <span class="comment">% figure already exists</span>
+0036     delete(fig);
+0037 <span class="keyword">end</span>
+0038 fig=figure(<span class="string">'Visible'</span>,<span class="string">'off'</span>,<span class="string">'Menubar'</span>,<span class="string">'none'</span>,<span class="string">'Toolbar'</span>,<span class="string">'none'</span>,<span class="keyword">...</span>
+0039     <span class="string">'Tag'</span>,tag,<span class="string">'NumberTitle'</span>,<span class="string">'off'</span>,<span class="string">'Name'</span>,<span class="string">'Using SIRHEN'</span>,<span class="keyword">...</span>
+0040     <span class="string">'IntegerHandle'</span>,<span class="string">'off'</span>,<span class="string">'HandleVisibility'</span>,<span class="string">'Callback'</span>,<span class="keyword">...</span>
+0041     <span class="string">'Units'</span>,<span class="string">'pixels'</span>);
+0042 
+0043 htext=uicontrol(fig,<span class="string">'Style'</span>,<span class="string">'text'</span>,<span class="string">'String'</span>,message,<span class="string">'Units'</span>,<span class="string">'pixels'</span>,<span class="keyword">...</span>
+0044     <span class="string">'HorizontalAlignment'</span>,<span class="string">'left'</span>);
+0045 <span class="comment">%[message,position]=textwrap(htext,message);</span>
+0046 extent=get(htext,<span class="string">'Extent'</span>);
+0047 <span class="comment">%set(htext,'String',message,'Position',position);</span>
+0048 <span class="comment">%set(htext,'Units','pixels');</span>
+0049 <span class="comment">%position=get(htext,'Position');</span>
+0050 <span class="comment">%position(1:2)=5;</span>
+0051 margin=5;
+0052 position=[margin margin extent(3)+margin extent(4)+margin];
+0053 set(htext,<span class="string">'Position'</span>,position,<span class="string">'BackgroundColor'</span>,get(fig,<span class="string">'Color'</span>));
+0054 
+0055 figpos=get(fig,<span class="string">'Position'</span>);
+0056 figpos(3)=position(3)+2*position(1);
+0057 figpos(4)=position(4)+2*position(2);
+0058 figpos(1)=srcpos(1)+(srcpos(3)-figpos(3))/2;
+0059 figpos(2)=srcpos(2)+(srcpos(4)-figpos(4))/2;
+0060 set(fig,<span class="string">'Position'</span>,figpos,<span class="string">'Visible'</span>,<span class="string">'on'</span>);</pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

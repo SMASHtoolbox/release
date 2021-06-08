@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of map</title>
+  <meta name="keywords" content="map">
+  <meta name="description" content="MAP Map ImageGroup coordinate to a new representation">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="../../index.html">+SMASH</a> &gt; <a href="../index.html">+ImageAnalysis</a> &gt; <a href="index.html">@ImageGroup</a> &gt; map.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+ImageAnalysis/@ImageGroup&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>map
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>MAP Map ImageGroup coordinate to a new representation</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function object=map(object,coordinate,method,argument) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">MAP Map ImageGroup coordinate to a new representation
+
+ This method applies a mapping function to one or both coordinate
+ arrays in ImageGroup object.  It is intended for advanced users only.
+ For simple transformations, use the shift and scale methods.  Many data
+ transformations can be performed directly.
+    &gt;&gt; object=2*object+1; % Data is multipied by 2 and added by one
+ 
+ If the above solutions are insufficient, this method should be called
+ with the following syntax.
+    &gt;&gt; object=map(object,coordinate,method,argument);
+
+ Valid coordinate choices are 'Grid1', 'Grid2', and 'Data'.  Three mapping
+ methods--'polynomial','table', and 'custom'--are supported.  The final
+ input depends on the method. Polynomial mapping requires a N+1 length for
+ a N-th order polynomial. Table mapping requires two-column table of input
+ and output values used for interpolation.  Custom mapping requires a
+ handle to a function that accepts and returns a single array; note that
+ this array may have one or two columns, depending on the coordinate
+ choice.
+
+ see also <a href="ImageGroup.html" class="code" title="">ImageGroup</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="map.html" class="code" title="function object=map(object,coordinate,method,argument)">map</a>	MAP Map ImageGroup coordinate to a new representation</li><li><a href="split.html" class="code" title="function varargout=split(object,imageNumbers)">split</a>	SPLIT Divide ImageGroup into Image objects</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="map.html" class="code" title="function object=map(object,coordinate,method,argument)">map</a>	MAP Map ImageGroup coordinate to a new representation</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">%MAP Map ImageGroup coordinate to a new representation</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This method applies a mapping function to one or both coordinate</span>
+0004 <span class="comment">% arrays in ImageGroup object.  It is intended for advanced users only.</span>
+0005 <span class="comment">% For simple transformations, use the shift and scale methods.  Many data</span>
+0006 <span class="comment">% transformations can be performed directly.</span>
+0007 <span class="comment">%    &gt;&gt; object=2*object+1; % Data is multipied by 2 and added by one</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% If the above solutions are insufficient, this method should be called</span>
+0010 <span class="comment">% with the following syntax.</span>
+0011 <span class="comment">%    &gt;&gt; object=map(object,coordinate,method,argument);</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">% Valid coordinate choices are 'Grid1', 'Grid2', and 'Data'.  Three mapping</span>
+0014 <span class="comment">% methods--'polynomial','table', and 'custom'--are supported.  The final</span>
+0015 <span class="comment">% input depends on the method. Polynomial mapping requires a N+1 length for</span>
+0016 <span class="comment">% a N-th order polynomial. Table mapping requires two-column table of input</span>
+0017 <span class="comment">% and output values used for interpolation.  Custom mapping requires a</span>
+0018 <span class="comment">% handle to a function that accepts and returns a single array; note that</span>
+0019 <span class="comment">% this array may have one or two columns, depending on the coordinate</span>
+0020 <span class="comment">% choice.</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">% see also ImageGroup</span>
+0023 
+0024 <span class="comment">% created January 29, 2016 by Sean Grant (Sandia National Laboratories/UT)</span>
+0025 
+0026 <span class="comment">% Note: as of making this, the Image function will work on ImageGroups</span>
+0027 <span class="comment">% directly without this.</span>
+0028 <a name="_sub0" href="#_subfunctions" class="code">function object=map(object,coordinate,method,argument)</a>
+0029 
+0030 <span class="comment">% split up ImageGroup</span>
+0031 temp=cell(object.NumberImages,1);
+0032 tempObj=cell(object.NumberImages,1);
+0033 
+0034 <span class="comment">% Perform function on each image individually</span>
+0035 [temp{:}]=<a href="split.html" class="code" title="function varargout=split(object,imageNumbers)">split</a>(object);
+0036 <span class="keyword">for</span> n=1:object.NumberImages
+0037     tempObj{n}=<a href="map.html" class="code" title="function object=map(object,coordinate,method,argument)">map</a>(temp{n},coordinate,method,argument);
+0038 <span class="keyword">end</span>
+0039 
+0040 <span class="comment">% remake ImageGroup</span>
+0041 object=SMASH.ImageAnalysis.ImageGroup(tempObj{:});
+0042 
+0043 
+0044 <span class="keyword">end</span>
+0045</pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

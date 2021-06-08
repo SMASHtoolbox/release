@@ -1,0 +1,127 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of shutdownWindows</title>
+  <meta name="keywords" content="shutdownWindows">
+  <meta name="description" content="shutdownWindows Send Windows shutdown command">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../index.html">SMASHtoolbox</a> &gt; <a href="../index.html">+SMASH</a> &gt; <a href="index.html">+System</a> &gt; shutdownWindows.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../index.html"><img alt="<" border="0" src="../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+System&nbsp;<img alt=">" border="0" src="../../../../right.png"></a></td></tr></table>-->
+
+<h1>shutdownWindows
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>shutdownWindows Send Windows shutdown command</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function shutdownWindows(password,varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> shutdownWindows Send Windows shutdown command
+
+ This function sends a Windows shutdown command to an IP address.
+    shutdownWindows(password,address);
+ The first argument &quot;password&quot; must be the Administrator password for the
+ machine at the specified &quot;address&quot; (e.g., '192.168.85.1').  Multiple
+ addresses can be specified:
+    shutdownWindows(password,address1,address2,...);
+ for machines with a common Administrator password.
+
+ NOTE: passwords are transmitted without encryption, so this function
+ should only be used on a closed network.  The host machine and all
+ clients must be properly configured *outside* of MATLAB for remote
+ shutdown.
+
+ See also SMASH.System</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% shutdownWindows Send Windows shutdown command</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This function sends a Windows shutdown command to an IP address.</span>
+0004 <span class="comment">%    shutdownWindows(password,address);</span>
+0005 <span class="comment">% The first argument &quot;password&quot; must be the Administrator password for the</span>
+0006 <span class="comment">% machine at the specified &quot;address&quot; (e.g., '192.168.85.1').  Multiple</span>
+0007 <span class="comment">% addresses can be specified:</span>
+0008 <span class="comment">%    shutdownWindows(password,address1,address2,...);</span>
+0009 <span class="comment">% for machines with a common Administrator password.</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% NOTE: passwords are transmitted without encryption, so this function</span>
+0012 <span class="comment">% should only be used on a closed network.  The host machine and all</span>
+0013 <span class="comment">% clients must be properly configured *outside* of MATLAB for remote</span>
+0014 <span class="comment">% shutdown.</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% See also SMASH.System</span>
+0017 <span class="comment">%</span>
+0018 
+0019 <span class="comment">%</span>
+0020 <span class="comment">% created October 23, 2020 by Daniel Dolan (Sandia National Laboratories)</span>
+0021 <span class="comment">%</span>
+0022 <a name="_sub0" href="#_subfunctions" class="code">function shutdownWindows(password,varargin)</a>
+0023 
+0024 <span class="comment">% manage input</span>
+0025 assert(nargin &gt;= 2,<span class="string">'ERROR: insufficient input'</span>);
+0026 assert(ischar(password),<span class="string">'ERROR: invalid password'</span>);
+0027 
+0028 [~,list]=system(<span class="string">'net use'</span>);
+0029 
+0030 <span class="comment">% send shutdown command(s)</span>
+0031 <span class="keyword">for</span> m=1:numel(varargin)
+0032     <span class="comment">% verify address</span>
+0033     address=varargin{m};
+0034     <span class="keyword">try</span>
+0035         address=packtools.call(<span class="string">'listIP4'</span>,address);
+0036     <span class="keyword">catch</span>
+0037         error(<span class="string">'ERROR: invalid IP address'</span>);
+0038     <span class="keyword">end</span>
+0039     <span class="keyword">for</span> n=1:numel(address)
+0040         delay=packtools.call(<span class="string">'ping'</span>,address{n},100);
+0041          <span class="keyword">if</span> isnan(delay)
+0042              fprintf(<span class="string">'No response from %s\n'</span>,address{n});
+0043              <span class="keyword">continue</span>
+0044          <span class="keyword">end</span>
+0045          <span class="comment">% verify network use</span>
+0046          <span class="keyword">if</span> ~contains(list,address{n})
+0047              command=sprintf(<span class="string">'net use \\\\%s /user:Administrator %s'</span>,<span class="keyword">...</span>
+0048                  address{n},password);
+0049              [value,response]=system(command);
+0050              <span class="keyword">if</span> value &gt; 0
+0051                  disp(response);
+0052                  <span class="keyword">continue</span>
+0053              <span class="keyword">end</span>
+0054              pause(1);
+0055          <span class="keyword">end</span>
+0056          <span class="comment">% send command</span>
+0057          command=sprintf(<span class="string">'shutdown -s -m \\\\%s'</span>,address{n});
+0058          [value,response]=system(command);
+0059          <span class="keyword">if</span> value &gt; 0
+0060              disp(response);
+0061          <span class="keyword">end</span>         
+0062     <span class="keyword">end</span>        
+0063 <span class="keyword">end</span>
+0064 
+0065 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

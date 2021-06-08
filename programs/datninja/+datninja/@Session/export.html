@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of export</title>
+  <meta name="keywords" content="export">
+  <meta name="description" content="manage input">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../../index.html">datninja</a> &gt; <a href="#">+datninja</a> &gt; <a href="index.html">@Session</a> &gt; export.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../../index.html"><img alt="<" border="0" src="../../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/datninja/+datninja/@Session&nbsp;<img alt=">" border="0" src="../../../../../../right.png"></a></td></tr></table>-->
+
+<h1>export
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>manage input</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>function export(object,file,format) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> manage input</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function export(object,file,format)</a>
+0002 
+0003 <span class="comment">% manage input</span>
+0004 <span class="keyword">if</span> (nargin &lt; 2) || isempty(file)
+0005     [file,location]=uiputfile(<span class="string">'*.*'</span>,<span class="string">'Select export file'</span>);
+0006     <span class="keyword">if</span> isnumeric(file)
+0007         <span class="keyword">return</span>
+0008     <span class="keyword">end</span>
+0009     file=fullfile(location,file);
+0010 <span class="keyword">else</span>
+0011     assert(ischar(file) &amp;&amp; logical(exist(file,<span class="string">'file'</span>)),<span class="keyword">...</span>
+0012         <span class="string">'ERROR: invalid image file'</span>);
+0013 <span class="keyword">end</span>
+0014 
+0015 <span class="keyword">if</span> (nargin &lt; 3) || isempty(format)
+0016     format=<span class="string">'%#+.6g %#+.6g'</span>;
+0017 <span class="keyword">end</span>
+0018 <span class="keyword">if</span> ~strcmp(format(end-1:end),<span class="string">'\n'</span>)
+0019     format=[format <span class="string">'\n'</span>];
+0020 <span class="keyword">end</span>
+0021 
+0022 
+0023 <span class="comment">% perform export</span>
+0024 fid=fopen(file,<span class="string">'w'</span>);
+0025 fprintf(fid,<span class="string">'Source image: %s\n'</span>,object.ImageFile);
+0026 fprintf(fid,<span class="string">'(x,y) data exported %s\n'</span>,datestr(now));
+0027 fprintf(fid,format,transpose(object.DataTable(:,3:4)));
+0028 fclose(fid);
+0029 
+0030 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,488 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of createGUI</title>
+  <meta name="keywords" content="createGUI">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../../index.html">datninja</a> &gt; <a href="../index.html">private</a> &gt; <a href="index.html">old</a> &gt; createGUI.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../../index.html"><img alt="<" border="0" src="../../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/datninja/private/old&nbsp;<img alt=">" border="0" src="../../../../../../right.png"></a></td></tr></table>-->
+
+<h1>createGUI
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>function db=createGUI(FontSize) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="createGUI.html" class="code" title="function db=createGUI(FontSize)">createGUI</a>	</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="createGUI.html" class="code" title="function db=createGUI(FontSize)">createGUI</a>	</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function changeTab(varargin)</a></li><li><a href="#_sub2" class="code">function updateMN(src,varargin)</a></li><li><a href="#_sub3" class="code">function updateXY(src,varargin)</a></li><li><a href="#_sub4" class="code">function storeReference(varargin)</a></li><li><a href="#_sub5" class="code">function storeData(varargin)</a></li><li><a href="#_sub6" class="code">function selectReference(varargin)</a></li><li><a href="#_sub7" class="code">function selectData(varargin)</a></li><li><a href="#_sub8" class="code">function updateReference(varargin)</a></li><li><a href="#_sub9" class="code">function removeReference(varargin)</a></li><li><a href="#_sub10" class="code">function startOver(varargin)</a></li><li><a href="#_sub11" class="code">function exitProgram(varargin)</a></li><li><a href="#_sub12" class="code">function loadFile(varargin)</a></li><li><a href="#_sub13" class="code">function selectPoint(varargin)</a></li><li><a href="#_sub14" class="code">function pressKey(~,event)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function db=createGUI(FontSize)</a>
+0002 
+0003 PixelFormat=<span class="string">'%.3f'</span>;
+0004 VariableFormat=<span class="string">'%+#.6g'</span>;
+0005 
+0006 session=datninja.Session();
+0007 
+0008 <span class="comment">%% mock up dialog box</span>
+0009 db=SMASH.MUI.DialogPlot(<span class="string">'FontSize'</span>,FontSize);
+0010 set(db.Figure,<span class="string">'IntegerHandle'</span>,<span class="string">'off'</span>,<span class="string">'HandleVisibility'</span>,<span class="string">'callback'</span>);
+0011 db.Name=<span class="string">'dataninja 2.0'</span>;
+0012 db.Hidden=true;
+0013 setappdata(db.Figure,<span class="string">'Session'</span>,session);
+0014 
+0015 spacer(1)=addblock(db,<span class="string">'text'</span>,<span class="string">'junk'</span>,20);
+0016 
+0017 h=addblock(db,<span class="string">'text'</span>,<span class="string">'Reference point:'</span>);
+0018 set(h,<span class="string">'FontWeight'</span>,<span class="string">'bold'</span>,<span class="string">'Tag'</span>,<span class="string">'PointLabel'</span>);
+0019 h=addblock(db,<span class="string">'cedit'</span>,<span class="string">'m='</span>,[5 10]);
+0020 set(h(end),<span class="string">'Tag'</span>,<span class="string">'mEdit'</span>);
+0021 h=addblock(db,<span class="string">'cedit'</span>,<span class="string">'n='</span>,[5 10]);
+0022 set(h(end),<span class="string">'Tag'</span>,<span class="string">'nEdit'</span>);
+0023 h=addblock(db,<span class="string">'cedit'</span>,<span class="string">'x='</span>,[5 10]);
+0024 set(h(end),<span class="string">'Tag'</span>,<span class="string">'xEdit'</span>);
+0025 hA=addblock(db,<span class="string">'cedit'</span>,<span class="string">'y='</span>,[5 10]);
+0026 set(hA(end),<span class="string">'Tag'</span>,<span class="string">'yEdit'</span>);
+0027 
+0028 hB=addblock(db,<span class="string">'button'</span>,<span class="string">'Store'</span>,10);
+0029 set(hB,<span class="string">'Tag'</span>,<span class="string">'StorePoint'</span>);
+0030 
+0031 hList=addblock(db,<span class="string">'listbox'</span>,<span class="string">'Stored points:'</span>,{<span class="string">''</span>},15,20);
+0032 set(hList(1),<span class="string">'FontWeight'</span>,<span class="string">'bold'</span>);
+0033 set(hList(2),<span class="string">'String'</span>,{<span class="string">'(none)'</span>},<span class="string">'Enable'</span>,<span class="string">'off'</span>,<span class="string">'Tag'</span>,<span class="string">'StoredPoints'</span>);
+0034 
+0035 h=addblock(db,<span class="string">'button'</span>,{<span class="string">'Update'</span> <span class="string">'Remove'</span>});
+0036 set(h(1),<span class="string">'Tag'</span>,<span class="string">'Update'</span>);
+0037 set(h(2),<span class="string">'Tag'</span>,<span class="string">'Remove'</span>);
+0038 
+0039 spacer(2)=addblock(db,<span class="string">'text'</span>,<span class="string">'junk'</span>,20);
+0040 
+0041 finish(db);
+0042 delete(spacer);
+0043 
+0044 posA=getpixelposition(hA(2));
+0045 posB=getpixelposition(hB);
+0046 posB(1)=posA(1);
+0047 posB(3)=posA(3);
+0048 setpixelposition(hB,posB);
+0049 
+0050 <span class="comment">%% port controls to tabs</span>
+0051 h=get(db.ControlPanel,<span class="string">'Children'</span>);
+0052 
+0053 hTabGroup=uitabgroup(<span class="string">'Parent'</span>,db.ControlPanel,<span class="string">'TabLocation'</span>,<span class="string">'bottom'</span>,<span class="keyword">...</span>
+0054     <span class="string">'SelectionChangedFcn'</span>,@<a href="#_sub1" class="code" title="subfunction changeTab(varargin)">changeTab</a>);
+0055     <a name="_sub1" href="#_subfunctions" class="code">function changeTab(varargin)</a>
+0056         <span class="keyword">switch</span> varargin{2}.NewValue
+0057             <span class="keyword">case</span> hTab(1)                               
+0058                 data=session.ReferenceTable;
+0059                 hEdit=[hReference.mEdit hReference.nEdit <span class="keyword">...</span>
+0060                     hReference.xEdit hReference.yEdit];
+0061                 hList=hReference.StoredPoints;
+0062             <span class="keyword">case</span> hTab(2)
+0063                 <span class="keyword">try</span>
+0064                     analyzeReference(session);
+0065                     analyzeData(session);
+0066                 <span class="keyword">catch</span>
+0067                 <span class="keyword">end</span>
+0068                 data=session.DataTable;
+0069                 hEdit=[hData.mEdit hData.nEdit <span class="keyword">...</span>
+0070                     hData.xEdit hData.yEdit];
+0071                 hList=hData.StoredPoints;
+0072         <span class="keyword">end</span>
+0073         <span class="keyword">if</span> isempty(data)
+0074             set(hSelectedPoints,<span class="string">'XData'</span>,[],<span class="string">'YData'</span>,[]);
+0075             set(hList,<span class="string">'String'</span>,<span class="string">'(none)'</span>,<span class="string">'Value'</span>,1,<span class="string">'Enable'</span>,<span class="string">'off'</span>);
+0076         <span class="keyword">else</span>                    
+0077             set(hSelectedPoints,<span class="string">'XData'</span>,data(:,1),<span class="string">'YData'</span>,data(:,2));
+0078             list=cell(size(data,1),1);
+0079             <span class="keyword">for</span> k=1:numel(list)
+0080                 list{k}=sprintf(<span class="string">'Point %d'</span>,k);
+0081             <span class="keyword">end</span>
+0082             set(hList,<span class="string">'String'</span>,list,<span class="string">'Value'</span>,1,<span class="string">'Enable'</span>,<span class="string">'on'</span>);
+0083         <span class="keyword">end</span>
+0084         set(hEdit,<span class="string">'String'</span>,<span class="string">''</span>);
+0085         set(hCurrentPoint,<span class="string">'XData'</span>,[],<span class="string">'YData'</span>,[]);        
+0086     <span class="keyword">end</span>
+0087 hTab(1)=uitab(hTabGroup,<span class="string">'Title'</span>,<span class="string">'Reference'</span>,<span class="string">'Tag'</span>,<span class="string">'Reference'</span>);
+0088 set(h,<span class="string">'Parent'</span>,hTab(1));
+0089 
+0090 hTab(2)=uitab(hTabGroup,<span class="string">'Title'</span>,<span class="string">'Data'</span>,<span class="string">'Tag'</span>,<span class="string">'Data'</span>);
+0091 new=copyobj(h,hTab(2));
+0092 
+0093 <span class="keyword">for</span> m=1:numel(hTab)
+0094     children=get(hTab(m),<span class="string">'Children'</span>);
+0095     set(hTab(m),<span class="string">'Children'</span>,children(end:-1:1));
+0096 <span class="keyword">end</span>
+0097 
+0098 
+0099 hReference=SMASH.MUI.findTags(hTab(1));
+0100 hData=SMASH.MUI.findTags(hTab(2));
+0101 set(hData.PointLabel,<span class="string">'String'</span>,<span class="string">'Data point:'</span>);
+0102 
+0103 set([hReference.mEdit hReference.nEdit hData.mEdit hData.nEdit],<span class="keyword">...</span>
+0104     <span class="string">'Callback'</span>,@<a href="#_sub2" class="code" title="subfunction updateMN(src,varargin)">updateMN</a>)
+0105     <a name="_sub2" href="#_subfunctions" class="code">function updateMN(src,varargin)</a>
+0106         new=sscanf(src.String,<span class="string">'%f'</span>,1);
+0107         <span class="keyword">if</span> isempty(new)
+0108             src.String=<span class="string">''</span>;
+0109             set(hCurrentPoint,<span class="string">'XData'</span>,nan,<span class="string">'YData'</span>,nan);
+0110             <span class="keyword">return</span>
+0111         <span class="keyword">end</span>
+0112         new=sprintf(<span class="string">'%.3f'</span>,new);
+0113         set(src,<span class="string">'String'</span>,new);
+0114         new=sscanf(new,<span class="string">'%g'</span>);
+0115         <span class="keyword">switch</span> src.Tag
+0116             <span class="keyword">case</span> <span class="string">'mEdit'</span>
+0117                 set(hCurrentPoint,<span class="string">'XData'</span>,new);
+0118             <span class="keyword">case</span> <span class="string">'nEdit'</span>
+0119                 set(hCurrentPoint,<span class="string">'YData'</span>,new);
+0120         <span class="keyword">end</span>
+0121         <span class="keyword">if</span> strcmpi(src.Parent.Tag,<span class="string">'Data'</span>)
+0122             <span class="keyword">if</span> isempty(session.ParameterMatrix)
+0123                 set([hData.xEdit hData.yEdit],<span class="string">'String'</span>,<span class="string">''</span>);
+0124             <span class="keyword">else</span>
+0125                 Q=ones(1,3);
+0126                 Q(2)=sscanf(hData.mEdit.String,<span class="string">'%g'</span>,1);
+0127                 Q(3)=sscanf(hData.nEdit.String,<span class="string">'%g'</span>,1);
+0128                 Q=Q*session.ParameterMatrix;
+0129                 hData.xEdit.String=sprintf(VariableFormat,Q(1));
+0130                 hData.yEdit.String=sprintf(VariableFormat,Q(2));
+0131             <span class="keyword">end</span>
+0132         <span class="keyword">end</span>
+0133     <span class="keyword">end</span>
+0134 
+0135 set([hData.xEdit hData.yEdit],<span class="string">'Enable'</span>,<span class="string">'off'</span>);
+0136 set([hReference.xEdit hReference.yEdit],<span class="keyword">...</span>
+0137     <span class="string">'Callback'</span>,@<a href="#_sub3" class="code" title="subfunction updateXY(src,varargin)">updateXY</a>)
+0138     <a name="_sub3" href="#_subfunctions" class="code">function updateXY(src,varargin)</a>
+0139         new=sscanf(src.String,<span class="string">'%g'</span>,1);
+0140         <span class="keyword">if</span> isempty(new)
+0141             set(src.String,<span class="string">''</span>);
+0142             <span class="keyword">return</span>
+0143         <span class="keyword">end</span>
+0144         new=sprintf(VariableFormat,new);
+0145         set(src,<span class="string">'String'</span>,new);
+0146     <span class="keyword">end</span>
+0147 
+0148 set(hReference.StorePoint,<span class="string">'Callback'</span>,@<a href="#_sub4" class="code" title="subfunction storeReference(varargin)">storeReference</a>);
+0149 <a name="_sub4" href="#_subfunctions" class="code">function storeReference(varargin)</a>
+0150     list=[hReference.mEdit hReference.nEdit hReference.xEdit hReference.yEdit];
+0151     data=nan(size(list));    
+0152     <span class="keyword">for</span> k=1:numel(list)
+0153         temp=get(list(k),<span class="string">'String'</span>);
+0154         temp=sscanf(temp,<span class="string">'%g'</span>,1);
+0155         <span class="keyword">if</span> isempty(temp)
+0156             <span class="keyword">return</span>
+0157         <span class="keyword">end</span>
+0158         data(k)=temp;
+0159     <span class="keyword">end</span>
+0160     x=hSelectedPoints.XData;
+0161     x(end+1)=data(1);
+0162     y=hSelectedPoints.YData;
+0163     y(end+1)=data(2);
+0164     set(hSelectedPoints,<span class="string">'XData'</span>,x,<span class="string">'YData'</span>,y);    
+0165     session.ReferenceTable(end+1,:)=data;
+0166     temp=get(hReference.StoredPoints,<span class="string">'String'</span>);
+0167     <span class="keyword">if</span> strcmpi(hReference.StoredPoints.Enable,<span class="string">'on'</span>)
+0168         temp{end+1}=sprintf(<span class="string">'Point %d'</span>,numel(temp)+1);
+0169     <span class="keyword">else</span>
+0170         temp={<span class="string">'Point 1'</span>};
+0171     <span class="keyword">end</span>
+0172     set(hReference.StoredPoints,<span class="string">'String'</span>,temp,<span class="string">'Value'</span>,numel(temp),<span class="keyword">...</span>
+0173         <span class="string">'Enable'</span>,<span class="string">'on'</span>);    
+0174 <span class="keyword">end</span>
+0175 
+0176 set(hData.StorePoint,<span class="string">'Callback'</span>,@<a href="#_sub5" class="code" title="subfunction storeData(varargin)">storeData</a>);
+0177 <a name="_sub5" href="#_subfunctions" class="code">function storeData(varargin)</a>
+0178     list=[hData.mEdit hData.nEdit hData.xEdit hData.yEdit];
+0179     data=nan(size(list));    
+0180     <span class="keyword">for</span> k=1:numel(list)
+0181         temp=get(list(k),<span class="string">'String'</span>);
+0182         temp=sscanf(temp,<span class="string">'%g'</span>,1);
+0183         <span class="keyword">if</span> ~isempty(temp)
+0184             data(k)=temp;
+0185         <span class="keyword">end</span>
+0186     <span class="keyword">end</span>
+0187     x=hSelectedPoints.XData;
+0188     x(end+1)=data(1);
+0189     y=hSelectedPoints.YData;
+0190     y(end+1)=data(2);
+0191     set(hSelectedPoints,<span class="string">'XData'</span>,x,<span class="string">'YData'</span>,y);    
+0192     session.DataTable(end+1,:)=data;
+0193     temp=get(hData.StoredPoints,<span class="string">'String'</span>);
+0194     <span class="keyword">if</span> strcmpi(hData.StoredPoints.Enable,<span class="string">'on'</span>)
+0195         temp{end+1}=sprintf(<span class="string">'Point %d'</span>,numel(temp)+1);
+0196     <span class="keyword">else</span>
+0197         temp={<span class="string">'Point 1'</span>};
+0198     <span class="keyword">end</span>
+0199     set(hData.StoredPoints,<span class="string">'String'</span>,temp,<span class="string">'Value'</span>,numel(temp),<span class="keyword">...</span>
+0200         <span class="string">'Enable'</span>,<span class="string">'on'</span>);    
+0201 <span class="keyword">end</span>
+0202 
+0203 set(hReference.StoredPoints,<span class="string">'Callback'</span>,@<a href="#_sub6" class="code" title="subfunction selectReference(varargin)">selectReference</a>);
+0204     <a name="_sub6" href="#_subfunctions" class="code">function selectReference(varargin)</a>
+0205         index=get(hReference.StoredPoints,<span class="string">'Value'</span>);        
+0206         data=session.ReferenceTable(index,:);
+0207         hReference.mEdit.String=sprintf(PixelFormat,data(1));
+0208         <a href="#_sub2" class="code" title="subfunction updateMN(src,varargin)">updateMN</a>(hReference.mEdit);
+0209         hReference.nEdit.String=sprintf(PixelFormat,data(2));
+0210         <a href="#_sub2" class="code" title="subfunction updateMN(src,varargin)">updateMN</a>(hReference.nEdit);
+0211         hReference.xEdit.String=sprintf(VariableFormat,data(3));
+0212         hReference.yEdit.String=sprintf(VariableFormat,data(4));        
+0213     <span class="keyword">end</span>
+0214 
+0215 set(selectData.StoredPoints,<span class="string">'Callback'</span>,@<a href="#_sub7" class="code" title="subfunction selectData(varargin)">selectData</a>);
+0216     <a name="_sub7" href="#_subfunctions" class="code">function selectData(varargin)</a>
+0217 <span class="comment">%         index=get(hData.StoredPoints,'Value');</span>
+0218 <span class="comment">%         data=session.DataTable(index,:);</span>
+0219 <span class="comment">%         hData.mEdit.String=sprintf(PixelFormat,data(1));</span>
+0220 <span class="comment">%         updateMN(hData.mEdit);</span>
+0221 <span class="comment">%         hData.nEdit.String=sprintf(PixelFormat,data(2));</span>
+0222 <span class="comment">%         updateMN(hData.nEdit);</span>
+0223 <span class="comment">%         hData.xEdit.String=sprintf(VariableFormat,data(3));</span>
+0224 <span class="comment">%         hData.yEdit.String=sprintf(VariableFormat,data(4));</span>
+0225     <span class="keyword">end</span>
+0226 
+0227 set(hReference.Update,<span class="string">'Callback'</span>,@<a href="#_sub8" class="code" title="subfunction updateReference(varargin)">updateReference</a>);
+0228     <a name="_sub8" href="#_subfunctions" class="code">function updateReference(varargin)        </a>
+0229         index=get(hReference.StoredPoints,<span class="string">'Value'</span>);
+0230         <a href="#_sub4" class="code" title="subfunction storeReference(varargin)">storeReference</a>();
+0231         session.ReferenceTable(index,:)=session.ReferenceTable(<span class="keyword">end</span>,:);
+0232         session.ReferenceTable=session.ReferenceTable(1:end-1,:);
+0233         list=hReference.StoredPoints.String;
+0234         hReference.StoredPoints.Value=index;
+0235         hReference.StoredPoints.String=list(1:end-1);        
+0236         hSelectedPoints.XData=session.ReferenceTable(:,1);
+0237         hSelectedPoints.YData=session.ReferenceTable(:,2);
+0238         
+0239     <span class="keyword">end</span>
+0240 
+0241 set(hReference.Remove,<span class="string">'Callback'</span>,@<a href="#_sub9" class="code" title="subfunction removeReference(varargin)">removeReference</a>);
+0242     <a name="_sub9" href="#_subfunctions" class="code">function removeReference(varargin)</a>
+0243         index=get(hReference.StoredPoints,<span class="string">'Value'</span>);    
+0244         M=size(session.ReferenceTable,1);
+0245         k=[1:index-1 index+1:M];
+0246         session.ReferenceTable=session.ReferenceTable(k,:);
+0247         <span class="keyword">if</span> numel(k) &gt;= 1 
+0248             hReference.StoredPoints.Value=max(index-1,1);
+0249             list=hReference.StoredPoints.String;
+0250             hReference.StoredPoints.String=list(k);            
+0251         <span class="keyword">else</span>
+0252             hReference.StoredPoints.Value=1;
+0253             hReference.StoredPoints.String=<span class="string">'(none)'</span>;
+0254             hReference.StoredPoints.Enable=<span class="string">'off'</span>;
+0255         <span class="keyword">end</span>
+0256         set(hSelectedPoints,<span class="keyword">...</span>
+0257             <span class="string">'XData'</span>,session.ReferenceTable(:,1),<span class="keyword">...</span>
+0258             <span class="string">'YData'</span>,session.ReferenceTable(:,2));
+0259     <span class="keyword">end</span>
+0260 
+0261 <span class="comment">%% menus</span>
+0262 hm=uimenu(db.Figure,<span class="string">'Label'</span>,<span class="string">'Session'</span>);
+0263 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Start over'</span>,<span class="string">'Callback'</span>,@<a href="#_sub10" class="code" title="subfunction startOver(varargin)">startOver</a>);
+0264     <a name="_sub10" href="#_subfunctions" class="code">function startOver(varargin)</a>
+0265         delete(db.Figure);
+0266         <a href="createGUI.html" class="code" title="function db=createGUI(FontSize)">createGUI</a>(FontSize);
+0267     <span class="keyword">end</span>
+0268 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Load previous'</span>,<span class="string">'Separator'</span>,<span class="string">'on'</span>);
+0269 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Save current'</span>);
+0270 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Exit'</span>,<span class="string">'Separator'</span>,<span class="string">'on'</span>,<span class="string">'Callback'</span>,@<a href="#_sub11" class="code" title="subfunction exitProgram(varargin)">exitProgram</a>);
+0271     <a name="_sub11" href="#_subfunctions" class="code">function exitProgram(varargin)</a>
+0272         delete(db.Figure);
+0273     <span class="keyword">end</span>
+0274 
+0275 hm=uimenu(db.Figure,<span class="string">'Label'</span>,<span class="string">'Image'</span>);
+0276 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Load file'</span>,<span class="string">'Callback'</span>,@<a href="#_sub12" class="code" title="subfunction loadFile(varargin)">loadFile</a>);
+0277     <a name="_sub12" href="#_subfunctions" class="code">function loadFile(varargin)</a>
+0278         loadImage(session);
+0279         set(hImage,<span class="string">'CData'</span>,session.Image,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0280     <span class="keyword">end</span>
+0281 sub=uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Rotate'</span>,<span class="string">'Separator'</span>,<span class="string">'on'</span>);
+0282 uimenu(sub,<span class="string">'Label'</span>,<span class="string">'Clockwise'</span>);
+0283 uimenu(sub,<span class="string">'Label'</span>,<span class="string">'Counter clockwise'</span>);
+0284 sub=uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Flip'</span>);
+0285 uimenu(sub,<span class="string">'Label'</span>,<span class="string">'Vertical'</span>);
+0286 uimenu(sub,<span class="string">'Label'</span>,<span class="string">'Horizontal'</span>);
+0287 sub=uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Log scaling'</span>);
+0288 uimenu(sub,<span class="string">'Label'</span>,<span class="string">'None'</span>);
+0289 uimenu(sub,<span class="string">'Label'</span>,<span class="string">'Horizontal'</span>);
+0290 uimenu(sub,<span class="string">'Label'</span>,<span class="string">'Vertical'</span>);
+0291 uimenu(sub,<span class="string">'Label'</span>,<span class="string">'Both'</span>);
+0292 
+0293 hm=uimenu(db.Figure,<span class="string">'Label'</span>,<span class="string">'Marker'</span>);
+0294 sub=uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Size'</span>);
+0295 uimenu(sub,<span class="string">'Label'</span>,<span class="string">'5 points'</span>);
+0296 uimenu(sub,<span class="string">'Label'</span>,<span class="string">'10 points'</span>,<span class="string">'Checked'</span>,<span class="string">'on'</span>);
+0297 uimenu(sub,<span class="string">'Label'</span>,<span class="string">'15 points'</span>);
+0298 uimenu(sub,<span class="string">'Label'</span>,<span class="string">'20 points'</span>);
+0299 uimenu(sub,<span class="string">'Label'</span>,<span class="string">'25 points'</span>);
+0300 uimenu(sub,<span class="string">'Label'</span>,<span class="string">'50 points'</span>);
+0301 uimenu(sub,<span class="string">'Label'</span>,<span class="string">'100 points'</span>);
+0302 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Color'</span>);
+0303 
+0304 <span class="comment">%% axes</span>
+0305 set(db.Axes,<span class="string">'FontSize'</span>,FontSize,<span class="string">'Color'</span>,<span class="string">'none'</span>,<span class="keyword">...</span>
+0306     <span class="string">'ButtonDownFcn'</span>,@<a href="#_sub13" class="code" title="subfunction selectPoint(varargin)">selectPoint</a>)
+0307 label{1}=<span class="string">'Press arrow key for pan and shift-arrow key for zoom'</span>;
+0308 label{2}=<span class="string">'Press ''a'' for auto scaling and ''t'' for tight scaling'</span>;
+0309 title(db.Axes,label);
+0310 
+0311 hImage=image(db.Axes,<span class="string">'Visible'</span>,<span class="string">'off'</span>,<span class="string">'ButtonDownFcn'</span>,@<a href="#_sub13" class="code" title="subfunction selectPoint(varargin)">selectPoint</a>);
+0312 hCurrentPoint=line(db.Axes',<span class="string">'XData'</span>,nan,<span class="string">'YData'</span>,nan,<span class="string">'Color'</span>,<span class="string">'r'</span>,<span class="keyword">...</span>
+0313     <span class="string">'MarkerSize'</span>,10,<span class="string">'Marker'</span>,<span class="string">'x'</span>,<span class="string">'LineStyle'</span>,<span class="string">'none'</span>);
+0314 hSelectedPoints=line(db.Axes,<span class="string">'XData'</span>,[],<span class="string">'YData'</span>,[],<span class="string">'Color'</span>,<span class="string">'r'</span>,<span class="keyword">...</span>
+0315     <span class="string">'MarkerSize'</span>,10,<span class="string">'Marker'</span>,<span class="string">'sq'</span>,<span class="string">'LineStyle'</span>,<span class="string">'none'</span>);
+0316 set(db.Axes,<span class="string">'YDir'</span>,<span class="string">'reverse'</span>);
+0317 xlabel(db.Axes,<span class="string">'Pixel coordinate m'</span>);
+0318 ylabel(db.Axes,<span class="string">'Pixel coordinate n'</span>);
+0319 
+0320     <a name="_sub13" href="#_subfunctions" class="code">function selectPoint(varargin)</a>
+0321         location=get(db.Axes,<span class="string">'CurrentPoint'</span>);
+0322         location=location(1,1:2);
+0323         set(hCurrentPoint,<span class="string">'XData'</span>,location(1),<span class="string">'YData'</span>,location(2));
+0324         value{1}=sprintf(PixelFormat,location(1));
+0325         value{2}=sprintf(PixelFormat,location(2));
+0326         current=hTabGroup.SelectedTab;
+0327         <span class="keyword">switch</span> current.Tag
+0328             <span class="keyword">case</span> <span class="string">'Reference'</span>
+0329                 set(hReference.mEdit,<span class="string">'String'</span>,value{1},<span class="string">'UserData'</span>,value{1});
+0330                 set(hReference.nEdit,<span class="string">'String'</span>,value{2},<span class="string">'UserData'</span>,value{2});
+0331             <span class="keyword">case</span> <span class="string">'Data'</span>
+0332                 set(hData.mEdit,<span class="string">'String'</span>,value{1},<span class="string">'UserData'</span>,value{1});
+0333                 set(hData.nEdit,<span class="string">'String'</span>,value{2},<span class="string">'UserData'</span>,value{2});
+0334                 <span class="keyword">if</span> ~isempty(session.ParameterMatrix)
+0335                     Q=[1 location]*session.ParameterMatrix;
+0336                     value{1}=sprintf(VariableFormat,Q(1));
+0337                     value{2}=sprintf(VariableFormat,Q(2));
+0338                     set(hData.xEdit,<span class="string">'String'</span>,value{1},<span class="string">'UserData'</span>,value{1});
+0339                     set(hData.yEdit,<span class="string">'String'</span>,value{2},<span class="string">'UserData'</span>,value{2});
+0340                 <span class="keyword">end</span>
+0341         <span class="keyword">end</span>
+0342     <span class="keyword">end</span>
+0343 
+0344 <span class="comment">%% figure</span>
+0345 ht=findobj(db.Figure,<span class="string">'Type'</span>,<span class="string">'uitoolbar'</span>);
+0346 delete(ht);
+0347 
+0348 pos=getpixelposition(db.Figure);
+0349 pos(3)=2*pos(4);
+0350 setpixelposition(db.Figure,pos);
+0351 movegui(db.Figure,<span class="string">'center'</span>);
+0352 
+0353 set(db.Figure,<span class="string">'WindowKeyPressFcn'</span>,@<a href="#_sub14" class="code" title="subfunction pressKey(~,event)">pressKey</a>)
+0354     <a name="_sub14" href="#_subfunctions" class="code">function pressKey(~,event)</a>
+0355         current=get(db.Figure.CurrentObject,<span class="string">'Type'</span>);
+0356         <span class="keyword">if</span> strcmpi(current,<span class="string">'uicontrol'</span>)
+0357             <span class="keyword">return</span>
+0358         <span class="keyword">end</span>
+0359         modifier=event.Modifier;
+0360         <span class="keyword">switch</span> numel(modifier)
+0361             <span class="keyword">case</span> 0
+0362                 <span class="comment">% keep going</span>
+0363             <span class="keyword">case</span> 1
+0364                 <span class="keyword">if</span> strcmpi(modifier,<span class="string">'alt'</span>) || strcmpi(modifier,<span class="string">'control'</span>)
+0365                     <span class="keyword">return</span>
+0366                 <span class="keyword">end</span>
+0367             <span class="keyword">otherwise</span>
+0368                 <span class="keyword">return</span>
+0369         <span class="keyword">end</span>
+0370         key = event.Key;
+0371         <span class="keyword">if</span> ~ischar(key)
+0372             <span class="keyword">return</span>
+0373         <span class="keyword">end</span>
+0374         PanFactor=0.10;
+0375         ZoomFactor=2.00;
+0376         <span class="keyword">switch</span> lower(key)
+0377             <span class="keyword">case</span> <span class="string">'s'</span>
+0378                 <span class="keyword">if</span> strcmpi(modifier,<span class="string">'shift'</span>)
+0379                     
+0380                 <span class="keyword">else</span>
+0381                     <span class="comment">%StorePointPushed(app,[])</span>
+0382                 <span class="keyword">end</span>
+0383             <span class="keyword">case</span> <span class="string">'a'</span>
+0384                 axis(db.Axes,<span class="string">'auto'</span>);
+0385             <span class="keyword">case</span> <span class="string">'t'</span>
+0386                 axis(db.Axes,<span class="string">'tight'</span>);
+0387                 <span class="keyword">return</span>
+0388             <span class="keyword">case</span> <span class="string">'leftarrow'</span>
+0389                 bound=db.Axes.XLim;
+0390                 width=bound(2)-bound(1);
+0391                 <span class="keyword">if</span> strcmpi(modifier,<span class="string">'shift'</span>)
+0392                     center=(bound(1)+bound(2))/2;
+0393                     bound=center+width*ZoomFactor.*[-0.5 0.5];
+0394                 <span class="keyword">else</span>
+0395                     bound=bound-width*PanFactor;
+0396                 <span class="keyword">end</span>
+0397                 db.Axes.XLim=bound;
+0398             <span class="keyword">case</span> <span class="string">'rightarrow'</span>
+0399                 bound=db.Axes.XLim;
+0400                 width=bound(2)-bound(1);
+0401                 <span class="keyword">if</span> strcmpi(modifier,<span class="string">'shift'</span>)
+0402                     center=(bound(1)+bound(2))/2;
+0403                     bound=center+width/ZoomFactor.*[-0.5 0.5];
+0404                 <span class="keyword">else</span>
+0405                     bound=bound+width*PanFactor;
+0406                 <span class="keyword">end</span>
+0407                 db.Axes.XLim=bound;
+0408             <span class="keyword">case</span> <span class="string">'downarrow'</span>
+0409                 bound=db.Axes.YLim;
+0410                 width=bound(2)-bound(1);
+0411                 <span class="keyword">if</span> strcmpi(modifier,<span class="string">'shift'</span>)
+0412                     center=(bound(1)+bound(2))/2;
+0413                     bound=center+width*ZoomFactor.*[-0.5 0.5];
+0414                 <span class="keyword">elseif</span> strcmpi(db.Axes.YDir,<span class="string">'normal'</span>)
+0415                     bound=bound-width*PanFactor;
+0416                 <span class="keyword">else</span>
+0417                     bound=bound+width*PanFactor;
+0418                 <span class="keyword">end</span>
+0419                 db.Axes.YLim=bound;
+0420             <span class="keyword">case</span> <span class="string">'uparrow'</span>
+0421                 bound=db.Axes.YLim;
+0422                 width=bound(2)-bound(1);
+0423                 <span class="keyword">if</span> strcmpi(modifier,<span class="string">'shift'</span>)
+0424                     center=(bound(1)+bound(2))/2;
+0425                     bound=center+width/ZoomFactor.*[-0.5 0.5];
+0426                 <span class="keyword">elseif</span> strcmpi(db.Axes.YDir,<span class="string">'normal'</span>)
+0427                     bound=bound+width*PanFactor;
+0428                 <span class="keyword">else</span>
+0429                     bound=bound-width*PanFactor;
+0430                 <span class="keyword">end</span>
+0431                 db.Axes.YLim=bound;
+0432             <span class="keyword">case</span> <span class="string">'space'</span>
+0433                 <span class="keyword">if</span> hTabGroup.SelectedTab == hTab(2)
+0434                     <a href="#_sub5" class="code" title="subfunction storeData(varargin)">storeData</a>();
+0435                 <span class="keyword">end</span>
+0436         <span class="keyword">end</span>
+0437     <span class="keyword">end</span>
+0438 
+0439 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

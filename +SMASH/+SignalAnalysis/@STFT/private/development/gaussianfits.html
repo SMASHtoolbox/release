@@ -1,0 +1,191 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of gaussianfits</title>
+  <meta name="keywords" content="gaussianfits">
+  <meta name="description" content="gaussianfits : fit data to Gaussian curves">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../../../index.html">SMASHtoolbox</a> &gt; <a href="../../../../index.html">+SMASH</a> &gt; <a href="../../../index.html">+SignalAnalysis</a> &gt; <a href="../../index.html">@STFT</a> &gt; <a href="../index.html">private</a> &gt; <a href="index.html">development</a> &gt; gaussianfits.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../../../index.html"><img alt="<" border="0" src="../../../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+SignalAnalysis/@STFT/private/development&nbsp;<img alt=">" border="0" src="../../../../../../../right.png"></a></td></tr></table>-->
+
+<h1>gaussianfits
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../../../up.png"></a></h2>
+<div class="box"><strong>gaussianfits : fit data to Gaussian curves</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../../../up.png"></a></h2>
+<div class="box"><strong>function [param,fit]=gaussianfits(x,y,varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> gaussianfits : fit data to Gaussian curves
+
+ Usage:
+   &gt;&gt; [params,yfit]=gaussianfit(x,y,guess,options);
+function [params,yfit]=gaussianfits(x,y,Npeaks,guess,options)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function [chi2,param,fit]=residual(NLparam)</a></li><li><a href="#_sub2" class="code">function [chi2,params,yfit]=residual_old(NLparams,x,y)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% gaussianfits : fit data to Gaussian curves</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% Usage:</span>
+0004 <span class="comment">%   &gt;&gt; [params,yfit]=gaussianfit(x,y,guess,options);</span>
+0005 <span class="comment">%function [params,yfit]=gaussianfits(x,y,Npeaks,guess,options)</span>
+0006 <a name="_sub0" href="#_subfunctions" class="code">function [param,fit]=gaussianfits(x,y,varargin)</a>
+0007 
+0008 <span class="comment">% handle input</span>
+0009 assert(nargin&gt;=2,<span class="string">'ERROR: insufficient number of inputs'</span>);
+0010 assert(numel(x)==numel(y),<span class="string">'ERROR: inconsistent data arrays'</span>);
+0011 
+0012 Narg=numel(varargin);
+0013 assert(rem(Narg,2),<span class="string">'ERROR: unmatched name/value pair'</span>);
+0014 peaks=1;
+0015 guess=[];
+0016 separation=(max(x)-min(x))/(numel(x)-1);
+0017 options=optimset(<span class="string">'TolX'</span>,1e-6,<span class="string">'TolFun'</span>,1e-6);
+0018 <span class="keyword">for</span> n=1:2:Narg
+0019     name=varargin{n};
+0020     value=varargin{n+1};
+0021     <span class="keyword">switch</span> name
+0022         <span class="keyword">case</span> <span class="string">'guess'</span>
+0023             guess=value;
+0024         <span class="keyword">case</span> <span class="string">'options'</span>
+0025             options=value;
+0026         <span class="keyword">case</span> <span class="string">'separation'</span>
+0027             separation=value;
+0028         <span class="keyword">case</span> <span class="string">'peaks'</span>
+0029             peaks=value;
+0030         <span class="keyword">otherwise</span>
+0031             error(<span class="string">'ERROR: invalid name'</span>);
+0032     <span class="keyword">end</span>
+0033 <span class="keyword">end</span>
+0034 
+0035 <span class="keyword">if</span> isempty(guess)
+0036     [~,index]=max(y);
+0037     xp=x(index);   
+0038     xtemp=reshape(x-xp,size(y));
+0039     sigma=sqrt(sum(y.*xtemp.^2)/sum(y));
+0040     guess=[xp sigma];
+0041     guess=repmat(guess,[1 Npeaks]);
+0042 <span class="keyword">end</span>
+0043 
+0044 <span class="comment">% error checking</span>
+0045 assert(isnumeric(peaks) &amp;&amp; isscalar(peaks),<span class="keyword">...</span>
+0046     <span class="string">'ERROR: invalid number of peaks'</span>);
+0047 peaks=round(peaks);
+0048 assert(peaks&gt;=1,<span class="string">'ERROR: invalid number of peaks'</span>);
+0049 
+0050 assert(numel(guess)==(2*peaks),<span class="string">'ERROR: invalid guess'</span>)
+0051 
+0052 assert(isnumeric(separation) &amp;&amp; isscalar(separation),<span class="keyword">...</span>
+0053     <span class="string">'ERROR: invalid number of separation'</span>);
+0054 separation=round(separation);
+0055 assert(separation&gt;=1,<span class="string">'ERROR: invalid separation'</span>);
+0056 
+0057 <span class="comment">% scale data</span>
+0058 x=x(:);
+0059 y=y(:);
+0060 numpoints=numel(x);
+0061 
+0062 x0=min(x);
+0063 Lx=max(x)-x0;
+0064 x=(x-x0)/Lx;
+0065 
+0066 y0=min(y);
+0067 Ly=max(y)-y0;
+0068 y=(y-y0)/Ly;
+0069 
+0070 guess(1:2:end)=(guess(1:2:end)-x0)/Lx;
+0071 guess(2:2:end)=guess(2:2:end)/Lx;
+0072 
+0073 <span class="comment">% TRANSITION TO FIXED WIDTHS?</span>
+0074 
+0075 <span class="comment">% perform nonlinear optimization</span>
+0076     <a name="_sub1" href="#_subfunctions" class="code">function [chi2,param,fit]=residual(NLparam)</a>
+0077         xp=NLparam(1:2:end);
+0078         sigma=NLparam(2:2:end);
+0079         matrix=nan(numpoints,peaks);
+0080         reference=1:peaks;
+0081         <span class="keyword">for</span> m=1:peaks
+0082             <span class="keyword">if</span> (m==1) || all(abs(xp(m)-xp(1:m-1)))
+0083                 matrix(:,m)=exp(-(x-xp(m)).^2/2/sigma(m)^2);
+0084             <span class="keyword">else</span>
+0085                 reference=find(~isnan(matrix(1,1:m-1),1,<span class="string">'last'</span>));
+0086             <span class="keyword">end</span>            
+0087         <span class="keyword">end</span>
+0088         keep=~isnan(matrix(1,:));
+0089         matrix=matrix(:,keep);
+0090         
+0091     <span class="keyword">end</span>
+0092 fitness=@(NLparams) <a href="#_sub1" class="code" title="subfunction [chi2,param,fit]=residual(NLparam)">residual</a>(NLparams,x,y);
+0093 [NLparams,fval]=fminsearch(fitness,guess,options);
+0094 [chi2,params,yfit]=<a href="#_sub1" class="code" title="subfunction [chi2,param,fit]=residual(NLparam)">residual</a>(NLparams,x,y);
+0095 
+0096 <span class="comment">% convert results to original scale</span>
+0097 params(1)=y0+Ly*params(1);
+0098 params(2)=Ly*params(2);
+0099 params(3)=x0+Lx*params(3);
+0100 params(4)=Lx*params(4);
+0101 yfit=y0+Ly*yfit;
+0102 
+0103 <span class="keyword">end</span>
+0104 
+0105 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0106 <span class="comment">% nonlinear least squares residual function %</span>
+0107 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0108 <a name="_sub2" href="#_subfunctions" class="code">function [chi2,params,yfit]=residual_old(NLparams,x,y)</a>
+0109 
+0110 <span class="comment">% extract nonlinear least square parameters</span>
+0111 <span class="keyword">if</span> any(isnan(NLparams))
+0112     chi2=inf;
+0113     <span class="keyword">return</span>;
+0114 <span class="keyword">end</span>
+0115 xp=NLparams(1);
+0116 sigma=NLparams(2);
+0117 <span class="keyword">if</span> (xp&lt;x(1)) || (xp&gt;x(end))
+0118     chi2=inf;
+0119     <span class="keyword">return</span>
+0120 <span class="keyword">end</span>
+0121 
+0122 <span class="comment">% determine linear least square parameters</span>
+0123 Ndata=numel(x);
+0124 M=ones(Ndata,2);
+0125 M(:,2)=exp(-(x-xp).^2/(2*sigma^2));
+0126 
+0127 Lparams=M\y(:);
+0128 y0=Lparams(1);
+0129 A=Lparams(2);
+0130 
+0131 <span class="comment">% combine parameters</span>
+0132 params=[y0 A xp sigma];
+0133 
+0134 <span class="comment">% calculate residual error</span>
+0135 yfit=y0+A*M(:,2);
+0136 chi2=sum((y(:)-yfit).^2);
+0137 
+0138 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

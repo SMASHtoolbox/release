@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of FringeHandler</title>
+  <meta name="keywords" content="FringeHandler">
+  <meta name="description" content="Creates a context menu for the given signal that will allow the user to">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">PointVISAR</a> &gt; <a href="index.html">private</a> &gt; FringeHandler.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/PointVISAR/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>FringeHandler
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>Creates a context menu for the given signal that will allow the user to</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function cmenu = FringeHandler(index, signalLabel) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Creates a context menu for the given signal that will allow the user to
+ modify fringes. FringeHandler will create a context menu that contains
+ one item that is used to bring up a dialog that allows the user to modify
+ the Add Fringes and the SubtractFringes.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="PointVISARGUI.html" class="code" title="function fig=PointVISARGUI(data)">PointVISARGUI</a>	PointVISARGUI</li><li><a href="VisarAnalysis.html" class="code" title="function record = VisarAnalysis(record, varargin)">VisarAnalysis</a>	VisarAnalysis Provides a gateway to different stages of Visar</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function func = FringeMenuCallback(varargin)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 
+0002 <a name="_sub0" href="#_subfunctions" class="code">function cmenu = FringeHandler(index, signalLabel)</a>
+0003 <span class="comment">% Creates a context menu for the given signal that will allow the user to</span>
+0004 <span class="comment">% modify fringes. FringeHandler will create a context menu that contains</span>
+0005 <span class="comment">% one item that is used to bring up a dialog that allows the user to modify</span>
+0006 <span class="comment">% the Add Fringes and the SubtractFringes.</span>
+0007 
+0008 <span class="comment">% This is really just an object oriented wrapper around some code that</span>
+0009 <span class="comment">% creates a context menu, handles the context menuitem's callback by</span>
+0010 <span class="comment">% opening a FringeDlg then stroring the modified data back into the main</span>
+0011 <span class="comment">% figure's UserData, then updating the GUI.</span>
+0012 <span class="comment">% created 12/22/2004 by Ed Kaltenbach (ARA)</span>
+0013 
+0014 <span class="comment">% create the context menu</span>
+0015 cmenu = uicontextmenu(<span class="string">'UserData'</span>, index, <span class="string">'Tag'</span>, signalLabel);
+0016 
+0017 <span class="comment">% add one menuitem labeled &quot;Edit Fringes&quot; and set its callback</span>
+0018 uimenu(cmenu, <span class="string">'Label'</span>, <span class="string">'Edit Fringes'</span>, <span class="string">'Tag'</span>, <span class="string">'editFringes'</span>, <span class="keyword">...</span>
+0019     <span class="string">'Callback'</span>, @<a href="#_sub1" class="code" title="subfunction func = FringeMenuCallback(varargin)">FringeMenuCallback</a>);
+0020 
+0021 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0022 <span class="comment">% Subfunctions</span>
+0023 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0024 
+0025 <a name="_sub1" href="#_subfunctions" class="code">function func = FringeMenuCallback(varargin)</a>
+0026 <span class="comment">% FRINGEMENUCALLBACK    Executed when a user selects the 'Edit Fringes'</span>
+0027 <span class="comment">%                       option from the popup menu displayed after the user</span>
+0028 <span class="comment">%                       has right clicked on a record in the figure</span>
+0029 
+0030 VisarData = get(gcf, <span class="string">'UserData'</span>);
+0031     
+0032 <span class="comment">% get the index of the line that was clicked</span>
+0033 cmenu = get(gcbo, <span class="string">'Parent'</span>);
+0034 index = get(cmenu, <span class="string">'UserData'</span>);
+0035     
+0036 <span class="comment">% get number of records loaded into VisarData</span>
+0037 s = size(VisarData);
+0038 recordCnt = s(2);
+0039     
+0040 <span class="keyword">if</span> index &lt;= recordCnt
+0041     <span class="comment">% get the time where the user clicked and use as</span>
+0042     <span class="comment">% default in the fringe dialog</span>
+0043     Cp = get(gca, <span class="string">'CurrentPoint'</span>);
+0044     Xp = Cp(2, 1); <span class="comment">% X-point</span>
+0045     Yp = Cp(2, 2); <span class="comment">% Y-point</span>
+0046 
+0047     <span class="comment">% display the fringe dialog</span>
+0048     VisarData = FringeDlg(VisarData, Xp, index);
+0049         
+0050     <span class="comment">% VISAR analysis</span>
+0051     <span class="comment">% - make sure signal is updated with new fringe data</span>
+0052     RecordData = VisarData{index};
+0053     RecordData = <a href="VisarAnalysis.html" class="code" title="function record = VisarAnalysis(record, varargin)">VisarAnalysis</a>(RecordData, <span class="string">'QuadratureSignals'</span>, <span class="string">'Velocity'</span>);
+0054         
+0055     <span class="comment">% store the returned recordData</span>
+0056     VisarData{index} = RecordData;
+0057       
+0058     <span class="comment">% store it back in the figure's UserData</span>
+0059     set(gcf, <span class="string">'UserData'</span>, VisarData);
+0060 <span class="keyword">end</span>
+0061 
+0062 <a href="PointVISARGUI.html" class="code" title="function fig=PointVISARGUI(data)">PointVISARGUI</a>(<span class="string">'update'</span>);</pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

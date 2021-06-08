@@ -1,0 +1,216 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of overlay</title>
+  <meta name="keywords" content="overlay">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="../../index.html">+SMASH</a> &gt; <a href="../index.html">+MUI</a> &gt; <a href="index.html">@Figure</a> &gt; overlay.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+MUI/@Figure&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>overlay
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function overlay(object,mode) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="detoggle.html" class="code" title="function detoggle(object)">detoggle</a>	determine number of active toggles</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="Figure.html" class="code" title="">Figure</a>	Figure class</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function callback(src,varargin)</a></li><li><a href="#_sub2" class="code">function ButtonUp(varargin)</a></li><li><a href="#_sub3" class="code">function update_overlay(varargin)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function overlay(object,mode)</a>
+0002 
+0003 <span class="keyword">switch</span> mode
+0004     <span class="keyword">case</span> <span class="string">'create'</span>
+0005         h=uitoggletool(<span class="string">'Parent'</span>,object.ToolBar,<span class="keyword">...</span>
+0006             <span class="string">'Tag'</span>,<span class="string">'overlay'</span>,<span class="string">'ToolTipString'</span>,<span class="string">'Overlay (x,y) data'</span>,<span class="keyword">...</span>
+0007             <span class="string">'Cdata'</span>,local_graphic(<span class="string">'OverlayIcon'</span>),<span class="string">'Separator'</span>,<span class="string">'off'</span>,<span class="keyword">...</span>
+0008             <span class="string">'ClickedCallback'</span>,@<a href="#_sub1" class="code" title="subfunction callback(src,varargin)">callback</a>);
+0009         object.ToolButton.Overlay=h;
+0010     <span class="keyword">case</span> <span class="string">'hide'</span>
+0011         set(object.Button.Overlay,<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+0012     <span class="keyword">case</span> <span class="string">'show'</span>
+0013         set(object.Button.Overlay,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0014 <span class="keyword">end</span>
+0015 
+0016 <span class="comment">%%</span>
+0017     <a name="_sub1" href="#_subfunctions" class="code">function callback(src,varargin)</a>
+0018         state=get(src,<span class="string">'State'</span>);
+0019         <a href="detoggle.html" class="code" title="function detoggle(object)">detoggle</a>(object);
+0020         <span class="comment">%fig=object.Handle;</span>
+0021         <span class="keyword">if</span> strcmpi(state,<span class="string">'on'</span>)            
+0022             set(src,<span class="string">'State'</span>,<span class="string">'on'</span>);
+0023             set(object.Handle,<span class="string">'Pointer'</span>,<span class="string">'crosshair'</span>,<span class="keyword">...</span>
+0024                 <span class="string">'WindowButtonUpFcn'</span>,@<a href="#_sub2" class="code" title="subfunction ButtonUp(varargin)">ButtonUp</a>);
+0025         <span class="keyword">end</span>
+0026     <span class="keyword">end</span>
+0027 
+0028 <span class="keyword">end</span>
+0029 
+0030 <a name="_sub2" href="#_subfunctions" class="code">function ButtonUp(varargin)</a>
+0031 
+0032 <span class="comment">% initial preparation</span>
+0033 fig=gcbf;
+0034 selection=get(fig,<span class="string">'SelectionType'</span>);
+0035 <span class="keyword">if</span> ~strcmpi(selection,<span class="string">'normal'</span>)
+0036     <span class="keyword">return</span>
+0037 <span class="keyword">end</span>
+0038 
+0039 target=get(fig,<span class="string">'CurrentAxes'</span>);
+0040 tag=get(target,<span class="string">'Tag'</span>);
+0041 <span class="keyword">if</span>  strcmp(tag,<span class="string">'legend'</span>) || strcmp(tag,<span class="string">'colorbar'</span>)
+0042     <span class="keyword">return</span>
+0043 <span class="keyword">end</span>
+0044 
+0045 <span class="comment">% load data</span>
+0046 [filename,pathname]=uigetfile(<span class="string">'*.*'</span>,<span class="string">'Select (x,y) data file'</span>);
+0047 <span class="keyword">if</span> isnumeric(filename)
+0048     <span class="keyword">return</span>
+0049 <span class="keyword">else</span>
+0050     filename=fullfile(pathname,filename);
+0051 <span class="keyword">end</span>
+0052 
+0053 <span class="keyword">try</span>
+0054     temp=mui.tools.ColumnReader(filename,[],2);
+0055     data.x=temp(:,1);
+0056     data.y=temp(:,2);    
+0057 <span class="keyword">catch</span>
+0058     errordlg(<span class="string">'ERROR: unable to read data file'</span>,<span class="string">'File error'</span>);
+0059     <span class="keyword">return</span>
+0060 <span class="keyword">end</span>
+0061 
+0062 <span class="comment">% create overlay line (with context menu)</span>
+0063 data.scale=[1 1];
+0064 data.shift=[0 0];
+0065 data.color=<span class="string">'k'</span>;
+0066 data.linewidth=0.5;
+0067 [~,name,ext]=fileparts(filename);
+0068 data.name=[name ext];
+0069 <span class="comment">%hl=line('Parent',target,'UserData',data,'Tag','overlay_line');</span>
+0070 hl=mui.CustomLine(<span class="string">'Parent'</span>,target,<span class="string">'UserData'</span>,data,<span class="string">'Tag'</span>,<span class="string">'overlay_line'</span>);
+0071 
+0072 <span class="comment">%hm=uicontextmenu('Tag','overlay');</span>
+0073 <span class="comment">%set(hl,'UIContextMenu',hm);</span>
+0074 hm=get(hl,<span class="string">'UIContextMenu'</span>);
+0075 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Overlay file:'</span>,<span class="string">'Enable'</span>,<span class="string">'off'</span>);
+0076 <span class="comment">%label=sprintf('%s overlay',name);</span>
+0077 uimenu(hm,<span class="string">'Label'</span>,data.name,<span class="string">'Enable'</span>,<span class="string">'off'</span>);
+0078 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Scale overlay'</span>,<span class="string">'Tag'</span>,<span class="string">'scale'</span>,<span class="keyword">...</span>
+0079     <span class="string">'Callback'</span>,{@<a href="#_sub3" class="code" title="subfunction update_overlay(varargin)">update_overlay</a>,hl},<span class="string">'Separator'</span>,<span class="string">'on'</span>);
+0080 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Shift overlay'</span>,<span class="string">'Tag'</span>,<span class="string">'shift'</span>,<span class="keyword">...</span>
+0081     <span class="string">'Callback'</span>,{@<a href="#_sub3" class="code" title="subfunction update_overlay(varargin)">update_overlay</a>,hl});
+0082 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Remove overlay'</span>,<span class="string">'Tag'</span>,<span class="string">'delete'</span>,<span class="keyword">...</span>
+0083     <span class="string">'Callback'</span>,{@<a href="#_sub3" class="code" title="subfunction update_overlay(varargin)">update_overlay</a>,hl});
+0084 <a href="#_sub3" class="code" title="subfunction update_overlay(varargin)">update_overlay</a>([],[],hl);
+0085 
+0086 hc=get(hm,<span class="string">'Children'</span>);
+0087 hc=[hc(end-1); hc(end); hc(1:end-2)];
+0088 set(hm,<span class="string">'Children'</span>,hc);
+0089 set(hc(2),<span class="string">'Separator'</span>,<span class="string">'on'</span>);
+0090 
+0091     <a name="_sub3" href="#_subfunctions" class="code">function update_overlay(varargin)        </a>
+0092         hl=varargin{3};
+0093         data=get(hl,<span class="string">'UserData'</span>);
+0094         
+0095         src=varargin{1};
+0096         <span class="keyword">if</span> ishandle(src)
+0097             tag=get(src,<span class="string">'Tag'</span>);
+0098             <span class="keyword">switch</span> lower(tag)
+0099                 <span class="keyword">case</span> <span class="string">'scale'</span>
+0100                     default{1}=sprintf(<span class="string">'%g'</span>,data.scale(1));
+0101                     default{2}=sprintf(<span class="string">'%g'</span>,data.scale(2));
+0102                     label{1}=<span class="string">'Horizontal scaling factor'</span>;
+0103                     label{2}=<span class="string">'Vertical scaling factor'</span>;
+0104                     answer=inputdlg(label,<span class="string">'Scale overlay'</span>,1,default);
+0105                     <span class="keyword">if</span> isempty(answer)
+0106                         <span class="keyword">return</span>
+0107                     <span class="keyword">end</span>
+0108                     [value,count]=sscanf(answer{1},<span class="string">'%g'</span>,1);
+0109                     <span class="keyword">if</span> count==1
+0110                         data.scale(1)=value;
+0111                     <span class="keyword">end</span>
+0112                     [value,count]=sscanf(answer{2},<span class="string">'%g'</span>,1);
+0113                     <span class="keyword">if</span> count==1
+0114                         data.scale(2)=value;
+0115                     <span class="keyword">end</span>
+0116                 <span class="keyword">case</span> <span class="string">'shift'</span>
+0117                     default{1}=sprintf(<span class="string">'%g'</span>,data.shift(1));
+0118                     default{2}=sprintf(<span class="string">'%g'</span>,data.shift(2));
+0119                     label{1}=<span class="string">'Horizontal shift'</span>;
+0120                     label{2}=<span class="string">'Vertical shift'</span>;
+0121                     answer=inputdlg(label,<span class="string">'Shift overlay'</span>,1,default);
+0122                     <span class="keyword">if</span> isempty(answer)
+0123                         <span class="keyword">return</span>
+0124                     <span class="keyword">end</span>
+0125                     [value,count]=sscanf(answer{1},<span class="string">'%g'</span>,1);
+0126                     <span class="keyword">if</span> count==1
+0127                         data.shift(1)=value;
+0128                     <span class="keyword">end</span>
+0129                     [value,count]=sscanf(answer{2},<span class="string">'%g'</span>,1);
+0130                     <span class="keyword">if</span> count==1
+0131                         data.shift(2)=value;
+0132                     <span class="keyword">end</span>
+0133                 <span class="keyword">case</span> <span class="string">'delete'</span>
+0134                     button=questdlg(<span class="string">'Remove overlay?'</span>,<span class="string">'Remove overay'</span>);
+0135                     <span class="keyword">if</span> strcmpi(button,<span class="string">'yes'</span>)
+0136                         delete(hl);
+0137                     <span class="keyword">end</span>
+0138                     <span class="keyword">return</span>;
+0139                 <span class="keyword">case</span> <span class="string">'color'</span>
+0140                     color=uisetcolor;
+0141                     <span class="keyword">if</span> color==0
+0142                         <span class="keyword">return</span>;
+0143                     <span class="keyword">else</span>
+0144                         data.color=color;
+0145                     <span class="keyword">end</span>
+0146                 <span class="keyword">case</span> <span class="string">'width'</span>
+0147                     default{1}=sprintf(<span class="string">'%g'</span>,data.linewidth);
+0148                     label{1}=sprintf(<span class="string">'%-40s'</span>,<span class="string">'Line width (points)'</span>);
+0149                     answer=inputdlg(label,<span class="string">'Line width'</span>,1,default);
+0150                     <span class="keyword">if</span> isempty(answer)
+0151                         <span class="keyword">return</span>
+0152                     <span class="keyword">end</span>
+0153                     [value,count]=sscanf(answer{1},<span class="string">'%g'</span>,1);
+0154                     <span class="keyword">if</span> count==1
+0155                         value=max([value 0.1]); <span class="comment">% enforce minimum line width</span>
+0156                         data.linewidth=max(value);
+0157                     <span class="keyword">end</span>
+0158             <span class="keyword">end</span>
+0159         <span class="keyword">end</span>
+0160         
+0161         x=data.scale(1)*data.x+data.shift(1);
+0162         y=data.scale(2)*data.y+data.shift(2);
+0163         set(hl,<span class="string">'XData'</span>,x,<span class="string">'YData'</span>,y,<span class="string">'UserData'</span>,data,<span class="keyword">...</span>
+0164             <span class="string">'Color'</span>,data.color,<span class="string">'LineWidth'</span>,data.linewidth);
+0165         
+0166     <span class="keyword">end</span>
+0167 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

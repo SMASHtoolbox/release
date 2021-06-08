@@ -1,0 +1,391 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of VisarAnalysis</title>
+  <meta name="keywords" content="VisarAnalysis">
+  <meta name="description" content="VisarAnalysis Provides a gateway to different stages of Visar">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">PointVISAR</a> &gt; <a href="index.html">private</a> &gt; VisarAnalysis.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/PointVISAR/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>VisarAnalysis
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>VisarAnalysis Provides a gateway to different stages of Visar</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function record = VisarAnalysis(record, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">   VisarAnalysis Provides a gateway to different stages of Visar
+   Analysis.
+   This function provides a gateway to the different stages of VISAR
+   analysis; most of the actual calculations are performed in separate
+   routines called by this function. The user must pass a VISAR record
+   structure to the function. If no other input is given, all stages of
+   the Visar analysis are performed. The output of the function is a new
+   VISAR record structure with results stored in the appropriate fields.
+
+   Example:
+       record = VisarAnalysis(record);   % Perform complete analysis
+       record = VisarAnalysis(record, 'SignalFilter');   % Perform only
+       Signal Filtering
+       record = VisarAnalysis(record, 'SignalFilter', 'QuadratureSignals');
+       
+       The last example performs all analysis operations from signal
+       filtering through the generation of quadrature signals
+       (inclusively). There are six analysis operations, which are
+       performed in the following order.
+
+       'Loadrecord'        Loads raw record from binary or ASCII file
+       'PreProcessing'     Applies filter, signal shifts/scaling, and time
+                           shifts
+       'QuadratureSignals' Generates the quadrature signals
+       'Fringes'           Adds or removes fringes
+       'Velocity'          Calculates the velocity
+       'PostProcessing'    Modifies the analysis results
+
+   Any two operations may be used as start of stop points for the
+   analysis. This capability is intended for use in incremental analysis,
+   as in the PointVISAR program.
+
+   Created by      Daniel Dolan        01/27/2005
+   Modified by     Kevin McCollough    02/03/2005</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="FilterSignal.html" class="code" title="function [signal,params]=FilterSignal(rawsignal,name,params)">FilterSignal</a>	function filtSignal = FilterSignal(rawSignal, filterType, filterParams)</li><li><a href="LoadSignals.html" class="code" title="function VisarData = LoadSignals(VisarData)">LoadSignals</a>	LOADSIGNALS   Loads raw signals into PointVISAR</li><li><a href="SmoothDerivative.html" class="code" title="function varargout=SmoothDerivative(params,y,x)">SmoothDerivative</a>	SmoothDerivative : calculate a smooth derivative using the Savitzky-Golay</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="FringeDialog.html" class="code" title="function FringeDialog(data)">FringeDialog</a>	Displays a modal dialog where the user can modify fringes.</li><li><a href="FringeHandler.html" class="code" title="function cmenu = FringeHandler(index, signalLabel)">FringeHandler</a>	Creates a context menu for the given signal that will allow the user to</li><li><a href="LoadConfig.html" class="code" title="function [data,status]=LoadConfig(filename)">LoadConfig</a>	LoadConfig  Loads a PointVISAR configuration file.</li><li><a href="MergeConfigs.html" class="code" title="function func=MergeConfigs()">MergeConfigs</a>	prompt the user for mutliple config files</li><li><a href="NewRecordGUI.html" class="code" title="function fig=NewRecordGUI(VISARtype,SignalStorage)">NewRecordGUI</a>	%%%%%%%%%%%%%%%</li><li><a href="ReadEditRecordGUI.html" class="code" title="function fig=ReadEditRecordGUI(record)">ReadEditRecordGUI</a>	read/edit records for PointVISARGUI</li><li><a href="TimeShiftDialog.html" class="code" title="function TimeShiftDialog(data)">TimeShiftDialog</a>	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function func=SmearJump(t,t0,tr)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function record = VisarAnalysis(record, varargin)</a>
+0002 <span class="comment">%   VisarAnalysis Provides a gateway to different stages of Visar</span>
+0003 <span class="comment">%   Analysis.</span>
+0004 <span class="comment">%   This function provides a gateway to the different stages of VISAR</span>
+0005 <span class="comment">%   analysis; most of the actual calculations are performed in separate</span>
+0006 <span class="comment">%   routines called by this function. The user must pass a VISAR record</span>
+0007 <span class="comment">%   structure to the function. If no other input is given, all stages of</span>
+0008 <span class="comment">%   the Visar analysis are performed. The output of the function is a new</span>
+0009 <span class="comment">%   VISAR record structure with results stored in the appropriate fields.</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">%   Example:</span>
+0012 <span class="comment">%       record = VisarAnalysis(record);   % Perform complete analysis</span>
+0013 <span class="comment">%       record = VisarAnalysis(record, 'SignalFilter');   % Perform only</span>
+0014 <span class="comment">%       Signal Filtering</span>
+0015 <span class="comment">%       record = VisarAnalysis(record, 'SignalFilter', 'QuadratureSignals');</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">%       The last example performs all analysis operations from signal</span>
+0018 <span class="comment">%       filtering through the generation of quadrature signals</span>
+0019 <span class="comment">%       (inclusively). There are six analysis operations, which are</span>
+0020 <span class="comment">%       performed in the following order.</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">%       'Loadrecord'        Loads raw record from binary or ASCII file</span>
+0023 <span class="comment">%       'PreProcessing'     Applies filter, signal shifts/scaling, and time</span>
+0024 <span class="comment">%                           shifts</span>
+0025 <span class="comment">%       'QuadratureSignals' Generates the quadrature signals</span>
+0026 <span class="comment">%       'Fringes'           Adds or removes fringes</span>
+0027 <span class="comment">%       'Velocity'          Calculates the velocity</span>
+0028 <span class="comment">%       'PostProcessing'    Modifies the analysis results</span>
+0029 <span class="comment">%</span>
+0030 <span class="comment">%   Any two operations may be used as start of stop points for the</span>
+0031 <span class="comment">%   analysis. This capability is intended for use in incremental analysis,</span>
+0032 <span class="comment">%   as in the PointVISAR program.</span>
+0033 <span class="comment">%</span>
+0034 <span class="comment">%   Created by      Daniel Dolan        01/27/2005</span>
+0035 <span class="comment">%   Modified by     Kevin McCollough    02/03/2005</span>
+0036 
+0037 
+0038 <span class="comment">%   Create the list of VISAR operations in order</span>
+0039 oplist={};
+0040 oplist{end+1} = <span class="string">'LoadRecord'</span>;
+0041 oplist{end+1} = <span class="string">'PreProcessing'</span>;
+0042 oplist{end+1} = <span class="string">'QuadratureSignals'</span>;
+0043 oplist{end+1} = <span class="string">'Fringes'</span>;
+0044 oplist{end+1} = <span class="string">'Velocity'</span>;
+0045 oplist{end+1} = <span class="string">'PostProcessing'</span>;
+0046 
+0047 <span class="comment">% outrecord = record;</span>
+0048 
+0049 <span class="comment">% Parse the input parameters</span>
+0050 <span class="keyword">switch</span>  nargin
+0051     <span class="keyword">case</span> 0      <span class="comment">% No record structure was provided</span>
+0052         error(<span class="string">'ERROR: VisarAnalysis:parseInputParams - Missing VISAR record'</span>);
+0053     <span class="keyword">case</span> 1      <span class="comment">% Just the record structure was provided</span>
+0054         operList = oplist;
+0055     <span class="keyword">case</span> 2      <span class="comment">% record structure, with a starting operation were given</span>
+0056         operList{1} = varargin{1};
+0057     <span class="keyword">case</span> 3      <span class="comment">% record structure, with starting and stoping ops were given</span>
+0058         firstOp = varargin{1};
+0059         firstOpValidated = false;
+0060         secndOp = varargin{2};
+0061         secndOpValidated = false;
+0062         
+0063         <span class="keyword">for</span> ii=1:numel(oplist)
+0064             <span class="keyword">if</span> strcmp(firstOp, oplist{ii})
+0065                 startOpIndex = ii;
+0066                 firstOpValidated = true;
+0067             <span class="keyword">end</span>
+0068             <span class="keyword">if</span> strcmp(secndOp, oplist{ii})
+0069                 stopOpIndex = ii;
+0070                 secndOpValidated = true;
+0071             <span class="keyword">end</span>
+0072         <span class="keyword">end</span>
+0073         
+0074         <span class="comment">% Check that a valid starting operation was given</span>
+0075         <span class="keyword">if</span> ~firstOpValidated
+0076             error(<span class="string">'ERROR: VisarAnalysis:parseInputParams - Invalid starting operation'</span>);
+0077         <span class="keyword">end</span>
+0078         
+0079         <span class="comment">% Check that a valid stoping operation was given</span>
+0080         <span class="keyword">if</span> ~secndOpValidated
+0081             error(<span class="string">'ERROR: VisarAnalysis:parseInputParams - Invalid stopping operation'</span>);
+0082         <span class="keyword">end</span>
+0083         
+0084         <span class="comment">% Check that the start and stop ops are in the correct order</span>
+0085         <span class="keyword">if</span> (startOpIndex &gt; stopOpIndex)
+0086             error(<span class="string">'ERROR: VisarAnalysis:parseInputParams - Invalid operation ordering'</span>);
+0087         <span class="keyword">end</span>
+0088         
+0089         <span class="comment">% Set operations list to be all operations between the startOp and</span>
+0090         <span class="comment">% stopOp</span>
+0091         jj = 1;
+0092         <span class="keyword">while</span> (startOpIndex &lt;= stopOpIndex)
+0093             operList{jj} = oplist{startOpIndex};
+0094             startOpIndex = startOpIndex + 1;
+0095             jj = jj + 1;
+0096         <span class="keyword">end</span>
+0097 <span class="keyword">end</span>
+0098 
+0099 <span class="comment">% Iterate through the list of operations</span>
+0100 <span class="keyword">for</span> ii=1:numel(operList)     
+0101     <span class="keyword">switch</span> operList{ii}
+0102         <span class="keyword">case</span> oplist{1}      <span class="comment">% Load record</span>
+0103             record=<a href="LoadSignals.html" class="code" title="function VisarData = LoadSignals(VisarData)">LoadSignals</a>(record);
+0104             <span class="keyword">for</span> jj=1:record.NumSignals
+0105                 record.RawSignalTime{jj}=<span class="keyword">...</span>
+0106                     record.SignalTimeScale*record.RawSignalTime{jj};
+0107             <span class="keyword">end</span>
+0108         <span class="keyword">case</span> oplist{2}      <span class="comment">% Pre-processing</span>
+0109             <span class="keyword">for</span> jj=1:record.NumSignals
+0110                 <span class="comment">% filtering</span>
+0111                 record.Signal{jj}=<a href="FilterSignal.html" class="code" title="function [signal,params]=FilterSignal(rawsignal,name,params)">FilterSignal</a>(record.RawSignal{jj},<span class="keyword">...</span>
+0112                     record.FilterName,record.FilterParams);
+0113                 <span class="comment">% vertical offsets and scaling</span>
+0114                 record.Signal{jj}=record.SignalScale(jj)*<span class="keyword">...</span>
+0115                     (record.Signal{jj}+record.SignalVerticalShift(jj));
+0116                 <span class="comment">% time shifts</span>
+0117                 record.SignalTime{jj}=record.RawSignalTime{jj}<span class="keyword">...</span>
+0118                     +record.SignalTimeShift(jj)+record.TimeShift;
+0119             <span class="keyword">end</span> 
+0120             <span class="comment">% generate common time base</span>
+0121             <span class="keyword">for</span> jj=1:record.NumSignals
+0122                 tmin(jj)=min(record.SignalTime{jj});
+0123                 tmax(jj)=max(record.SignalTime{jj});
+0124                 dt(jj)=(tmax(jj)-tmin(jj))/numel(record.SignalTime{jj}); <span class="comment">% average time step</span>
+0125             <span class="keyword">end</span>
+0126             tmin=max(tmin);
+0127             tmax=min(tmax);
+0128             dt=max(dt);
+0129             N=ceil((tmax-tmin)/dt);
+0130             record.Time=linspace(tmin,tmax,N);            
+0131         <span class="keyword">case</span> oplist{3}      <span class="comment">% Generate Quadrature Signals</span>
+0132             time=record.Time;
+0133             <span class="comment">% identify initial and experiment regions</span>
+0134             InitialTime=record.InitialTime;
+0135             index=(time&gt;=InitialTime(1)) &amp; (time&lt;=InitialTime(2));
+0136             <span class="keyword">if</span> ~any(index) <span class="comment">% no data in initial domain--use first point</span>
+0137                 index=1;
+0138             <span class="keyword">end</span>
+0139             inittime=time(index);
+0140             ExperimentTime=record.ExperimentTime;
+0141             index=(time&gt;=ExperimentTime(1)) &amp; (time&lt;=ExperimentTime(2));
+0142             time=time(index);
+0143             record.Time=time;
+0144             <span class="comment">%generate quadrature signals</span>
+0145             <span class="keyword">switch</span> lower(record.Type)
+0146                 <span class="keyword">case</span> <span class="string">'conventional'</span>
+0147                     <span class="comment">% initial region</span>
+0148                     Dx0=(interp1(record.SignalTime{1},record.Signal{1},<span class="keyword">...</span>
+0149                         inittime,<span class="string">'linear'</span>));
+0150                     Dy0=(interp1(record.SignalTime{2},record.Signal{2},<span class="keyword">...</span>
+0151                         inittime,<span class="string">'linear'</span>));
+0152                     BIM0=(interp1(record.SignalTime{3},record.Signal{3},<span class="keyword">...</span>
+0153                         inittime,<span class="string">'linear'</span>));
+0154                     Dx0=Dx0./BIM0;
+0155                     Dy0=Dy0./BIM0;  
+0156                     <span class="comment">% experiment region</span>
+0157                     Dx=interp1(record.SignalTime{1},record.Signal{1},<span class="keyword">...</span>
+0158                         time,<span class="string">'linear'</span>);
+0159                     Dy=interp1(record.SignalTime{2},record.Signal{2},<span class="keyword">...</span>
+0160                         time,<span class="string">'linear'</span>);
+0161                     BIM=interp1(record.SignalTime{3},record.Signal{3},<span class="keyword">...</span>
+0162                         time,<span class="string">'linear'</span>);
+0163                     Dx=Dx./BIM;
+0164                     Dy=Dy./BIM;
+0165                 <span class="keyword">case</span> <span class="string">'pushpull2'</span>
+0166                     <span class="comment">% initial region</span>
+0167                     Dx0=(interp1(record.SignalTime{1},record.Signal{1},<span class="keyword">...</span>
+0168                         inittime,<span class="string">'linear'</span>));
+0169                     Dy0=(interp1(record.SignalTime{2},record.Signal{2},<span class="keyword">...</span>
+0170                         inittime,<span class="string">'linear'</span>));
+0171                     <span class="comment">% experiment region</span>
+0172                     Dx=interp1(record.SignalTime{1},record.Signal{1},<span class="keyword">...</span>
+0173                         time,<span class="string">'linear'</span>);
+0174                     Dy=interp1(record.SignalTime{2},record.Signal{2},<span class="keyword">...</span>
+0175                         time,<span class="string">'linear'</span>);
+0176                 <span class="keyword">case</span> <span class="string">'pushpull4'</span>
+0177                     <span class="comment">% initial region</span>
+0178                     D1A0=(interp1(record.SignalTime{1},record.Signal{1},<span class="keyword">...</span>
+0179                         inittime,<span class="string">'linear'</span>));
+0180                     D1B0=(interp1(record.SignalTime{2},record.Signal{2},<span class="keyword">...</span>
+0181                         inittime,<span class="string">'linear'</span>));
+0182                     D2A0=(interp1(record.SignalTime{3},record.Signal{3},<span class="keyword">...</span>
+0183                         inittime,<span class="string">'linear'</span>));
+0184                     D2B0=(interp1(record.SignalTime{4},record.Signal{4},<span class="keyword">...</span>
+0185                         inittime,<span class="string">'linear'</span>));
+0186                     Dx0=D1A0-D1B0;
+0187                     Dy0=D2A0-D2B0;
+0188                     <span class="comment">% experiment region</span>
+0189                     D1A=interp1(record.SignalTime{1},record.Signal{1},<span class="keyword">...</span>
+0190                         time,<span class="string">'linear'</span>);
+0191                     D1B=interp1(record.SignalTime{2},record.Signal{2},<span class="keyword">...</span>
+0192                         time,<span class="string">'linear'</span>);
+0193                     D2A=interp1(record.SignalTime{3},record.Signal{3},<span class="keyword">...</span>
+0194                         time,<span class="string">'linear'</span>);
+0195                     D2B=interp1(record.SignalTime{4},record.Signal{4},<span class="keyword">...</span>
+0196                         time,<span class="string">'linear'</span>);
+0197                     Dx=D1A-D1B;
+0198                     Dy=D2A-D2B;
+0199                 <span class="keyword">otherwise</span>
+0200                     error(<span class="string">'ERROR: VisarAnalysis - Unknown VISAR type.'</span>);
+0201             <span class="keyword">end</span>             
+0202             record.D{1}=Dx;
+0203             record.D{2}=Dy;                       
+0204             <span class="comment">% calculate phase difference</span>
+0205             x0 = record.Ellipse(1);
+0206             y0 = record.Ellipse(2);
+0207             Lx = record.Ellipse(3);
+0208             Ly = record.Ellipse(4);
+0209             epsilon = record.Ellipse(5);
+0210             xR=(Dx0-x0)/Lx;
+0211             yR=(Dy0-y0)/Ly;
+0212             <span class="comment">% sign convention matches ellipse fit</span>
+0213             phaseR=atan2(yR+xR*sin(epsilon),xR*cos(epsilon));   
+0214             phaseR=mean(unwrap(phaseR));
+0215             x=(Dx-x0)/Lx;
+0216             y=(Dy-y0)/Ly;
+0217             phase=atan2(y+x*sin(epsilon),x*cos(epsilon));                      
+0218             phase=unwrap(phase,pi); <span class="comment">% deal with phase wraps</span>
+0219             record.FringeShift=(phase-phaseR)/(2*pi);
+0220             <span class="comment">% calculate contrast</span>
+0221             contrast0=sqrt(Dx0.^2+2*Dx0.*Dy0*sin(epsilon)+Dy0.^2)*sec(epsilon);
+0222             contrast0=mean(contrast0);
+0223             contrast=sqrt(Dx.^2+2*Dx.*Dy*sin(epsilon)+Dy.^2)*sec(epsilon);
+0224             <span class="keyword">if</span> (contrast0&lt;min(contrast)) || (contrast0==0);
+0225                 <span class="comment">%warndlg(...</span>
+0226                 <span class="comment">%    'Low initial contrast--check initial time setting',...</span>
+0227                 <span class="comment">%    'Low initial contrast');</span>
+0228             <span class="keyword">else</span> 
+0229                 contrast=contrast/contrast0;
+0230             <span class="keyword">end</span>
+0231             record.Contrast=contrast;               
+0232         <span class="keyword">case</span> oplist{4}      <span class="comment">% Add / Remove fringes</span>
+0233             <span class="keyword">for</span> jj=1:numel(record.AddJumps)
+0234                 <span class="keyword">if</span> isempty(record.JumpWidth) || (record.JumpWidth==0)
+0235                     jump = (record.Time &gt;= record.AddJumps(jj));
+0236                 <span class="keyword">else</span>
+0237                     jump=<a href="#_sub1" class="code" title="subfunction func=SmearJump(t,t0,tr)">SmearJump</a>(record.Time,record.AddJumps(jj),record.JumpWidth);
+0238                 <span class="keyword">end</span>
+0239                 record.FringeShift=record.FringeShift+jump;
+0240             <span class="keyword">end</span>
+0241             <span class="keyword">for</span> kk=1:numel(record.SubtractJumps)
+0242                 <span class="keyword">if</span> isempty(record.JumpWidth) || (record.JumpWidth==0)
+0243                     jump = (record.Time &gt;= record.SubtractJumps(kk));
+0244                 <span class="keyword">else</span>
+0245                    jump=<a href="#_sub1" class="code" title="subfunction func=SmearJump(t,t0,tr)">SmearJump</a>(record.Time,record.SubtractJumps(kk),record.JumpWidth); 
+0246                 <span class="keyword">end</span>
+0247                 record.FringeShift=record.FringeShift-jump;
+0248             <span class="keyword">end</span>            
+0249         <span class="keyword">case</span> oplist{5}      <span class="comment">% Calculate the velocity</span>
+0250             v0=record.InitialVelocity;    
+0251             <span class="keyword">switch</span> lower(record.Analysis)
+0252                 <span class="keyword">case</span> <span class="string">'displacement'</span> <span class="comment">% exact approach</span>
+0253                     params=record.DerivativeParams;
+0254                     <span class="keyword">if</span> isempty(params)
+0255                         params=[1 3];
+0256                     <span class="keyword">end</span>                    
+0257                     dFdt=<a href="SmoothDerivative.html" class="code" title="function varargout=SmoothDerivative(params,y,x)">SmoothDerivative</a>(params,record.FringeShift,record.Time);                                                            
+0258                     dFdt(isnan(dFdt))=0; <span class="comment">% removed nan values at boundaries</span>
+0259                     N=numel(record.Time);
+0260                     T=(record.Time(end)-record.Time(1))/(N-1);
+0261                     record.Velocity=zeros(size(record.Time));
+0262                     <span class="keyword">for</span> n=1:N
+0263                         told=record.Time(n)-record.Delay;
+0264                         <span class="keyword">if</span> told&lt;record.Time(1)
+0265                             vold=v0;
+0266                             aold=0;
+0267                         <span class="keyword">else</span>
+0268                             vold=interp1(record.Time,record.Velocity,told,<span class="string">'linear'</span>,<span class="string">'extrap'</span>);
+0269                             aold=interp1(record.Time,record.Velocity,[told-T told+T],<span class="string">'linear'</span>,<span class="string">'extrap'</span>);
+0270                             aold=(aold(2)-aold(1))/(2*T); <span class="comment">% central difference</span>
+0271                         <span class="keyword">end</span>
+0272                         record.Velocity(n)=vold+(record.Wavelength/2)*dFdt(n);
+0273                         <span class="keyword">if</span> isempty(record.Dispersion) || isnan(record.Dispersion)
+0274                             <span class="comment">% do nothing</span>
+0275                         <span class="keyword">else</span>
+0276                             record.Velocity(n)=record.Velocity(n)-record.Dispersion*record.Delay*aold;
+0277                         <span class="keyword">end</span>
+0278                     <span class="keyword">end</span>
+0279                 <span class="keyword">otherwise</span>
+0280                     <span class="keyword">if</span> strcmpi(record.Analysis,<span class="string">'velocity'</span>)
+0281                         <span class="comment">% do nothing</span>
+0282                     <span class="keyword">else</span>
+0283                         fprintf(<span class="string">'%s is not a valid analysis mode.\n'</span>,record.Analysis);
+0284                         fprintf(<span class="string">'Using velocity analysis instead.\n'</span>);
+0285                     <span class="keyword">end</span>
+0286                     record.Velocity = v0+record.VPF*record.FringeShift;
+0287                     <span class="keyword">if</span> isempty(record.Delay) || isnan(record.Delay)
+0288                         <span class="comment">% do nothing</span>
+0289                     <span class="keyword">elseif</span> isempty(record.Dispersion) || isnan(record.Dispersion)
+0290                         shift=record.Delay/2;
+0291                         record.Time=record.Time-shift; <span class="comment">% revised VISAR approx</span>
+0292                     <span class="keyword">else</span>
+0293                         gamma=(0.50+record.Dispersion)/(1+record.Dispersion);
+0294                         shift=gamma*record.Delay;
+0295                         record.Time=record.Time-shift; <span class="comment">% revised VISAR approx</span>
+0296                     <span class="keyword">end</span>
+0297             <span class="keyword">end</span>          
+0298         <span class="keyword">case</span> oplist{6}      <span class="comment">% Post Processing</span>
+0299             <span class="comment">% do something?</span>
+0300         <span class="keyword">otherwise</span>           <span class="comment">% Unknown operation</span>
+0301             error(<span class="string">'ERROR: VisarAnalysis - Unknown VISAR operation'</span>);
+0302     <span class="keyword">end</span>
+0303 <span class="keyword">end</span>
+0304 
+0305 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0306 <a name="_sub1" href="#_subfunctions" class="code">function func=SmearJump(t,t0,tr)</a>
+0307 
+0308 T=tr/(2*atanh(4/5));
+0309 func=(1+tanh((t-t0)/T))/2;</pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

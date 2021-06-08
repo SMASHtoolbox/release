@@ -1,0 +1,151 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of probe</title>
+  <meta name="keywords" content="probe">
+  <meta name="description" content="probe Probe archive file">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="../../index.html">+SMASH</a> &gt; <a href="../index.html">+FileAccess</a> &gt; <a href="index.html">@SDAfile</a> &gt; probe.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+FileAccess/@SDAfile&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>probe
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>probe Probe archive file</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function varargout=probe(object,target) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> probe Probe archive file
+ 
+ This method probes the state and contents of an archive file.  When
+ called without outputs:
+   &gt;&gt; probe(archive);
+ the function prints the state and contents to the command window.
+ Specific values are returned as outputs.
+   &gt;&gt; [label,type,description,status]=probe(object);
+
+ The default behavior of this method is to return *all* records contained
+ in an archive.  Results can be limited by passing a search text pattern.
+   &gt;&gt; probe(object,pattern);
+ 
+ See also <a href="SDAfile.html" class="code" title="">SDAfile</a>, <a href="select.html" class="code" title="function choice=select(archive,pattern,reference)">select</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="copy.html" class="code" title="function copy(object,destination,label)">copy</a>	copy Copy records between archives</li><li><a href="remove.html" class="code" title="function remove(archive,varargin)">remove</a>	remove Remove record from an archive</li><li><a href="replace.html" class="code" title="function replace(object,label,data)">replace</a>	replace Replace record data</li><li><a href="select.html" class="code" title="function choice=select(archive,pattern,reference)">select</a>	select Select record from an archive</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 
+0002 <span class="comment">% probe Probe archive file</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% This method probes the state and contents of an archive file.  When</span>
+0005 <span class="comment">% called without outputs:</span>
+0006 <span class="comment">%   &gt;&gt; probe(archive);</span>
+0007 <span class="comment">% the function prints the state and contents to the command window.</span>
+0008 <span class="comment">% Specific values are returned as outputs.</span>
+0009 <span class="comment">%   &gt;&gt; [label,type,description,status]=probe(object);</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% The default behavior of this method is to return *all* records contained</span>
+0012 <span class="comment">% in an archive.  Results can be limited by passing a search text pattern.</span>
+0013 <span class="comment">%   &gt;&gt; probe(object,pattern);</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% See also SDAfile, select</span>
+0016 <span class="comment">%</span>
+0017 
+0018 <span class="comment">%</span>
+0019 <span class="comment">% created October 9, 2014 by Daniel Dolan (Sandia National Laboratories)</span>
+0020 <span class="comment">%    -altered method to match revised SDA specification</span>
+0021 <span class="comment">%</span>
+0022 <a name="_sub0" href="#_subfunctions" class="code">function varargout=probe(object,target)</a>
+0023 
+0024 <span class="comment">% handle input</span>
+0025 <span class="keyword">if</span> nargin&lt;2
+0026     target=<span class="string">''</span>;
+0027 <span class="keyword">else</span>
+0028     target=regexptranslate(<span class="string">'wildcard'</span>,target);
+0029 <span class="keyword">end</span>
+0030 
+0031 <span class="comment">% extract labels</span>
+0032 info=h5info(object.ArchiveFile);
+0033 Ngroups=numel(info.Groups);
+0034 [label,description,type]=deal(cell(1,Ngroups));
+0035 keep=true(1,Ngroups);
+0036 <span class="keyword">for</span> k=1:Ngroups
+0037     temp=info.Groups(k).Name;
+0038     <span class="keyword">if</span> iscell(temp)
+0039         keyboard
+0040     <span class="keyword">end</span>
+0041     label{k}=temp(2:end);
+0042     description{k}=readAttribute(object.ArchiveFile,temp,<span class="string">'Description'</span>);
+0043     type{k}=readAttribute(object.ArchiveFile,temp,<span class="string">'RecordType'</span>);
+0044     <span class="comment">% determine if record matches target pattern</span>
+0045     <span class="keyword">if</span> isempty(target)
+0046         <span class="keyword">continue</span>
+0047     <span class="keyword">end</span>
+0048     start=regexp(label{k},target,<span class="string">'once'</span>);
+0049     <span class="keyword">if</span> isempty(start)
+0050         keep(k)=false;
+0051     <span class="keyword">end</span>
+0052 <span class="keyword">end</span>
+0053 label=label(keep);
+0054 description=description(keep);
+0055 type=type(keep);
+0056 Ngroups=numel(label);
+0057 
+0058 <span class="comment">% handle output</span>
+0059 <span class="keyword">if</span> nargout==0
+0060     <span class="keyword">if</span> isempty(label)
+0061         fprintf(<span class="string">'No records found\n'</span>);
+0062         <span class="keyword">return</span>
+0063     <span class="keyword">end</span>
+0064     width(1)=max(cellfun(@numel,label));
+0065     width(1)=max(width(1),numel(<span class="string">'Label'</span>));
+0066     width(2)=max(cellfun(@numel,type));
+0067     width(2)=max(width(2),numel(<span class="string">'Type'</span>));
+0068     width(3)=max(cellfun(@numel,description));
+0069     width(3)=max(width(3),numel(<span class="string">'Description'</span>));
+0070     width=width+2; <span class="comment">% a little extra room</span>
+0071     format=[<span class="keyword">...</span>
+0072         sprintf(<span class="string">'%%-%ds'</span>,width(1)) <span class="string">' '</span> <span class="keyword">...</span>
+0073         sprintf(<span class="string">'%%-%ds'</span>,width(2)) <span class="string">' '</span> <span class="keyword">...</span>
+0074         sprintf(<span class="string">'%%-%ds'</span>,width(3)) <span class="string">'\n'</span>];
+0075     fprintf(<span class="string">'Archive file status:\n'</span>);
+0076     checkStatus(object);    
+0077     fprintf(<span class="string">'%s\n'</span>,repmat(<span class="string">'-'</span>,[1 sum(width)+2+3]));
+0078     fprintf(format,<span class="string">'Label'</span>,<span class="string">'Type'</span>,<span class="string">'Description'</span>);
+0079     fprintf(<span class="string">'%s\n'</span>,repmat(<span class="string">'-'</span>,[1 sum(width)+2+3]));
+0080     <span class="keyword">for</span> k=1:Ngroups
+0081         fprintf(format,label{k},type{k},description{k}); 
+0082     <span class="keyword">end</span>
+0083     fprintf(<span class="string">'%s\n'</span>,repmat(<span class="string">'-'</span>,[1 sum(width)+2+3]));
+0084 <span class="keyword">else</span>
+0085     varargout{1}=label;
+0086     varargout{2}=type;
+0087     varargout{3}=description;
+0088     varargout{4}=checkStatus(object);
+0089 <span class="keyword">end</span>
+0090 
+0091 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of RecordNotesDialog</title>
+  <meta name="keywords" content="RecordNotesDialog">
+  <meta name="description" content="%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">PointVISAR</a> &gt; <a href="index.html">private</a> &gt; RecordNotesDialog.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/PointVISAR/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>RecordNotesDialog
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function RecordNotesDialog(record) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="ReadEditRecordGUI.html" class="code" title="function fig=ReadEditRecordGUI(record)">ReadEditRecordGUI</a>	read/edit records for PointVISARGUI</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function ExitDialog(src,varargin)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 
+0002 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0003 <a name="_sub0" href="#_subfunctions" class="code">function RecordNotesDialog(record)</a>
+0004 
+0005 <span class="comment">% create dialog (if necessary)</span>
+0006 fig=findall(0,<span class="string">'Type'</span>,<span class="string">'figure'</span>,<span class="string">'Tag'</span>,<span class="string">'PointVISAR:Notes'</span>);
+0007 <span class="keyword">if</span> ishandle(fig)
+0008     figure(fig);
+0009     notebox=findobj(fig,<span class="string">'Tag'</span>,<span class="string">'Notes'</span>);
+0010 <span class="keyword">else</span>
+0011     <span class="comment">% spacing parameters (characters)</span>
+0012     dx=5;
+0013     dy=1;
+0014     ControlHeight=2;
+0015     TextWidth=80;
+0016     TextHeight=20;
+0017     FigWidth=TextWidth+2*dx;
+0018     FigHeight=TextHeight+ControlHeight+3*dy;
+0019     <span class="comment">% create figure</span>
+0020     fig=figure(<span class="string">'Visible'</span>,<span class="string">'off'</span>,<span class="keyword">...</span>
+0021         <span class="string">'MenuBar'</span>,<span class="string">'none'</span>,<span class="string">'Toolbar'</span>,<span class="string">'none'</span>,<span class="keyword">...</span>
+0022         <span class="string">'Tag'</span>,<span class="string">'RecordNotesDialog'</span>,<span class="string">'Resize'</span>,<span class="string">'off'</span>,<span class="keyword">...</span>
+0023         <span class="string">'NumberTitle'</span>,<span class="string">'off'</span>,<span class="string">'Name'</span>,<span class="string">'Record notes'</span>,<span class="keyword">...</span>
+0024         <span class="string">'Units'</span>,<span class="string">'characters'</span>,<span class="string">'Position'</span>,[0 0 FigWidth FigHeight],<span class="keyword">...</span>
+0025         <span class="string">'CloseRequestFcn'</span>,@<a href="#_sub1" class="code" title="subfunction ExitDialog(src,varargin)">ExitDialog</a>);
+0026     movegui(fig,<span class="string">'center'</span>);
+0027     figure(fig);
+0028     figpos=get(fig,<span class="string">'Position'</span>);
+0029     <span class="comment">% record notes edit box</span>
+0030     x0=dx;
+0031     y0=figpos(4)-dy-TextHeight;
+0032     notebox=uicontrol(<span class="string">'Style'</span>,<span class="string">'edit'</span>,<span class="keyword">...</span>
+0033         <span class="string">'Tag'</span>,<span class="string">'Notes'</span>,<span class="keyword">...</span>
+0034         <span class="string">'HorizontalAlignment'</span>,<span class="string">'left'</span>,<span class="keyword">...</span>
+0035         <span class="string">'Min'</span>,0,<span class="string">'Max'</span>,2,<span class="keyword">...</span>
+0036         <span class="string">'BackgroundColor'</span>,[1 1 1],<span class="keyword">...</span>
+0037         <span class="string">'Units'</span>,<span class="string">'characters'</span>,<span class="string">'Position'</span>,[x0 y0 TextWidth TextHeight]);
+0038     <span class="comment">% ok/cancel buttons at the bottom</span>
+0039     y0=dy;
+0040     cancel=uicontrol(<span class="string">'Style'</span>,<span class="string">'pushbutton'</span>,<span class="keyword">...</span>
+0041         <span class="string">'String'</span>,<span class="string">'Cancel'</span>,<span class="string">'Tag'</span>,<span class="string">'cancel'</span>,<span class="string">'Units'</span>,<span class="string">'characters'</span>);
+0042     extent=get(cancel,<span class="string">'Extent'</span>);
+0043     width=1.25*extent(3);
+0044     x0=figpos(3)-dx-width;
+0045     set(cancel,<span class="string">'Position'</span>,[x0 y0 width ControlHeight]);
+0046     ok=uicontrol(<span class="string">'Style'</span>,<span class="string">'pushbutton'</span>,<span class="keyword">...</span>
+0047         <span class="string">'String'</span>,<span class="string">'OK'</span>,<span class="string">'Tag'</span>,<span class="string">'ok'</span>,<span class="string">'Units'</span>,<span class="string">'characters'</span>);
+0048     x0=x0-dx/2-width;
+0049     set(ok,<span class="string">'Position'</span>,[x0 y0 width ControlHeight]);
+0050     set([ok cancel],<span class="string">'Callback'</span>,@<a href="#_sub1" class="code" title="subfunction ExitDialog(src,varargin)">ExitDialog</a>);
+0051     children=[notebox ok cancel];
+0052     set(fig,<span class="string">'Children'</span>,children(end:-1:1));
+0053     <span class="comment">% protect figure from command line</span>
+0054     set(fig,<span class="string">'HandleVisibility'</span>,<span class="string">'callback'</span>);
+0055 <span class="keyword">end</span>
+0056 
+0057 <span class="comment">% store necessary information and update list selection</span>
+0058 set(notebox,<span class="string">'String'</span>,record.Notes);
+0059 hc=findobj(fig,<span class="string">'Type'</span>,<span class="string">'uicontrol'</span>);
+0060 set(hc,<span class="string">'FontName'</span>,<span class="string">'fixed'</span>);
+0061 
+0062 <span class="comment">%%%%%%%%%%%%%</span>
+0063 <span class="comment">% callbacks %</span>
+0064 <span class="comment">%%%%%%%%%%%%%</span>
+0065 
+0066 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0067 <a name="_sub1" href="#_subfunctions" class="code">function ExitDialog(src,varargin)</a>
+0068 
+0069 fig=ancestor(src,<span class="string">'figure'</span>);
+0070 main=findall(0,<span class="string">'Type'</span>,<span class="string">'figure'</span>,<span class="string">'Tag'</span>,<span class="string">'PointVISAR:ReadEditRecord'</span>);
+0071 
+0072 choice=get(src,<span class="string">'Tag'</span>);
+0073 <span class="keyword">if</span> strcmp(choice,<span class="string">'ok'</span>) <span class="comment">% user chose OK button</span>
+0074     record=get(main,<span class="string">'UserData'</span>);
+0075     notebox=findobj(fig,<span class="string">'Tag'</span>,<span class="string">'Notes'</span>);
+0076     record.Notes=get(notebox,<span class="string">'String'</span>);
+0077     set(main,<span class="string">'UserData'</span>,record);    
+0078     delete(fig);
+0079     figure(main);
+0080     <span class="keyword">return</span>
+0081 <span class="keyword">end</span>
+0082 
+0083 <span class="comment">% see if the user is serious about cancel</span>
+0084 prompt{1}=<span class="string">'All note changes be lost! Continue?'</span>;
+0085 answer=questdlg(prompt,<span class="string">'Cancel notes?'</span>);
+0086 <span class="keyword">if</span> strcmpi(answer,<span class="string">'yes'</span>)
+0087     delete(fig);
+0088     figure(main)
+0089 <span class="keyword">else</span>
+0090     <span class="keyword">return</span>
+0091 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

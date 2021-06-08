@@ -1,0 +1,301 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of ParseConfig</title>
+  <meta name="keywords" content="ParseConfig">
+  <meta name="description" content="parseconfig : parse configuration file">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">PointVISAR</a> &gt; <a href="index.html">private</a> &gt; ParseConfig.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/PointVISAR/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>ParseConfig
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>parseconfig : parse configuration file</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function [data,status,filename]=ParseConfig(filename) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> parseconfig : parse configuration file
+
+ This function parses a file into field/value pairs for records defined by
+ the configuration. Records are denoted by begin{type}/end{type}
+ statements, between which any number of &quot;field = value&quot; statements can be
+ inserted.  Braces associate multiple values to a field, such as &quot;field =
+ {value1 value2}&quot;.  Extraneous white space (such as carriage returns)
+ between the field/value declaration is ignored; lines containing only
+ white space are ingored unless they occur within a brace pair.  The &quot;%&quot;
+ character indicates a comment (from that point to the end of line) ouside
+ of a brace pair. 
+
+ Usage: 
+   data=parseconfig(filename) returns a cell array of structures as
+   defined by contents of filename.  If filename is an empty string or no
+   input is given, the user is prompted for a file with a dialog box.
+
+   [data,status]=parseconfig(...) returns an structure describing problems
+   encountered during parsing.  The exit mode ('normal', 'cancel', or
+   'error') given in status.exitmode.  A brief message describing the
+   problem (if any) is given in status.message.  This output is intended
+   for use in graphical interfaces, where the user may be unaware that an
+   error has occured. 
+
+   [data,status,filename]=parseconfig(...) returns the absolute name of
+   the configuration file.  This output is helpful when the dialog box is
+   used or the input string contains a relative name (e.g.,
+   &quot;./temp/file.txt&quot;)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="OSenforcer.html" class="code" title="function out=OSenforcer(in)">OSenforcer</a>	OSenforcer : enforce operating system separators</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="LoadConfig.html" class="code" title="function [data,status]=LoadConfig(filename)">LoadConfig</a>	LoadConfig  Loads a PointVISAR configuration file.</li><li><a href="MergeConfigs.html" class="code" title="function func=MergeConfigs()">MergeConfigs</a>	prompt the user for mutliple config files</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function func=validfield(field)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% parseconfig : parse configuration file</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This function parses a file into field/value pairs for records defined by</span>
+0004 <span class="comment">% the configuration. Records are denoted by begin{type}/end{type}</span>
+0005 <span class="comment">% statements, between which any number of &quot;field = value&quot; statements can be</span>
+0006 <span class="comment">% inserted.  Braces associate multiple values to a field, such as &quot;field =</span>
+0007 <span class="comment">% {value1 value2}&quot;.  Extraneous white space (such as carriage returns)</span>
+0008 <span class="comment">% between the field/value declaration is ignored; lines containing only</span>
+0009 <span class="comment">% white space are ingored unless they occur within a brace pair.  The &quot;%&quot;</span>
+0010 <span class="comment">% character indicates a comment (from that point to the end of line) ouside</span>
+0011 <span class="comment">% of a brace pair.</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">% Usage:</span>
+0014 <span class="comment">%   data=parseconfig(filename) returns a cell array of structures as</span>
+0015 <span class="comment">%   defined by contents of filename.  If filename is an empty string or no</span>
+0016 <span class="comment">%   input is given, the user is prompted for a file with a dialog box.</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">%   [data,status]=parseconfig(...) returns an structure describing problems</span>
+0019 <span class="comment">%   encountered during parsing.  The exit mode ('normal', 'cancel', or</span>
+0020 <span class="comment">%   'error') given in status.exitmode.  A brief message describing the</span>
+0021 <span class="comment">%   problem (if any) is given in status.message.  This output is intended</span>
+0022 <span class="comment">%   for use in graphical interfaces, where the user may be unaware that an</span>
+0023 <span class="comment">%   error has occured.</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">%   [data,status,filename]=parseconfig(...) returns the absolute name of</span>
+0026 <span class="comment">%   the configuration file.  This output is helpful when the dialog box is</span>
+0027 <span class="comment">%   used or the input string contains a relative name (e.g.,</span>
+0028 <span class="comment">%   &quot;./temp/file.txt&quot;)</span>
+0029  
+0030 <span class="comment">% created 1/22/2007 by Daniel Dolan</span>
+0031 <a name="_sub0" href="#_subfunctions" class="code">function [data,status,filename]=ParseConfig(filename)</a>
+0032 
+0033 <span class="comment">% input check</span>
+0034 <span class="keyword">if</span> nargin &lt; 1
+0035     filename=<span class="string">''</span>;
+0036 <span class="keyword">end</span>
+0037 
+0038 <span class="comment">% default outputs</span>
+0039 data={};
+0040 status.exitmode=<span class="string">'normal'</span>;
+0041 status.message=<span class="string">''</span>;
+0042 
+0043 <span class="comment">% generate absolute path name</span>
+0044 <span class="keyword">if</span> isempty(filename) <span class="comment">% prompt user for file name</span>
+0045     spec=cell(2,2);
+0046     spec{1,1}= <span class="string">'*.txt;*.TXT;*.dat;*.DAT;*.inp;*.INP;'</span>;
+0047     spec{1,2}=<span class="string">'Text files'</span>;
+0048     spec{2,1}=<span class="string">'*.*'</span>;
+0049     spec{2,2}=<span class="string">'All files'</span>;
+0050     [filename,pathname]=uigetfile(spec,<span class="string">'Choose configuration file'</span>);
+0051     <span class="keyword">if</span> isnumeric(filename) || isnumeric(pathname) <span class="comment">% user pressed cancel</span>
+0052         status.exitmode=<span class="string">'cancel'</span>;
+0053         status.message=<span class="string">'User pressed cancel'</span>;
+0054         fprintf(<span class="string">'%s\n'</span>,status.message);
+0055         <span class="keyword">return</span>
+0056     <span class="keyword">end</span>
+0057 <span class="keyword">else</span> <span class="comment">% use specified file name</span>
+0058     filename=<a href="OSenforcer.html" class="code" title="function out=OSenforcer(in)">OSenforcer</a>(filename);
+0059     [pathname,filename,ext,ver]=fileparts(filename);
+0060     filename=[filename ext ver];
+0061     <span class="keyword">if</span> isempty(pathname) <span class="comment">% file in current directory</span>
+0062         pathname=pwd;
+0063     <span class="keyword">else</span> <span class="comment">% file name contains path information (could be relative)</span>
+0064         old=pwd;
+0065         cd(pathname);
+0066         pathname=pwd;
+0067         cd(old);
+0068     <span class="keyword">end</span>
+0069 <span class="keyword">end</span>
+0070 filename=fullfile(pathname,filename);
+0071 
+0072 <span class="comment">% see if file exists</span>
+0073 <span class="keyword">if</span> ~exist(filename,<span class="string">'file'</span>)
+0074     status.exitmode=<span class="string">'error'</span>;
+0075     status.message=sprintf(<span class="string">'Configuration file %s does not exist'</span>,filename);
+0076     fprintf(<span class="string">'%s\n'</span>,status.message);
+0077     <span class="keyword">return</span>
+0078 <span class="keyword">end</span>
+0079 
+0080 <span class="comment">% see if file can be opened</span>
+0081 fid=fopen(filename,<span class="string">'rt'</span>);
+0082 <span class="keyword">if</span> fid&lt;0
+0083     status.exitmode=<span class="string">'error'</span>;
+0084     status.message=sprintf(<span class="string">'Unable to open file %s'</span>,filename);
+0085     fprintf(<span class="string">'%s\n'</span>,status.message);    
+0086     <span class="keyword">return</span>
+0087 <span class="keyword">end</span>
+0088 
+0089 <span class="comment">% read configuration file, ignoring comments</span>
+0090 newline=sprintf(<span class="string">'\n'</span>);
+0091 config=<span class="string">''</span>;
+0092 bracelevel=0;
+0093 <span class="keyword">while</span> ~feof(fid)
+0094     textline=fgetl(fid);
+0095     <span class="keyword">if</span> isnumeric(textline)
+0096         <span class="keyword">continue</span>
+0097     <span class="keyword">elseif</span> isempty(sscanf(textline,<span class="string">'%s'</span>)) <span class="comment">% empty text line</span>
+0098         <span class="keyword">if</span> bracelevel&gt;0
+0099             config=[config newline];
+0100         <span class="keyword">end</span>
+0101         <span class="keyword">continue</span>
+0102     <span class="keyword">end</span>
+0103     N=numel(textline);
+0104     stop=N;
+0105     <span class="keyword">for</span> ii=1:N <span class="comment">% look for special characters</span>
+0106         <span class="keyword">switch</span> textline(ii)
+0107             <span class="keyword">case</span> <span class="string">'%'</span>
+0108                 <span class="keyword">if</span> bracelevel==0
+0109                     stop=ii-1;
+0110                     <span class="keyword">break</span>
+0111                 <span class="keyword">end</span>
+0112             <span class="keyword">case</span> <span class="string">'{'</span>
+0113                 bracelevel=bracelevel+1;
+0114             <span class="keyword">case</span> <span class="string">'}'</span>
+0115                 bracelevel=bracelevel-1;
+0116         <span class="keyword">end</span>
+0117     <span class="keyword">end</span>
+0118     config=[config textline(1:stop) newline];
+0119 <span class="keyword">end</span>
+0120 fclose(fid);
+0121 
+0122 <span class="comment">% verify matched braces</span>
+0123 <span class="keyword">if</span> bracelevel~=0
+0124     status.exitmode=<span class="string">'error'</span>;
+0125     status.message=sprintf(<span class="string">'Unbalanced braces in file %s'</span>,filename);
+0126     fprintf(<span class="string">'%s\n'</span>,status.message);
+0127     <span class="keyword">return</span>
+0128 <span class="keyword">end</span>
+0129 
+0130 <span class="comment">% parse configuration</span>
+0131 <span class="keyword">while</span> numel(config)&gt;0
+0132     <span class="comment">% probe the begin statement</span>
+0133     [field,count,errmsg,next]=sscanf(config,<span class="string">'%s'</span>,1);
+0134     config=config(next:end);
+0135     <span class="keyword">if</span> isempty(field)
+0136         <span class="keyword">continue</span> <span class="comment">% skip extra space before/between/after records</span>
+0137     <span class="keyword">end</span>
+0138     left=find(field==<span class="string">'{'</span>);
+0139     right=find(field==<span class="string">'}'</span>);
+0140     <span class="keyword">if</span> strncmp(field,<span class="string">'begin{'</span>,6) &amp;&amp; <span class="keyword">...</span>
+0141             numel(left)==1 &amp;&amp; numel(right)==1 &amp;&amp; all(left&lt;right)  <span class="comment">% valid begin</span>
+0142         type=field((left+1):(right-1));
+0143         startlabel=field;
+0144         stoplabel=sprintf(<span class="string">'end{%s}'</span>,type);
+0145     <span class="keyword">else</span>
+0146         status.exitmode=<span class="string">'error'</span>;
+0147         status.message=sprintf(<span class="string">'Improper begin statement: &quot;%s&quot;'</span>,field);
+0148         fprintf(<span class="string">'%s\n'</span>,status.message);
+0149         <span class="keyword">return</span>
+0150     <span class="keyword">end</span>
+0151     <span class="comment">% run through record entries</span>
+0152     data{end+1}.Type=type;
+0153     bracelevel=0;
+0154     done=false;
+0155     <span class="keyword">while</span> ~done
+0156         <span class="comment">% capture field</span>
+0157         [field,count,errmsg,next]=sscanf(config,<span class="string">'%s'</span>,1);
+0158         config=config(next:end);
+0159         <span class="keyword">if</span> strcmp(field,stoplabel) &amp;&amp; bracelevel==0 <span class="comment">% stop label found</span>
+0160             done=true;
+0161             <span class="keyword">continue</span>
+0162         <span class="keyword">elseif</span> (numel(config)==0) || <span class="keyword">...</span>
+0163                 (strncmp(field,<span class="string">'begin{'</span>,6) &amp;&amp; bracelevel==0) <span class="comment">% end statement missing</span>
+0164             status.exitmode=<span class="string">'error'</span>;
+0165             status.message=<span class="keyword">...</span>
+0166                 sprintf(<span class="string">'Unable to find matching end statement for &quot;%s&quot;'</span>,startlabel);
+0167             <span class="keyword">return</span>
+0168         <span class="keyword">elseif</span> ~<a href="#_sub1" class="code" title="subfunction func=validfield(field)">validfield</a>(field)
+0169             <span class="comment">%any(field=='{') || any(field=='}') || any(field=='=')</span>
+0170             status.exitmode=<span class="string">'error'</span>;
+0171             status.message=<span class="keyword">...</span>
+0172                 sprintf(<span class="string">'Invalid field &quot;%s&quot; found'</span>,field);
+0173             fprintf(<span class="string">'%s\n'</span>,status.message);
+0174             <span class="keyword">return</span>
+0175         <span class="keyword">end</span>
+0176         <span class="comment">% find separator</span>
+0177         [sep,count,errmsg,next]=sscanf(config,<span class="string">'%s'</span>,1);
+0178         <span class="keyword">if</span> strcmp(sep,<span class="string">'='</span>)
+0179             config=config(next:end);
+0180         <span class="keyword">else</span>
+0181             status.exitmode=<span class="string">'error'</span>;
+0182             status.message=<span class="keyword">...</span>
+0183                 sprintf(<span class="string">'Invalid separator &quot;%s&quot; found'</span>,sep);
+0184             fprintf(<span class="string">'%s\n'</span>,status.message);
+0185             <span class="keyword">return</span>
+0186         <span class="keyword">end</span>
+0187         <span class="comment">% capture value</span>
+0188         [value,count,errmsg,next]=sscanf(config,<span class="string">'%s'</span>,1);
+0189         <span class="keyword">if</span> value(1)==<span class="string">'{'</span>
+0190             next=find(config==<span class="string">'{'</span>,1);
+0191             config=config(next:end);
+0192             bracelevel=0;
+0193             <span class="keyword">for</span> ii=1:numel(config)
+0194                 <span class="keyword">switch</span> config(ii)
+0195                     <span class="keyword">case</span> <span class="string">'{'</span>
+0196                         bracelevel=bracelevel+1;
+0197                     <span class="keyword">case</span> <span class="string">'}'</span>
+0198                         bracelevel=bracelevel-1;
+0199                 <span class="keyword">end</span>
+0200                 <span class="keyword">if</span> bracelevel==0
+0201                     value=config(2:(ii-1));
+0202                     next=ii+1;
+0203                     <span class="keyword">break</span>
+0204                 <span class="keyword">end</span>
+0205             <span class="keyword">end</span>            
+0206         <span class="keyword">end</span>
+0207         config=config(next:end);
+0208         data{end}.(field)=value;
+0209     <span class="keyword">end</span>    
+0210 <span class="keyword">end</span>
+0211 
+0212 <a name="_sub1" href="#_subfunctions" class="code">function func=validfield(field)</a>
+0213 
+0214 field=double(field);
+0215 number=(field&gt;=48) &amp; (field &lt;=57);
+0216 uppercase=(field&gt;=65) &amp; (field&lt;=90);
+0217 underscore=(field==95);
+0218 lowercase=(field&gt;=97) &amp; (field&lt;=122);
+0219 
+0220 func=false;
+0221 <span class="keyword">if</span> uppercase(1) || lowercase(1)
+0222     <span class="keyword">if</span> all(number | uppercase | underscore | lowercase)
+0223         func=true;
+0224     <span class="keyword">end</span>
+0225 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

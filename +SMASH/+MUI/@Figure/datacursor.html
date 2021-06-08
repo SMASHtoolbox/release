@@ -1,0 +1,126 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of datacursor</title>
+  <meta name="keywords" content="datacursor">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="../../index.html">+SMASH</a> &gt; <a href="../index.html">+MUI</a> &gt; <a href="index.html">@Figure</a> &gt; datacursor.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+MUI/@Figure&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>datacursor
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function datacursor(object,mode) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="detoggle.html" class="code" title="function detoggle(object)">detoggle</a>	determine number of active toggles</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="Figure.html" class="code" title="">Figure</a>	Figure class</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function callback(src,varargin)</a></li><li><a href="#_sub2" class="code">function output_txt = datacursor_text(obj,event_obj)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function datacursor(object,mode)</a>
+0002 
+0003 <span class="keyword">switch</span> mode
+0004     <span class="keyword">case</span> <span class="string">'create'</span>
+0005         h=uitoggletool(<span class="string">'Parent'</span>,object.ToolBar,<span class="keyword">...</span>
+0006             <span class="string">'Tag'</span>,<span class="string">'DataCursor'</span>,<span class="string">'ToolTipString'</span>,<span class="string">'Data cursor'</span>,<span class="keyword">...</span>
+0007             <span class="string">'Cdata'</span>,local_graphic(<span class="string">'DatatipIcon'</span>),<span class="string">'Separator'</span>,<span class="string">'off'</span>,<span class="keyword">...</span>
+0008             <span class="string">'ClickedCallback'</span>,@<a href="#_sub1" class="code" title="subfunction callback(src,varargin)">callback</a>);
+0009         object.ToolButton.DataCursor=h;
+0010     <span class="keyword">case</span> <span class="string">'hide'</span>
+0011         set(object.Button.DataCursor,<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+0012     <span class="keyword">case</span> <span class="string">'show'</span>
+0013         set(object.Button.DataCursor,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0014 <span class="keyword">end</span>
+0015 
+0016 <span class="comment">%%</span>
+0017     <a name="_sub1" href="#_subfunctions" class="code">function callback(src,varargin)</a>
+0018         state=get(src,<span class="string">'State'</span>);
+0019         <a href="detoggle.html" class="code" title="function detoggle(object)">detoggle</a>(object);
+0020         <span class="keyword">if</span> strcmpi(state,<span class="string">'on'</span>)
+0021             set(src,<span class="string">'State'</span>,<span class="string">'on'</span>);
+0022             dcm_obj=datacursormode(object.Handle);
+0023         set(dcm_obj,<span class="string">'Enable'</span>,<span class="string">'on'</span>,<span class="string">'UpdateFcn'</span>,@<a href="#_sub2" class="code" title="subfunction output_txt = datacursor_text(obj,event_obj)">datacursor_text</a>)
+0024         <span class="keyword">end</span>
+0025     <span class="keyword">end</span>
+0026 
+0027 <span class="keyword">end</span>
+0028 
+0029 
+0030 <span class="comment">%%</span>
+0031 <a name="_sub2" href="#_subfunctions" class="code">function output_txt = datacursor_text(obj,event_obj)</a>
+0032 <span class="comment">% Display the position of the data cursor</span>
+0033 <span class="comment">% obj          Currently not used (empty)</span>
+0034 <span class="comment">% event_obj    Handle to event object</span>
+0035 <span class="comment">% output_txt   Data cursor text string (string or cell array of strings).</span>
+0036 
+0037 
+0038 pos = get(event_obj,<span class="string">'Position'</span>);
+0039 x=pos(1);
+0040 output_txt{1}=sprintf(<span class="string">'X: %#+.6g'</span>,x);
+0041 y=pos(2);
+0042 output_txt{2}=sprintf(<span class="string">'Y: %#+.6g'</span>,y);
+0043 
+0044 target=get(event_obj,<span class="string">'Target'</span>);
+0045 <span class="keyword">switch</span> get(target,<span class="string">'Type'</span>)
+0046     <span class="keyword">case</span> <span class="string">'image'</span>
+0047         cdata=get(target,<span class="string">'CData'</span>);
+0048         [M,N]=size(cdata);        
+0049         xdata=get(target,<span class="string">'XData'</span>);
+0050         xdata=linspace(xdata(1),xdata(end),N);
+0051         ydata=get(target,<span class="string">'YData'</span>);
+0052         ydata=linspace(ydata(1),ydata(end),M);
+0053         z=interp2(xdata,ydata,cdata,x,y,<span class="string">'nearest'</span>);
+0054         output_txt{3}=sprintf(<span class="string">'C: %#+.6g'</span>,z);
+0055     <span class="keyword">case</span> <span class="string">'patch'</span>
+0056         zdata=get(target,<span class="string">'zData'</span>);
+0057         <span class="keyword">if</span> ~isempty(zdata)
+0058             xdata=get(target,<span class="string">'XData'</span>);
+0059             ydata=get(target,<span class="string">'YData'</span>);
+0060             L2=(x-xdata).^2+(y-ydata).^2;
+0061             [~,index]=min(L2);
+0062             z=zdata(index);
+0063             output_txt{3}=sprintf(<span class="string">'Z: %#+.6g'</span>,z);
+0064         <span class="keyword">end</span>
+0065         cdata=get(target,<span class="string">'CData'</span>);
+0066         <span class="keyword">if</span> ~isempty(cdata)
+0067             xdata=get(target,<span class="string">'XData'</span>);
+0068             ydata=get(target,<span class="string">'YData'</span>);
+0069             L2=(x-xdata).^2+(y-ydata).^2;
+0070             [~,index]=min(L2);
+0071             z=cdata(index);
+0072             temp=sprintf(<span class="string">'%#+.6g '</span>,z);
+0073             output_txt{3}=sprintf(<span class="string">'C: %s'</span>,temp);
+0074         <span class="keyword">end</span>
+0075 <span class="keyword">end</span>
+0076 
+0077 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

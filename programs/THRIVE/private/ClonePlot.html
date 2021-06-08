@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of ClonePlot</title>
+  <meta name="keywords" content="ClonePlot">
+  <meta name="description" content="get handles">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">THRIVE</a> &gt; <a href="index.html">private</a> &gt; ClonePlot.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/THRIVE/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>ClonePlot
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>get handles</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function ClonePlot(src,varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> get handles</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="clean_legend.html" class="code" title="function varargout=clean_legend(varargin)">clean_legend</a>	clean_legend : eliminates duplicate tag information in legend</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="EllipseScreen.html" class="code" title="function fig=EllipseScreen(oldfig)">EllipseScreen</a>	allocate mising input</li><li><a href="LoadScreen.html" class="code" title="function fig=LoadScreen(oldfig)">LoadScreen</a>	LoadScreen:</li><li><a href="QuadratureScreen.html" class="code" title="function fig=QuadratureScreen(oldfig)">QuadratureScreen</a>	this function needs to be significantly revised. Entry into the figure</li><li><a href="ResultsScreen.html" class="code" title="function fig=ResultsScreen(oldfig)">ResultsScreen</a>	ResultsScreen:</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function ClonePlot(src,varargin)</a>
+0002 
+0003 <span class="comment">% get handles</span>
+0004 parent=get(src,<span class="string">'Parent'</span>);
+0005 haxes=findall(parent,<span class="string">'Type'</span>,<span class="string">'axes'</span>);
+0006 
+0007 <span class="comment">% separate legend objects</span>
+0008 N=numel(haxes);
+0009 flag=false([1 N]);
+0010 <span class="keyword">for</span> ii=1:N
+0011     tag=get(haxes(ii),<span class="string">'Tag'</span>);
+0012     <span class="keyword">if</span> strcmp(tag,<span class="string">'legend'</span>)
+0013         flag(ii)=true;
+0014     <span class="keyword">end</span>
+0015 <span class="keyword">end</span>
+0016 hlegend=haxes(flag);
+0017 haxes=haxes(~flag);
+0018 
+0019 <span class="comment">% create figure</span>
+0020 <span class="comment">%fig=MinimalFigure('Visible','off');</span>
+0021 fig=figure(<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+0022 movegui(fig,<span class="string">'center'</span>);
+0023 
+0024 <span class="comment">% copy non-legend axes objects</span>
+0025 new=copyobj(haxes,fig);
+0026 
+0027 <span class="comment">% recreate legends</span>
+0028 <span class="keyword">for</span> ii=1:numel(hlegend)  
+0029     data=get(hlegend(ii),<span class="string">'UserData'</span>);      
+0030     source=data.PlotHandle;  
+0031     children=get(data.PlotHandle,<span class="string">'Children'</span>);
+0032     handles=data.handles;
+0033     Nhandle=numel(handles);
+0034     match=ones([1 Nhandle]);
+0035     <span class="keyword">for</span> jj=1:Nhandle
+0036         match(jj)=find(handles(jj)==children,1);
+0037     <span class="keyword">end</span>    
+0038     kk=find(source==haxes);
+0039     destination=new(kk);
+0040     children=get(destination,<span class="string">'Children'</span>);        
+0041     <a href="clean_legend.html" class="code" title="function varargout=clean_legend(varargin)">clean_legend</a>(children(match),data.lstrings,<span class="string">'Location'</span>,<span class="string">'Best'</span>); <span class="comment">% create new legend</span>
+0042     <a href="clean_legend.html" class="code" title="function varargout=clean_legend(varargin)">clean_legend</a>(data.handles,data.lstrings,<span class="string">'Location'</span>,<span class="string">'Best'</span>); <span class="comment">% refresh existing legend</span>
+0043 <span class="keyword">end</span>
+0044 
+0045 <span class="comment">% make figure visible</span>
+0046 name=sprintf(<span class="string">'Cloned plot (%s)'</span>,datestr(now));
+0047 set(fig,<span class="string">'NumberTitle'</span>,<span class="string">'off'</span>,<span class="string">'Name'</span>,name,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0048 refresh(ancestor(parent,<span class="string">'figure'</span>));</pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

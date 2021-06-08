@@ -1,0 +1,865 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of datninja</title>
+  <meta name="keywords" content="datninja">
+  <meta name="description" content="datninja : extract line data from (digitize) an image">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">datninja</a> &gt; <a href="index.html">old</a> &gt; datninja.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/datninja/old&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>datninja
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>datninja : extract line data from (digitize) an image</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function datninja(imagefile) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> datninja : extract line data from (digitize) an image
+
+ The program assists the user in &quot;digitizing a curve&quot;, the process of
+ converting points in a digital image to a set of (x,y) data points.  To
+ do this, the user selects two sets of points in the image.  First, a
+ series of reference points are chosen based on known locations in the
+ image (e.g., the axes origin).  At least three reference point (not all
+ on the same line) must be chosen, and more reference points may be added
+ to refine the calibration.  Second, a set of data points--the locations
+ of interest--are chosen.  A graphical interface assists this process, and
+ the results are saved to a text file.  Data saved by datninja can be
+ reloaded into the program, and can be read into MATLAB using the
+ datninja_reader function.
+
+ Usage:
+  &gt;&gt; datninja(filename); % load image file into the datninja proram
+  &gt;&gt; dataninja; % load program (user will be prompted for a file)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function LoadImage(varargin)</a></li><li><a href="#_sub2" class="code">function SavePoints(varargin)</a></li><li><a href="#_sub3" class="code">function LoadPoints(varargin)</a></li><li><a href="#_sub4" class="code">function RemovePoints(varargin)</a></li><li><a href="#_sub5" class="code">function ExitProgram(varargin)</a></li><li><a href="#_sub6" class="code">function RotateImage(src,~,direction)</a></li><li><a href="#_sub7" class="code">function FlipImage(src,~,direction)</a></li><li><a href="#_sub8" class="code">function setXScale(varargin)</a></li><li><a href="#_sub9" class="code">function setYScale(varargin)</a></li><li><a href="#_sub10" class="code">function AboutProgram(varargin)</a></li><li><a href="#_sub11" class="code">function UsingProgram(varargin)</a></li><li><a href="#_sub12" class="code">function MoveRectangle(varargin)</a></li><li><a href="#_sub13" class="code">function ChangeZoom(varargin)</a></li><li><a href="#_sub14" class="code">function UpdateDetailAxes(data)</a></li><li><a href="#_sub15" class="code">function PointSelect(varargin)</a></li><li><a href="#_sub16" class="code">function CreatePoint(varargin)</a></li><li><a href="#_sub17" class="code">function AlterPoint(varargin)</a></li><li><a href="#_sub18" class="code">function value=EnterRefValues(oldvalue)</a></li><li><a href="#_sub19" class="code">function ResizeWindow(varargin)</a></li><li><a href="#_sub20" class="code">function KeyPressFcn(src,eventdata)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% datninja : extract line data from (digitize) an image</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% The program assists the user in &quot;digitizing a curve&quot;, the process of</span>
+0004 <span class="comment">% converting points in a digital image to a set of (x,y) data points.  To</span>
+0005 <span class="comment">% do this, the user selects two sets of points in the image.  First, a</span>
+0006 <span class="comment">% series of reference points are chosen based on known locations in the</span>
+0007 <span class="comment">% image (e.g., the axes origin).  At least three reference point (not all</span>
+0008 <span class="comment">% on the same line) must be chosen, and more reference points may be added</span>
+0009 <span class="comment">% to refine the calibration.  Second, a set of data points--the locations</span>
+0010 <span class="comment">% of interest--are chosen.  A graphical interface assists this process, and</span>
+0011 <span class="comment">% the results are saved to a text file.  Data saved by datninja can be</span>
+0012 <span class="comment">% reloaded into the program, and can be read into MATLAB using the</span>
+0013 <span class="comment">% datninja_reader function.</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% Usage:</span>
+0016 <span class="comment">%  &gt;&gt; datninja(filename); % load image file into the datninja proram</span>
+0017 <span class="comment">%  &gt;&gt; dataninja; % load program (user will be prompted for a file)</span>
+0018 
+0019 <span class="comment">% created November 24, 2008 by Daniel Dolan (Sandia National Labs)</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">% updated December 2, 2008 by Daniel Dolan</span>
+0022 <span class="comment">%   -switched from WindowKeyPressFcn to KeyPressFcn for backwards</span>
+0023 <span class="comment">%   compatibility</span>
+0024 <span class="comment">%   -removed the dock controls</span>
+0025 <span class="comment">%   -turned off the main figure's integer handle</span>
+0026 <span class="comment">%   -increased the space available for the axes titles</span>
+0027 <span class="comment">% updated May 31, 2010 by Daniel Dolan</span>
+0028 <span class="comment">%   -fixed a logarithmic scaling bug</span>
+0029 <span class="comment">%   -automatically drop transparency layer (if it exists)</span>
+0030 <a name="_sub0" href="#_subfunctions" class="code">function datninja(imagefile)</a>
+0031 
+0032 <span class="comment">% handle input</span>
+0033 <span class="keyword">if</span> nargin&lt;1 
+0034     imagefile=<span class="string">''</span>;
+0035 <span class="keyword">end</span>
+0036 
+0037 message{1}=<span class="string">'The datninja program is obsolete and will be removed in future toolbox releases'</span>;
+0038 message{2}=<span class="string">'Use the datninja app instead'</span>;
+0039 warning(<span class="string">'%s\n'</span>,message{:});
+0040 
+0041 <span class="comment">% create GUI</span>
+0042 fig=figure(<span class="string">'Visible'</span>,<span class="string">'off'</span>,<span class="string">'NumberTitle'</span>,<span class="string">'off'</span>,<span class="keyword">...</span>
+0043     <span class="string">'IntegerHandle'</span>,<span class="string">'off'</span>,<span class="string">'DockControls'</span>,<span class="string">'off'</span>,<span class="keyword">...</span>
+0044     <span class="string">'Name'</span>,<span class="string">'datninja'</span>,<span class="string">'Tag'</span>,<span class="string">'datninja'</span>,<span class="keyword">...</span>
+0045     <span class="string">'Toolbar'</span>,<span class="string">'none'</span>,<span class="string">'MenuBar'</span>,<span class="string">'none'</span>,<span class="keyword">...</span>
+0046     <span class="string">'Units'</span>,<span class="string">'pixels'</span>,<span class="string">'Pointer'</span>,<span class="string">'crosshair'</span>,<span class="keyword">...</span>
+0047     <span class="string">'CloseRequestFcn'</span>,@<a href="#_sub5" class="code" title="subfunction ExitProgram(varargin)">ExitProgram</a>,<span class="keyword">...</span>
+0048     <span class="string">'KeyPressFcn'</span>,@<a href="#_sub20" class="code" title="subfunction KeyPressFcn(src,eventdata)">KeyPressFcn</a>);
+0049 figcolor=get(fig,<span class="string">'Color'</span>);
+0050 
+0051 dummy=repmat(<span class="string">'M'</span>,[1 40]);
+0052 test=uicontrol(<span class="string">'Style'</span>,<span class="string">'pushbutton'</span>,<span class="string">'Units'</span>,<span class="string">'pixels'</span>,<span class="keyword">...</span>
+0053     <span class="string">'String'</span>,dummy);
+0054 extent=get(test,<span class="string">'Extent'</span>);
+0055 delete(test);
+0056 data.charwidth=extent(3)/size(dummy,2);
+0057 data.charheight=extent(4)/size(dummy,1);
+0058 data.minwidth=80*data.charwidth;
+0059 data.minheight=20*data.charheight;
+0060 data.gap=5; <span class="comment">% pixels</span>
+0061 data.margin=data.charheight;
+0062 data.imagefile=imagefile;
+0063 data.savefile=<span class="string">''</span>;
+0064 
+0065 <span class="comment">% create menus</span>
+0066 hmenu=uimenu(<span class="string">'Label'</span>,<span class="string">'Program'</span>);
+0067 uimenu(hmenu,<span class="string">'Label'</span>,<span class="string">'Load image'</span>,<span class="string">'Tag'</span>,<span class="string">'LoadImage'</span>,<span class="string">'Callback'</span>,@<a href="#_sub1" class="code" title="subfunction LoadImage(varargin)">LoadImage</a>);
+0068 uimenu(hmenu,<span class="string">'Label'</span>,<span class="string">'Save points'</span>,<span class="string">'Tag'</span>,<span class="string">'SavePoints'</span>,<span class="keyword">...</span>
+0069     <span class="string">'Callback'</span>,@<a href="#_sub2" class="code" title="subfunction SavePoints(varargin)">SavePoints</a>,<span class="string">'Separator'</span>,<span class="string">'on'</span>);
+0070 hsub=uimenu(hmenu,<span class="string">'Label'</span>,<span class="string">'Load points'</span>);
+0071 uimenu(hsub,<span class="string">'Label'</span>,<span class="string">'Load reference points'</span>,<span class="string">'Tag'</span>,<span class="string">'LoadReference'</span>,<span class="keyword">...</span>
+0072     <span class="string">'Callback'</span>,@<a href="#_sub3" class="code" title="subfunction LoadPoints(varargin)">LoadPoints</a>);
+0073 uimenu(hsub,<span class="string">'Label'</span>,<span class="string">'Load data points'</span>,<span class="string">'Tag'</span>,<span class="string">'LoadData'</span>,<span class="keyword">...</span>
+0074     <span class="string">'Callback'</span>,@<a href="#_sub3" class="code" title="subfunction LoadPoints(varargin)">LoadPoints</a>);
+0075 uimenu(hsub,<span class="string">'Label'</span>,<span class="string">'Load all points'</span>,<span class="string">'Tag'</span>,<span class="string">'LoadAll'</span>,<span class="keyword">...</span>
+0076     <span class="string">'Callback'</span>,@<a href="#_sub3" class="code" title="subfunction LoadPoints(varargin)">LoadPoints</a>);
+0077 hsub=uimenu(hmenu,<span class="string">'Label'</span>,<span class="string">'Remove points'</span>);
+0078 uimenu(hsub,<span class="string">'Label'</span>,<span class="string">'Remove reference points'</span>,<span class="string">'Tag'</span>,<span class="string">'RemoveReference'</span>,<span class="keyword">...</span>
+0079     <span class="string">'Callback'</span>,@<a href="#_sub4" class="code" title="subfunction RemovePoints(varargin)">RemovePoints</a>);
+0080 uimenu(hsub,<span class="string">'Label'</span>,<span class="string">'Remove data points'</span>,<span class="string">'Tag'</span>,<span class="string">'RemoveData'</span>,<span class="keyword">...</span>
+0081     <span class="string">'Callback'</span>,@<a href="#_sub4" class="code" title="subfunction RemovePoints(varargin)">RemovePoints</a>);
+0082 uimenu(hsub,<span class="string">'Label'</span>,<span class="string">'Remove all points'</span>,<span class="string">'Tag'</span>,<span class="string">'RemoveAll'</span>,<span class="keyword">...</span>
+0083     <span class="string">'Callback'</span>,@<a href="#_sub4" class="code" title="subfunction RemovePoints(varargin)">RemovePoints</a>);
+0084 uimenu(hmenu,<span class="string">'Label'</span>,<span class="string">'Exit'</span>,<span class="string">'Tag'</span>,<span class="string">'ExitProgram'</span>,<span class="keyword">...</span>
+0085     <span class="string">'Callback'</span>,@<a href="#_sub5" class="code" title="subfunction ExitProgram(varargin)">ExitProgram</a>,<span class="string">'Separator'</span>,<span class="string">'on'</span>);
+0086 
+0087 hmenu=uimenu(<span class="string">'Label'</span>,<span class="string">'Tools'</span>);
+0088 hsub=uimenu(hmenu,<span class="string">'Label'</span>,<span class="string">'Rotate image'</span>);
+0089 uimenu(hsub,<span class="string">'Label'</span>,<span class="string">'Right'</span>,<span class="keyword">...</span>
+0090     <span class="string">'Callback'</span>,{@<a href="#_sub6" class="code" title="subfunction RotateImage(src,~,direction)">RotateImage</a>,<span class="string">'right'</span>});
+0091 uimenu(hsub,<span class="string">'Label'</span>,<span class="string">'Left'</span>,<span class="keyword">...</span>
+0092     <span class="string">'Callback'</span>,{@<a href="#_sub6" class="code" title="subfunction RotateImage(src,~,direction)">RotateImage</a>,<span class="string">'left'</span>});
+0093 hsub=uimenu(hmenu,<span class="string">'Label'</span>,<span class="string">'Flip image'</span>);
+0094 uimenu(hsub,<span class="string">'Label'</span>,<span class="string">'Vertically'</span>,<span class="keyword">...</span>
+0095     <span class="string">'Callback'</span>,{@<a href="#_sub7" class="code" title="subfunction FlipImage(src,~,direction)">FlipImage</a>,<span class="string">'vertical'</span>});
+0096 uimenu(hsub,<span class="string">'Label'</span>,<span class="string">'Horizontally'</span>,<span class="keyword">...</span>
+0097     <span class="string">'Callback'</span>,{@<a href="#_sub7" class="code" title="subfunction FlipImage(src,~,direction)">FlipImage</a>,<span class="string">'horizontal'</span>});
+0098 uimenu(hmenu,<span class="string">'Label'</span>,<span class="string">'Project line'</span>,<span class="keyword">...</span>
+0099     <span class="string">'Callback'</span>,@ProjectLine,<span class="keyword">...</span>
+0100     <span class="string">'Enable'</span>,<span class="string">'off'</span>);
+0101 
+0102 hmenu=uimenu(<span class="string">'Label'</span>,<span class="string">'Options'</span>);
+0103 hsub=uimenu(hmenu,<span class="string">'Label'</span>,<span class="string">'Horizontonal scale'</span>);
+0104 uimenu(hsub,<span class="string">'Label'</span>,<span class="string">'Linear'</span>,<span class="string">'Tag'</span>,<span class="string">'LinearXScale'</span>,<span class="string">'Callback'</span>,@<a href="#_sub8" class="code" title="subfunction setXScale(varargin)">setXScale</a>,<span class="keyword">...</span>
+0105     <span class="string">'Checked'</span>,<span class="string">'on'</span>);
+0106 uimenu(hsub,<span class="string">'Label'</span>,<span class="string">'Logarithmic'</span>,<span class="string">'Tag'</span>,<span class="string">'LogXScale'</span>,<span class="string">'Callback'</span>,@<a href="#_sub8" class="code" title="subfunction setXScale(varargin)">setXScale</a>);
+0107 hsub=uimenu(hmenu,<span class="string">'Label'</span>,<span class="string">'Vertical scale'</span>);
+0108 uimenu(hsub,<span class="string">'Label'</span>,<span class="string">'Linear'</span>,<span class="string">'Tag'</span>,<span class="string">'LinearYScale'</span>,<span class="string">'Callback'</span>,@<a href="#_sub9" class="code" title="subfunction setYScale(varargin)">setYScale</a>,<span class="keyword">...</span>
+0109     <span class="string">'Checked'</span>,<span class="string">'on'</span>);
+0110 uimenu(hsub,<span class="string">'Label'</span>,<span class="string">'Logarithmic'</span>,<span class="string">'Tag'</span>,<span class="string">'LogYScale'</span>,<span class="string">'Callback'</span>,@<a href="#_sub9" class="code" title="subfunction setYScale(varargin)">setYScale</a>);
+0111 
+0112 
+0113 hmenu=uimenu(<span class="string">'Label'</span>,<span class="string">'Help'</span>);
+0114 uimenu(hmenu,<span class="string">'Label'</span>,<span class="string">'About datninja'</span>,<span class="string">'Callback'</span>,@<a href="#_sub10" class="code" title="subfunction AboutProgram(varargin)">AboutProgram</a>);
+0115 uimenu(hmenu,<span class="string">'Label'</span>,<span class="string">'Using datninja'</span>,<span class="string">'Callback'</span>,@<a href="#_sub11" class="code" title="subfunction UsingProgram(varargin)">UsingProgram</a>);
+0116 
+0117 <span class="comment">% main axes</span>
+0118 hp=uipanel(<span class="string">'Parent'</span>,fig,<span class="string">'Tag'</span>,<span class="string">'MainPanel'</span>,<span class="string">'Units'</span>,<span class="string">'pixels'</span>,<span class="keyword">...</span>
+0119     <span class="string">'BorderType'</span>,<span class="string">'none'</span>);
+0120 ha=axes(<span class="string">'Parent'</span>,hp,<span class="string">'Tag'</span>,<span class="string">'MainAxes'</span>,<span class="string">'Units'</span>,<span class="string">'pixels'</span>,<span class="keyword">...</span>
+0121     <span class="string">'YDir'</span>,<span class="string">'reverse'</span>);
+0122 image(<span class="string">'Parent'</span>,ha,<span class="string">'Tag'</span>,<span class="string">'MainImage'</span>,<span class="string">'CData'</span>,ones([480 640 3]),<span class="keyword">...</span>
+0123     <span class="string">'ButtonDownFcn'</span>,{@<a href="#_sub12" class="code" title="subfunction MoveRectangle(varargin)">MoveRectangle</a>,<span class="string">'jump'</span>});
+0124 title(<span class="string">'Full image'</span>);
+0125 axis(ha,<span class="string">'image'</span>,<span class="string">'off'</span>);
+0126 rectangle(<span class="string">'Parent'</span>,ha,<span class="string">'LineStyle'</span>,<span class="string">'--'</span>,<span class="string">'Tag'</span>,<span class="string">'ZoomRectangle'</span>,<span class="keyword">...</span>
+0127     <span class="string">'ButtonDownFcn'</span>,{@<a href="#_sub12" class="code" title="subfunction MoveRectangle(varargin)">MoveRectangle</a>,<span class="string">'activate'</span>});
+0128 
+0129 <span class="comment">% create detail axes</span>
+0130 ha=axes(<span class="string">'Parent'</span>,fig,<span class="string">'Tag'</span>,<span class="string">'DetailAxes'</span>,<span class="string">'Units'</span>,<span class="string">'pixels'</span>,<span class="keyword">...</span>
+0131     <span class="string">'YDir'</span>,<span class="string">'reverse'</span>,<span class="string">'XTick'</span>,[],<span class="string">'YTick'</span>,[],<span class="string">'Box'</span>,<span class="string">'on'</span>);
+0132 image(<span class="string">'Parent'</span>,ha,<span class="string">'Tag'</span>,<span class="string">'DetailImage'</span>,<span class="string">'CData'</span>,ones([120 120 3]),<span class="keyword">...</span>
+0133     <span class="string">'ButtonDownFcn'</span>,@<a href="#_sub16" class="code" title="subfunction CreatePoint(varargin)">CreatePoint</a>);
+0134 set(ha,<span class="string">'YDir'</span>,<span class="string">'reverse'</span>);
+0135 axis(ha,<span class="string">'off'</span>);
+0136 title(<span class="string">'Zoom region'</span>);
+0137 
+0138 <span class="comment">% create control panel</span>
+0139 hp=uipanel(<span class="string">'Parent'</span>,fig,<span class="string">'Tag'</span>,<span class="string">'ControlPanel'</span>,<span class="string">'Units'</span>,<span class="string">'pixels'</span>,<span class="keyword">...</span>
+0140     <span class="string">'BackgroundColor'</span>,figcolor,<span class="string">'BorderType'</span>,<span class="string">'none'</span>);
+0141 panelpos=get(hp,<span class="string">'Position'</span>);
+0142 pos=[data.margin data.margin 0 0];
+0143 hc=uicontrol(<span class="string">'Parent'</span>,hp,<span class="string">'Style'</span>,<span class="string">'pushbutton'</span>,<span class="string">'Tag'</span>,<span class="string">'ZoomIn'</span>,<span class="keyword">...</span>
+0144     <span class="string">'String'</span>,<span class="string">'zoom in'</span>,<span class="string">'Callback'</span>,@<a href="#_sub13" class="code" title="subfunction ChangeZoom(varargin)">ChangeZoom</a>);
+0145 extent=get(hc,<span class="string">'Extent'</span>);
+0146 pos(3)=8*data.charwidth;
+0147 pos(4)=extent(4);
+0148 set(hc,<span class="string">'Position'</span>,pos);
+0149 pos(1)=pos(1)+pos(3)+data.margin;
+0150 hc=uicontrol(<span class="string">'Parent'</span>,hp,<span class="string">'Style'</span>,<span class="string">'pushbutton'</span>,<span class="string">'Tag'</span>,<span class="string">'ZoomOut'</span>,<span class="keyword">...</span>
+0151     <span class="string">'String'</span>,<span class="string">'zoom out'</span>,<span class="string">'Callback'</span>,@<a href="#_sub13" class="code" title="subfunction ChangeZoom(varargin)">ChangeZoom</a>);
+0152 set(hc,<span class="string">'Position'</span>,pos);
+0153 pos(1)=data.margin;
+0154 pos(2)=pos(2)+pos(4)+data.margin;
+0155 hc=uicontrol(<span class="string">'Parent'</span>,hp,<span class="string">'Style'</span>,<span class="string">'radiobutton'</span>,<span class="string">'Tag'</span>,<span class="string">'DataPoints'</span>,<span class="keyword">...</span>
+0156     <span class="string">'String'</span>,<span class="string">'Select data points'</span>,<span class="string">'Value'</span>,0,<span class="string">'Callback'</span>,@<a href="#_sub15" class="code" title="subfunction PointSelect(varargin)">PointSelect</a>);
+0157 extent=get(hc,<span class="string">'Extent'</span>);
+0158 pos(3)=20*data.charwidth;
+0159 pos(4)=extent(4);
+0160 set(hc,<span class="string">'Position'</span>,pos);
+0161 pos(2)=pos(2)+pos(4)+data.margin;
+0162 hc=uicontrol(<span class="string">'Parent'</span>,hp,<span class="string">'Style'</span>,<span class="string">'radiobutton'</span>,<span class="string">'Tag'</span>,<span class="string">'RefPoints'</span>,<span class="keyword">...</span>
+0163     <span class="string">'String'</span>,<span class="string">'Select reference points'</span>,<span class="string">'Value'</span>,1,<span class="string">'Callback'</span>,@<a href="#_sub15" class="code" title="subfunction PointSelect(varargin)">PointSelect</a>);
+0164 set(hc,<span class="string">'Position'</span>,pos);
+0165 panelpos(4)=pos(2)+pos(4)+data.margin;
+0166 set(hp,<span class="string">'Position'</span>,panelpos);
+0167 
+0168 <span class="comment">% store GUI data</span>
+0169 data.handles=guihandles(fig);
+0170 guidata(fig,data);
+0171 
+0172 <span class="comment">% position graphic objects</span>
+0173 set(fig,<span class="string">'ResizeFcn'</span>,@<a href="#_sub19" class="code" title="subfunction ResizeWindow(varargin)">ResizeWindow</a>);
+0174 <a href="#_sub19" class="code" title="subfunction ResizeWindow(varargin)">ResizeWindow</a>(fig,[],data);
+0175 
+0176 <span class="comment">% set all uicontrols to have figure's ButtonDownFcn</span>
+0177 callback=get(fig,<span class="string">'KeyPressFcn'</span>);
+0178 clist=findobj(fig,<span class="string">'Type'</span>,<span class="string">'uicontrol'</span>);
+0179 set(clist,<span class="string">'KeyPressFcn'</span>,callback);
+0180 
+0181 <span class="comment">% load image and data (if any)</span>
+0182 <a href="#_sub1" class="code" title="subfunction LoadImage(varargin)">LoadImage</a>(data.handles.LoadImage);
+0183 
+0184 <span class="comment">% make figure visible</span>
+0185 movegui(fig,<span class="string">'center'</span>);
+0186 set(fig,<span class="string">'HandleVisibility'</span>,<span class="string">'callback'</span>);
+0187 figure(fig);
+0188 
+0189 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0190 <span class="comment">% program menu functions %</span>
+0191 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0192 <a name="_sub1" href="#_subfunctions" class="code">function LoadImage(varargin)</a>
+0193 src=varargin{1};
+0194 data=guidata(src);
+0195 
+0196 filename=data.imagefile;
+0197 iscallback=false;
+0198 <span class="keyword">if</span> ishandle(gcbo)
+0199     iscallback=true;
+0200 <span class="keyword">end</span>
+0201 <span class="keyword">if</span> isempty(filename) || iscallback
+0202     filterspec={};
+0203     filterspec(end+1,:)={<span class="string">'*.*'</span>,<span class="string">'All files (*.*)'</span>};
+0204     filterspec(end+1,:)={<span class="string">'*.jpg;*.JPG;*.jpeg;*.JPEG'</span>;<span class="string">'JPEG files (*.jpg)'</span>};
+0205     filterspec(end+1,:)={<span class="string">'*.tif;*.TIF;*.tiff;*.TIFF'</span>;<span class="string">'TIFF files (*.tif)'</span>};
+0206     filterspec(end+1,:)={<span class="string">'*.gif;*.GIF;'</span>;<span class="string">'GIF files (*.gif)'</span>};
+0207     filterspec(end+1,:)={<span class="string">'*.png;*.PNG;'</span>;<span class="string">'PNG files (*.png)'</span>};
+0208     filterspec(end+1,:)={<span class="string">'*.bmp;*.BMP;'</span>;<span class="string">'BMP files (*.bmp)'</span>};
+0209     [filename,pathname]=uigetfile(filterspec,<span class="string">'Select image file'</span>);
+0210     <span class="keyword">if</span> isnumeric(filename) <span class="comment">% user pressed cancel</span>
+0211         <span class="keyword">return</span>
+0212     <span class="keyword">else</span>
+0213         data.imagefile=filename;
+0214         filename=fullfile(pathname,filename);
+0215     <span class="keyword">end</span>
+0216 <span class="keyword">end</span>
+0217 
+0218 [cdata,map]=imread(filename);
+0219 <span class="keyword">if</span> size(cdata,3)==1
+0220     <span class="keyword">if</span> isempty(map)
+0221         map=gray(64);
+0222     <span class="keyword">end</span>
+0223     <span class="comment">%cdata=ind2gray(cdata,map);</span>
+0224     colormap(map);
+0225 <span class="keyword">end</span>
+0226 
+0227 <span class="keyword">switch</span> size(cdata,3)
+0228     <span class="keyword">case</span> {1,3}
+0229         <span class="comment">% do nothing</span>
+0230     <span class="keyword">case</span> 4
+0231         cdata=cdata(:,:,1:3); <span class="comment">% remove transparency layer</span>
+0232     <span class="keyword">otherwise</span>
+0233         error(<span class="string">'ERROR: invalid image format'</span>);
+0234 <span class="keyword">end</span>
+0235 
+0236 handles=data.handles;
+0237 set(handles.MainImage,<span class="string">'CData'</span>,cdata);
+0238 axis(handles.MainAxes,<span class="string">'image'</span>);
+0239 datasize=size(cdata);
+0240 bound=min(datasize(1:2))/4;
+0241 pos=[0 datasize(1)-bound bound bound];
+0242 set(handles.ZoomRectangle,<span class="string">'Position'</span>,pos);
+0243 
+0244 set(handles.DetailImage,<span class="string">'CData'</span>,cdata);
+0245 <a href="#_sub14" class="code" title="subfunction UpdateDetailAxes(data)">UpdateDetailAxes</a>(data);
+0246 
+0247 guidata(src,data);
+0248 
+0249 <a name="_sub2" href="#_subfunctions" class="code">function SavePoints(varargin)</a>
+0250 src=varargin{1};
+0251 data=guidata(src);
+0252 handles=data.handles;
+0253 
+0254 <span class="comment">% extract data from figure</span>
+0255 h=findobj(handles.MainAxes,<span class="string">'Tag'</span>,<span class="string">'ReferencePoint'</span>);
+0256 Nref=numel(h);
+0257 [mref,nref,xref,yref]=deal(zeros(1,Nref));
+0258 <span class="keyword">for</span> n=1:Nref
+0259     mref(n)=get(h(n),<span class="string">'XData'</span>);
+0260     nref(n)=get(h(n),<span class="string">'YData'</span>);
+0261     pointdata=get(h(n),<span class="string">'UserData'</span>);
+0262     xref(n)=pointdata.value{1};
+0263     yref(n)=pointdata.value{2};
+0264 <span class="keyword">end</span>
+0265 
+0266 h=findobj(handles.MainAxes,<span class="string">'Tag'</span>,<span class="string">'DataPoint'</span>);
+0267 Ndata=numel(h);
+0268 [mdata,ndata]=deal(zeros(1,Ndata));
+0269 <span class="keyword">for</span> n=1:Ndata
+0270     mdata(n)=get(h(n),<span class="string">'XData'</span>);
+0271     ndata(n)=get(h(n),<span class="string">'YData'</span>);
+0272 <span class="keyword">end</span>
+0273 
+0274 <span class="comment">% deal with logarithmic scaling</span>
+0275 logx=strcmp(get(handles.LogXScale,<span class="string">'Checked'</span>),<span class="string">'on'</span>);
+0276 <span class="keyword">if</span> logx
+0277     xref=log10(xref);
+0278 <span class="keyword">end</span>
+0279 logy=strcmp(get(handles.LogYScale,<span class="string">'Checked'</span>),<span class="string">'on'</span>);
+0280 <span class="keyword">if</span> logy
+0281     yref=log10(yref);
+0282 <span class="keyword">end</span>
+0283 
+0284 <span class="comment">% perform linear transformation</span>
+0285 z=xref(:)+1i*yref(:);
+0286 Q=ones(Nref,3);
+0287 Q(:,1)=mref(:);
+0288 Q(:,2)=nref(:);
+0289 p=Q\z;
+0290 
+0291 Q=ones(Ndata,3);
+0292 Q(:,1)=mdata(:);
+0293 Q(:,2)=ndata(:);
+0294 z=Q*p;
+0295 xdata=real(z);
+0296 ydata=imag(z);
+0297 
+0298 <span class="comment">% undo logarithmic scaling (if present)</span>
+0299 <span class="keyword">if</span> logx
+0300     xdata=10.^(xdata);
+0301     xref=10.^(xref);
+0302 <span class="keyword">end</span>
+0303 <span class="keyword">if</span> logy
+0304     ydata=10.^(ydata);
+0305     yref=10.^(yref);
+0306 <span class="keyword">end</span>
+0307 
+0308 <span class="comment">% save points to a file</span>
+0309 filterspec={};
+0310 filterspec(1,:)={<span class="string">'*.txt;*.TXT'</span>; <span class="string">'Text files (*.txt)'</span>};
+0311 filterspec(2,:)={<span class="string">'*.*'</span> <span class="string">'All files (*.*)'</span>};
+0312 [filename,pathname]=uiputfile(filterspec,<span class="keyword">...</span>
+0313     <span class="string">'Select file for saving points'</span>,data.savefile);
+0314 <span class="keyword">if</span> isnumeric(filename)
+0315     <span class="keyword">return</span>
+0316 <span class="keyword">end</span>
+0317 data.savefile=filename;
+0318 filename=fullfile(pathname,filename);
+0319 
+0320 fid=fopen(filename,<span class="string">'wt'</span>);
+0321 fprintf(fid,<span class="string">'datninja points saved %s \n'</span>,datestr(now));
+0322 fprintf(fid,<span class="string">'Data format: m n x y \n'</span>);
+0323 fprintf(fid,<span class="string">'Image file: %s'</span>,data.imagefile);
+0324 array=transpose([mref(:) nref(:) xref(:) yref(:)]);
+0325 fprintf(fid,<span class="string">'\nreference: %.2f %.2f %.6g %.6g'</span>,array);
+0326 array=transpose([mdata(:) ndata(:) xdata(:) ydata(:)]);
+0327 fprintf(fid,<span class="string">'\ndata: %.2f %.2f %.6g %.6g'</span>,array);
+0328 fclose(fid);
+0329 
+0330 <span class="comment">% store changes for later</span>
+0331 guidata(src,data);
+0332 
+0333 <a name="_sub3" href="#_subfunctions" class="code">function LoadPoints(varargin)</a>
+0334 src=varargin{1};
+0335 data=guidata(src);
+0336 handles=data.handles;
+0337 
+0338 <span class="comment">% promt user for data file</span>
+0339 filterspec={};
+0340 filterspec(1,:)={<span class="string">'*.txt;*.TXT'</span>; <span class="string">'Text files'</span>};
+0341 filterspec(2,:)={<span class="string">'*.*'</span> <span class="string">'All files'</span>};
+0342 [filename,pathname]=uigetfile(filterspec,<span class="string">'Select data file'</span>);
+0343 <span class="keyword">if</span> isnumeric(filename)
+0344     <span class="keyword">return</span>
+0345 <span class="keyword">else</span>
+0346     filename=fullfile(pathname,filename);
+0347 <span class="keyword">end</span>
+0348 
+0349 <span class="comment">% read points from file</span>
+0350 [mref,nref,xref,yref]=deal([]);
+0351 [mdata,ndata]=deal([]);
+0352 fid=fopen(filename,<span class="string">'rt'</span>);
+0353 <span class="keyword">while</span> ~feof(fid)
+0354     temp=fgetl(fid);
+0355     [first,count,err,next]=sscanf(temp,<span class="string">'%s'</span>,1);    
+0356     isref=strcmp(first,<span class="string">'reference:'</span>);
+0357     isdata=strcmp(first,<span class="string">'data:'</span>);
+0358     <span class="keyword">if</span> isref || isdata        
+0359         temp=temp(next:end);
+0360         [value,count]=sscanf(temp,<span class="string">'%g'</span>);
+0361     <span class="keyword">else</span>
+0362         <span class="keyword">continue</span>
+0363     <span class="keyword">end</span>
+0364     <span class="keyword">if</span> isref &amp;&amp; (count&gt;=4)
+0365         mref(end+1)=value(1);
+0366         nref(end+1)=value(2);
+0367         xref(end+1)=value(3);
+0368         yref(end+1)=value(4);
+0369     <span class="keyword">end</span>
+0370     <span class="keyword">if</span> isdata &amp;&amp; (count&gt;=2)
+0371         mdata(end+1)=value(1);
+0372         ndata(end+1)=value(2);
+0373     <span class="keyword">end</span>        
+0374 <span class="keyword">end</span>
+0375 Nref=numel(mref);
+0376 Ndata=numel(mdata);
+0377 
+0378 <span class="comment">% insert points into figure (two places each)</span>
+0379 tag=get(src,<span class="string">'Tag'</span>);
+0380 <span class="keyword">switch</span> tag 
+0381     <span class="keyword">case</span> <span class="string">'LoadReference'</span>
+0382         <span class="keyword">for</span> n=1:Nref
+0383             <a href="#_sub16" class="code" title="subfunction CreatePoint(varargin)">CreatePoint</a>(handles.DetailImage,<span class="string">''</span>,<span class="string">'reference'</span>,<span class="keyword">...</span>
+0384                 mref(n),nref(n),xref(n),yref(n));
+0385         <span class="keyword">end</span>
+0386     <span class="keyword">case</span> <span class="string">'LoadData'</span>
+0387         <span class="keyword">for</span> n=1:Ndata
+0388             <a href="#_sub16" class="code" title="subfunction CreatePoint(varargin)">CreatePoint</a>(handles.DetailImage,<span class="string">''</span>,<span class="string">'data'</span>,<span class="keyword">...</span>
+0389                 mdata(n),ndata(n));
+0390         <span class="keyword">end</span>
+0391     <span class="keyword">case</span> <span class="string">'LoadAll'</span>
+0392         <span class="keyword">for</span> n=1:Nref
+0393             <a href="#_sub16" class="code" title="subfunction CreatePoint(varargin)">CreatePoint</a>(handles.DetailImage,<span class="string">''</span>,<span class="string">'reference'</span>,<span class="keyword">...</span>
+0394                 mref(n),nref(n),xref(n),yref(n));
+0395         <span class="keyword">end</span>        
+0396         <span class="keyword">for</span> n=1:Ndata
+0397             <a href="#_sub16" class="code" title="subfunction CreatePoint(varargin)">CreatePoint</a>(handles.DetailImage,<span class="string">''</span>,<span class="string">'data'</span>,<span class="keyword">...</span>
+0398                 mdata(n),ndata(n));
+0399         <span class="keyword">end</span>
+0400 <span class="keyword">end</span>
+0401 
+0402 <a name="_sub4" href="#_subfunctions" class="code">function RemovePoints(varargin)</a>
+0403 src=varargin{1};
+0404 data=guidata(src);
+0405 handles=data.handles;
+0406 
+0407 tag=get(src,<span class="string">'Tag'</span>);
+0408 <span class="keyword">switch</span> tag 
+0409     <span class="keyword">case</span> <span class="string">'RemoveReference'</span>
+0410         target=findobj(handles.datninja,<span class="string">'Tag'</span>,<span class="string">'ReferencePoint'</span>);
+0411         delete(target);
+0412     <span class="keyword">case</span> <span class="string">'RemoveData'</span>
+0413         target=findobj(handles.datninja,<span class="string">'Tag'</span>,<span class="string">'DataPoint'</span>);
+0414         delete(target);
+0415     <span class="keyword">case</span> <span class="string">'RemoveAll'</span>
+0416         target=findobj(handles.datninja,<span class="string">'Tag'</span>,<span class="string">'ReferencePoint'</span>);
+0417         delete(target);
+0418         target=findobj(handles.datninja,<span class="string">'Tag'</span>,<span class="string">'DataPoint'</span>);
+0419         delete(target);        
+0420 <span class="keyword">end</span>
+0421 
+0422 <a name="_sub5" href="#_subfunctions" class="code">function ExitProgram(varargin)</a>
+0423 src=varargin{1};
+0424 fig=ancestor(src,<span class="string">'figure'</span>);
+0425 answer=questdlg(<span class="string">'Are you sure you want to exit?'</span>,<span class="string">'Exit dataninja?'</span>);
+0426 <span class="keyword">if</span> strcmpi(answer,<span class="string">'yes'</span>)
+0427     delete(fig);
+0428 <span class="keyword">else</span>
+0429     figure(fig);
+0430 <span class="keyword">end</span>
+0431 
+0432 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0433 <span class="comment">% tools menu functions %</span>
+0434 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0435 <span class="comment">% set(handles.MainImage,'CData',cdata);</span>
+0436 <span class="comment">% axis(handles.MainAxes,'image');</span>
+0437 <span class="comment">% datasize=size(cdata);</span>
+0438 <span class="comment">% bound=min(datasize(1:2))/4;</span>
+0439 <span class="comment">% pos=[0 datasize(1)-bound bound bound];</span>
+0440 <span class="comment">% set(handles.ZoomRectangle,'Position',pos);</span>
+0441 <span class="comment">%</span>
+0442 <span class="comment">% set(handles.DetailImage,'CData',cdata);</span>
+0443 
+0444 <a name="_sub6" href="#_subfunctions" class="code">function RotateImage(src,~,direction)</a>
+0445 
+0446 fig=ancestor(src,<span class="string">'figure'</span>);
+0447 data=guidata(fig);
+0448 cdata=get(data.handles.MainImage,<span class="string">'CData'</span>);
+0449 temp=zeros([size(cdata,2) size(cdata,1) size(cdata,3)],class(cdata));
+0450 <span class="keyword">switch</span> direction
+0451     <span class="keyword">case</span> <span class="string">'right'</span>                
+0452         <span class="keyword">for</span> n=1:size(cdata,3)
+0453             temp(:,:,n)=transpose(cdata(:,:,n));
+0454         <span class="keyword">end</span>          
+0455         temp=temp(:,end:-1:1,:);
+0456     <span class="keyword">case</span> <span class="string">'left'</span>
+0457         <span class="keyword">for</span> n=1:size(cdata,3)
+0458             temp(:,:,n)=transpose(cdata(:,:,n));
+0459         <span class="keyword">end</span>
+0460         temp=temp(end:-1:1,:,:);        
+0461 <span class="keyword">end</span>
+0462 cdata=temp;
+0463 set(data.handles.MainImage,<span class="string">'CData'</span>,cdata);
+0464 set(data.handles.DetailImage,<span class="string">'CData'</span>,cdata);
+0465 
+0466 <a name="_sub7" href="#_subfunctions" class="code">function FlipImage(src,~,direction)</a>
+0467 
+0468 fig=ancestor(src,<span class="string">'figure'</span>);
+0469 data=guidata(fig);
+0470 cdata=get(data.handles.MainImage,<span class="string">'CData'</span>);
+0471 <span class="keyword">switch</span> direction
+0472     <span class="keyword">case</span> <span class="string">'vertical'</span>
+0473         cdata=cdata(end:-1:1,:,:);
+0474     <span class="keyword">case</span> <span class="string">'horizontal'</span>
+0475         cdata=cdata(:,end:-1:1,:);
+0476         
+0477 <span class="keyword">end</span>
+0478 set(data.handles.MainImage,<span class="string">'CData'</span>,cdata);
+0479 set(data.handles.DetailImage,<span class="string">'CData'</span>,cdata);
+0480 
+0481 <span class="comment">%function ProjectLine(varargin)</span>
+0482 
+0483 
+0484 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0485 <span class="comment">% options menu functions %</span>
+0486 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0487 <a name="_sub8" href="#_subfunctions" class="code">function setXScale(varargin)</a>
+0488 src=varargin{1};
+0489 data=guidata(src);
+0490 handles=data.handles;
+0491 set([handles.LinearXScale handles.LogXScale],<span class="string">'Checked'</span>,<span class="string">'off'</span>);
+0492 set(src,<span class="string">'Checked'</span>,<span class="string">'on'</span>);
+0493 
+0494 <a name="_sub9" href="#_subfunctions" class="code">function setYScale(varargin)</a>
+0495 src=varargin{1};
+0496 data=guidata(src);
+0497 handles=data.handles;
+0498 set([handles.LinearYScale handles.LogYScale],<span class="string">'Checked'</span>,<span class="string">'off'</span>);
+0499 set(src,<span class="string">'Checked'</span>,<span class="string">'on'</span>);
+0500 
+0501 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%</span>
+0502 <span class="comment">% help menu functions %</span>
+0503 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%</span>
+0504 <a name="_sub10" href="#_subfunctions" class="code">function AboutProgram(varargin)</a>
+0505 
+0506 message={};
+0507 message{end+1}=<span class="string">'DATNINJA (DATa NINJA) program'</span>;
+0508 message{end+1}=<span class="string">'version 1.0 (May 2010)'</span>;
+0509 msgbox(message,<span class="string">'About datninja'</span>)
+0510 
+0511 <a name="_sub11" href="#_subfunctions" class="code">function UsingProgram(varargin)</a>
+0512 
+0513 message={};
+0514 message{end+1}=<span class="string">'Using the datninja program:'</span>;
+0515 message{end+1}=<span class="string">'1. Load an image into the program.'</span>;
+0516 message{end+1}=<span class="string">'2. Select at least three reference points (not along a line).'</span>;
+0517 message{end+1}=<span class="string">'3. Select the data points of interest.'</span>;
+0518 message{end+1}=<span class="string">'4. Save the points to a file.'</span>;
+0519 message{end+1}=<span class="string">''</span>;
+0520 message{end+1}=<span class="string">'The full image, with all reference and data points, is shown on the left.'</span>;
+0521 message{end+1}=<span class="string">'The dashed rectangle indicates the zoom region, which is shown on the right. The zoom region can be moved by clicking on the full image, dragging the rectangle, or pressing the direction keys'</span>;
+0522 message{end+1}=<span class="string">'New points are always selected in the zoom region. Right-click on a point to edit or remove it'</span>;
+0523 <span class="comment">%message{end+1}='';</span>
+0524 msgbox(message,<span class="string">'Using datninja'</span>)
+0525 
+0526 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%</span>
+0527 <span class="comment">% main axes functions %</span>
+0528 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%</span>
+0529 <a name="_sub12" href="#_subfunctions" class="code">function MoveRectangle(varargin)</a>
+0530 src=varargin{1};
+0531 mode=varargin{3};
+0532 data=guidata(src);
+0533 
+0534 handles=data.handles;
+0535 fig=ancestor(src,<span class="string">'figure'</span>);
+0536 <span class="keyword">switch</span> mode
+0537     <span class="keyword">case</span> <span class="string">'jump'</span>
+0538         MousePos=get(handles.MainAxes,<span class="string">'CurrentPoint'</span>);
+0539         RectanglePos=get(handles.ZoomRectangle,<span class="string">'Position'</span>);
+0540         RectanglePos(1)=MousePos(1,1)-RectanglePos(3)/2;
+0541         RectanglePos(2)=MousePos(1,2)-RectanglePos(4)/2;
+0542         set(handles.ZoomRectangle,<span class="string">'Position'</span>,RectanglePos);
+0543         <a href="#_sub14" class="code" title="subfunction UpdateDetailAxes(data)">UpdateDetailAxes</a>(data);
+0544     <span class="keyword">case</span> <span class="string">'activate'</span>
+0545         store.MousePos=get(handles.MainAxes,<span class="string">'CurrentPoint'</span>);
+0546         store.RectanglePos=get(src,<span class="string">'Position'</span>);
+0547         store.MotionFcn=get(fig,<span class="string">'WindowButtonMotionFcn'</span>);
+0548         set(fig,<span class="string">'WindowButtonMotionFcn'</span>,{@<a href="#_sub12" class="code" title="subfunction MoveRectangle(varargin)">MoveRectangle</a>,<span class="string">'move'</span>});
+0549         store.UpFcn=get(fig,<span class="string">'WindowButtonUpFcn'</span>);
+0550         set(fig,<span class="string">'WindowButtonUpFcn'</span>,{@<a href="#_sub12" class="code" title="subfunction MoveRectangle(varargin)">MoveRectangle</a>,<span class="string">'deactivate'</span>});
+0551         set(src,<span class="string">'UserData'</span>,store);
+0552     <span class="keyword">case</span> <span class="string">'move'</span>
+0553         store=get(handles.ZoomRectangle,<span class="string">'UserData'</span>);
+0554         MousePos=get(handles.MainAxes,<span class="string">'CurrentPoint'</span>);
+0555         shift=MousePos-store.MousePos;
+0556         RectanglePos=store.RectanglePos;
+0557         RectanglePos(1)=RectanglePos(1)+shift(1,1);
+0558         RectanglePos(2)=RectanglePos(2)+shift(1,2);
+0559         set(handles.ZoomRectangle,<span class="string">'Position'</span>,RectanglePos);
+0560         <a href="#_sub14" class="code" title="subfunction UpdateDetailAxes(data)">UpdateDetailAxes</a>(data);
+0561     <span class="keyword">case</span> <span class="string">'deactivate'</span>
+0562         store=get(handles.ZoomRectangle,<span class="string">'UserData'</span>);
+0563         set(fig,<span class="string">'WindowButtonMotionFcn'</span>,store.MotionFcn,<span class="keyword">...</span>
+0564             <span class="string">'WindowButtonUpFcn'</span>,store.UpFcn);
+0565 <span class="keyword">end</span>
+0566 
+0567 <a name="_sub13" href="#_subfunctions" class="code">function ChangeZoom(varargin)</a>
+0568 src=varargin{1};
+0569 data=guidata(src);
+0570 handles=data.handles;
+0571 
+0572 RectanglePos=get(handles.ZoomRectangle,<span class="string">'Position'</span>);
+0573 oldwidth=RectanglePos(3);
+0574 tag=get(src,<span class="string">'Tag'</span>);
+0575 <span class="keyword">switch</span> lower(tag)
+0576     <span class="keyword">case</span> <span class="string">'zoomin'</span>
+0577         width=max([oldwidth/2 4]);
+0578     <span class="keyword">case</span> <span class="string">'zoomout'</span>
+0579         imsize=size(get(handles.MainImage,<span class="string">'CData'</span>));
+0580         imsize=min(imsize(1:2));
+0581         width=min([2*oldwidth imsize]);      
+0582 <span class="keyword">end</span>
+0583 shift=(oldwidth-width)/2;
+0584 RectanglePos(1:2)=RectanglePos(1:2)+shift;
+0585 RectanglePos(3:4)=width;
+0586 set(handles.ZoomRectangle,<span class="string">'Position'</span>,RectanglePos);
+0587 <a href="#_sub14" class="code" title="subfunction UpdateDetailAxes(data)">UpdateDetailAxes</a>(data);
+0588 <span class="comment">%figure(handles.datninja);</span>
+0589 
+0590 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0591 <span class="comment">% detail axes functions %</span>
+0592 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0593 <a name="_sub14" href="#_subfunctions" class="code">function UpdateDetailAxes(data)</a>
+0594 handles=data.handles;
+0595 pos=get(handles.ZoomRectangle,<span class="string">'Position'</span>);
+0596 xb=[pos(1) pos(1)+pos(3)];
+0597 yb=[pos(2) pos(2)+pos(4)];
+0598 set(handles.DetailAxes,<span class="string">'XLim'</span>,xb,<span class="string">'YLIm'</span>,yb);
+0599 
+0600 <a name="_sub15" href="#_subfunctions" class="code">function PointSelect(varargin)</a>
+0601 
+0602 src=varargin{1};
+0603 data=guidata(src);
+0604 handles=data.handles;
+0605 
+0606 set([handles.RefPoints handles.DataPoints],<span class="string">'Value'</span>,0);
+0607 set(src,<span class="string">'Value'</span>,1);
+0608 
+0609 
+0610 <a name="_sub16" href="#_subfunctions" class="code">function CreatePoint(varargin)</a>
+0611 
+0612 src=varargin{1};
+0613 data=guidata(src);
+0614 handles=data.handles;
+0615 <span class="keyword">if</span> nargin&lt;3
+0616     mode=<span class="string">'mouseclick'</span>;
+0617 <span class="keyword">else</span>
+0618     mode=<span class="string">'manual'</span>;
+0619     ptype=varargin{3};    
+0620 <span class="keyword">end</span>
+0621 
+0622 <span class="keyword">switch</span> mode
+0623     <span class="keyword">case</span> <span class="string">'manual'</span>
+0624         x=varargin{4};
+0625         y=varargin{5};
+0626         <span class="keyword">switch</span> ptype
+0627             <span class="keyword">case</span> <span class="string">'reference'</span>
+0628                 select_ref=true;
+0629                 select_data=false;
+0630                 pointdata.value=varargin(6:7);
+0631             <span class="keyword">case</span> <span class="string">'data'</span>
+0632                 select_ref=false;
+0633                 select_data=true;
+0634         <span class="keyword">end</span>
+0635     <span class="keyword">case</span> <span class="string">'mouseclick'</span>
+0636         selection=get(handles.datninja,<span class="string">'SelectionType'</span>);
+0637         <span class="keyword">if</span> ~strcmpi(selection,<span class="string">'normal'</span>)
+0638             <span class="keyword">return</span>
+0639         <span class="keyword">end</span>        
+0640         select_ref=logical(get(handles.RefPoints,<span class="string">'Value'</span>));
+0641         <span class="keyword">if</span> select_ref <span class="comment">% prompt user for reference values</span>
+0642             value=<a href="#_sub18" class="code" title="subfunction value=EnterRefValues(oldvalue)">EnterRefValues</a>();
+0643             <span class="keyword">if</span> isempty(value)
+0644                 <span class="keyword">return</span>
+0645             <span class="keyword">else</span>
+0646                 pointdata.value=value;
+0647             <span class="keyword">end</span>
+0648         <span class="keyword">end</span>
+0649         select_data=logical(get(handles.DataPoints,<span class="string">'Value'</span>));        
+0650         pos=get(handles.DetailAxes,<span class="string">'CurrentPoint'</span>);
+0651         x=pos(1,1);
+0652         y=pos(1,2);
+0653 <span class="keyword">end</span>
+0654 
+0655 hpoint(1)=line(<span class="string">'Parent'</span>,handles.DetailAxes,<span class="keyword">...</span>
+0656     <span class="string">'XData'</span>,x,<span class="string">'YData'</span>,y,<span class="keyword">...</span>
+0657     <span class="string">'Color'</span>,[1 0 0],<span class="string">'MarkerSize'</span>,10);
+0658 hpoint(2)=copyobj(hpoint(1),handles.MainAxes);
+0659 
+0660 hcmenu=uicontextmenu();
+0661 uimenu(hcmenu,<span class="string">'Label'</span>,<span class="string">'Remove this point'</span>,<span class="keyword">...</span>
+0662     <span class="string">'Callback'</span>,{@<a href="#_sub17" class="code" title="subfunction AlterPoint(varargin)">AlterPoint</a>,<span class="string">'RemovePoint'</span>,hpoint});
+0663 <span class="keyword">if</span> select_ref    
+0664     set(hpoint,<span class="string">'Marker'</span>,<span class="string">'+'</span>,<span class="string">'Tag'</span>,<span class="string">'ReferencePoint'</span>,<span class="string">'UserData'</span>,pointdata);
+0665     uimenu(hcmenu,<span class="string">'Label'</span>,<span class="string">'Edit reference values'</span>,<span class="keyword">...</span>
+0666         <span class="string">'Callback'</span>,{@<a href="#_sub17" class="code" title="subfunction AlterPoint(varargin)">AlterPoint</a>,<span class="string">'EditValues'</span>,hpoint});
+0667 <span class="keyword">end</span>
+0668 <span class="keyword">if</span> select_data
+0669     set(hpoint,<span class="string">'Marker'</span>,<span class="string">'x'</span>,<span class="string">'Tag'</span>,<span class="string">'DataPoint'</span>);
+0670 <span class="keyword">end</span>
+0671 set(hpoint,<span class="string">'UIContextMenu'</span>,hcmenu);
+0672 
+0673 <a name="_sub17" href="#_subfunctions" class="code">function AlterPoint(varargin)</a>
+0674 <span class="comment">%src=varargin{1};</span>
+0675 mode=varargin{3};
+0676 target=varargin{4};
+0677 
+0678 <span class="keyword">switch</span> mode
+0679     <span class="keyword">case</span> <span class="string">'RemovePoint'</span>
+0680         delete(target);
+0681     <span class="keyword">case</span> <span class="string">'EditValues'</span>
+0682         pointdata=get(target(1),<span class="string">'UserData'</span>);
+0683         value=pointdata.value;
+0684         value=<a href="#_sub18" class="code" title="subfunction value=EnterRefValues(oldvalue)">EnterRefValues</a>(value);
+0685         <span class="keyword">if</span> isempty(value)
+0686             <span class="keyword">return</span>
+0687         <span class="keyword">else</span>
+0688             pointdata.value=value;
+0689             set(target,<span class="string">'UserData'</span>,pointdata);
+0690         <span class="keyword">end</span>       
+0691 <span class="keyword">end</span>
+0692 
+0693 <a name="_sub18" href="#_subfunctions" class="code">function value=EnterRefValues(oldvalue)</a>
+0694 
+0695 <span class="keyword">if</span> (nargin&lt;1) || isempty(oldvalue)
+0696     default={<span class="string">''</span>,<span class="string">''</span>};
+0697 <span class="keyword">else</span> <span class="comment">% convert numeric values</span>
+0698     default=cell(size(oldvalue));
+0699     <span class="keyword">for</span> n=1:numel(default)
+0700         default{n}=sprintf(<span class="string">'%.6g'</span>,oldvalue{n});
+0701     <span class="keyword">end</span>
+0702 <span class="keyword">end</span>
+0703 prompt{1}=<span class="string">'Enter horizontal position:'</span>;
+0704 prompt{2}=<span class="string">'Enter vertical position:'</span>;
+0705 label=<span class="string">'Reference point values'</span>;
+0706 options.Resize=<span class="string">'on'</span>;
+0707 value=inputdlg(prompt,label,1,default,options);
+0708 <span class="keyword">if</span> isempty(value) <span class="comment">% user pressed cancel</span>
+0709     <span class="keyword">return</span>
+0710 <span class="keyword">else</span>
+0711     <span class="keyword">for</span> n=1:numel(value)
+0712         [value{n},count]=sscanf(value{n},<span class="string">'%g'</span>);
+0713         <span class="keyword">if</span> count~=1
+0714             value{n}=oldvalue{n};
+0715         <span class="keyword">end</span>
+0716     <span class="keyword">end</span>
+0717 <span class="keyword">end</span>
+0718 
+0719 <span class="comment">%%%%%%%%%%%%%%%%%%%%%</span>
+0720 <span class="comment">% utility functions %</span>
+0721 <span class="comment">%%%%%%%%%%%%%%%%%%%%%</span>
+0722 <a name="_sub19" href="#_subfunctions" class="code">function ResizeWindow(varargin)</a>
+0723 
+0724 <span class="comment">% extract data</span>
+0725 fig=varargin{1};
+0726 data=guidata(fig);
+0727 handles=data.handles;
+0728 
+0729 <span class="comment">% enforce minimum figure size</span>
+0730 set(fig,<span class="string">'Units'</span>,<span class="string">'pixels'</span>);
+0731 figpos=get(fig,<span class="string">'Position'</span>);
+0732 <span class="keyword">if</span> figpos(3)&lt; data.minwidth
+0733     figpos(3)=data.minwidth;
+0734 <span class="keyword">end</span>
+0735 <span class="keyword">if</span> figpos(4)&lt;data.minheight
+0736     figpos(2)=figpos(2)-data.minheight+figpos(4);
+0737     figpos(4)=data.minheight;
+0738 <span class="keyword">end</span>
+0739 set(fig,<span class="string">'Position'</span>,figpos);
+0740 
+0741 pos=get(handles.ControlPanel,<span class="string">'Position'</span>);
+0742 panelheight=pos(4);
+0743 detailheight=figpos(4)-panelheight-3*data.charheight;
+0744 detailwidth=detailheight;
+0745 x1=figpos(3)-2*data.charheight-detailwidth;
+0746 
+0747 pos=[0 0 x1 figpos(4)];
+0748 set(handles.MainPanel,<span class="string">'Position'</span>,pos);
+0749 
+0750 pos=[0 0 x1 figpos(4)-2*data.charheight];
+0751 set(handles.MainAxes,<span class="string">'Position'</span>,pos);
+0752 
+0753 pos(1)=x1+data.charheight;
+0754 pos(2)=data.charheight;
+0755 pos(3)=detailwidth;
+0756 pos(4)=detailwidth;
+0757 set(handles.DetailAxes,<span class="string">'Position'</span>,pos);
+0758 
+0759 pos(1)=x1;
+0760 pos(2)=figpos(4)-panelheight;
+0761 pos(3)=figpos(3)-x1;
+0762 pos(4)=panelheight;
+0763 set(handles.ControlPanel,<span class="string">'Position'</span>,pos);
+0764 
+0765 <a name="_sub20" href="#_subfunctions" class="code">function KeyPressFcn(src,eventdata)</a>
+0766 data=guidata(src);
+0767 handles=data.handles;
+0768 
+0769 <span class="keyword">switch</span> eventdata.Key
+0770     <span class="keyword">case</span> <span class="string">'leftarrow'</span>
+0771         hshift=-1;
+0772         vshift=0;
+0773     <span class="keyword">case</span> <span class="string">'rightarrow'</span>
+0774         hshift=+1;
+0775         vshift=0;
+0776     <span class="keyword">case</span> <span class="string">'uparrow'</span>
+0777         hshift=0;
+0778         vshift=+1;
+0779     <span class="keyword">case</span> <span class="string">'downarrow'</span>
+0780         hshift=0;
+0781         vshift=-1;
+0782     <span class="keyword">otherwise</span>
+0783         <span class="keyword">return</span>
+0784 <span class="keyword">end</span>
+0785 
+0786 xdir=get(handles.MainAxes,<span class="string">'XDir'</span>);
+0787 <span class="keyword">if</span> strcmp(xdir,<span class="string">'reverse'</span>)
+0788     hshift=-hshift;
+0789 <span class="keyword">end</span>
+0790 ydir=get(handles.MainAxes,<span class="string">'YDir'</span>);
+0791 <span class="keyword">if</span> strcmp(ydir,<span class="string">'reverse'</span>)
+0792     vshift=-vshift;
+0793 <span class="keyword">end</span>
+0794 
+0795 pos=get(handles.ZoomRectangle,<span class="string">'Position'</span>);
+0796 factor=1/4;
+0797 pos(1)=pos(1)+hshift*factor*pos(3);
+0798 pos(2)=pos(2)+vshift*factor*pos(4);
+0799 set(handles.ZoomRectangle,<span class="string">'Position'</span>,pos);
+0800 <a href="#_sub14" class="code" title="subfunction UpdateDetailAxes(data)">UpdateDetailAxes</a>(data);</pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

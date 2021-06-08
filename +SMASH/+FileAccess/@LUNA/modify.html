@@ -1,0 +1,152 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of modify</title>
+  <meta name="keywords" content="modify">
+  <meta name="description" content="modify Modify time axes of scan">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="../../index.html">+SMASH</a> &gt; <a href="../index.html">+FileAccess</a> &gt; <a href="index.html">@LUNA</a> &gt; modify.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+FileAccess/@LUNA&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>modify
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>modify Modify time axes of scan</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function object=modify(object,step,range) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> modify Modify time axes of scan
+
+ This method modifies the time axes of a LUNA scan.  The time step between
+ points and the total time range are specified as follows.
+     &gt;&gt; object=modify(object,step,[tmin max]);
+ Empty and omitted inputs allow particular settings to remain fixed.
+     &gt;&gt; object=modify(object,step); % change step, range remains the same
+     &gt;&gt; object=modify(object,step,[]); % same as above
+     &gt;&gt; object=modify(object,[],[tmin tmax]); % change range, step remains the same
+ Any modification changes the object's IsModified property from false
+ to true, indicating that the object may differ from the data stored in
+ the source file.
+
+ Step values must always be greater than zero.  Direct interpolation is
+ applied when the requested step is less than or equal to the current
+ step.  If the requested step size is larger than the current value, low
+ pass filtering is applied before interpolation to prevent aliasing.
+
+ Time ranges are always specified with two values, and infinite values are
+ permitted.
+      - [-inf tmax] specifies all times &lt;= tmax
+      - [tmin +inf] specifies all times &gt;= tmin
+      - [-inf +inf] specifies all times (equivalient to [])
+ The two values must be different (tmax &gt; tmin).
+
+ See also <a href="LUNA.html" class="code" title="">LUNA</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="explore.html" class="code" title="function varargout=explore(object)">explore</a>	explore Explore scan</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% modify Modify time axes of scan</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This method modifies the time axes of a LUNA scan.  The time step between</span>
+0004 <span class="comment">% points and the total time range are specified as follows.</span>
+0005 <span class="comment">%     &gt;&gt; object=modify(object,step,[tmin max]);</span>
+0006 <span class="comment">% Empty and omitted inputs allow particular settings to remain fixed.</span>
+0007 <span class="comment">%     &gt;&gt; object=modify(object,step); % change step, range remains the same</span>
+0008 <span class="comment">%     &gt;&gt; object=modify(object,step,[]); % same as above</span>
+0009 <span class="comment">%     &gt;&gt; object=modify(object,[],[tmin tmax]); % change range, step remains the same</span>
+0010 <span class="comment">% Any modification changes the object's IsModified property from false</span>
+0011 <span class="comment">% to true, indicating that the object may differ from the data stored in</span>
+0012 <span class="comment">% the source file.</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% Step values must always be greater than zero.  Direct interpolation is</span>
+0015 <span class="comment">% applied when the requested step is less than or equal to the current</span>
+0016 <span class="comment">% step.  If the requested step size is larger than the current value, low</span>
+0017 <span class="comment">% pass filtering is applied before interpolation to prevent aliasing.</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% Time ranges are always specified with two values, and infinite values are</span>
+0020 <span class="comment">% permitted.</span>
+0021 <span class="comment">%      - [-inf tmax] specifies all times &lt;= tmax</span>
+0022 <span class="comment">%      - [tmin +inf] specifies all times &gt;= tmin</span>
+0023 <span class="comment">%      - [-inf +inf] specifies all times (equivalient to [])</span>
+0024 <span class="comment">% The two values must be different (tmax &gt; tmin).</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">% See also LUNA</span>
+0027 <span class="comment">%</span>
+0028 
+0029 <span class="comment">%</span>
+0030 <span class="comment">% created April 30, 2015 by Daniel Dolan (Sandia National Laboratories)</span>
+0031 <span class="comment">%</span>
+0032 <a name="_sub0" href="#_subfunctions" class="code">function object=modify(object,step,range)</a>
+0033 
+0034 <span class="comment">% manage input</span>
+0035 assert(nargin&gt;=2,<span class="string">'ERROR: insufficient input'</span>);
+0036 
+0037 <span class="keyword">if</span> isempty(step)
+0038     <span class="comment">% keep going</span>
+0039 <span class="keyword">else</span>
+0040     assert(SMASH.General.testNumber(step,<span class="string">'positive'</span>,<span class="string">'notzero'</span>),<span class="keyword">...</span>
+0041         <span class="string">'ERROR: invalid step'</span>);
+0042 <span class="keyword">end</span>
+0043 
+0044 <span class="keyword">if</span> (nargin&lt;3) || isempty(range)
+0045     range=[max(object.Time) min(object.Time)];
+0046 <span class="keyword">end</span>
+0047 assert(isnumeric(range) &amp;&amp; numel(range)==2 &amp;&amp; (diff(range)~=0),<span class="keyword">...</span>
+0048     <span class="string">'ERROR: invalid range'</span>);
+0049 range=sort(range);
+0050 range(1)=max(range(1),object.Time(1));
+0051 range(2)=min(range(2),object.Time(end));
+0052 
+0053 <span class="comment">% enforce uniform time base</span>
+0054 dt=(object.Time(end)-object.Time(1))/(numel(object.Time)-1);
+0055 <span class="keyword">if</span> isempty(step)
+0056     step=dt;
+0057 <span class="keyword">end</span>
+0058 t1=object.Time(1):dt:object.Time(end);
+0059 y=object.LinearAmplitude;
+0060 y=interp1(object.Time,y,t1);
+0061 
+0062 <span class="comment">% time revision</span>
+0063 <span class="keyword">if</span> step&gt;dt
+0064     sigma=4*(step/dt);
+0065     L=3*round(sigma);
+0066     x=-L:L;
+0067     weight=exp(-x.^2/(2*sigma^2));
+0068     weight=weight(:)/sum(weight);
+0069     y=conv(y,weight,<span class="string">'same'</span>);    
+0070 <span class="keyword">end</span>
+0071 
+0072 t2=range(1):step:range(2);
+0073 y=interp1(t1,y,t2,<span class="string">'linear'</span>);
+0074 
+0075 <span class="comment">% store results</span>
+0076 object.Time=t2;
+0077 object.LinearAmplitude=y;
+0078 object.IsModified=true;
+0079 
+0080 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

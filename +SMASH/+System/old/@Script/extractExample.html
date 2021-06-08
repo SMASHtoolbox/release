@@ -1,0 +1,168 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of extractExample</title>
+  <meta name="keywords" content="extractExample">
+  <meta name="description" content="extractExample Extract examples from toolbox">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../../index.html">SMASHtoolbox</a> &gt; <a href="../../../index.html">+SMASH</a> &gt; <a href="../../index.html">+System</a> &gt; <a href="#">old</a> &gt; <a href="index.html">@Script</a> &gt; extractExample.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../../index.html"><img alt="<" border="0" src="../../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+System/old/@Script&nbsp;<img alt=">" border="0" src="../../../../../../right.png"></a></td></tr></table>-->
+
+<h1>extractExample
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>extractExample Extract examples from toolbox</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>function varargout=extractExample(name) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> extractExample Extract examples from toolbox
+
+ This method extracts MATLAB scripts(s) from the &quot;examples&quot; directory of
+ the SMASH toolbox and copies them to a local subdirectory.
+    Script.extractExample(); % extract all scripts
+    Script.extractExample(subdir); % extract script from one subdirectory
+ Examples are extracted as standard (*.m) or live (*.mlx) scripts based on
+ how they were inserted.
+
+ See also <a href="Script.html" class="code" title="">Script</a>, <a href="insertExample.html" class="code" title="function insertExample(name,location)">insertExample</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="Script.html" class="code" title="">Script</a>	This class manages the format of MATLAB scripts and their inclusion into</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function value=isLive(filename)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% extractExample Extract examples from toolbox</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This method extracts MATLAB scripts(s) from the &quot;examples&quot; directory of</span>
+0004 <span class="comment">% the SMASH toolbox and copies them to a local subdirectory.</span>
+0005 <span class="comment">%    Script.extractExample(); % extract all scripts</span>
+0006 <span class="comment">%    Script.extractExample(subdir); % extract script from one subdirectory</span>
+0007 <span class="comment">% Examples are extracted as standard (*.m) or live (*.mlx) scripts based on</span>
+0008 <span class="comment">% how they were inserted.</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% See also Script, insertExample</span>
+0011 <span class="comment">%</span>
+0012 
+0013 <span class="comment">%</span>
+0014 <span class="comment">% created January 10, 2018 by Daniel Dolan (Sandia National Laboratories)</span>
+0015 <span class="comment">%</span>
+0016 <a name="_sub0" href="#_subfunctions" class="code">function varargout=extractExample(name)</a>
+0017 
+0018 <span class="comment">% manage input</span>
+0019 <span class="keyword">if</span> (nargin &lt; 1) || isempty(name)
+0020     name=<span class="string">'*.m'</span>;
+0021 <span class="keyword">elseif</span> strcmpi(name,<span class="string">'-all'</span>)
+0022     name=<span class="string">'*'</span>;
+0023 <span class="keyword">else</span>
+0024     assert(ischar(name),<span class="string">'ERROR: invalid example name'</span>);
+0025     k=(name == <span class="string">'/'</span>) | (name == <span class="string">'\'</span>);
+0026     name(k)=filesep;
+0027 <span class="keyword">end</span>
+0028 
+0029 <span class="comment">% copy files</span>
+0030 local=fullfile(pwd,<span class="string">'examples'</span>);
+0031 <span class="keyword">if</span> ~exist(local,<span class="string">'dir'</span>)
+0032     mkdir(local)
+0033 <span class="keyword">end</span>
+0034 
+0035 [subdir,name,ext]=fileparts(name);
+0036 name=[name ext];
+0037 source=fullfile(smashroot,<span class="string">'examples'</span>,subdir);
+0038 <span class="keyword">if</span> exist(fullfile(source,name),<span class="string">'dir'</span>)
+0039     list.name=name;
+0040     list.isdir=true;
+0041 <span class="keyword">else</span>
+0042     list=dir(fullfile(source,name));
+0043 <span class="keyword">end</span>
+0044 
+0045 report=cell(numel(list),1);
+0046 <span class="keyword">for</span> n=1:numel(list)
+0047     <span class="keyword">if</span> list(n).name(1)==<span class="string">'.'</span>
+0048         <span class="keyword">continue</span>   
+0049     <span class="keyword">end</span>
+0050     new=fullfile(local,subdir,list(n).name);
+0051     [temp,~,~,]=fileparts(new);
+0052     <span class="keyword">if</span> ~exist(temp,<span class="string">'dir'</span>)
+0053         mkdir(temp);
+0054     <span class="keyword">end</span>    
+0055     [~,temp,~]=fileparts(list(n).name);
+0056     fprintf(<span class="string">'Copying &quot;%s&quot;'</span>,temp);
+0057     temp=fullfile(source,list(n).name);
+0058     copyfile(temp,new,<span class="string">'f'</span>);
+0059     report{n}=new;
+0060     <span class="keyword">if</span> list(n).isdir
+0061         sub=dir(fullfile(new,<span class="string">'*.m'</span>));
+0062         <span class="keyword">for</span> k=1:numel(sub)
+0063             temp=fullfile(new,sub(k).name);
+0064             <span class="keyword">if</span> <a href="#_sub1" class="code" title="subfunction value=isLive(filename)">isLive</a>(temp)
+0065                 packtools.call(<span class="string">'Script.convert'</span>,temp,<span class="string">''</span>,<span class="string">'-overwrite'</span>);                
+0066             <span class="keyword">end</span>            
+0067         <span class="keyword">end</span>
+0068         junk=dir(fullfile(new,<span class="string">'.*'</span>));
+0069         <span class="keyword">for</span> k=1:numel(junk)
+0070             <span class="keyword">switch</span> junk(k).name
+0071                 <span class="keyword">case</span> {<span class="string">'.'</span> <span class="string">'..'</span>}
+0072                     <span class="comment">% do nothing</span>
+0073                 <span class="keyword">otherwise</span>
+0074                     temp=fullfile(new,junk(k).name);
+0075                     delete(temp);
+0076             <span class="keyword">end</span>
+0077         <span class="keyword">end</span>
+0078     <span class="keyword">elseif</span> <a href="#_sub1" class="code" title="subfunction value=isLive(filename)">isLive</a>(temp)
+0079         packtools.call(<span class="string">'Script.convert'</span>,new,<span class="string">''</span>,<span class="string">'-overwrite'</span>);
+0080         delete(new);
+0081     <span class="keyword">end</span>
+0082     fprintf(<span class="string">'\n'</span>);
+0083 <span class="keyword">end</span>
+0084 
+0085 <span class="comment">% manage output</span>
+0086 <span class="keyword">if</span> nargout &gt; 0
+0087     varargout{1}=report;
+0088 <span class="keyword">end</span>
+0089 
+0090 <span class="keyword">end</span>
+0091 
+0092 <a name="_sub1" href="#_subfunctions" class="code">function value=isLive(filename)</a>
+0093 
+0094 value=false;
+0095 
+0096 [pname,fname,~]=fileparts(filename);
+0097 log=fullfile(pname,[<span class="string">'.'</span> fname]);
+0098 <span class="keyword">try</span>
+0099     fid=fopen(log,<span class="string">'r'</span>);
+0100     temp=fgets(fid);
+0101 <span class="keyword">catch</span>
+0102     <span class="keyword">return</span>
+0103 <span class="keyword">end</span>
+0104 fclose(fid);
+0105 
+0106 <span class="keyword">if</span> strcmpi(strtrim(temp),<span class="string">'live'</span>)
+0107     value=true;
+0108 <span class="keyword">end</span>
+0109 
+0110 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

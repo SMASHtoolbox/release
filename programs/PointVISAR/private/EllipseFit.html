@@ -1,0 +1,197 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of EllipseFit</title>
+  <meta name="keywords" content="EllipseFit">
+  <meta name="description" content="EllipseFit : Fit an ellipse to (x,y) data">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">PointVISAR</a> &gt; <a href="index.html">private</a> &gt; EllipseFit.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/PointVISAR/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>EllipseFit
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>EllipseFit : Fit an ellipse to (x,y) data</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function func = EllipseFit(params, x, y, fixed, options) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> EllipseFit : Fit an ellipse to (x,y) data
+ Created 8/2/2004 by Daniel Dolan</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function func = Residuals(varparams, x, y, varlabels, fixedparams,</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% EllipseFit : Fit an ellipse to (x,y) data</span>
+0002 <span class="comment">% Created 8/2/2004 by Daniel Dolan</span>
+0003 <span class="comment">%</span>
+0004 <a name="_sub0" href="#_subfunctions" class="code">function func = EllipseFit(params, x, y, fixed, options)</a>
+0005 
+0006 <span class="keyword">if</span> nargin &lt; 4
+0007     fixed = [];
+0008 <span class="keyword">end</span>
+0009 <span class="keyword">if</span> isempty(fixed)
+0010     <span class="comment">%fixed = logical(zeros(size(params)));</span>
+0011     fixed=true(size(params));
+0012 <span class="keyword">end</span>
+0013 
+0014 <span class="keyword">if</span> nargin &lt; 5
+0015     options = [];
+0016 <span class="keyword">end</span>
+0017 <span class="keyword">if</span> isempty(options)
+0018     options = optimset();
+0019 <span class="keyword">end</span>
+0020 
+0021 
+0022 varparams = [];
+0023 varlabels = {};
+0024 fixedparams = [];
+0025 fixedlabels = {};
+0026 ivar = 1;
+0027 ifixed = 1;
+0028 
+0029 x0 = params(1);
+0030 <span class="keyword">if</span> logical(fixed(1))
+0031    fixedparams(ifixed) = x0;
+0032    fixedlabels{ifixed} = <span class="string">'x0'</span>;
+0033    ifixed = ifixed + 1;
+0034 <span class="keyword">else</span>
+0035     varparams(ivar) = x0;
+0036     varlabels{ivar} = <span class="string">'x0'</span>;
+0037     ivar = ivar + 1;
+0038 <span class="keyword">end</span>
+0039 
+0040 y0 = params(2);
+0041 <span class="keyword">if</span> logical(fixed(2))
+0042    fixedparams(ifixed) = y0;
+0043    fixedlabels{ifixed} = <span class="string">'y0'</span>;
+0044    ifixed = ifixed + 1;
+0045 <span class="keyword">else</span>
+0046     varparams(ivar) = y0;
+0047     varlabels{ivar} = <span class="string">'y0'</span>;
+0048     ivar = ivar + 1;
+0049 <span class="keyword">end</span>
+0050 
+0051 Lx = params(3);
+0052 <span class="keyword">if</span> logical(fixed(3))
+0053    fixedparams(ifixed) = Lx;
+0054    fixedlabels{ifixed} = <span class="string">'Lx'</span>;
+0055    ifixed = ifixed + 1;
+0056 <span class="keyword">else</span>
+0057     varparams(ivar) = Lx;
+0058     varlabels{ivar} = <span class="string">'Lx'</span>;
+0059     ivar = ivar + 1;
+0060 <span class="keyword">end</span>
+0061 
+0062 Ly = params(4);
+0063 <span class="keyword">if</span> logical(fixed(4))
+0064    fixedparams(ifixed) = Ly;
+0065    fixedlabels{ifixed} = <span class="string">'Ly'</span>;
+0066    ifixed = ifixed + 1;
+0067 <span class="keyword">else</span>
+0068     varparams(ivar) = Ly;
+0069     varlabels{ivar} = <span class="string">'Ly'</span>;
+0070     ivar = ivar + 1;
+0071 <span class="keyword">end</span>
+0072 
+0073 phase=params(5);
+0074 <span class="keyword">if</span> logical(fixed(5))
+0075    fixedparams(ifixed) = phase;
+0076    fixedlabels{ifixed} = <span class="string">'phase'</span>;
+0077    ifixed = ifixed + 1;
+0078 <span class="keyword">else</span>
+0079     varparams(ivar) = phase;
+0080     varlabels{ivar} = <span class="string">'phase'</span>;
+0081     ivar = ivar + 1;
+0082 <span class="keyword">end</span>
+0083 
+0084 varparams = fminsearch(<span class="keyword">...</span>
+0085     @<a href="#_sub1" class="code" title="subfunction func = Residuals(varparams, x, y, varlabels, fixedparams, ">Residuals</a>, varparams, options, x, y, varlabels, fixedparams, <span class="keyword">...</span>
+0086     fixedlabels);
+0087 
+0088 ivar = 1;
+0089 ifixed = 1;
+0090 <span class="keyword">for</span> ii=1:length(params)
+0091     <span class="keyword">if</span> logical(fixed(ii))
+0092         func(ii) = fixedparams(ifixed);
+0093         ifixed = ifixed + 1;
+0094     <span class="keyword">else</span>
+0095         func(ii) = varparams(ivar);
+0096         ivar = ivar+1;
+0097     <span class="keyword">end</span>    
+0098 <span class="keyword">end</span>
+0099 
+0100 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0101 <a name="_sub1" href="#_subfunctions" class="code">function func = Residuals(varparams, x, y, varlabels, fixedparams, </a><span class="keyword">...</span>
+0102     fixedlabels)
+0103 
+0104 <span class="keyword">for</span> ii=1:length(varparams)
+0105     <span class="keyword">switch</span>(varlabels{ii})
+0106         <span class="keyword">case</span> <span class="string">'x0'</span>
+0107             x0 = varparams(ii);
+0108         <span class="keyword">case</span> <span class="string">'y0'</span>
+0109             y0 = varparams(ii);
+0110         <span class="keyword">case</span> <span class="string">'Lx'</span>
+0111             Lx = varparams(ii);
+0112         <span class="keyword">case</span> <span class="string">'Ly'</span>
+0113             Ly = varparams(ii);
+0114         <span class="keyword">case</span> <span class="string">'phase'</span>
+0115             phase = varparams(ii);
+0116         <span class="keyword">otherwise</span>
+0117             <span class="comment">%</span>
+0118     <span class="keyword">end</span>    
+0119 <span class="keyword">end</span>
+0120 
+0121 <span class="keyword">for</span> ii=1:length(fixedparams)
+0122     <span class="keyword">switch</span>(fixedlabels{ii})
+0123         <span class="keyword">case</span> <span class="string">'x0'</span>
+0124             x0 = fixedparams(ii);
+0125         <span class="keyword">case</span> <span class="string">'y0'</span>
+0126             y0 = fixedparams(ii);
+0127         <span class="keyword">case</span> <span class="string">'Lx'</span>
+0128             Lx = fixedparams(ii);
+0129         <span class="keyword">case</span> <span class="string">'Ly'</span>
+0130             Ly = fixedparams(ii);
+0131         <span class="keyword">case</span> <span class="string">'phase'</span>
+0132             phase = fixedparams(ii);
+0133         <span class="keyword">otherwise</span>
+0134             <span class="comment">%</span>
+0135     <span class="keyword">end</span>    
+0136 <span class="keyword">end</span>
+0137 
+0138 x = x - x0;
+0139 y = y - y0;
+0140 Ax = 1 / Lx;
+0141 Ay = 1 / Ly;
+0142 C = sin(phase);
+0143 
+0144 func = Ax^2 * (x.^2) + Ay^2 * (y.^2) + 2 * (Ax * x) .* (Ay * y) * C + C.^2 - 1;
+0145 func = func.^2;
+0146 <span class="comment">%plot(func);figure(gcf);waitforbuttonpress;</span>
+0147 func = sum(func);</pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

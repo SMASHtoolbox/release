@@ -1,0 +1,79 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of SelectVariable</title>
+  <meta name="keywords" content="SelectVariable">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">PointVISAR</a> &gt; <a href="index.html">private</a> &gt; SelectVariable.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/PointVISAR/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>SelectVariable
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function cmenu=SelectVariable(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="PointVISARGUI.html" class="code" title="function fig=PointVISARGUI(data)">PointVISARGUI</a>	PointVISARGUI</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function func=SetVariable(varargin)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function cmenu=SelectVariable(varargin)</a>
+0002 
+0003 cmenu=uicontextmenu(<span class="string">'Tag'</span>,<span class="string">'SelectVariable'</span>);
+0004 uimenu(cmenu,<span class="string">'Label'</span>,<span class="string">'Velocity'</span>,<span class="string">'Tag'</span>,<span class="string">'velocity'</span>,<span class="keyword">...</span>
+0005     <span class="string">'Callback'</span>,@<a href="#_sub1" class="code" title="subfunction func=SetVariable(varargin)">SetVariable</a>);
+0006 uimenu(cmenu,<span class="string">'Label'</span>,<span class="string">'Phase'</span>,<span class="string">'Tag'</span>,<span class="string">'phase'</span>,<span class="keyword">...</span>
+0007     <span class="string">'Callback'</span>,@<a href="#_sub1" class="code" title="subfunction func=SetVariable(varargin)">SetVariable</a>);
+0008 uimenu(cmenu,<span class="string">'Label'</span>,<span class="string">'Calc. BIM'</span>,<span class="string">'Tag'</span>,<span class="string">'bim'</span>,<span class="keyword">...</span>
+0009     <span class="string">'Callback'</span>,@<a href="#_sub1" class="code" title="subfunction func=SetVariable(varargin)">SetVariable</a>);
+0010 uimenu(cmenu,<span class="string">'Label'</span>,<span class="string">'Contrast'</span>,<span class="string">'Tag'</span>,<span class="string">'contrast'</span>,<span class="string">'Enable'</span>,<span class="string">'off'</span>,<span class="keyword">...</span>
+0011     <span class="string">'Callback'</span>,@<a href="#_sub1" class="code" title="subfunction func=SetVariable(varargin)">SetVariable</a>);
+0012 
+0013 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0014 <a name="_sub1" href="#_subfunctions" class="code">function func=SetVariable(varargin)</a>
+0015 
+0016 choice=get(gcbo,<span class="string">'Tag'</span>);
+0017 hlabel=get(get(gcbo,<span class="string">'Parent'</span>),<span class="string">'UserData'</span>);
+0018 
+0019 <span class="keyword">switch</span>(choice)
+0020     <span class="keyword">case</span> <span class="string">'velocity'</span>
+0021         set(hlabel,<span class="string">'String'</span>,<span class="string">'Velocity'</span>);
+0022     <span class="keyword">case</span> <span class="string">'phase'</span>
+0023         set(hlabel,<span class="string">'String'</span>,<span class="string">'Phase'</span>);
+0024     <span class="keyword">case</span> <span class="string">'bim'</span>
+0025         set(hlabel,<span class="string">'String'</span>,<span class="string">'Calc. BIM'</span>);
+0026     <span class="keyword">case</span> <span class="string">'contrast'</span>
+0027         set(hlabel,<span class="string">'String'</span>,<span class="string">'Contrast'</span>);
+0028 <span class="keyword">end</span>
+0029 
+0030 <a href="PointVISARGUI.html" class="code" title="function fig=PointVISARGUI(data)">PointVISARGUI</a>(<span class="string">'update'</span>);</pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of analyzeReference</title>
+  <meta name="keywords" content="analyzeReference">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../../index.html">datninja</a> &gt; <a href="#">+datninja</a> &gt; <a href="index.html">@Session</a> &gt; analyzeReference.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../../index.html"><img alt="<" border="0" src="../../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/datninja/+datninja/@Session&nbsp;<img alt=">" border="0" src="../../../../../../right.png"></a></td></tr></table>-->
+
+<h1>analyzeReference
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>function analyzeReference(object) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function result=calculateMaxAngle(table)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function analyzeReference(object)</a>
+0002 
+0003 M=size(object.ReferenceTable,1);
+0004 assert(M &gt;= 3,<span class="string">'ERROR: at least three points needed for reference analysis'</span>);
+0005 
+0006 m=object.ReferenceTable(:,1);
+0007 n=object.ReferenceTable(:,2);
+0008 theta=<a href="#_sub1" class="code" title="subfunction result=calculateMaxAngle(table)">calculateMaxAngle</a>([m n]);
+0009 assert(theta &gt;= 10,<span class="string">'ERROR: insufficient reference span'</span>);
+0010 
+0011 <span class="comment">% log scaling</span>
+0012 x=object.ReferenceTable(:,3);
+0013 <span class="keyword">switch</span> object.LogScaling
+0014     <span class="keyword">case</span> {<span class="string">'horizontal'</span> <span class="string">'both'</span>}
+0015         x=log10(x);
+0016 <span class="keyword">end</span>
+0017 
+0018 y=object.ReferenceTable(:,4);
+0019 <span class="keyword">switch</span> object.LogScaling
+0020     <span class="keyword">case</span> {<span class="string">'vertical'</span> <span class="string">'both'</span>}
+0021         y=log10(y);
+0022 <span class="keyword">end</span>
+0023 
+0024 <span class="comment">% matrix analysis</span>
+0025 Q=ones(M,3);
+0026 Q(:,2)=m;
+0027 Q(:,3)=n;
+0028 
+0029 object.ParameterMatrix=Q\[x y];
+0030 
+0031 <span class="keyword">end</span>
+0032 
+0033 <span class="comment">% calculateMaxAngle Calculate max angle</span>
+0034 <span class="comment">% This function calculates the maximum angle spanned by a table of (x,y) points.</span>
+0035 <span class="comment">%    theta=calculateMaxAngle(table); % angle returned in degrees</span>
+0036 <span class="comment">% NOTE: both table columns must have the same units (e.g., pixels) for the calculation to be meaningful</span>
+0037 <span class="comment">%</span>
+0038 <a name="_sub1" href="#_subfunctions" class="code">function result=calculateMaxAngle(table)</a>
+0039 
+0040 <span class="keyword">try</span>
+0041     index=convhull(table,<span class="string">'Simplify'</span>,true);
+0042 <span class="keyword">catch</span>
+0043     result=0;
+0044     <span class="keyword">return</span>
+0045 <span class="keyword">end</span>
+0046 result=0;
+0047 index=unique(index);
+0048 x=table(index,1);
+0049 y=table(index,2);
+0050 M=numel(x);
+0051 <span class="keyword">for</span> m=1:M
+0052     <span class="keyword">if</span> m == 1
+0053         k=[M 1 2];
+0054     <span class="keyword">elseif</span> m == M
+0055         k=[M-1 M 1];
+0056     <span class="keyword">else</span>
+0057         k=[m-1 m m+1];
+0058     <span class="keyword">end</span>
+0059     u=[x(k(1))-x(k(2)) y(k(1))-y(k(2))];
+0060     v=[x(k(3))-x(k(2)) y(k(3))-y(k(2))];
+0061     u=u/norm(u);
+0062     v=v/norm(v);
+0063     theta=acosd(dot(u,v));
+0064     <span class="keyword">if</span> theta &gt; 90
+0065         theta=180-theta;
+0066     <span class="keyword">end</span>
+0067     result=max(result,theta);
+0068 <span class="keyword">end</span>
+0069 
+0070 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

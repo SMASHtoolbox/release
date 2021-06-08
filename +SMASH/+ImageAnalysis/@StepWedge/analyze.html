@@ -1,0 +1,353 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of analyze</title>
+  <meta name="keywords" content="analyze">
+  <meta name="description" content="analyze Analyze step wedge">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="../../index.html">+SMASH</a> &gt; <a href="../index.html">+ImageAnalysis</a> &gt; <a href="index.html">@StepWedge</a> &gt; analyze.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+ImageAnalysis/@StepWedge&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>analyze
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>analyze Analyze step wedge</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function varargout=analyze(object,mode,varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> analyze Analyze step wedge
+
+ This method analyzes the step wedge image to determine how
+ measured optical density maps to film exposure.  
+     object=analyze(object);
+ Analysis must be performed before the apply method can be used.
+
+ Step wedge analysis several intermediate steps.
+   -The user is prompted to crop the measurement (if not already done).
+   -Automatic rotation is applied to orient the measurement.
+   -Constant regions are identified by transitions of peak slope.
+   -Median values from each constant region are associated with total
+   optical density (step value plus offset)
+ Analysis is controlled by various settings (derivative parameters, etc.).
+  These settings may be adjusted using the &quot;configure&quot; method.
+
+ By default, this method fits a 4th order polynomial to the middle 95% of
+ the wedge's range.  These settings can be modified as follows.
+    object=analyze(object,'middle','Range',[lower upper],'Order',N);
+ Lower/upper range values must be between 0 and 1.  Polynomial order must
+ be an integer, and values are typically 2--6; higher values are permitted
+ but may produce unphysical results.
+
+ The full wedge range can also be analyzed.
+    object=analyze(object,'full');
+ Full range analysis divides the step wedge into three domains: fog,
+ active, and saturation.  
+    -The fog domain is  a constant density from the lowest exposure,
+    spanning all points within the density tolerance (default 0.05) of the
+    lowest exposure point.
+    -The saturation domain is a constant density at the highest permitted
+    value of the densitometer.  This region only exists when measured
+    densities are exactly the same at high exposures.
+    -The active domain is a monotonic density function between the fog and
+    saturation domains.  The slope of the active domain is continuous with
+    the fog domain but *not* the saturation domain.
+ Full wedge analysis parameters can be adjusted as shown below.
+    object=analyze(object,'full','Order',N,'FogTolerance',tol);
+ NOTE: 'full' analysis enforces the monotonic increase of film density
+ with exposure at any polynomial order.
+
+ See also <a href="StepWedge.html" class="code" title="">StepWedge</a>, <a href="apply.html" class="code" title="function target=apply(object,target)">apply</a>, <a href="configure.html" class="code" title="function varargout=configure(object,varargin)">configure</a>, <a href="clean.html" class="code" title="function object=clean(object,nhood)">clean</a>, <a href="crop.html" class="code" title="function object=crop(object,varargin)">crop</a>, <a href="rotate.html" class="code" title="function object=rotate(object,theta,value)">rotate</a>, <a href="tweak.html" class="code" title="function object=tweak(object)">tweak</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="crop.html" class="code" title="function object=crop(object,varargin)">crop</a>	crop Crop step wedge measurement</li><li><a href="generate.html" class="code" title="function object=generate(object)">generate</a>	generate Generate exposure table</li><li><a href="locate.html" class="code" title="function varargout=locate(object)">locate</a>	locate Locate step wedge regions</li><li><a href="rotate.html" class="code" title="function object=rotate(object,theta,value)">rotate</a>	rotate Rotate measured image</li><li><a href="view.html" class="code" title="function varargout=view(object,choice,varargin)">view</a>	view Step wedge visualization</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function [xs,ys,option]=analyzeMiddle(x,y,varargin)</a></li><li><a href="#_sub2" class="code">function [xs,ys,option]=analyzeFull(x,y,varargin)</a></li><li><a href="#_sub3" class="code">function chi2=residual(param)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% analyze Analyze step wedge</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This method analyzes the step wedge image to determine how</span>
+0004 <span class="comment">% measured optical density maps to film exposure.</span>
+0005 <span class="comment">%     object=analyze(object);</span>
+0006 <span class="comment">% Analysis must be performed before the apply method can be used.</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% Step wedge analysis several intermediate steps.</span>
+0009 <span class="comment">%   -The user is prompted to crop the measurement (if not already done).</span>
+0010 <span class="comment">%   -Automatic rotation is applied to orient the measurement.</span>
+0011 <span class="comment">%   -Constant regions are identified by transitions of peak slope.</span>
+0012 <span class="comment">%   -Median values from each constant region are associated with total</span>
+0013 <span class="comment">%   optical density (step value plus offset)</span>
+0014 <span class="comment">% Analysis is controlled by various settings (derivative parameters, etc.).</span>
+0015 <span class="comment">%  These settings may be adjusted using the &quot;configure&quot; method.</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">% By default, this method fits a 4th order polynomial to the middle 95% of</span>
+0018 <span class="comment">% the wedge's range.  These settings can be modified as follows.</span>
+0019 <span class="comment">%    object=analyze(object,'middle','Range',[lower upper],'Order',N);</span>
+0020 <span class="comment">% Lower/upper range values must be between 0 and 1.  Polynomial order must</span>
+0021 <span class="comment">% be an integer, and values are typically 2--6; higher values are permitted</span>
+0022 <span class="comment">% but may produce unphysical results.</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">% The full wedge range can also be analyzed.</span>
+0025 <span class="comment">%    object=analyze(object,'full');</span>
+0026 <span class="comment">% Full range analysis divides the step wedge into three domains: fog,</span>
+0027 <span class="comment">% active, and saturation.</span>
+0028 <span class="comment">%    -The fog domain is  a constant density from the lowest exposure,</span>
+0029 <span class="comment">%    spanning all points within the density tolerance (default 0.05) of the</span>
+0030 <span class="comment">%    lowest exposure point.</span>
+0031 <span class="comment">%    -The saturation domain is a constant density at the highest permitted</span>
+0032 <span class="comment">%    value of the densitometer.  This region only exists when measured</span>
+0033 <span class="comment">%    densities are exactly the same at high exposures.</span>
+0034 <span class="comment">%    -The active domain is a monotonic density function between the fog and</span>
+0035 <span class="comment">%    saturation domains.  The slope of the active domain is continuous with</span>
+0036 <span class="comment">%    the fog domain but *not* the saturation domain.</span>
+0037 <span class="comment">% Full wedge analysis parameters can be adjusted as shown below.</span>
+0038 <span class="comment">%    object=analyze(object,'full','Order',N,'FogTolerance',tol);</span>
+0039 <span class="comment">% NOTE: 'full' analysis enforces the monotonic increase of film density</span>
+0040 <span class="comment">% with exposure at any polynomial order.</span>
+0041 <span class="comment">%</span>
+0042 <span class="comment">% See also StepWedge, apply, configure, clean, crop, rotate, tweak</span>
+0043 <span class="comment">%</span>
+0044 
+0045 <span class="comment">%</span>
+0046 <span class="comment">% created August 28, 2015 by Daniel Dolan (Sandia National Laboratories)</span>
+0047 <span class="comment">%</span>
+0048 <a name="_sub0" href="#_subfunctions" class="code">function varargout=analyze(object,mode,varargin)</a>
+0049 
+0050 <span class="comment">% manage input</span>
+0051 <span class="keyword">if</span> (nargin&lt;2) || isempty(mode)
+0052     mode=<span class="string">'middle'</span>;
+0053 <span class="keyword">end</span>
+0054 assert(ischar(mode),<span class="string">'ERROR: invalid analysis mode'</span>);
+0055 
+0056 <span class="comment">% initial preparations</span>
+0057 <span class="keyword">if</span> ~object.Cropped
+0058     object=<a href="crop.html" class="code" title="function object=crop(object,varargin)">crop</a>(object,<span class="string">'manual'</span>);
+0059 <span class="keyword">end</span>
+0060 
+0061 object=<a href="rotate.html" class="code" title="function object=rotate(object,theta,value)">rotate</a>(object,<span class="string">'auto'</span>);
+0062 object=<a href="locate.html" class="code" title="function varargout=locate(object)">locate</a>(object);
+0063 object=<a href="generate.html" class="code" title="function object=generate(object)">generate</a>(object);
+0064 
+0065 <span class="comment">% perform analysis</span>
+0066 x=object.Results.TransferPoints(:,1);
+0067 y=object.Results.TransferPoints(:,2);
+0068 <span class="keyword">switch</span> lower(mode)
+0069     <span class="keyword">case</span> <span class="string">'middle'</span>
+0070         [xs,ys,option]=<a href="#_sub1" class="code" title="subfunction [xs,ys,option]=analyzeMiddle(x,y,varargin)">analyzeMiddle</a>(x,y,varargin{:});
+0071         option.Mode=<span class="string">'middle'</span>;
+0072     <span class="keyword">case</span> <span class="string">'full'</span>
+0073         [xs,ys,option]=<a href="#_sub2" class="code" title="subfunction [xs,ys,option]=analyzeFull(x,y,varargin)">analyzeFull</a>(x,y,varargin{:});
+0074         option.Mode=<span class="string">'full'</span>;
+0075     <span class="keyword">otherwise</span>
+0076         error(<span class="string">'ERROR: &quot;%s&quot; is not a valid analyze mode'</span>,mode);
+0077 <span class="keyword">end</span>
+0078 
+0079 numpoints=1000;
+0080 xsn=linspace(min(xs),max(xs),numpoints);
+0081 ys=interp1(xs,ys,xsn);
+0082 xs=xsn;
+0083 
+0084 table=[10.^(xs(:)) ys(:)];
+0085 object.Results.ForwardTable=table;
+0086 
+0087 table=table(:,end:-1:1);
+0088 start=find(table(:,1)==table(1,1),1,<span class="string">'last'</span>);
+0089 table=table(start:<span class="keyword">end</span>,:);
+0090 stop=find(table(:,1)==table(<span class="keyword">end</span>,1),1,<span class="string">'first'</span>);
+0091 table=table(1:stop,:);
+0092 object.Results.ReverseTable=table;
+0093 
+0094 object.Analyzed=true;
+0095 <a href="view.html" class="code" title="function varargout=view(object,choice,varargin)">view</a>(object,<span class="string">'Results'</span>);
+0096 
+0097 <span class="comment">% handle output</span>
+0098 <span class="keyword">if</span> nargout==0
+0099     <span class="comment">% do nothing</span>
+0100 <span class="keyword">else</span>    
+0101     object.Analyzed=true;
+0102     varargout{1}=object;  
+0103     varargout{2}=option;
+0104 <span class="keyword">end</span>
+0105 
+0106 <span class="keyword">end</span>
+0107 
+0108 <a name="_sub1" href="#_subfunctions" class="code">function [xs,ys,option]=analyzeMiddle(x,y,varargin)</a>
+0109 
+0110 <span class="comment">% manage input</span>
+0111 Narg=numel(varargin);
+0112 assert(rem(Narg,2)==0,<span class="string">'ERROR: unmatched name/value pair'</span>);
+0113 option=struct(<span class="string">'Range'</span>,[0.025 0.975],<span class="string">'Order'</span>,4);
+0114 <span class="keyword">for</span> n=1:2:Narg
+0115     name=varargin{n};
+0116     assert(ischar(name),<span class="string">'ERROR: invalid option name'</span>);
+0117     value=varargin{n+1};
+0118     assert(isnumeric(value),<span class="string">'ERROR: invalid option value'</span>);
+0119     <span class="keyword">switch</span> lower(name)
+0120         <span class="keyword">case</span> <span class="string">'range'</span>
+0121             assert((numel(value)==2) &amp;&amp; all(value&gt;0) &amp;&amp; all(value&lt;1),<span class="keyword">...</span>
+0122                 <span class="string">'ERROR: invalid range'</span>);            
+0123             option.Range=sort(value);
+0124         <span class="keyword">case</span> <span class="string">'order'</span>
+0125             assert(isscalar(value) &amp;&amp; (value&gt;0) &amp;&amp; (value==round(value)),<span class="keyword">...</span>
+0126                 <span class="string">'ERROR: invalid order'</span>);
+0127             option.Order=value;
+0128         <span class="keyword">otherwise</span>
+0129             error(<span class="string">'ERROR: &quot;%s&quot; is not a valid analysis option'</span>);
+0130     <span class="keyword">end</span>
+0131 <span class="keyword">end</span>
+0132 
+0133 <span class="comment">% analyze data inside specified range</span>
+0134 min_y=min(y);
+0135 max_y=max(y);
+0136 Ly=max_y-min_y;
+0137 y1=min_y+option.Range(1)*Ly;
+0138 y2=min_y+option.Range(2)*Ly;
+0139 
+0140 keep=(y&gt;=y1)&amp;(y&lt;=y2);
+0141 p=polyfit(x(keep),y(keep),option.Order);
+0142 xs=linspace(min(x(keep)),max(x(keep)),1000);
+0143 ys=polyval(p,xs);
+0144 
+0145 pd=polyder(p);
+0146 slope=polyval(pd,xs(end));
+0147 y0=mean(y(y&gt;=y2));
+0148 x0=xs(end)-(ys(end)-y0)/slope; <span class="comment">% project curve to upper bound</span>
+0149 xs(end+1)=x0;
+0150 ys(end+1)=y0;
+0151 
+0152 slope=polyval(polyder(p),xs(1));
+0153 y0=mean(y(y&lt;=y1));
+0154 x0=xs(1)-(ys(1)-y0)/slope; <span class="comment">% project curve to lower bound</span>
+0155 xs(end+1)=x0;
+0156 ys(end+1)=y0;
+0157 
+0158 [xs,index]=sort(xs);
+0159 ys=ys(index);
+0160 
+0161 <span class="keyword">end</span>
+0162 
+0163 <a name="_sub2" href="#_subfunctions" class="code">function [xs,ys,option]=analyzeFull(x,y,varargin)</a>
+0164 
+0165 <span class="comment">% manage input</span>
+0166 table=[x(:) y(:)];
+0167 table=sortrows(table);
+0168 x=table(:,1);
+0169 y=table(:,2);
+0170 numpoints=numel(x);
+0171 
+0172 Narg=numel(varargin);
+0173 assert(rem(Narg,2)==0,<span class="string">'ERROR: unmatched name/value pair'</span>);
+0174 option=struct(<span class="string">'Range'</span>,[0.025 0.975],<span class="string">'Order'</span>,4,<span class="keyword">...</span>
+0175     <span class="string">'FogTolerance'</span>,0.05,<span class="string">'Optimization'</span>,optimset());
+0176 <span class="keyword">for</span> n=1:2:Narg
+0177     name=varargin{n};
+0178     assert(ischar(name),<span class="string">'ERROR: invalid option name'</span>);
+0179     value=varargin{n+1};
+0180     <span class="comment">%assert(isnumeric(value),'ERROR: invalid option value');</span>
+0181     <span class="keyword">switch</span> lower(name)
+0182         <span class="keyword">case</span> <span class="string">'range'</span>
+0183             assert(isnumeric(value) &amp;&amp; (numel(value)==2) &amp;&amp; all(value&gt;0) &amp;&amp; all(value&lt;1),<span class="keyword">...</span>
+0184                 <span class="string">'ERROR: invalid range'</span>);            
+0185             option.Range=sort(value);
+0186         <span class="keyword">case</span> <span class="string">'order'</span>
+0187             assert(isnumeric(value) &amp;&amp; isscalar(value) &amp;&amp; (value&gt;0) &amp;&amp; (value==round(value)),<span class="keyword">...</span>
+0188                 <span class="string">'ERROR: invalid order'</span>);
+0189             option.Order=value;
+0190         <span class="keyword">case</span> <span class="string">'fogtolerance'</span>
+0191             assert(isnumeric(value) &amp;&amp; isscalar(value) &amp;&amp; (value&gt;0),<span class="keyword">...</span>
+0192                 <span class="string">'ERROR: invalid density tolerance'</span>);
+0193             option.FogTolerance=value;
+0194         <span class="keyword">case</span> <span class="string">'optimization'</span>
+0195             <span class="keyword">try</span>
+0196                 option.Optimization=optimset(value);
+0197             <span class="keyword">catch</span>
+0198                 error(<span class="string">'ERROR: invalid optimization settings'</span>);
+0199             <span class="keyword">end</span>
+0200         <span class="keyword">otherwise</span>
+0201             error(<span class="string">'ERROR: &quot;%s&quot; is not a valid analysis option'</span>);
+0202     <span class="keyword">end</span>
+0203 <span class="keyword">end</span>
+0204 
+0205 <span class="comment">% estimate fog region</span>
+0206 threshold=y(1)+option.FogTolerance;
+0207 k=find(y&gt;threshold,1,<span class="string">'first'</span>);
+0208 xfog0=x(k-1);
+0209 
+0210 <span class="comment">% identify saturation region (if present)</span>
+0211 temp=(y(end:-1:1) ~= y(end));
+0212 k=find(temp,1,<span class="string">'first'</span>);
+0213 xsat=x(end-(k-2));
+0214 
+0215 <span class="comment">% set up residual function</span>
+0216 b=ones(1,option.Order+1);
+0217 b(end-1)=0;
+0218 fit=[];
+0219 vector=[];
+0220 matrix=ones(numpoints,1);
+0221 FixFog=true;
+0222     <a name="_sub3" href="#_subfunctions" class="code">function chi2=residual(param)             </a>
+0223         <span class="keyword">if</span> FixFog
+0224             xfog=xfog0;
+0225         <span class="keyword">else</span>
+0226             xfog=xfog0+param(1);
+0227             param=param(2:end);
+0228         <span class="keyword">end</span>
+0229         <span class="comment">%yfog=mean(y(x&lt;=xfog));</span>
+0230         yfog=median(y(x&lt;=xfog));
+0231         u=(x-xfog)./(xsat-xfog);              
+0232         b(1:end-2)=param;
+0233         basis=zeros(numpoints,1);
+0234         k=(x&gt;xfog) &amp; (x&lt;xsat);
+0235         c=conv(b,b);
+0236         <span class="comment">%c=conv([1 0],c);</span>
+0237         c=polyint(c);
+0238         basis(k)=polyval(c,u(k))-polyval(c,0);
+0239         k=(x&gt;=xsat);
+0240         basis(k)=polyval(c,1)-polyval(c,0);
+0241         matrix(:,1)=basis;
+0242         vector=matrix\(y-yfog);
+0243         fit=matrix*vector+yfog;
+0244         chi2=mean((y-fit).^2);
+0245     <span class="keyword">end</span>
+0246 
+0247 <span class="comment">% initial optimization</span>
+0248 FixFog=true;
+0249 guess=zeros(1,option.Order-1);
+0250 result=fminsearch(@<a href="#_sub3" class="code" title="subfunction chi2=residual(param)">residual</a>,guess,option.Optimization);
+0251 
+0252 <span class="comment">% revised optimization</span>
+0253 FixFog=false;
+0254 guess=zeros(1,option.Order);
+0255 guess(2:end)=result;
+0256 result=fminsearch(@<a href="#_sub3" class="code" title="subfunction chi2=residual(param)">residual</a>,guess,option.Optimization);
+0257 
+0258 <span class="comment">%xs=linspace(min(x),max(x),1000);</span>
+0259 <span class="comment">%ys=interp1(x,fit,xs);</span>
+0260 xs=x;
+0261 ys=fit;
+0262 
+0263 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of VISARfringen</title>
+  <meta name="keywords" content="VISARfringen">
+  <meta name="description" content="apply default parameters where necessary">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">fringen</a> &gt; <a href="index.html">private</a> &gt; VISARfringen.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/fringen/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>VISARfringen
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>apply default parameters where necessary</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function data=VISARfringen(data) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> apply default parameters where necessary</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="import_data.html" class="code" title="function data=import_data(data)">import_data</a>	read data from file</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="make_signals.html" class="code" title="function data=make_signals(data)">make_signals</a>	</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function data=VISARfringen(data)</a>
+0002 
+0003 <span class="comment">% apply default parameters where necessary</span>
+0004 params=data.params;
+0005 <span class="keyword">if</span> ~isfield(params,<span class="string">'wavelength'</span>) || isempty(params.wavelength)
+0006     params.wavelength=532e-9; <span class="comment">% m</span>
+0007 <span class="keyword">end</span>
+0008 <span class="keyword">if</span> ~isfield(params,<span class="string">'delay'</span>) || isempty(params.delay)
+0009     params.delay=1e-9; <span class="comment">% s</span>
+0010 <span class="keyword">end</span>
+0011 <span class="keyword">if</span> ~isfield(params,<span class="string">'dispersion'</span>) || isempty(params.dispersion)
+0012     params.dispersion=0;
+0013 <span class="keyword">end</span>
+0014 <span class="keyword">if</span> ~isfield(params,<span class="string">'ref_phase'</span>) || isempty(params.ref_phase)
+0015     params.ref_phase=0;
+0016 <span class="keyword">end</span>
+0017 <span class="keyword">if</span> ~isfield(params,<span class="string">'phase_shift'</span>) || isempty(params.phase_shift)
+0018     <span class="comment">%params.phase_shift=[0 pi pi/2 3*pi/2];</span>
+0019     params.phase_shift=[0 180 90 270];
+0020 <span class="keyword">end</span>
+0021 <span class="keyword">if</span> ~isfield(params,<span class="string">'ref_scale'</span>) || isempty(params.ref_scale)
+0022     params.ref_scale=1;
+0023 <span class="keyword">end</span>
+0024 <span class="keyword">if</span> ~isfield(params,<span class="string">'delay_scale'</span>) || isempty(params.delay_scale)
+0025     params.delay_scale=1;
+0026 <span class="keyword">end</span>
+0027 
+0028 <span class="comment">% replicate parameters as needed</span>
+0029 Nsignal=numel(params.phase_shift);
+0030 <span class="keyword">if</span> numel(params.ref_scale) ~= Nsignal
+0031     params.ref_scale=repmat(params.ref_scale(1),[1 Nsignal]);
+0032 <span class="keyword">end</span>
+0033 <span class="keyword">if</span> numel(params.delay_scale) ~= Nsignal
+0034     params.delay_scale=repmat(params.delay_scale(1),[1 Nsignal]);
+0035 <span class="keyword">end</span>
+0036 
+0037 <span class="comment">% store parameters and extract local copies</span>
+0038 data.params=params;
+0039 wavelength=params.wavelength;
+0040 delay=params.delay;
+0041 dispersion=params.dispersion;
+0042 ref_phase=params.ref_phase*(pi/180);
+0043 phase_shift=params.phase_shift*(pi/180);
+0044 ref_scale=params.ref_scale;
+0045 delay_scale=params.delay_scale;
+0046 
+0047 <span class="comment">% read data and calculate phase difference</span>
+0048 data=<a href="import_data.html" class="code" title="function data=import_data(data)">import_data</a>(data);
+0049 data.IT=data.IC+data.IE;
+0050 timeB=data.time-delay;
+0051 Phi=data.position-interp1(data.time,data.position,timeB,<span class="string">'linear'</span>,0);
+0052 Phi=Phi+(dispersion*delay)*interp1(data.time,data.velocity,timeB,<span class="string">'linear'</span>,0);
+0053 Phi=(4*pi/wavelength)*Phi+ref_phase;
+0054 
+0055 <span class="comment">% calculate PDV signals</span>
+0056 <span class="comment">%[data.signal]=deal(zeros(size(data.time)));</span>
+0057 data.signal=cell(1,Nsignal);
+0058 <span class="keyword">for</span> k=1:Nsignal
+0059     baseline=(ref_scale(k)+delay_scale(k))*data.IT;
+0060     amplitude=2*sqrt(ref_scale(k)*delay_scale(k))*data.IC;
+0061     data.signal{k}=baseline+amplitude.*cos(Phi-phase_shift(k));
+0062 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

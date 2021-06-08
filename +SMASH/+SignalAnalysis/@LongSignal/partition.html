@@ -1,0 +1,239 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of partition</title>
+  <meta name="keywords" content="partition">
+  <meta name="description" content="partition Manage partitioning">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="../../index.html">+SMASH</a> &gt; <a href="../index.html">+SignalAnalysis</a> &gt; <a href="index.html">@LongSignal</a> &gt; partition.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+SignalAnalysis/@LongSignal&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>partition
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>partition Manage partitioning</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function partition(object,varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> partition Manage partitioning
+
+ This method manages how LongSignal objects are partitiond into local
+ analysis regions.  Analysis regions *always* span an integer number of
+ Grid points, and regions are also separated by an integer number of Grid
+ points  Partition parameters &quot;points&quot; and &quot;skip&quot; can be defined
+ explicitly.
+    object=partition(object,'Points',points); % skip=points
+    object=partition(object,'Points',[points skip]);
+
+ Partitioning can also be defined in terms of &quot;duration&quot; and &quot;advanced&quot;
+ parameters, which use the same dimensions as the object's Grid property.
+    object=partition(object,'Duration',duration); % advance=duration
+    object=partition(object,'Duration',[duration advance]);
+ The parameters &quot;duration&quot;/&quot;advance&quot; are internally converted to
+ &quot;points&quot;/&quot;skip&quot;.  Since &quot;points&quot; and &quot;skip&quot; must be integers, the actual
+ values of &quot;duration&quot; and &quot;advance&quot; may be slightly different than
+ specified.  
+
+ Division into a fixed number of analysis blocks is also supported.
+    object=partition(object,'Blocks',blocks); % overlap=0
+    object=partition(object,'Blocks',[blocks overlap]);
+ The spacing between region centers is determined from the &quot;blocks&quot;
+ parameter, i.e. this parameter (in conjuction with the total number of
+ points) determines the &quot;skip&quot; parameter. By default, each region is
+ distinct from its neighbors.  Fractional overlap between regions then
+ defines the number of points in each region.
+    points=(overlap+1)*skip
+ Once again, the &quot;points&quot; and &quot;skip&quot; parameters must be integers, so minor
+ deviations between specified and actual &quot;blocks&quot;/&quot;overlap&quot; parameters may
+ be observed.
+
+ To display the parameters of an object, call this method without outputs
+ or parameters.
+     division(object);
+ Parameters can also be read from (but not written to) the
+ Partition property.
+     param=object.Partition;
+
+ See also <a href="LongSignal.html" class="code" title="">LongSignal</a>, <a href="analyze.html" class="code" title="function result=analyze(object,LocalFcn,range,update)">analyze</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="partition.html" class="code" title="function partition(object,varargin)">partition</a>	partition Manage partitioning</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="partition.html" class="code" title="function partition(object,varargin)">partition</a>	partition Manage partitioning</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% partition Manage partitioning</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This method manages how LongSignal objects are partitiond into local</span>
+0004 <span class="comment">% analysis regions.  Analysis regions *always* span an integer number of</span>
+0005 <span class="comment">% Grid points, and regions are also separated by an integer number of Grid</span>
+0006 <span class="comment">% points  Partition parameters &quot;points&quot; and &quot;skip&quot; can be defined</span>
+0007 <span class="comment">% explicitly.</span>
+0008 <span class="comment">%    object=partition(object,'Points',points); % skip=points</span>
+0009 <span class="comment">%    object=partition(object,'Points',[points skip]);</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% Partitioning can also be defined in terms of &quot;duration&quot; and &quot;advanced&quot;</span>
+0012 <span class="comment">% parameters, which use the same dimensions as the object's Grid property.</span>
+0013 <span class="comment">%    object=partition(object,'Duration',duration); % advance=duration</span>
+0014 <span class="comment">%    object=partition(object,'Duration',[duration advance]);</span>
+0015 <span class="comment">% The parameters &quot;duration&quot;/&quot;advance&quot; are internally converted to</span>
+0016 <span class="comment">% &quot;points&quot;/&quot;skip&quot;.  Since &quot;points&quot; and &quot;skip&quot; must be integers, the actual</span>
+0017 <span class="comment">% values of &quot;duration&quot; and &quot;advance&quot; may be slightly different than</span>
+0018 <span class="comment">% specified.</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% Division into a fixed number of analysis blocks is also supported.</span>
+0021 <span class="comment">%    object=partition(object,'Blocks',blocks); % overlap=0</span>
+0022 <span class="comment">%    object=partition(object,'Blocks',[blocks overlap]);</span>
+0023 <span class="comment">% The spacing between region centers is determined from the &quot;blocks&quot;</span>
+0024 <span class="comment">% parameter, i.e. this parameter (in conjuction with the total number of</span>
+0025 <span class="comment">% points) determines the &quot;skip&quot; parameter. By default, each region is</span>
+0026 <span class="comment">% distinct from its neighbors.  Fractional overlap between regions then</span>
+0027 <span class="comment">% defines the number of points in each region.</span>
+0028 <span class="comment">%    points=(overlap+1)*skip</span>
+0029 <span class="comment">% Once again, the &quot;points&quot; and &quot;skip&quot; parameters must be integers, so minor</span>
+0030 <span class="comment">% deviations between specified and actual &quot;blocks&quot;/&quot;overlap&quot; parameters may</span>
+0031 <span class="comment">% be observed.</span>
+0032 <span class="comment">%</span>
+0033 <span class="comment">% To display the parameters of an object, call this method without outputs</span>
+0034 <span class="comment">% or parameters.</span>
+0035 <span class="comment">%     division(object);</span>
+0036 <span class="comment">% Parameters can also be read from (but not written to) the</span>
+0037 <span class="comment">% Partition property.</span>
+0038 <span class="comment">%     param=object.Partition;</span>
+0039 <span class="comment">%</span>
+0040 <span class="comment">% See also LongSignal, analyze</span>
+0041 <span class="comment">%</span>
+0042 
+0043 <a name="_sub0" href="#_subfunctions" class="code">function partition(object,varargin)</a>
+0044 
+0045 <span class="comment">% handle input</span>
+0046 <span class="keyword">if</span> nargin == 1
+0047     param=object.Partition;
+0048     temp=cell(1,6);
+0049     <span class="keyword">if</span> isempty(param)
+0050         <span class="keyword">for</span> n=1:6
+0051             temp{n}=<span class="string">'(undefined)'</span>;
+0052         <span class="keyword">end</span>
+0053     <span class="keyword">else</span>
+0054         temp{1}=sprintf(<span class="string">'%.0d'</span>,param.Points);
+0055         temp{2}=sprintf(<span class="string">'%.0d'</span>,param.Skip);
+0056         temp{3}=sprintf(<span class="string">'%#.6g'</span>,param.Duration);
+0057         temp{4}=sprintf(<span class="string">'%#.6g'</span>,param.Advance);
+0058         temp{5}=sprintf(<span class="string">'%.0d'</span>,param.Blocks);
+0059         temp{6}=sprintf(<span class="string">'%#.6g'</span>,param.Overlap);
+0060     <span class="keyword">end</span> 
+0061     fprintf(<span class="string">'\tPoints   = %#13s\tSkip    = %#13s\n'</span>,<span class="keyword">...</span>
+0062         temp{1:2});
+0063     fprintf(<span class="string">'\tDuration = %#13s\tAdvance = %#13s\n'</span>,<span class="keyword">...</span>
+0064         temp{3:4});
+0065     fprintf(<span class="string">'\tBlocks   = %#13s\tOverlap = %#13s\n'</span>,<span class="keyword">...</span>
+0066         temp{5:6});
+0067     <span class="keyword">return</span>    
+0068 <span class="keyword">elseif</span> nargin == 2 
+0069     <span class="keyword">if</span> isstruct(varargin{1})
+0070         <span class="keyword">try</span>
+0071             <a href="partition.html" class="code" title="function partition(object,varargin)">partition</a>(object,<span class="string">'Points'</span>,[object.Points object.Skip]);
+0072         <span class="keyword">catch</span> ME
+0073             throwAsCaller(ME);
+0074         <span class="keyword">end</span>
+0075     <span class="keyword">elseif</span> isempty(varargin{1})
+0076         object.Partition=[];
+0077     <span class="keyword">else</span>
+0078         error(<span class="string">'ERROR: invalid input'</span>);
+0079     <span class="keyword">end</span>
+0080     <span class="keyword">return</span>    
+0081 <span class="keyword">elseif</span> nargin==3
+0082     choice=varargin{1};
+0083     value=varargin{2};
+0084 <span class="keyword">else</span>
+0085     error(<span class="string">'ERROR: invalid number of inputs'</span>);
+0086 <span class="keyword">end</span>
+0087 
+0088 <span class="comment">% error checking</span>
+0089 assert(ischar(choice),<span class="string">'ERROR: invalid partition choice'</span>);
+0090 
+0091 assert(isnumeric(value),<span class="keyword">...</span>
+0092     <span class="string">'ERROR: division parameter(s) must be numeric'</span>);
+0093 <span class="keyword">if</span> numel(value)==1
+0094     value(2)=nan;
+0095 <span class="keyword">end</span>
+0096 assert(numel(value)==2,<span class="string">'ERROR: invalid number of parameters'</span>);
+0097 
+0098 dt=object.Increment;
+0099 numpoints=object.NumberPoints;
+0100 
+0101 <span class="comment">% calculate points/skip for each choice</span>
+0102 choice=lower(choice);
+0103 <span class="keyword">switch</span> choice
+0104     <span class="keyword">case</span> {<span class="string">'point'</span>,<span class="string">'points'</span>}
+0105         <span class="keyword">if</span> isnan(value(2))
+0106             value(2)=value(1);
+0107         <span class="keyword">end</span>      
+0108         value=round(value);
+0109         assert(value(1)&gt;1,<span class="keyword">...</span>
+0110             <span class="string">'ERROR: Points/Skip values must be greater than 1'</span>);
+0111         points=value(1);
+0112         skip=value(2);        
+0113     <span class="keyword">case</span> {<span class="string">'duration'</span>,<span class="string">'durations'</span>}
+0114         <span class="keyword">if</span> isnan(value(2))
+0115             value(2)=value(1);
+0116         <span class="keyword">end</span> 
+0117         assert(all(value&gt;0),<span class="keyword">...</span>
+0118             <span class="string">'ERROR: Duration/Advance values must be greater than 0'</span>);     
+0119         points=round(value(1)/dt)+1;
+0120         assert(points &gt; 4,<span class="string">'ERROR: specified duration is too small'</span>);
+0121         skip=round(value(2)/dt);     
+0122         assert(skip &gt;= 1,<span class="string">'ERROR: specified advance is too small'</span>);
+0123     <span class="keyword">case</span> {<span class="string">'block'</span>,<span class="string">'blocks'</span>}
+0124         <span class="keyword">if</span> isnan(value(2))
+0125             value(2)=0;
+0126         <span class="keyword">end</span>
+0127         value(1)=round(value(1));
+0128         assert(value(1) &gt; 0,<span class="string">'ERROR: blocks value must be greater than 0'</span>);        
+0129         <span class="comment">%assert(value(2)&gt;=0,'ERROR: Overlap value must be greater than or equal to 0');</span>
+0130         skip=floor(numpoints/value(1));         
+0131         skip=max(skip,1);
+0132         points=(value(2)+1)*skip;        
+0133     <span class="keyword">otherwise</span>        
+0134         error(<span class="string">'ERROR: invalid division choice'</span>);
+0135 <span class="keyword">end</span>
+0136 
+0137 <span class="comment">% calculate duration/advance and blocks/overlap</span>
+0138 <span class="keyword">if</span> rem(points,2) == 0
+0139     points=points+1; <span class="comment">% force odd number of points</span>
+0140 <span class="keyword">end</span>
+0141 
+0142 duration=(points-1)*dt;
+0143 advance=skip*dt;
+0144 blocks=floor(numpoints/skip);
+0145 overlap=(points/skip)-1;
+0146 
+0147 <span class="comment">%object.Parameter=[points skip duration advance blocks overlap];</span>
+0148 object.Partition=struct(<span class="keyword">...</span>
+0149     <span class="string">'Points'</span>,points,<span class="string">'Skip'</span>,skip,<span class="keyword">...</span>
+0150     <span class="string">'Duration'</span>,duration,<span class="string">'Advance'</span>,advance,<span class="keyword">...</span>
+0151     <span class="string">'Blocks'</span>,blocks,<span class="string">'Overlap'</span>,overlap);
+0152 
+0153 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,237 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of FourPanels</title>
+  <meta name="keywords" content="FourPanels">
+  <meta name="description" content="FourPanels : create a pair of horizontal panels with slider sizing">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">PointVISAR</a> &gt; <a href="index.html">private</a> &gt; FourPanels.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/PointVISAR/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>FourPanels
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>FourPanels : create a pair of horizontal panels with slider sizing</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function [slider,panel]=FourPanels(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> FourPanels : create a pair of horizontal panels with slider sizing
+                    controlled by a slider
+ only one FourPanels system can exist with any parent figure or uipanel</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="ReadEditRecordGUI.html" class="code" title="function fig=ReadEditRecordGUI(record)">ReadEditRecordGUI</a>	read/edit records for PointVISARGUI</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function func=ResizeFcn(src,eventdata)</a></li><li><a href="#_sub2" class="code">function func=PositionPanels(src,eventdata)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% FourPanels : create a pair of horizontal panels with slider sizing</span>
+0002 <span class="comment">%                    controlled by a slider</span>
+0003 <span class="comment">% only one FourPanels system can exist with any parent figure or uipanel</span>
+0004 
+0005 <a name="_sub0" href="#_subfunctions" class="code">function [slider,panel]=FourPanels(varargin)</a>
+0006 
+0007 <span class="comment">% make sure an even number of input arguments were given</span>
+0008 <span class="keyword">if</span> logical(rem(nargin,2))
+0009     error(<span class="string">'Unmatched number of input arguments'</span>)
+0010 <span class="keyword">end</span>
+0011 
+0012 <span class="comment">% define variables</span>
+0013 parent=[];
+0014 SliderValue=[];
+0015 SliderThickness=[];
+0016 PanelLabel={};
+0017 
+0018 <span class="comment">% sweep through input, updating the appropriate variables</span>
+0019 <span class="keyword">for</span> ii=1:2:nargin
+0020     label=varargin{ii};
+0021     <span class="keyword">switch</span> lower(label)
+0022         <span class="keyword">case</span> <span class="string">'parent'</span>
+0023             parent=varargin{ii+1};
+0024         <span class="keyword">case</span> <span class="string">'slidervalue'</span>
+0025             SliderValue=varargin{ii+1};
+0026         <span class="keyword">case</span> <span class="string">'sliderthickness'</span> <span class="comment">% pixels</span>
+0027             SliderThickness=varargin{ii+1};
+0028         <span class="keyword">case</span> <span class="string">'panellabel'</span>
+0029             PanelTag=varargin{ii+1};
+0030         <span class="keyword">otherwise</span>
+0031             msg2=<span class="string">' is not a valid field name'</span>;
+0032             error([label msg2]);
+0033     <span class="keyword">end</span>
+0034 <span class="keyword">end</span>
+0035 
+0036 <span class="comment">% apply default values as necessary</span>
+0037 <span class="keyword">if</span> isempty(parent)
+0038     parent=gcf;
+0039 <span class="keyword">end</span>
+0040 <span class="keyword">if</span> isempty(SliderValue)
+0041     SliderValue=[0.5 0.5 0.5];
+0042 <span class="keyword">end</span>
+0043 <span class="keyword">if</span> isempty(SliderThickness)
+0044     SliderThickness=25;
+0045 <span class="keyword">end</span>
+0046 <span class="keyword">if</span> isempty(PanelLabel)
+0047     PanelLabel={<span class="string">'TopLeft'</span>,<span class="string">'BottomLeft'</span>,<span class="string">'TopRight'</span>,<span class="string">'BottomRight'</span>};
+0048 <span class="keyword">end</span>
+0049 
+0050 <span class="comment">% see if a FourPanels system already exists</span>
+0051 SliderTag=<span class="string">'FourPanelSlider'</span>;
+0052 main=findobj(parent,<span class="string">'Style'</span>,<span class="string">'slider'</span>,<span class="string">'Tag'</span>,SliderTag);
+0053 <span class="keyword">if</span> ishandle(main) <span class="comment">% update FourPanels system</span>
+0054     data=get(main,<span class="string">'UserData'</span>);
+0055     <span class="keyword">for</span> ii=1:numel(data.slider)
+0056         set(data.slider(ii),<span class="string">'Value'</span>,SliderValue(ii));
+0057     <span class="keyword">end</span>
+0058     <a href="#_sub2" class="code" title="subfunction func=PositionPanels(src,eventdata)">PositionPanels</a>(parent,[]);
+0059 <span class="keyword">else</span> <span class="comment">% create FourPanels system</span>
+0060     figcolor=get(parent,<span class="string">'Color'</span>);
+0061     colorshift=0.05;
+0062     <span class="keyword">for</span> ii=1:3
+0063         leftcolor(ii)=min([1 figcolor(ii)+colorshift]);
+0064         rightcolor(ii)=max([0 figcolor(ii)-colorshift]);
+0065     <span class="keyword">end</span> 
+0066     <span class="comment">% panel sizing sliders</span>
+0067     slider(1)=uicontrol(<span class="string">'Style'</span>,<span class="string">'slider'</span>,<span class="string">'Tag'</span>,SliderTag,<span class="keyword">...</span>
+0068         <span class="string">'Value'</span>,SliderValue(1),<span class="string">'Callback'</span>,@<a href="#_sub2" class="code" title="subfunction func=PositionPanels(src,eventdata)">PositionPanels</a>);
+0069     slider(2)=uicontrol(<span class="string">'Style'</span>,<span class="string">'slider'</span>,<span class="keyword">...</span>
+0070         <span class="string">'Value'</span>,SliderValue(2),<span class="string">'Callback'</span>,@<a href="#_sub2" class="code" title="subfunction func=PositionPanels(src,eventdata)">PositionPanels</a>);
+0071     slider(3)=uicontrol(<span class="string">'Style'</span>,<span class="string">'slider'</span>,<span class="keyword">...</span>
+0072         <span class="string">'Value'</span>,SliderValue(3),<span class="string">'Callback'</span>,@<a href="#_sub2" class="code" title="subfunction func=PositionPanels(src,eventdata)">PositionPanels</a>);
+0073    <span class="comment">% panels</span>
+0074    <span class="keyword">for</span> ii=1:numel(PanelLabel)
+0075         panel(ii)=uipanel(<span class="string">'Parent'</span>,parent,<span class="keyword">...</span>
+0076             <span class="string">'Tag'</span>,PanelLabel{ii},<span class="string">'Units'</span>,<span class="string">'pixels'</span>);
+0077         <span class="comment">%detail(ii)=uicontrol('Parent',panel(ii),'Style','pushbutton');</span>
+0078     <span class="keyword">end</span>
+0079     <span class="comment">%set(detail,'String','+','FontWeight','bold',...</span>
+0080     <span class="comment">%    'Units','characters','Position',[0 0 1 1],...</span>
+0081     <span class="comment">%    'Tag','DetailButton',...</span>
+0082     <span class="comment">%    'ToolTipString','Detail view','Units','pixels',...</span>
+0083     <span class="comment">%    'Callback',@DetailButton);</span>
+0084     set([panel(1:2)],<span class="string">'BackgroundColor'</span>,leftcolor);
+0085     set([panel(3:4)],<span class="string">'BackgroundColor'</span>,rightcolor)
+0086     <span class="comment">% store information for later use</span>
+0087     data.slider=slider;
+0088     data.panel=panel;
+0089     <span class="comment">%data.detail=detail;</span>
+0090     data.thickness=SliderThickness;
+0091     set(slider(1),<span class="string">'UserData'</span>,data);
+0092     <span class="comment">% size everything for the first time</span>
+0093     <a href="#_sub1" class="code" title="subfunction func=ResizeFcn(src,eventdata)">ResizeFcn</a>(parent,[]);
+0094     <span class="comment">% allow future resizing</span>
+0095     set(parent,<span class="string">'ResizeFcn'</span>,@<a href="#_sub1" class="code" title="subfunction func=ResizeFcn(src,eventdata)">ResizeFcn</a>);
+0096 <span class="keyword">end</span>
+0097 
+0098 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0099 <a name="_sub1" href="#_subfunctions" class="code">function func=ResizeFcn(src,eventdata)</a>
+0100 
+0101 SliderTag=<span class="string">'FourPanelSlider'</span>;
+0102 fig=ancestor(src,<span class="string">'figure'</span>);
+0103 main=findobj(fig,<span class="string">'Tag'</span>,SliderTag);
+0104 data=get(main,<span class="string">'UserData'</span>);
+0105 
+0106 slider=data.slider;
+0107 thickness=data.thickness;
+0108 
+0109 FigUnits=get(fig,<span class="string">'Units'</span>);
+0110 set(fig,<span class="string">'Units'</span>,<span class="string">'pixels'</span>);
+0111 figpos=get(fig,<span class="string">'Position'</span>);
+0112 set(gcf,<span class="string">'Units'</span>,FigUnits);
+0113 
+0114 pos=[0 0 figpos(3) thickness];
+0115 set(slider(1),<span class="string">'Position'</span>,pos);
+0116 
+0117 pos(2)=thickness;
+0118 pos(3)=thickness;
+0119 pos(4)=figpos(4)-pos(2);
+0120 set(slider(2),<span class="string">'Position'</span>,pos);
+0121 
+0122 pos(1)=figpos(3)-pos(3);
+0123 set(slider(3),<span class="string">'Position'</span>,pos);
+0124 <a href="#_sub2" class="code" title="subfunction func=PositionPanels(src,eventdata)">PositionPanels</a>(src,[]);
+0125 
+0126 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0127 <a name="_sub2" href="#_subfunctions" class="code">function func=PositionPanels(src,eventdata)</a>
+0128 
+0129 <span class="comment">% find the main slider</span>
+0130 SliderTag=<span class="string">'FourPanelSlider'</span>;
+0131 fig=ancestor(src,<span class="string">'figure'</span>);
+0132 main=findobj(fig,<span class="string">'Tag'</span>,SliderTag);
+0133 data=get(main,<span class="string">'UserData'</span>);
+0134 
+0135 <span class="comment">% determine slider settings</span>
+0136 slider=data.slider;
+0137 <span class="keyword">for</span> ii=1:numel(slider);
+0138     value(ii)=get(slider(ii),<span class="string">'Value'</span>);
+0139 <span class="keyword">end</span>
+0140 
+0141 <span class="comment">% determine the working area</span>
+0142 pos1=get(slider(1),<span class="string">'Position'</span>);
+0143 pos2=get(slider(2),<span class="string">'Position'</span>);
+0144 pos3=get(slider(3),<span class="string">'Position'</span>);
+0145 
+0146 x0=pos2(1)+pos2(3);
+0147 Lx=pos3(1)-x0;
+0148 Ly=pos3(4); <span class="comment">% should be the same as pos2(4);</span>
+0149 
+0150 <span class="comment">% left panel positions</span>
+0151 Lx1=value(1)*Lx;
+0152 Ly2=value(2)*Ly;
+0153 Ly1=Ly-Ly2;
+0154 y0=pos2(2)+Ly2;
+0155 PanelPosition{1}=[x0 y0 Lx1 Ly1];
+0156 y0=pos2(2);
+0157 PanelPosition{2}=[x0 y0 Lx1 Ly2];
+0158 
+0159 <span class="comment">% right panel positions</span>
+0160 x0=x0+Lx1;
+0161 Lx2=Lx-Lx1;
+0162 Ly2=value(3)*Ly;
+0163 Ly1=Ly-Ly2;
+0164 y0=pos3(2)+Ly2;
+0165 PanelPosition{3}=[x0 y0 Lx2 Ly1];
+0166 y0=pos3(2);
+0167 PanelPosition{4}=[x0 y0 Lx2 Ly2];
+0168 
+0169 <span class="comment">% position the panels</span>
+0170 panel=data.panel;
+0171 <span class="keyword">for</span> ii=1:numel(panel)
+0172     pos=PanelPosition{ii};
+0173     <span class="keyword">if</span> all(pos(3:4)&gt;0)
+0174         set(panel(ii),<span class="string">'Position'</span>,pos,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0175    
+0176         <span class="comment">%detailpos=get(data.detail(ii),'Position');</span>
+0177         <span class="comment">%LD=max(detailpos(3:4));</span>
+0178         <span class="comment">%detailpos(1)=pos(3)-LD;</span>
+0179         <span class="comment">%detailpos(2)=pos(4)-LD;</span>
+0180         <span class="comment">%detailpos(3:4)=LD;</span>
+0181         <span class="comment">%set(data.detail(ii),'Position',detailpos,'Visible','on');</span>
+0182     <span class="keyword">else</span>
+0183         set(panel(ii),<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+0184         <span class="comment">%set(data.detail(ii),'Visible','off');</span>
+0185     <span class="keyword">end</span>
+0186 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

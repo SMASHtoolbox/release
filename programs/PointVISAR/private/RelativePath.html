@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of RelativePath</title>
+  <meta name="keywords" content="RelativePath">
+  <meta name="description" content="RelativePath : determine the relative path between two directories">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">PointVISAR</a> &gt; <a href="index.html">private</a> &gt; RelativePath.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/PointVISAR/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>RelativePath
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>RelativePath : determine the relative path between two directories</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function func=RelativePath(targetpath,sourcepath) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> RelativePath : determine the relative path between two directories</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="SaveConfig.html" class="code" title="function message=SaveConfig(data)">SaveConfig</a>	SaveConfig  Save current PointVISAR configuration to file.</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function [drive,list]=dirparts(directory)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% RelativePath : determine the relative path between two directories</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%</span>
+0005 <a name="_sub0" href="#_subfunctions" class="code">function func=RelativePath(targetpath,sourcepath)</a>
+0006 
+0007 <span class="comment">% input check</span>
+0008 <span class="keyword">if</span> nargin&lt;1
+0009     error(<span class="string">'Error: no target path specified'</span>);
+0010 <span class="keyword">end</span>
+0011 <span class="keyword">if</span> nargin&lt;2
+0012     sourcepath=<span class="string">''</span>;
+0013 <span class="keyword">end</span>
+0014 
+0015 <span class="comment">% default value(s)</span>
+0016 <span class="keyword">if</span> isempty(sourcepath)
+0017     sourcepath=pwd;
+0018 <span class="keyword">end</span>
+0019 
+0020 <span class="comment">% enforce correct file separators for current system</span>
+0021 kk=find((targetpath==<span class="string">'/'</span>)|(targetpath==<span class="string">'\'</span>));
+0022 targetpath(kk)=filesep;
+0023 kk=find((sourcepath==<span class="string">'/'</span>)|(sourcepath==<span class="string">'\'</span>));
+0024 sourcepath(kk)=filesep;
+0025 
+0026 <span class="comment">% error checking</span>
+0027 <span class="keyword">if</span> ~isdir(targetpath)
+0028     message=sprintf(<span class="string">'Error: %s \n is not a directory!'</span>,targetpath);
+0029     error(message)
+0030 <span class="keyword">end</span>
+0031 <span class="keyword">if</span> ~isdir(sourcepath)
+0032     message=sprintf(<span class="string">'Error: %s \n is not a directory!'</span>,sourcepath);
+0033     error(message)
+0034 <span class="keyword">end</span>
+0035 
+0036 <span class="comment">% extract drive and directory information for source and target</span>
+0037 [sourcedrive,sourcedir]=<a href="#_sub1" class="code" title="subfunction [drive,list]=dirparts(directory)">dirparts</a>(sourcepath);
+0038 [targetdrive,targetdir]=<a href="#_sub1" class="code" title="subfunction [drive,list]=dirparts(directory)">dirparts</a>(targetpath);
+0039 
+0040 <span class="keyword">if</span> ~strcmp(sourcedrive,targetdrive)
+0041     func=targetpath;
+0042     message=sprintf(<span class="string">'Error: source/target drives do not match-- no relative path is possible!'</span>);
+0043     error(message);
+0044 <span class="keyword">end</span>
+0045 
+0046 N=min([numel(sourcedir) numel(targetdir)]);
+0047 <span class="keyword">for</span> level=1:N
+0048     <span class="keyword">if</span> strcmp(sourcedir{level},targetdir{level})
+0049         <span class="keyword">continue</span>
+0050     <span class="keyword">else</span>
+0051         level=level-1;
+0052         <span class="keyword">break</span>
+0053     <span class="keyword">end</span>
+0054 <span class="keyword">end</span>
+0055 
+0056 uplevel=numel(sourcedir)-level;
+0057 <span class="keyword">if</span> uplevel==0
+0058     func=[<span class="string">'.'</span> filesep];
+0059 <span class="keyword">else</span>
+0060     func=[<span class="string">'..'</span> filesep];
+0061     func=repmat(func,[1 uplevel]);
+0062 <span class="keyword">end</span>
+0063 
+0064 downlevel=level+1;
+0065 <span class="keyword">for</span> ii=downlevel:numel(targetdir)
+0066     func=[func targetdir{ii} filesep];
+0067 <span class="keyword">end</span>
+0068 
+0069 <span class="keyword">if</span> func(end)==filesep
+0070     func=func(1:end-1);
+0071 <span class="keyword">end</span>
+0072 
+0073 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0074 <a name="_sub1" href="#_subfunctions" class="code">function [drive,list]=dirparts(directory)</a>
+0075 
+0076 <span class="comment">% terminate directory with a file separator for convenience</span>
+0077 <span class="keyword">if</span> directory(end)~=filesep
+0078     directory(end+1)=filesep;
+0079 <span class="keyword">end</span>
+0080 
+0081 <span class="comment">% find the file separators</span>
+0082 start=find(directory==filesep);
+0083 
+0084 <span class="comment">% extract drive information</span>
+0085 drive=directory(1:start(1)-1);
+0086 <span class="keyword">if</span> isempty(drive)
+0087     drive=<span class="string">'root'</span>; <span class="comment">% unix systems</span>
+0088 <span class="keyword">end</span>
+0089 
+0090 <span class="comment">% extract directory names</span>
+0091 <span class="keyword">for</span> ii=1:length(start)-1
+0092     list{ii}=directory(start(ii)+1:start(ii+1)-1);
+0093 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

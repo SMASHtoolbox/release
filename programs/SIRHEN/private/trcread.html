@@ -1,0 +1,391 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of trcread</title>
+  <meta name="keywords" content="trcread">
+  <meta name="description" content="TRCREAD Read LeCroy binary data files">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">SIRHEN</a> &gt; <a href="index.html">private</a> &gt; trcread.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/SIRHEN/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>trcread
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>TRCREAD Read LeCroy binary data files</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function varargout=trcread(filename) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> TRCREAD Read LeCroy binary data files
+
+ This function reads binary data created by LeCroy digitizers
+ (*.TRC files).  To access the signal and its time base, call the function
+ with a file name as an input.
+   &gt;&gt; [signal,time]=trcread(filename);
+ If no file is specified, the user will be prompted to select one.  To
+ obtain additional information about the file, use a third output
+ argument.
+   &gt;&gt; [signal,time,info]=trcread(...);</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="SelectionScreen.html" class="code" title="function fig=SelectionScreen(prevfig)">SelectionScreen</a>	allocate mising input</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function result=ReadString()</a></li><li><a href="#_sub2" class="code">function result=ReadByte(repeat)</a></li><li><a href="#_sub3" class="code">function result=ReadWord(repeat)</a></li><li><a href="#_sub4" class="code">function result=ReadLong()</a></li><li><a href="#_sub5" class="code">function result=ReadEnum()</a></li><li><a href="#_sub6" class="code">function result=ReadFloat()</a></li><li><a href="#_sub7" class="code">function result=ReadDouble()</a></li><li><a href="#_sub8" class="code">function result=ReadTimeStamp()</a></li><li><a href="#_sub9" class="code">function result=ReadUnitDefinition()</a></li><li><a href="#_sub10" class="code">function result=InterpretCommType(value)</a></li><li><a href="#_sub11" class="code">function [result,machineformat]=InterpretCommOrder(value)</a></li><li><a href="#_sub12" class="code">function result=InterpretRecordType(value)</a></li><li><a href="#_sub13" class="code">function result=InterpretProcessingDone(value)</a></li><li><a href="#_sub14" class="code">function result=InterpretTimebase(value)</a></li><li><a href="#_sub15" class="code">function result=InterpretVerticalCoupling(value)</a></li><li><a href="#_sub16" class="code">function result=InterpretFixedVerticalGain(value)</a></li><li><a href="#_sub17" class="code">function result=InterpretBandwidthLimit(value)</a></li><li><a href="#_sub18" class="code">function result=InterpretWaveSource(value)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% TRCREAD Read LeCroy binary data files</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This function reads binary data created by LeCroy digitizers</span>
+0004 <span class="comment">% (*.TRC files).  To access the signal and its time base, call the function</span>
+0005 <span class="comment">% with a file name as an input.</span>
+0006 <span class="comment">%   &gt;&gt; [signal,time]=trcread(filename);</span>
+0007 <span class="comment">% If no file is specified, the user will be prompted to select one.  To</span>
+0008 <span class="comment">% obtain additional information about the file, use a third output</span>
+0009 <span class="comment">% argument.</span>
+0010 <span class="comment">%   &gt;&gt; [signal,time,info]=trcread(...);</span>
+0011 <span class="comment">%</span>
+0012 
+0013 <span class="comment">% created August 17, 2013 by Daniel Dolan (Sandia National Laboratories)</span>
+0014 <a name="_sub0" href="#_subfunctions" class="code">function varargout=trcread(filename)</a>
+0015 
+0016 <span class="comment">% handle input</span>
+0017 <span class="keyword">if</span> (nargin&lt;1) || isempty(filename)
+0018     [fname,pname]=uigetfile(<span class="string">'*.trc;*.TRC'</span>,<span class="string">'Choose LeCroy TRC file'</span>);
+0019     <span class="keyword">if</span> isnumeric(fname) <span class="comment">% user pressed cancel</span>
+0020         varargout{1}=fname;
+0021         <span class="keyword">return</span>
+0022     <span class="keyword">end</span>
+0023     filename=[pname fname];    
+0024 <span class="keyword">end</span>
+0025 
+0026 <span class="comment">% read file</span>
+0027 machineformat=<span class="string">'ieee-le'</span>;
+0028 fid=fopen(filename,<span class="string">'r'</span>,machineformat);
+0029 
+0030 target=<span class="string">'WAVEDESC'</span>;
+0031 <span class="keyword">while</span> ~feof(fid)
+0032     temp=fscanf(fid,<span class="string">'%8c'</span>,1);
+0033     <span class="keyword">if</span> strcmp(temp,target)
+0034         fseek(fid,-numel(target),<span class="string">'cof'</span>);
+0035         <span class="comment">%start=ftell(fid);</span>
+0036         info.descriptor_name=<a href="#_sub1" class="code" title="subfunction result=ReadString()">ReadString</a>;
+0037         <span class="keyword">break</span>
+0038     <span class="keyword">else</span>
+0039         fseek(fid,-numel(target)+1,<span class="string">'cof'</span>);
+0040     <span class="keyword">end</span>
+0041 <span class="keyword">end</span>
+0042 info.template_name=<a href="#_sub1" class="code" title="subfunction result=ReadString()">ReadString</a>;
+0043 info.comm_type=<a href="#_sub10" class="code" title="subfunction result=InterpretCommType(value)">InterpretCommType</a>(<a href="#_sub5" class="code" title="subfunction result=ReadEnum()">ReadEnum</a>);
+0044 [info.comm_order,machineformat]=<a href="#_sub11" class="code" title="subfunction [result,machineformat]=InterpretCommOrder(value)">InterpretCommOrder</a>(<a href="#_sub5" class="code" title="subfunction result=ReadEnum()">ReadEnum</a>);
+0045 
+0046 info.wave_descriptor=<a href="#_sub4" class="code" title="subfunction result=ReadLong()">ReadLong</a>;
+0047 info.user_text=<a href="#_sub4" class="code" title="subfunction result=ReadLong()">ReadLong</a>;
+0048 info.res_desc1=<a href="#_sub4" class="code" title="subfunction result=ReadLong()">ReadLong</a>;
+0049 info.trigtime_array=<a href="#_sub4" class="code" title="subfunction result=ReadLong()">ReadLong</a>;
+0050 info.ris_time_array=<a href="#_sub4" class="code" title="subfunction result=ReadLong()">ReadLong</a>;
+0051 info.res_array1=<a href="#_sub4" class="code" title="subfunction result=ReadLong()">ReadLong</a>;
+0052 info.wave_array_1=<a href="#_sub4" class="code" title="subfunction result=ReadLong()">ReadLong</a>;
+0053 info.wave_array_2=<a href="#_sub4" class="code" title="subfunction result=ReadLong()">ReadLong</a>;
+0054 info.res_array2=<a href="#_sub4" class="code" title="subfunction result=ReadLong()">ReadLong</a>;
+0055 info.res_array3=<a href="#_sub4" class="code" title="subfunction result=ReadLong()">ReadLong</a>;
+0056 info.instrument_name=<a href="#_sub1" class="code" title="subfunction result=ReadString()">ReadString</a>;
+0057 info.instrument_number=<a href="#_sub4" class="code" title="subfunction result=ReadLong()">ReadLong</a>;
+0058 info.trace_label=<a href="#_sub1" class="code" title="subfunction result=ReadString()">ReadString</a>;
+0059 info.reserved1=<a href="#_sub3" class="code" title="subfunction result=ReadWord(repeat)">ReadWord</a>;
+0060 info.reserved2=<a href="#_sub3" class="code" title="subfunction result=ReadWord(repeat)">ReadWord</a>;
+0061 
+0062 info.wave_array_count=<a href="#_sub4" class="code" title="subfunction result=ReadLong()">ReadLong</a>;
+0063 info.pnts_per_screen=<a href="#_sub4" class="code" title="subfunction result=ReadLong()">ReadLong</a>;
+0064 info.first_valid_pnt=<a href="#_sub4" class="code" title="subfunction result=ReadLong()">ReadLong</a>;
+0065 info.last_valid_pnt=<a href="#_sub4" class="code" title="subfunction result=ReadLong()">ReadLong</a>;
+0066 info.first_point=<a href="#_sub4" class="code" title="subfunction result=ReadLong()">ReadLong</a>;
+0067 info.sparsing_factor=<a href="#_sub4" class="code" title="subfunction result=ReadLong()">ReadLong</a>;
+0068 info.segment_index=<a href="#_sub4" class="code" title="subfunction result=ReadLong()">ReadLong</a>;
+0069 info.subarray_count=<a href="#_sub4" class="code" title="subfunction result=ReadLong()">ReadLong</a>;
+0070 info.sweeps_per_acq=<a href="#_sub4" class="code" title="subfunction result=ReadLong()">ReadLong</a>;
+0071 info.points_per_pair=<a href="#_sub3" class="code" title="subfunction result=ReadWord(repeat)">ReadWord</a>;
+0072 info.pair_offset=<a href="#_sub3" class="code" title="subfunction result=ReadWord(repeat)">ReadWord</a>;
+0073 info.vertical_gain=<a href="#_sub6" class="code" title="subfunction result=ReadFloat()">ReadFloat</a>;
+0074 info.vertical_offset=<a href="#_sub6" class="code" title="subfunction result=ReadFloat()">ReadFloat</a>;
+0075 info.max_value=<a href="#_sub6" class="code" title="subfunction result=ReadFloat()">ReadFloat</a>;
+0076 info.min_value=<a href="#_sub6" class="code" title="subfunction result=ReadFloat()">ReadFloat</a>;
+0077 info.nominal_bits=<a href="#_sub3" class="code" title="subfunction result=ReadWord(repeat)">ReadWord</a>;
+0078 info.nominal_subarray_count=<a href="#_sub3" class="code" title="subfunction result=ReadWord(repeat)">ReadWord</a>;
+0079 info.horiz_interval=<a href="#_sub6" class="code" title="subfunction result=ReadFloat()">ReadFloat</a>;
+0080 info.horiz_offset=<a href="#_sub7" class="code" title="subfunction result=ReadDouble()">ReadDouble</a>;
+0081 info.pixel_offset=<a href="#_sub7" class="code" title="subfunction result=ReadDouble()">ReadDouble</a>;
+0082 info.vertunit=<a href="#_sub9" class="code" title="subfunction result=ReadUnitDefinition()">ReadUnitDefinition</a>;
+0083 info.horzunit=<a href="#_sub9" class="code" title="subfunction result=ReadUnitDefinition()">ReadUnitDefinition</a>;
+0084 info.horiz_uncertainty=<a href="#_sub6" class="code" title="subfunction result=ReadFloat()">ReadFloat</a>;
+0085 info.trigger_time=<a href="#_sub8" class="code" title="subfunction result=ReadTimeStamp()">ReadTimeStamp</a>;
+0086 info.acq_duration=<a href="#_sub6" class="code" title="subfunction result=ReadFloat()">ReadFloat</a>;
+0087 info.record_type=<a href="#_sub12" class="code" title="subfunction result=InterpretRecordType(value)">InterpretRecordType</a>(<a href="#_sub5" class="code" title="subfunction result=ReadEnum()">ReadEnum</a>);
+0088 info.process_done=<a href="#_sub13" class="code" title="subfunction result=InterpretProcessingDone(value)">InterpretProcessingDone</a>(<a href="#_sub5" class="code" title="subfunction result=ReadEnum()">ReadEnum</a>);
+0089 info.reserved5=<a href="#_sub3" class="code" title="subfunction result=ReadWord(repeat)">ReadWord</a>;
+0090 info.ris_sweeps=<a href="#_sub3" class="code" title="subfunction result=ReadWord(repeat)">ReadWord</a>;
+0091 
+0092 info.timebase=<a href="#_sub14" class="code" title="subfunction result=InterpretTimebase(value)">InterpretTimebase</a>(<a href="#_sub5" class="code" title="subfunction result=ReadEnum()">ReadEnum</a>);
+0093 info.vert_coupling=<a href="#_sub15" class="code" title="subfunction result=InterpretVerticalCoupling(value)">InterpretVerticalCoupling</a>(<a href="#_sub5" class="code" title="subfunction result=ReadEnum()">ReadEnum</a>);
+0094 info.probe_att=<a href="#_sub6" class="code" title="subfunction result=ReadFloat()">ReadFloat</a>;
+0095 info.fixed_vert_gain=<a href="#_sub16" class="code" title="subfunction result=InterpretFixedVerticalGain(value)">InterpretFixedVerticalGain</a>(<a href="#_sub5" class="code" title="subfunction result=ReadEnum()">ReadEnum</a>);
+0096 info.bandwidth_limit=<a href="#_sub17" class="code" title="subfunction result=InterpretBandwidthLimit(value)">InterpretBandwidthLimit</a>(<a href="#_sub5" class="code" title="subfunction result=ReadEnum()">ReadEnum</a>);
+0097 info.vertical_vernier=<a href="#_sub6" class="code" title="subfunction result=ReadFloat()">ReadFloat</a>;
+0098 info.acq_vert_offset=<a href="#_sub6" class="code" title="subfunction result=ReadFloat()">ReadFloat</a>;
+0099 info.wave_source=<a href="#_sub18" class="code" title="subfunction result=InterpretWaveSource(value)">InterpretWaveSource</a>(<a href="#_sub5" class="code" title="subfunction result=ReadEnum()">ReadEnum</a>);
+0100 
+0101 <span class="keyword">if</span> info.user_text&gt;0
+0102     format=sprintf(<span class="string">'%%%dc'</span>,info.user_text);
+0103     info.user_text_block=fscanf(fid,format,1);
+0104 <span class="keyword">end</span>
+0105 
+0106 <span class="keyword">if</span> info.trigtime_array&gt;0
+0107     <span class="comment">% under construction</span>
+0108 <span class="keyword">end</span>
+0109 
+0110 <span class="keyword">if</span> info.ris_time_array&gt;0
+0111     <span class="comment">% under construction</span>
+0112 <span class="keyword">end</span>
+0113 
+0114 <span class="keyword">switch</span> info.comm_type
+0115     <span class="keyword">case</span> <span class="string">'byte'</span>
+0116         signal=<a href="#_sub2" class="code" title="subfunction result=ReadByte(repeat)">ReadByte</a>(info.pnts_per_screen);
+0117     <span class="keyword">case</span> <span class="string">'word'</span>
+0118         signal=<a href="#_sub3" class="code" title="subfunction result=ReadWord(repeat)">ReadWord</a>(info.pnts_per_screen);
+0119 <span class="keyword">end</span>
+0120 
+0121 <span class="comment">%fprintf('offset=%d\n',ftell(fid)-start);</span>
+0122 fclose(fid);
+0123 
+0124 <span class="comment">%% entry readers</span>
+0125     <a name="_sub1" href="#_subfunctions" class="code">function result=ReadString()</a>
+0126         result=fscanf(fid,<span class="string">'%16c'</span>,1);
+0127     <span class="keyword">end</span>
+0128     <a name="_sub2" href="#_subfunctions" class="code">function result=ReadByte(repeat)</a>
+0129         <span class="keyword">if</span> nargin&lt;1
+0130             repeat=1;
+0131         <span class="keyword">end</span>
+0132         result=fread(fid,repeat,<span class="string">'int8'</span>,machineformat);        
+0133     <span class="keyword">end</span>
+0134     <a name="_sub3" href="#_subfunctions" class="code">function result=ReadWord(repeat)        </a>
+0135         <span class="keyword">if</span> nargin&lt;1
+0136             repeat=1;
+0137         <span class="keyword">end</span>
+0138         result=fread(fid,repeat,<span class="string">'int16'</span>,machineformat);        
+0139     <span class="keyword">end</span>
+0140     <a name="_sub4" href="#_subfunctions" class="code">function result=ReadLong()        </a>
+0141         result=fread(fid,1,<span class="string">'int32'</span>,machineformat);        
+0142     <span class="keyword">end</span>
+0143     <a name="_sub5" href="#_subfunctions" class="code">function result=ReadEnum()</a>
+0144         result=fread(fid,1,<span class="string">'int16'</span>,machineformat); 
+0145     <span class="keyword">end</span>
+0146     <a name="_sub6" href="#_subfunctions" class="code">function result=ReadFloat()</a>
+0147         result=fread(fid,1,<span class="string">'single'</span>,machineformat);
+0148     <span class="keyword">end</span>
+0149     <a name="_sub7" href="#_subfunctions" class="code">function result=ReadDouble()</a>
+0150         result=fread(fid,1,<span class="string">'double'</span>,machineformat);
+0151     <span class="keyword">end</span>
+0152     <a name="_sub8" href="#_subfunctions" class="code">function result=ReadTimeStamp()</a>
+0153         second=<a href="#_sub7" class="code" title="subfunction result=ReadDouble()">ReadDouble</a>;
+0154         minute=<a href="#_sub2" class="code" title="subfunction result=ReadByte(repeat)">ReadByte</a>;
+0155         hour=<a href="#_sub2" class="code" title="subfunction result=ReadByte(repeat)">ReadByte</a>;
+0156         day=<a href="#_sub2" class="code" title="subfunction result=ReadByte(repeat)">ReadByte</a>;
+0157         month=<a href="#_sub2" class="code" title="subfunction result=ReadByte(repeat)">ReadByte</a>;
+0158         year=<a href="#_sub3" class="code" title="subfunction result=ReadWord(repeat)">ReadWord</a>;
+0159         <a href="#_sub3" class="code" title="subfunction result=ReadWord(repeat)">ReadWord</a>; <span class="comment">% unused</span>
+0160         result=datenum(year,month,day,hour,minute,second);
+0161         result=datestr(result);
+0162     <span class="keyword">end</span>
+0163     <a name="_sub9" href="#_subfunctions" class="code">function result=ReadUnitDefinition()</a>
+0164         result=fscanf(fid,<span class="string">'%48c'</span>,1);
+0165     <span class="keyword">end</span>
+0166 
+0167 <span class="comment">%% calcuate time and signal arrays</span>
+0168 time=0:(info.pnts_per_screen-1);
+0169 time=time*info.horiz_interval+info.horiz_offset;
+0170 
+0171 signal=signal*info.vertical_gain-info.vertical_offset;
+0172 time=reshape(time,size(signal));
+0173 
+0174 <span class="comment">%% handle output</span>
+0175 <span class="keyword">if</span> nargout==0
+0176     figure;
+0177     plot(time,signal);
+0178 <span class="keyword">end</span>
+0179 
+0180 <span class="keyword">if</span> nargout&gt;=1
+0181     varargout{1}=signal;
+0182 <span class="keyword">end</span>
+0183 
+0184 <span class="keyword">if</span> nargout&gt;=2
+0185     varargout{2}=time;
+0186 <span class="keyword">end</span>
+0187 
+0188 <span class="keyword">if</span> nargout&gt;=3
+0189     varargout{3}=info;
+0190 <span class="keyword">end</span>
+0191 
+0192 <span class="keyword">end</span>
+0193 
+0194 <span class="comment">%% interpreters</span>
+0195 <a name="_sub10" href="#_subfunctions" class="code">function result=InterpretCommType(value)</a>
+0196 
+0197 <span class="keyword">switch</span> value
+0198     <span class="keyword">case</span> 0
+0199         result=<span class="string">'byte'</span>;
+0200     <span class="keyword">case</span> 1
+0201         result=<span class="string">'word'</span>;
+0202 <span class="keyword">end</span>
+0203 
+0204 <span class="keyword">end</span>
+0205 
+0206 <a name="_sub11" href="#_subfunctions" class="code">function [result,machineformat]=InterpretCommOrder(value)</a>
+0207 
+0208 <span class="keyword">switch</span> value
+0209     <span class="keyword">case</span> 0
+0210         result=<span class="string">'HIFIRST'</span>;
+0211         machineformat=<span class="string">'ieee-be'</span>; <span class="comment">% big endian</span>
+0212     <span class="keyword">case</span> 1
+0213         result=<span class="string">'LOFIRST'</span>;
+0214         machineformat=<span class="string">'ieee-le'</span>; <span class="comment">% little endian</span>
+0215 <span class="keyword">end</span>
+0216 
+0217 <span class="keyword">end</span>
+0218 
+0219 <a name="_sub12" href="#_subfunctions" class="code">function result=InterpretRecordType(value)</a>
+0220 
+0221 <span class="keyword">switch</span> value
+0222     <span class="keyword">case</span> 0
+0223         result=<span class="string">'single_sweep'</span>;
+0224     <span class="keyword">otherwise</span>
+0225         result=value;
+0226 <span class="keyword">end</span>
+0227 
+0228 <span class="keyword">end</span>
+0229 
+0230 <a name="_sub13" href="#_subfunctions" class="code">function result=InterpretProcessingDone(value)</a>
+0231 
+0232 <span class="keyword">switch</span> value
+0233     <span class="keyword">case</span> 0
+0234         result=<span class="string">'no_processing'</span>;
+0235     <span class="keyword">case</span> 1
+0236         result=<span class="string">'fir_filter'</span>;
+0237     <span class="keyword">case</span> 2
+0238         result=<span class="string">'interpolated'</span>;
+0239     <span class="keyword">case</span> 3
+0240         result=<span class="string">'sparsed'</span>;
+0241     <span class="keyword">case</span> 4
+0242         result=<span class="string">'autoscaled'</span>;
+0243     <span class="keyword">case</span> 5
+0244         result=<span class="string">'no_result'</span>;
+0245     <span class="keyword">case</span> 6
+0246         result=<span class="string">'rolling'</span>;
+0247     <span class="keyword">case</span> 7
+0248         result=<span class="string">'cumulative'</span>;
+0249     <span class="keyword">otherwise</span>
+0250         result=value;
+0251 <span class="keyword">end</span>
+0252 
+0253 <span class="keyword">end</span>
+0254 
+0255 <a name="_sub14" href="#_subfunctions" class="code">function result=InterpretTimebase(value)</a>
+0256 
+0257 <span class="keyword">if</span> value==100
+0258     result=<span class="string">'external'</span>;
+0259     <span class="keyword">return</span>
+0260 <span class="keyword">end</span>
+0261 
+0262 factor=floor(value/3);
+0263 extra=value-3*factor;
+0264 <span class="keyword">if</span> extra==0
+0265     result=1;
+0266 <span class="keyword">elseif</span> extra==1
+0267     result=2;
+0268 <span class="keyword">elseif</span> extra==2
+0269     result=5;
+0270 <span class="keyword">end</span>
+0271 result=result*10^(factor)*1e-12; <span class="comment">% second per division</span>
+0272 
+0273 <span class="keyword">end</span>
+0274 
+0275 <a name="_sub15" href="#_subfunctions" class="code">function result=InterpretVerticalCoupling(value)</a>
+0276 
+0277 <span class="keyword">switch</span> value
+0278     <span class="keyword">case</span> 0
+0279         result=<span class="string">'DC_50_Ohms'</span>;
+0280     <span class="keyword">case</span> 1
+0281         result=<span class="string">'ground'</span>;
+0282     <span class="keyword">case</span> 2
+0283         result=<span class="string">'DC_1MOhm'</span>;
+0284     <span class="keyword">case</span> 3
+0285         result=<span class="string">'ground'</span>;
+0286     <span class="keyword">case</span> 4
+0287         result=<span class="string">'AC_1MOhm'</span>;
+0288 <span class="keyword">end</span>
+0289 
+0290 <span class="keyword">end</span>
+0291 
+0292 <a name="_sub16" href="#_subfunctions" class="code">function result=InterpretFixedVerticalGain(value)</a>
+0293 
+0294 factor=floor(value/3);
+0295 extra=value-3*factor;
+0296 <span class="keyword">if</span> extra==0
+0297     result=1;
+0298 <span class="keyword">elseif</span> extra==1
+0299     result=2;
+0300 <span class="keyword">elseif</span> extra==2
+0301     result=5;
+0302 <span class="keyword">end</span>
+0303 result=result*10^(factor)*1e-6; <span class="comment">% volts per division</span>
+0304 
+0305 <span class="keyword">end</span>
+0306 
+0307 <a name="_sub17" href="#_subfunctions" class="code">function result=InterpretBandwidthLimit(value)</a>
+0308 
+0309 <span class="keyword">switch</span> value
+0310     <span class="keyword">case</span> 0
+0311         result=<span class="string">'off'</span>;
+0312     <span class="keyword">case</span> 1
+0313         result=<span class="string">'on'</span>;
+0314 <span class="keyword">end</span>
+0315 
+0316 <span class="keyword">end</span>
+0317 
+0318 <a name="_sub18" href="#_subfunctions" class="code">function result=InterpretWaveSource(value)</a>
+0319 
+0320 <span class="keyword">switch</span> value
+0321     <span class="keyword">case</span> 0
+0322         result=<span class="string">'CHANNEL_1'</span>;
+0323     <span class="keyword">case</span> 1
+0324         result=<span class="string">'CHANNEL_2'</span>;
+0325     <span class="keyword">case</span> 2
+0326         result=<span class="string">'CHANNEL_3'</span>;
+0327     <span class="keyword">case</span> 3
+0328         result=<span class="string">'CHANNEL_4'</span>;
+0329     <span class="keyword">case</span> 9
+0330         result=<span class="string">'UNKNOWN'</span>;
+0331 <span class="keyword">end</span>
+0332 
+0333 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

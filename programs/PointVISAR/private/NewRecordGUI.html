@@ -1,0 +1,333 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of NewRecordGUI</title>
+  <meta name="keywords" content="NewRecordGUI">
+  <meta name="description" content="%%%%%%%%%%%%%%%">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">PointVISAR</a> &gt; <a href="index.html">private</a> &gt; NewRecordGUI.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/PointVISAR/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>NewRecordGUI
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>%%%%%%%%%%%%%%%</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function fig=NewRecordGUI(VISARtype,SignalStorage) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">%%%%%%%%%%%%%%%
+ main routine %
+%%%%%%%%%%%%%%%</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="ActiveRecord.html" class="code" title="function active=ActiveRecord(data)">ActiveRecord</a>	determine active PointVISAR record</li><li><a href="CreateRecord.html" class="code" title="function func=CreateRecord(type)">CreateRecord</a>	CreateRecord    Creates a single VISAR record with default empty fields</li><li><a href="NewRecordGUI.html" class="code" title="function fig=NewRecordGUI(VISARtype,SignalStorage)">NewRecordGUI</a>	%%%%%%%%%%%%%%%</li><li><a href="ReadEditRecordGUI.html" class="code" title="function fig=ReadEditRecordGUI(record)">ReadEditRecordGUI</a>	read/edit records for PointVISARGUI</li><li><a href="VisarAnalysis.html" class="code" title="function record = VisarAnalysis(record, varargin)">VisarAnalysis</a>	VisarAnalysis Provides a gateway to different stages of Visar</li><li><a href="getfilename.html" class="code" title="function [filename,pathname,filterindex]=getfilename(varargin)">getfilename</a>	getfilename : system dependent frontend to uigetfile</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="NewRecordGUI.html" class="code" title="function fig=NewRecordGUI(VISARtype,SignalStorage)">NewRecordGUI</a>	%%%%%%%%%%%%%%%</li><li><a href="PointVISARGUI.html" class="code" title="function fig=PointVISARGUI(data)">PointVISARGUI</a>	PointVISARGUI</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function UpdateDialog(src,varargin)</a></li><li><a href="#_sub2" class="code">function BrowseCallback(src,varargin)</a></li><li><a href="#_sub3" class="code">function ExitDialog(src,varargin)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 
+0002 <span class="comment">%%%%%%%%%%%%%%%%</span>
+0003 <span class="comment">% main routine %</span>
+0004 <span class="comment">%%%%%%%%%%%%%%%%</span>
+0005 <a name="_sub0" href="#_subfunctions" class="code">function fig=NewRecordGUI(VISARtype,SignalStorage)</a>
+0006 
+0007 fig=findall(0,<span class="string">'Type'</span>,<span class="string">'figure'</span>,<span class="string">'Tag'</span>,<span class="string">'PointVISAR:NewRecord'</span>);
+0008 <span class="keyword">if</span> ishandle(fig) <span class="comment">% GUI already exists--clear text fields and reuse</span>
+0009     figure(fig);
+0010     ht=findobj(fig,<span class="string">'Style'</span>,<span class="string">'edit'</span>);
+0011     set(ht,<span class="string">'String'</span>,<span class="string">''</span>);
+0012     set(fig,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0013 <span class="keyword">else</span> <span class="comment">% create GUI</span>
+0014     <span class="comment">% input check</span>
+0015     <span class="keyword">if</span> nargin&lt;1
+0016         VISARtype=<span class="string">''</span>;
+0017     <span class="keyword">end</span>
+0018     <span class="keyword">if</span> nargin&lt;2
+0019         SignalStorage=<span class="string">''</span>;
+0020     <span class="keyword">end</span>
+0021     <span class="comment">% default inputs</span>
+0022     <span class="keyword">if</span> isempty(VISARtype)
+0023         VISARtype=<span class="string">'pushpull4'</span>;
+0024     <span class="keyword">end</span>
+0025     <span class="keyword">if</span> isempty(SignalStorage)
+0026         SignalStorage=<span class="string">'single'</span>;
+0027     <span class="keyword">end</span>
+0028     <span class="comment">% inteprete VISAR type</span>
+0029     <span class="keyword">switch</span> VISARtype
+0030         <span class="keyword">case</span> <span class="string">'conventional'</span>
+0031             NumSignals=3;
+0032             TypeValue=1;
+0033         <span class="keyword">case</span> <span class="string">'pushpull2'</span>
+0034             NumSignals=2;
+0035             TypeValue=2;
+0036         <span class="keyword">case</span> <span class="string">'pushpull4'</span>
+0037             NumSignals=4;
+0038             TypeValue=3;
+0039     <span class="keyword">end</span>
+0040     <span class="comment">% interpret signal storage</span>
+0041     <span class="keyword">switch</span> SignalStorage    
+0042         <span class="keyword">case</span> <span class="string">'single'</span>
+0043             NumFiles=1;
+0044             StorageValue=1;
+0045             FileLabel{1}=<span class="string">'Data file:'</span>;
+0046         <span class="keyword">case</span> <span class="string">'separate'</span>
+0047             NumFiles=NumSignals;
+0048             StorageValue=2;
+0049             temp=<a href="CreateRecord.html" class="code" title="function func=CreateRecord(type)">CreateRecord</a>(VISARtype);
+0050             FileLabel=temp.SignalLabels;
+0051             <span class="keyword">for</span> ii=1:numel(FileLabel)
+0052                 FileLabel{ii}=[FileLabel{ii} <span class="string">' file:'</span>];
+0053             <span class="keyword">end</span>
+0054     <span class="keyword">end</span>
+0055     <span class="comment">% GUI spacing parameters (characters)</span>
+0056     dx=5;
+0057     dy=1;
+0058     ControlHeight=2;
+0059     LabelHeight=1;
+0060     EditWidth=80;
+0061     ButtonWidth=10;
+0062     FigWidth=EditWidth+ButtonWidth+3*dx;
+0063     FigHeight=(2+NumFiles)*ControlHeight+(3+NumFiles)*dy+(NumFiles+1)*LabelHeight;
+0064     <span class="comment">% create figure</span>
+0065     fig=figure(<span class="string">'Visible'</span>,<span class="string">'off'</span>,<span class="keyword">...</span>
+0066         <span class="string">'MenuBar'</span>,<span class="string">'none'</span>,<span class="string">'Toolbar'</span>,<span class="string">'none'</span>,<span class="keyword">...</span>
+0067         <span class="string">'Tag'</span>,<span class="string">'PointVISAR:NewRecord'</span>,<span class="string">'Resize'</span>,<span class="string">'off'</span>,<span class="keyword">...</span>
+0068         <span class="string">'NumberTitle'</span>,<span class="string">'off'</span>,<span class="string">'Name'</span>,<span class="string">'New VISAR record'</span>,<span class="keyword">...</span>
+0069         <span class="string">'Units'</span>,<span class="string">'characters'</span>,<span class="string">'Position'</span>,[0 0 FigWidth FigHeight],<span class="keyword">...</span>
+0070         <span class="string">'CloseRequestFcn'</span>,@<a href="#_sub3" class="code" title="subfunction ExitDialog(src,varargin)">ExitDialog</a>);
+0071     movegui(fig,<span class="string">'center'</span>);
+0072     set(fig,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0073     figpos=get(fig,<span class="string">'Position'</span>);
+0074     <span class="comment">% create VISAR type selection popup</span>
+0075     hlabel=[];
+0076     x0=dx;
+0077     y0=figpos(4)-dy-LabelHeight;
+0078     width=(figpos(3)-4*dx)/2;
+0079     hlabel(end+1)=uicontrol(<span class="string">'Style'</span>,<span class="string">'text'</span>,<span class="keyword">...</span>
+0080         <span class="string">'String'</span>,<span class="string">'VISAR type (# signals):'</span>,<span class="string">'HorizontalAlignment'</span>,<span class="string">'left'</span>,<span class="keyword">...</span>
+0081         <span class="string">'FontName'</span>,<span class="string">'fixed'</span>,<span class="keyword">...</span>
+0082         <span class="string">'BackgroundColor'</span>,get(fig,<span class="string">'Color'</span>),<span class="keyword">...</span>
+0083         <span class="string">'Units'</span>,<span class="string">'characters'</span>,<span class="string">'Position'</span>,[x0 y0 width LabelHeight]);
+0084     y0=y0-ControlHeight;
+0085     select(1)=uicontrol(<span class="string">'Style'</span>,<span class="string">'popup'</span>,<span class="keyword">...</span>
+0086         <span class="string">'Tag'</span>,<span class="string">'TypeSelect'</span>,<span class="keyword">...</span>
+0087         <span class="string">'String'</span>,{<span class="string">'Conventional (3)'</span>,<span class="string">'Standard push-pull (2)'</span>,<span class="string">'Fast push-pull (4)'</span>},<span class="keyword">...</span>
+0088         <span class="string">'FontName'</span>,<span class="string">'fixed'</span>,<span class="keyword">...</span>
+0089         <span class="string">'Value'</span>,TypeValue,<span class="keyword">...</span>
+0090         <span class="string">'Callback'</span>,@<a href="#_sub1" class="code" title="subfunction UpdateDialog(src,varargin)">UpdateDialog</a>,<span class="keyword">...</span>
+0091         <span class="string">'UserData'</span>,{<span class="string">'conventional'</span>,<span class="string">'pushpull2'</span>,<span class="string">'pushpull4'</span>},<span class="keyword">...</span>
+0092         <span class="string">'Units'</span>,<span class="string">'characters'</span>,<span class="string">'Position'</span>,[x0 y0 width ControlHeight]);
+0093     <span class="comment">% create signal storage selection popup</span>
+0094     y0=figpos(4)-dy-LabelHeight;
+0095     x0=dx+width+2*dx;
+0096     hlabel(end+1)=uicontrol(<span class="string">'Style'</span>,<span class="string">'text'</span>,<span class="keyword">...</span>
+0097         <span class="string">'String'</span>,<span class="string">'Signal storage:'</span>,<span class="string">'HorizontalAlignment'</span>,<span class="string">'left'</span>,<span class="keyword">...</span>
+0098         <span class="string">'FontName'</span>,<span class="string">'fixed'</span>,<span class="keyword">...</span>
+0099         <span class="string">'BackgroundColor'</span>,get(fig,<span class="string">'Color'</span>),<span class="keyword">...</span>
+0100         <span class="string">'Units'</span>,<span class="string">'characters'</span>,<span class="string">'Position'</span>,[x0 y0 width LabelHeight]);
+0101     y0=y0-ControlHeight;
+0102     select(2)=uicontrol(<span class="string">'Style'</span>,<span class="string">'popup'</span>,<span class="keyword">...</span>
+0103         <span class="string">'Tag'</span>,<span class="string">'StorageSelect'</span>,<span class="keyword">...</span>
+0104         <span class="string">'String'</span>,{<span class="string">'Single file'</span>,<span class="string">'Separate files'</span>},<span class="keyword">...</span>
+0105         <span class="string">'FontName'</span>,<span class="string">'fixed'</span>,<span class="keyword">...</span>
+0106         <span class="string">'Value'</span>,StorageValue,<span class="keyword">...</span>
+0107         <span class="string">'Callback'</span>,@<a href="#_sub1" class="code" title="subfunction UpdateDialog(src,varargin)">UpdateDialog</a>,<span class="keyword">...</span>
+0108         <span class="string">'UserData'</span>,{<span class="string">'single'</span>,<span class="string">'separate'</span>},<span class="keyword">...</span>
+0109         <span class="string">'Units'</span>,<span class="string">'characters'</span>,<span class="string">'Position'</span>,[x0 y0 width ControlHeight]);
+0110     <span class="comment">% create file selectors</span>
+0111     hfile=[];
+0112     <span class="keyword">for</span> ii=1:NumFiles
+0113         x0=dx;
+0114         y0=y0-dy-LabelHeight;
+0115         width=figpos(3)-x0;
+0116         hlabel(end+1)=uicontrol(<span class="string">'Style'</span>,<span class="string">'text'</span>,<span class="keyword">...</span>
+0117             <span class="string">'String'</span>,FileLabel{ii},<span class="string">'HorizontalAlignment'</span>,<span class="string">'left'</span>,<span class="keyword">...</span>
+0118             <span class="string">'FontName'</span>,<span class="string">'fixed'</span>,<span class="keyword">...</span>
+0119             <span class="string">'BackgroundColor'</span>,get(fig,<span class="string">'Color'</span>),<span class="keyword">...</span>
+0120             <span class="string">'Units'</span>,<span class="string">'characters'</span>,<span class="string">'Position'</span>,[x0 y0 width LabelHeight]);
+0121         y0=y0-ControlHeight;
+0122         width=figpos(3)-x0-dx-ButtonWidth;
+0123         hedit(ii)=uicontrol(<span class="string">'Style'</span>,<span class="string">'edit'</span>,<span class="keyword">...</span>
+0124             <span class="string">'String'</span>,<span class="string">''</span>,<span class="string">'HorizontalAlignment'</span>,<span class="string">'right'</span>,<span class="keyword">...</span>
+0125             <span class="string">'FontName'</span>,<span class="string">'fixed'</span>,<span class="keyword">...</span>
+0126             <span class="string">'BackgroundColor'</span>,[1 1 1],<span class="keyword">...</span>
+0127             <span class="string">'UserData'</span>,ii,<span class="keyword">...</span>
+0128             <span class="string">'Units'</span>,<span class="string">'characters'</span>,<span class="string">'Position'</span>,[x0 y0 width ControlHeight]);
+0129         x0=x0+width;
+0130         data.label=hlabel(end);
+0131         data.edit=hedit(ii);
+0132         data.extension=<span class="string">'txt'</span>;
+0133         data.lastdir=pwd;
+0134         hbrowse(ii)=uicontrol(<span class="string">'Style'</span>,<span class="string">'pushbutton'</span>,<span class="keyword">...</span>
+0135             <span class="string">'String'</span>,<span class="string">'Browse'</span>,<span class="keyword">...</span><span class="comment">.</span>
+0136             <span class="string">'FontName'</span>,<span class="string">'fixed'</span>,<span class="keyword">...</span>
+0137             <span class="string">'UserData'</span>,data,<span class="string">'Callback'</span>,@<a href="#_sub2" class="code" title="subfunction BrowseCallback(src,varargin)">BrowseCallback</a>,<span class="keyword">...</span>
+0138             <span class="string">'Units'</span>,<span class="string">'characters'</span>,<span class="string">'Position'</span>,[x0 y0 ButtonWidth ControlHeight]);
+0139         hfile=[hfile hedit(ii) hbrowse(ii)];
+0140     <span class="keyword">end</span>
+0141     <span class="comment">% create ok/cancel buttons at the bottom</span>
+0142     y0=dy;
+0143     cancel=uicontrol(<span class="string">'Style'</span>,<span class="string">'pushbutton'</span>,<span class="keyword">...</span>
+0144         <span class="string">'String'</span>,<span class="string">'Cancel'</span>,<span class="string">'FontName'</span>,<span class="string">'fixed'</span>,<span class="keyword">...</span>
+0145         <span class="string">'Tag'</span>,<span class="string">'cancel'</span>,<span class="string">'Units'</span>,<span class="string">'characters'</span>);
+0146     extent=get(cancel,<span class="string">'Extent'</span>);
+0147     width=1.25*extent(3);
+0148     x0=figpos(3)-dx-width;
+0149     set(cancel,<span class="string">'Position'</span>,[x0 y0 width ControlHeight]);
+0150     ok=uicontrol(<span class="string">'Style'</span>,<span class="string">'pushbutton'</span>,<span class="keyword">...</span>
+0151         <span class="string">'String'</span>,<span class="string">'OK'</span>,<span class="string">'FontName'</span>,<span class="string">'fixed'</span>,<span class="keyword">...</span>
+0152         <span class="string">'Tag'</span>,<span class="string">'ok'</span>,<span class="string">'Units'</span>,<span class="string">'characters'</span>);
+0153     x0=x0-dx/2-width;
+0154     set(ok,<span class="string">'Position'</span>,[x0 y0 width ControlHeight]);
+0155     set([ok cancel],<span class="string">'Callback'</span>,@<a href="#_sub3" class="code" title="subfunction ExitDialog(src,varargin)">ExitDialog</a>);
+0156     <span class="comment">% store handles for later use</span>
+0157     children=[select hfile ok cancel hlabel];
+0158     set(fig,<span class="string">'Children'</span>,children(end:-1:1));
+0159     <span class="comment">% hide figure from command line users</span>
+0160     set(fig,<span class="string">'HandleVisibility'</span>,<span class="string">'callback'</span>);
+0161 <span class="keyword">end</span>
+0162 
+0163 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0164 <span class="comment">% update dialog callback %</span>
+0165 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0166 <a name="_sub1" href="#_subfunctions" class="code">function UpdateDialog(src,varargin)</a>
+0167 
+0168 fig=ancestor(src,<span class="string">'figure'</span>);
+0169 htype=findobj(fig,<span class="string">'Tag'</span>,<span class="string">'TypeSelect'</span>);
+0170 type=get(htype,<span class="string">'UserData'</span>);
+0171 value=get(htype,<span class="string">'Value'</span>);
+0172 type=type{value};
+0173 
+0174 hstorage=findobj(fig,<span class="string">'Tag'</span>,<span class="string">'StorageSelect'</span>);
+0175 storage=get(hstorage,<span class="string">'UserData'</span>);
+0176 value=get(hstorage,<span class="string">'Value'</span>);
+0177 storage=storage{value};
+0178 
+0179 delete(fig);
+0180 <a href="NewRecordGUI.html" class="code" title="function fig=NewRecordGUI(VISARtype,SignalStorage)">NewRecordGUI</a>(type,storage);
+0181 
+0182 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0183 <span class="comment">% file browse callback %</span>
+0184 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0185 <a name="_sub2" href="#_subfunctions" class="code">function BrowseCallback(src,varargin)</a>
+0186 
+0187 data=get(src,<span class="string">'UserData'</span>);
+0188 <span class="comment">% preserve previous filterspec</span>
+0189 filterspec={<span class="keyword">...</span>
+0190     <span class="string">'*.wfm;*.WFM;*.isf;*.ISF'</span>,<span class="string">'Tektronix binary files'</span>;<span class="keyword">...</span>
+0191     <span class="string">'*.h5;*.H5'</span>,<span class="string">'Agilent binary files'</span>;<span class="keyword">...</span>
+0192     <span class="string">'*.dig;*.DIG'</span>,<span class="string">'NTS binary files'</span>;<span class="keyword">...</span>
+0193     <span class="string">'*.txt;*.TXT;*.dat;*.DAT;*.csv;*.CSV;*.asc;*.ASC;'</span>,<span class="string">'Text files'</span>;<span class="keyword">...</span>
+0194     <span class="string">'*.*'</span>,<span class="string">'All files'</span>;};
+0195 <span class="keyword">for</span> jj=1:size(filterspec,1)
+0196     search=strfind(filterspec{jj,1},data.extension);
+0197     <span class="keyword">if</span> any(search)
+0198         temp=filterspec(1,:);
+0199         filterspec(1,:)=filterspec(jj,:);
+0200         filterspec(jj,:)=temp;
+0201         <span class="keyword">continue</span>
+0202     <span class="keyword">end</span>
+0203 <span class="keyword">end</span>
+0204 
+0205 <span class="comment">% generate the correct label</span>
+0206 label=get(data.label,<span class="string">'String'</span>);
+0207 label=[<span class="string">'Choose '</span> label];
+0208 
+0209 old=pwd;
+0210 cd(data.lastdir);
+0211 [filename,pathname]=<a href="getfilename.html" class="code" title="function [filename,pathname,filterindex]=getfilename(varargin)">getfilename</a>(filterspec,label);
+0212 cd(old);
+0213 
+0214 <span class="keyword">if</span> isnumeric(filename) <span class="comment">% user pressed cancel</span>
+0215     <span class="keyword">return</span>
+0216 <span class="keyword">end</span>
+0217 
+0218 <span class="comment">% update the edit box</span>
+0219 filename=fullfile(pathname,filename);
+0220 set(data.edit,<span class="string">'String'</span>,filename);
+0221 
+0222 <span class="comment">% update changes for all browse buttons</span>
+0223 [pathstr,name,extension]=fileparts(filename);     
+0224 button=findobj(gcf,<span class="string">'Style'</span>,<span class="string">'pushbutton'</span>,<span class="string">'String'</span>,<span class="string">'Browse'</span>);
+0225 <span class="keyword">for</span> ii=1:numel(button)
+0226     data=get(button(ii),<span class="string">'UserData'</span>);
+0227     data.lastdir=pathstr;
+0228     data.extension=extension;
+0229     set(button(ii),<span class="string">'UserData'</span>,data);
+0230 <span class="keyword">end</span>
+0231 
+0232 <span class="comment">%%%%%%%%%%%%%%%%%</span>
+0233 <span class="comment">% exit callback %</span>
+0234 <span class="comment">%%%%%%%%%%%%%%%%%</span>
+0235 <a name="_sub3" href="#_subfunctions" class="code">function ExitDialog(src,varargin)</a>
+0236 
+0237 fig=ancestor(src,<span class="string">'figure'</span>);
+0238 main=findall(0,<span class="string">'Type'</span>,<span class="string">'figure'</span>,<span class="string">'Tag'</span>,<span class="string">'PointVISAR'</span>);
+0239 data=get(main,<span class="string">'UserData'</span>);
+0240 active=<a href="ActiveRecord.html" class="code" title="function active=ActiveRecord(data)">ActiveRecord</a>(data);
+0241 
+0242 choice=get(src,<span class="string">'Tag'</span>);
+0243 <span class="keyword">if</span> strcmp(choice,<span class="string">'ok'</span>) <span class="comment">% user chose OK button</span>
+0244     <span class="comment">% store the chosen file names</span>
+0245     hedit=findobj(fig,<span class="string">'Style'</span>,<span class="string">'edit'</span>);
+0246     <span class="keyword">for</span> ii=1:numel(hedit)
+0247         index=get(hedit(ii),<span class="string">'UserData'</span>);
+0248         filename=get(hedit(ii),<span class="string">'String'</span>);
+0249         <span class="keyword">if</span> isempty(filename)
+0250             message{1}=<span class="string">'Incomplete file input!'</span>;
+0251             message{2}=<span class="string">'Please specify all files before pressing OK.'</span>;
+0252             warndlg(message,<span class="string">'Incomplete input'</span>);
+0253             <span class="keyword">return</span>
+0254         <span class="keyword">else</span>
+0255             InputFiles{index}=filename;
+0256         <span class="keyword">end</span>
+0257     <span class="keyword">end</span>    
+0258     <span class="comment">% create the VISAR record</span>
+0259     htype=findobj(fig,<span class="string">'Tag'</span>,<span class="string">'TypeSelect'</span>);
+0260     type=get(htype,<span class="string">'UserData'</span>);
+0261     value=get(htype,<span class="string">'Value'</span>);
+0262     type=type{value};
+0263     record=<a href="CreateRecord.html" class="code" title="function func=CreateRecord(type)">CreateRecord</a>(type);
+0264     record.InputFiles=InputFiles;        
+0265     <span class="comment">% launch record editing GUI</span>
+0266     <span class="keyword">if</span> ~isempty(active)
+0267         data{active}.Active=false;
+0268     <span class="keyword">end</span>
+0269     data{end+1}=record;
+0270     set(main,<span class="string">'UserData'</span>,data,<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+0271     record=<a href="VisarAnalysis.html" class="code" title="function record = VisarAnalysis(record, varargin)">VisarAnalysis</a>(record,<span class="string">'LoadRecord'</span>);
+0272     <a href="ReadEditRecordGUI.html" class="code" title="function fig=ReadEditRecordGUI(record)">ReadEditRecordGUI</a>(record); 
+0273 <span class="keyword">else</span>
+0274     answer=questdlg(<span class="string">'Cancel record load?'</span>,<span class="string">'Cancel load?'</span>);
+0275     <span class="keyword">if</span> ~strcmpi(answer,<span class="string">'yes'</span>)
+0276         <span class="comment">%if ~strcmp(lower(answer),'yes')</span>
+0277         <span class="keyword">return</span>
+0278     <span class="keyword">end</span>
+0279 <span class="keyword">end</span>
+0280 <span class="comment">%delete(fig)</span>
+0281 <span class="comment">% hide figure (available for later use</span>
+0282 set(fig,<span class="string">'Visible'</span>,<span class="string">'off'</span>);</pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

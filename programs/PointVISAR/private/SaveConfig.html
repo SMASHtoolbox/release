@@ -1,0 +1,137 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of SaveConfig</title>
+  <meta name="keywords" content="SaveConfig">
+  <meta name="description" content="SaveConfig  Save current PointVISAR configuration to file.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">PointVISAR</a> &gt; <a href="index.html">private</a> &gt; SaveConfig.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/PointVISAR/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>SaveConfig
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>SaveConfig  Save current PointVISAR configuration to file.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function message=SaveConfig(data) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">   SaveConfig  Save current PointVISAR configuration to file.
+               Writes out necessary values from UserData to a file so that
+               the user can reproduce the same analysis or a similar 
+               one at a later time.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="EditBoxNum2Str.html" class="code" title="function func=EditBoxNum2Str(number)">EditBoxNum2Str</a>	</li><li><a href="PointVISARversion.html" class="code" title="function [version,versiondate]=PointVISARversion()">PointVISARversion</a>	PointVISARversion : returns current PointVISAR version number</li><li><a href="RelativePath.html" class="code" title="function func=RelativePath(targetpath,sourcepath)">RelativePath</a>	RelativePath : determine the relative path between two directories</li><li><a href="putfilename.html" class="code" title="function [filename,pathname,filterindex]=putfilename(varargin)">putfilename</a>	</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="PointVISARGUI.html" class="code" title="function fig=PointVISARGUI(data)">PointVISARGUI</a>	PointVISARGUI</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">%   SaveConfig  Save current PointVISAR configuration to file.</span>
+0002 <span class="comment">%               Writes out necessary values from UserData to a file so that</span>
+0003 <span class="comment">%               the user can reproduce the same analysis or a similar</span>
+0004 <span class="comment">%               one at a later time.</span>
+0005 
+0006 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0007 <a name="_sub0" href="#_subfunctions" class="code">function message=SaveConfig(data)</a>
+0008 
+0009 <span class="comment">% Prompt the user for a configuration filename</span>
+0010 suggestion = <span class="string">'AnalysisConfig.txt'</span>;
+0011 dialogtitle = <span class="string">'Save configuration '</span>;
+0012 [fname,pname] = <a href="putfilename.html" class="code" title="function [filename,pathname,filterindex]=putfilename(varargin)">putfilename</a>({<span class="string">'*.*'</span>,<span class="string">'All files'</span>},dialogtitle,suggestion);
+0013 <span class="keyword">if</span> isnumeric(fname) <span class="comment">% user presed cancel or killed dialog</span>
+0014     <span class="keyword">return</span>
+0015 <span class="keyword">end</span>
+0016 filename=[pname fname];
+0017 rootpath=pname;
+0018 
+0019 <span class="comment">% Open the specified file and begin generating the file text</span>
+0020 fid=fopen(filename,<span class="string">'wt'</span>);
+0021 message{1} = <span class="string">'% VISAR Analysis configuration'</span>;
+0022 message{2} = [<span class="string">'% Generated '</span> datestr(now) <span class="string">' by PointVISAR version '</span> <a href="PointVISARversion.html" class="code" title="function [version,versiondate]=PointVISARversion()">PointVISARversion</a>];
+0023 message{3} = <span class="string">''</span>;
+0024 offset=repmat(<span class="string">' '</span>,[1 3]);
+0025 
+0026 <span class="comment">% For each data record</span>
+0027 <span class="keyword">for</span> ii=1:length(data);
+0028     names=data{ii}.ParameterFields;    
+0029     
+0030     <span class="comment">% Begin tag</span>
+0031     message{end+1} = [<span class="string">'begin{'</span> data{ii}.Type <span class="string">'}'</span>];
+0032     
+0033     <span class="comment">% All other parameters</span>
+0034     <span class="keyword">for</span> jj=2:numel(names)
+0035         field=names{jj};
+0036         value=data{ii}.(field);
+0037                      
+0038         <span class="keyword">if</span> isnumeric(value) || islogical(value)
+0039             numbers=<span class="string">''</span>;
+0040             <span class="keyword">for</span> kk=1:numel(value)
+0041                 numbers=[numbers <a href="EditBoxNum2Str.html" class="code" title="function func=EditBoxNum2Str(number)">EditBoxNum2Str</a>(value(kk)) <span class="string">' '</span>];
+0042             <span class="keyword">end</span>
+0043             message{end+1} = [offset field <span class="string">' = {'</span> numbers(1:end-1) <span class="string">'}'</span>];
+0044         <span class="keyword">elseif</span> ischar(value)
+0045             message{end+1}=[offset field <span class="string">' = {'</span> value <span class="string">'}'</span>];
+0046         <span class="keyword">elseif</span> iscell(value)
+0047              <span class="comment">% convert absolute paths to relative paths</span>
+0048             <span class="keyword">if</span> strcmp(field,<span class="string">'InputFiles'</span>)
+0049                 <span class="keyword">for</span> kk=1:numel(value)
+0050                     [pathname,filename,extension]=fileparts(value{kk});
+0051                     pathname=<a href="RelativePath.html" class="code" title="function func=RelativePath(targetpath,sourcepath)">RelativePath</a>(pathname,rootpath);
+0052                     filename=[filename extension];
+0053                     value{kk}=[<span class="string">''''</span> fullfile(pathname,filename) <span class="string">''''</span>];
+0054                 <span class="keyword">end</span>
+0055             <span class="keyword">end</span>
+0056             <span class="keyword">if</span> strcmp(field, <span class="string">'OutputFile'</span>)
+0057                 <span class="keyword">for</span> kk=1:numel(value)
+0058                     <span class="keyword">if</span> isempty(value{kk})
+0059                         filename=<span class="string">''</span>;
+0060                     <span class="keyword">else</span>
+0061                         [pathname,filename,extension]=fileparts(value{kk});
+0062                         pathname=<a href="RelativePath.html" class="code" title="function func=RelativePath(targetpath,sourcepath)">RelativePath</a>(pathname,rootpath);
+0063                         filename=[filename extension];
+0064                         value{kk}=[<span class="string">''''</span> fullfile(pathname,filename) <span class="string">''''</span>];
+0065                     <span class="keyword">end</span>
+0066                 <span class="keyword">end</span>
+0067             <span class="keyword">end</span>
+0068             message{end+1}=[offset field <span class="string">' ='</span>];
+0069             message{end+1}=[offset <span class="string">'{'</span>];
+0070             <span class="keyword">for</span> kk=1:numel(value)
+0071                 message{end+1}=[offset offset value{kk}];
+0072             <span class="keyword">end</span>
+0073             message{end+1}=[offset <span class="string">'}'</span>];
+0074         <span class="keyword">end</span>
+0075     <span class="keyword">end</span>
+0076     
+0077     <span class="comment">% Add the end tag for this record data</span>
+0078     <span class="comment">%message{end+1} = 'end';</span>
+0079     message{end+1}=[<span class="string">'end{'</span> data{ii}.Type <span class="string">'}'</span>];
+0080     message{end+1} = <span class="string">''</span>;
+0081 <span class="keyword">end</span>
+0082 
+0083 <span class="comment">% Write the entire message to the file</span>
+0084 fprintf(fid,<span class="string">'%s\n'</span>,message{:});
+0085 
+0086 <span class="comment">% Close the configuration file</span>
+0087 fclose(fid);</pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

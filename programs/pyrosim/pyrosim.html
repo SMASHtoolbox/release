@@ -1,0 +1,860 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of pyrosim</title>
+  <meta name="keywords" content="pyrosim">
+  <meta name="description" content="pyrosim: pyrometery measurement simulator">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="index.html">pyrosim</a> &gt; pyrosim.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../index.html"><img alt="<" border="0" src="../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/pyrosim&nbsp;<img alt=">" border="0" src="../../../../right.png"></a></td></tr></table>-->
+
+<h1>pyrosim
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>pyrosim: pyrometery measurement simulator</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function varargout=pyrosim(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> pyrosim: pyrometery measurement simulator
+
+ This program calculates the power, photon flux, and signal measured
+ by a detector in a pyrometer measurement.  The user may specify the
+ object's temperature, emissivity, the limting collection diameter/angle
+ of the relay, the relay efficiency, and the detector's response.  A range
+ of temperatures may be specified using standard array conventions.
+ Constant or variable emissivities, efficiencies, and reponse functions
+ may be specified; the latter is achieved by inputting the name of a two
+ column text file with the relevant wavelength data.  Non-constant fucntions 
+ are assumed to be zero outside the specifed spectral region.
+
+ The units for the calculation are as follows.
+    Temperature [K]
+    Wavelength [um]
+    Diameter [mm]
+    Angle [degrees]
+    Response [V/W]
+    Power [W]
+    Photon flux [1/s]
+    Signal [V]
+
+ Executing &quot;pyrosim&quot; with no inputs launches the graphical interface.
+ Specifying inputs to the function circumvents this interface.
+    &gt;&gt;[phi,phiN,signal]=pyrosim('name1',value1,'name2',value2,...);
+ Valid input names are as follows
+      temperature    : array of temperature values
+      emissivity     : emissivity value or file name
+      diameter       : collection diameter (scalar)
+      max_angle      : maximum collection angle (scalar)
+      relay          : relay value or file name
+      response       : detector response value or file name
+      max_wavelength : maximum integration wavelength (scalar)
+      min_wavelength : mininum integration wavelength (scalar)
+      num_wavelength : number of integration points (integer)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function varargout=CalculatePower(varargin)</a></li><li><a href="#_sub2" class="code">function y=makecurve(inp,x)</a></li><li><a href="#_sub3" class="code">function createGUI()</a></li><li><a href="#_sub4" class="code">function resizeGUI(src,eventdata,handles)</a></li><li><a href="#_sub5" class="code">function updateGUI(src,eventdata,handles)</a></li><li><a href="#_sub6" class="code">function value=validate_input(value,handle)</a></li><li><a href="#_sub7" class="code">function PlotSelect(src,eventdata,handles)</a></li><li><a href="#_sub8" class="code">function ProgramMenuCallback(src,eventdata,handles)</a></li><li><a href="#_sub9" class="code">function exit_pyrosim(src,varargin)</a></li><li><a href="#_sub10" class="code">function AxesContextCallback(src,eventdata,target)</a></li><li><a href="#_sub11" class="code">function [h,pos]=custom_uicontrol(varargin)</a></li><li><a href="#_sub12" class="code">function [h,pos]=textlabel(parent,pos,string,varargin)</a></li><li><a href="#_sub13" class="code">function [h,pos]=editbox(parent,pos,string,varargin)</a></li><li><a href="#_sub14" class="code">function [h,pos]=pushbutton(parent,pos,string,varargin)</a></li><li><a href="#_sub15" class="code">function [h,pos]=popupmenu(parent,pos,string,varargin)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% pyrosim: pyrometery measurement simulator</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This program calculates the power, photon flux, and signal measured</span>
+0004 <span class="comment">% by a detector in a pyrometer measurement.  The user may specify the</span>
+0005 <span class="comment">% object's temperature, emissivity, the limting collection diameter/angle</span>
+0006 <span class="comment">% of the relay, the relay efficiency, and the detector's response.  A range</span>
+0007 <span class="comment">% of temperatures may be specified using standard array conventions.</span>
+0008 <span class="comment">% Constant or variable emissivities, efficiencies, and reponse functions</span>
+0009 <span class="comment">% may be specified; the latter is achieved by inputting the name of a two</span>
+0010 <span class="comment">% column text file with the relevant wavelength data.  Non-constant fucntions</span>
+0011 <span class="comment">% are assumed to be zero outside the specifed spectral region.</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">% The units for the calculation are as follows.</span>
+0014 <span class="comment">%    Temperature [K]</span>
+0015 <span class="comment">%    Wavelength [um]</span>
+0016 <span class="comment">%    Diameter [mm]</span>
+0017 <span class="comment">%    Angle [degrees]</span>
+0018 <span class="comment">%    Response [V/W]</span>
+0019 <span class="comment">%    Power [W]</span>
+0020 <span class="comment">%    Photon flux [1/s]</span>
+0021 <span class="comment">%    Signal [V]</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">% Executing &quot;pyrosim&quot; with no inputs launches the graphical interface.</span>
+0024 <span class="comment">% Specifying inputs to the function circumvents this interface.</span>
+0025 <span class="comment">%    &gt;&gt;[phi,phiN,signal]=pyrosim('name1',value1,'name2',value2,...);</span>
+0026 <span class="comment">% Valid input names are as follows</span>
+0027 <span class="comment">%      temperature    : array of temperature values</span>
+0028 <span class="comment">%      emissivity     : emissivity value or file name</span>
+0029 <span class="comment">%      diameter       : collection diameter (scalar)</span>
+0030 <span class="comment">%      max_angle      : maximum collection angle (scalar)</span>
+0031 <span class="comment">%      relay          : relay value or file name</span>
+0032 <span class="comment">%      response       : detector response value or file name</span>
+0033 <span class="comment">%      max_wavelength : maximum integration wavelength (scalar)</span>
+0034 <span class="comment">%      min_wavelength : mininum integration wavelength (scalar)</span>
+0035 <span class="comment">%      num_wavelength : number of integration points (integer)</span>
+0036 
+0037 <span class="comment">% created May 21, 2008 by Daniel Dolan</span>
+0038 <span class="comment">% updated August 2, 2011 by Daniel Dolan</span>
+0039 <span class="comment">%%%%%%%%%%%%%%%%%</span>
+0040 <span class="comment">% main function %</span>
+0041 <span class="comment">%%%%%%%%%%%%%%%%%</span>
+0042 <a name="_sub0" href="#_subfunctions" class="code">function varargout=pyrosim(varargin)</a>
+0043 
+0044 varargout=cell(nargout,1);
+0045 <span class="keyword">if</span> nargin==0 <span class="comment">% launch GUI</span>
+0046     <span class="keyword">if</span> nargout&gt;0
+0047         fprintf(<span class="string">'Function output cannot be generated without input arguments \n'</span>);
+0048         fprintf(<span class="string">'Starting graphical interface instead \n'</span>);
+0049     <span class="keyword">end</span>
+0050     <a href="#_sub3" class="code" title="subfunction createGUI()">createGUI</a>;
+0051     <span class="keyword">if</span> isdeployed
+0052         varargout{1}=1;
+0053     <span class="keyword">end</span>
+0054 <span class="keyword">else</span>     
+0055     <span class="keyword">if</span> nargout==0
+0056         varargout={[]};
+0057     <span class="keyword">end</span>
+0058     [varargout{:}]=<a href="#_sub1" class="code" title="subfunction varargout=CalculatePower(varargin)">CalculatePower</a>(varargin{:});
+0059 <span class="keyword">end</span>
+0060 
+0061 <span class="comment">%%%%%%%%%%%%%%%%%%%%%</span>
+0062 <span class="comment">% support functions %</span>
+0063 <span class="comment">%%%%%%%%%%%%%%%%%%%%%</span>
+0064 <a name="_sub1" href="#_subfunctions" class="code">function varargout=CalculatePower(varargin)</a>
+0065 
+0066 <span class="comment">% default values</span>
+0067 temperature=1000; <span class="comment">% [K]</span>
+0068 emissivity=1; <span class="comment">% [-]</span>
+0069 diameter=1; <span class="comment">% [mm]</span>
+0070 max_angle=10; <span class="comment">% [deg]</span>
+0071 relay=1; <span class="comment">% [-]</span>
+0072 response=1; <span class="comment">% [V/W]</span>
+0073 max_wavelength=20; <span class="comment">% [um]</span>
+0074 min_wavelength=0.1; <span class="comment">% [um]</span>
+0075 num_wavelength=50e3;
+0076 
+0077 <span class="comment">% process input</span>
+0078 <span class="keyword">for</span> n=1:2:nargin
+0079     name=varargin{n};
+0080     <span class="keyword">if</span> ~ischar(name)
+0081         error(<span class="string">'ERROR: non-character name entry'</span>);
+0082     <span class="keyword">end</span>
+0083     <span class="keyword">try</span>
+0084         value=varargin{n+1};
+0085     <span class="keyword">catch</span>
+0086         fprintf(<span class="string">'Missing value for input ''%s''--trying to continue\n'</span>,name);
+0087         <span class="keyword">continue</span>
+0088     <span class="keyword">end</span>
+0089     <span class="keyword">switch</span> lower(name)
+0090         <span class="keyword">case</span> <span class="string">'temperature'</span>
+0091             temperature=value;
+0092         <span class="keyword">case</span> <span class="string">'emissivity'</span>
+0093             emissivity=value;
+0094         <span class="keyword">case</span> <span class="string">'diameter'</span>
+0095             diameter=value;
+0096         <span class="keyword">case</span> {<span class="string">'angle'</span>,<span class="string">'max_angle'</span>}
+0097             max_angle=value;
+0098         <span class="keyword">case</span> <span class="string">'relay'</span>
+0099             relay=value;
+0100         <span class="keyword">case</span> <span class="string">'response'</span>
+0101             response=value;
+0102         <span class="keyword">case</span> <span class="string">'max_wavelength'</span>
+0103             max_wavelength=value;
+0104         <span class="keyword">case</span> <span class="string">'min_wavelength'</span>
+0105             min_wavelength=value;
+0106         <span class="keyword">case</span> <span class="string">'num_wavelength'</span>
+0107             num_wavelength=value;
+0108         <span class="keyword">otherwise</span>
+0109             fprintf(<span class="string">'Unrecogized name ''%s'' will be ignored\n'</span>,name);
+0110     <span class="keyword">end</span>
+0111 <span class="keyword">end</span>
+0112 num_points=numel(temperature);
+0113 [phi,phiN,signal]=deal(zeros(1,num_points));
+0114 
+0115 <span class="comment">% general parameters</span>
+0116 c0=2.99792458e8; <span class="comment">% vacuum speed of light [m/s]</span>
+0117 h=4.135667516E-15; <span class="comment">% Planks's constant [eV*s]</span>
+0118 kB=8.6173324E-5; <span class="comment">% Boltzman's constant [eV/K]</span>
+0119 A=2/(h^3*c0^2); <span class="comment">% [1/eV^3/m^2/s]</span>
+0120 eV=1.602176487E-19; <span class="comment">% electron volt [J]</span>
+0121 <span class="comment">%sigma=(2*kB^4*pi^5)/(15*c0^2*h^3)*eV; % [W/m^2 K^4]</span>
+0122 <span class="comment">%fprintf('sigma=%.9g\n',sigma);</span>
+0123 
+0124 <span class="comment">% define wavelength domain</span>
+0125 hc=h*c0;
+0126 <span class="comment">%hc=SMASH.Reference.PhysicalConstant('hc','spectroscopy')/1e9;</span>
+0127 min_energy=hc./(max_wavelength*1e-6); <span class="comment">% [eV]</span>
+0128 max_energy=hc./(min_wavelength*1e-6);
+0129 energy=linspace(min_energy,max_energy,num_wavelength);
+0130 wavelength=hc./energy*1e6; <span class="comment">% [um]</span>
+0131 
+0132 emissivity=<a href="#_sub2" class="code" title="subfunction y=makecurve(inp,x)">makecurve</a>(emissivity,wavelength);
+0133 relay=<a href="#_sub2" class="code" title="subfunction y=makecurve(inp,x)">makecurve</a>(relay,wavelength);
+0134 diameter=diameter/1e3; <span class="comment">% convert mm to m</span>
+0135 relay=(pi*diameter*sind(max_angle)/2)^2*relay;
+0136 response=<a href="#_sub2" class="code" title="subfunction y=makecurve(inp,x)">makecurve</a>(response,wavelength);
+0137 
+0138 <span class="comment">% perform calculation at each temperature</span>
+0139 <span class="keyword">for</span> n=1:num_points
+0140     kT=kB*temperature(n);
+0141     radiance=zeros(size(energy));
+0142     index=energy&lt;(kT*1e-6);
+0143     radiance(index)=kT*energy(index).^2;
+0144     radiance(~index)=energy(~index).^3./(exp(energy(~index)/kT)-1);
+0145     radiance=A*emissivity.*radiance;
+0146     power=relay.*radiance;
+0147     phi(n)=eV*trapz(energy,power); <span class="comment">% collected power [W]</span>
+0148     phiN(n)=trapz(energy,power./energy); <span class="comment">% photon flux [1/s]</span>
+0149     signal(n)=eV*trapz(energy,power.*response); <span class="comment">% electrical signal [V]</span>
+0150 <span class="keyword">end</span>
+0151 varargout{1}=phi;
+0152 varargout{2}=phiN;
+0153 varargout{3}=signal;
+0154 
+0155 <a name="_sub2" href="#_subfunctions" class="code">function y=makecurve(inp,x)</a>
+0156 
+0157 <span class="keyword">if</span> ischar(inp) <span class="comment">% scan text file</span>
+0158     format=<span class="string">'%g%g'</span>;
+0159     fid=fopen(inp,<span class="string">'rt'</span>);
+0160     Nheader=0;
+0161     success=false;
+0162     <span class="keyword">while</span> ~feof(fid)
+0163         temp=fgets(fid);
+0164         [A,count]=sscanf(temp,format);
+0165         <span class="keyword">if</span> count==2
+0166             success=true;
+0167             <span class="keyword">break</span>
+0168         <span class="keyword">end</span>
+0169         Nheader=Nheader+1;                    
+0170     <span class="keyword">end</span>
+0171     <span class="keyword">if</span> success
+0172         frewind(fid);
+0173         <span class="keyword">for</span> k=1:Nheader
+0174             fgets(fid);
+0175         <span class="keyword">end</span>
+0176         data=fscanf(fid,format,[2 inf]);
+0177         data=transpose(data);
+0178         fclose(fid);
+0179     <span class="keyword">else</span>        
+0180         fclose(fid);
+0181         error(<span class="string">'ERROR: unable to read data file %s'</span>,inp);
+0182     <span class="keyword">end</span>
+0183     y=interp1(data(:,1),data(:,2),x,<span class="string">'pchip'</span>,0);
+0184 <span class="keyword">elseif</span> numel(inp)==1 <span class="comment">% replicate value</span>
+0185     y=repmat(inp,size(x));
+0186 <span class="keyword">else</span> <span class="comment">% tabular data (columns)</span>
+0187     y=interp1(inp(:,1),inp(:,2),x,<span class="string">'pchip'</span>,0);
+0188 <span class="keyword">end</span>
+0189 
+0190 <span class="comment">%%%%%%%%%%%%%%%%%</span>
+0191 <span class="comment">% GUI functions %</span>
+0192 <span class="comment">%%%%%%%%%%%%%%%%%</span>
+0193 <a name="_sub3" href="#_subfunctions" class="code">function createGUI()</a>
+0194 
+0195 <span class="comment">% probe primary monitor size</span>
+0196 monpos=get(0,<span class="string">'MonitorPositions'</span>);
+0197 monpos=monpos(1,:);
+0198 monLx=monpos(3)+monpos(1)-1;
+0199 monLy=monpos(4)+monpos(2)-1;
+0200 
+0201 Ly=0.75*min([monLx monLy]);
+0202 Lx=Ly;
+0203 fig=figure(<span class="string">'Visible'</span>,<span class="string">'off'</span>,<span class="string">'Name'</span>,<span class="string">'Pyrometry simulator'</span>,<span class="keyword">...</span><span class="comment">    </span>
+0204     <span class="string">'Toolbar'</span>,<span class="string">'figure'</span>,<span class="string">'DockControls'</span>,<span class="string">'off'</span>,<span class="keyword">...</span>
+0205     <span class="string">'Menubar'</span>,<span class="string">'none'</span>,<span class="string">'Toolbar'</span>,<span class="string">'figure'</span>,<span class="keyword">...</span>
+0206     <span class="string">'Units'</span>,<span class="string">'pixels'</span>,<span class="string">'Position'</span>,[0 0 Lx Lx],<span class="keyword">...</span>
+0207     <span class="string">'PaperPositionMode'</span>,<span class="string">'auto'</span>,<span class="keyword">...</span>
+0208     <span class="string">'IntegerHandle'</span>,<span class="string">'off'</span>,<span class="string">'NumberTitle'</span>,<span class="string">'off'</span>,<span class="keyword">...</span>
+0209     <span class="string">'Tag'</span>,<span class="string">'pyrosim'</span>,<span class="string">'CloseRequestFcn'</span>,@<a href="#_sub9" class="code" title="subfunction exit_pyrosim(src,varargin)">exit_pyrosim</a>);
+0210 hb=findall(fig,<span class="string">'Type'</span>,<span class="string">'uitoolbar'</span>);
+0211 hc=findall(hb);
+0212 <span class="keyword">for</span> n=1:numel(hc)
+0213     tag=lower(get(hc(n),<span class="string">'Tag'</span>));
+0214     <span class="keyword">try</span>
+0215         set(hc(n),<span class="string">'Separator'</span>,<span class="string">'off'</span>);
+0216     <span class="keyword">end</span>
+0217     <span class="keyword">if</span> strcmpi(tag,<span class="string">'FigureToolBar'</span>)
+0218         <span class="keyword">continue</span>
+0219     <span class="keyword">end</span>
+0220     <span class="keyword">if</span> findstr(tag,<span class="string">'exploration'</span>)        
+0221         tag=sscanf(tag,<span class="string">'exploration.%s'</span>,1);
+0222         <span class="keyword">switch</span> tag
+0223             <span class="keyword">case</span> {<span class="string">'zoomin'</span>,<span class="string">'pan'</span>,<span class="string">'datacursor'</span>}
+0224                 <span class="comment">% do nothing</span>
+0225             <span class="keyword">otherwise</span>
+0226                 set(hc(n),<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+0227         <span class="keyword">end</span>        
+0228     <span class="keyword">else</span>
+0229         set(hc(n),<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+0230     <span class="keyword">end</span>
+0231 <span class="keyword">end</span>
+0232 
+0233 data.ymargin=10; <span class="comment">% pixels</span>
+0234 data.xmargin=data.ymargin;
+0235 data.ygap=10; <span class="comment">% pixels</span>
+0236 filename0=repmat(<span class="string">'M'</span>,[1 40]);
+0237 number0=<span class="string">' +0.0000E+00'</span>;
+0238 
+0239 hm=uimenu(<span class="string">'Label'</span>,<span class="string">'Program'</span>,<span class="string">'Tag'</span>,<span class="string">'ProgramMenu'</span>);
+0240 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'About pyrosim'</span>,<span class="string">'Tag'</span>,<span class="string">'AboutProgram'</span>)
+0241 <span class="comment">%uimenu(hm,'Label','Open figure','Tag','OpenFigure','Visible','off');</span>
+0242 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Save screenshot (TIF)'</span>,<span class="string">'Tag'</span>,<span class="string">'SaveFigure'</span>,<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+0243 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Export results'</span>,<span class="string">'Tag'</span>,<span class="string">'ExportResults'</span>);
+0244 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Exit'</span>,<span class="string">'Separator'</span>,<span class="string">'on'</span>,<span class="string">'Tag'</span>,<span class="string">'ExitProgram'</span>);
+0245 
+0246 hpanel(1)=uipanel(fig,<span class="string">'Units'</span>,<span class="string">'pixels'</span>,<span class="string">'Tag'</span>,<span class="string">'InputPanel'</span>,<span class="keyword">...</span>
+0247     <span class="string">'BackgroundColor'</span>,get(fig,<span class="string">'Color'</span>),<span class="string">'BorderType'</span>,<span class="string">'none'</span>);
+0248 
+0249 pos(1)=data.xmargin;
+0250 pos(2)=data.ymargin;
+0251 [h,pos]=<a href="#_sub12" class="code" title="subfunction [h,pos]=textlabel(parent,pos,string,varargin)">textlabel</a>(hpanel(1),pos,<span class="string">'Min. wavelength (um): '</span>,<span class="keyword">...</span>
+0252     <span class="string">'HorizontalAlignment'</span>,<span class="string">'right'</span>);
+0253 pos(1)=pos(1)+pos(3);
+0254 [hedit,pos]=<a href="#_sub13" class="code" title="subfunction [h,pos]=editbox(parent,pos,string,varargin)">editbox</a>(hpanel(1),pos,number0,<span class="string">'String'</span>,0.1,<span class="string">'Tag'</span>,<span class="string">'min_wavelength'</span>);
+0255 pos(1)=pos(1)+pos(3);
+0256 [h,pos]=<a href="#_sub12" class="code" title="subfunction [h,pos]=textlabel(parent,pos,string,varargin)">textlabel</a>(hpanel(1),pos,<span class="string">'Max. wavelength (um): '</span>,<span class="keyword">...</span>
+0257     <span class="string">'HorizontalAlignment'</span>,<span class="string">'right'</span>);
+0258 pos(1)=pos(1)+pos(3);
+0259 [hedit,pos]=<a href="#_sub13" class="code" title="subfunction [h,pos]=editbox(parent,pos,string,varargin)">editbox</a>(hpanel(1),pos,number0,<span class="string">'String'</span>,20,<span class="string">'Tag'</span>,<span class="string">'max_wavelength'</span>);
+0260 pos(1)=pos(1)+pos(3);
+0261 [h,pos]=<a href="#_sub12" class="code" title="subfunction [h,pos]=textlabel(parent,pos,string,varargin)">textlabel</a>(hpanel(1),pos,<span class="string">'Integration points: '</span>,<span class="keyword">...</span>
+0262     <span class="string">'HorizontalAlignment'</span>,<span class="string">'right'</span>);
+0263 pos(1)=pos(1)+pos(3);
+0264 [hedit,pos]=<a href="#_sub13" class="code" title="subfunction [h,pos]=editbox(parent,pos,string,varargin)">editbox</a>(hpanel(1),pos,number0,<span class="string">'String'</span>,50e3,<span class="string">'Tag'</span>,<span class="string">'num_wavelength'</span>);
+0265 
+0266 pos(1)=data.xmargin;
+0267 pos(2)=pos(2)+pos(4)+data.ygap;
+0268 [h,pos]=<a href="#_sub12" class="code" title="subfunction [h,pos]=textlabel(parent,pos,string,varargin)">textlabel</a>(hpanel(1),pos,<span class="string">'Detector response (V/W): '</span>,<span class="keyword">...</span>
+0269     <span class="string">'HorizontalAlignment'</span>,<span class="string">'right'</span>);
+0270 pos(1)=pos(1)+pos(3);
+0271 [hedit,pos]=<a href="#_sub13" class="code" title="subfunction [h,pos]=editbox(parent,pos,string,varargin)">editbox</a>(hpanel(1),pos,filename0,<span class="keyword">...</span>
+0272     <span class="string">'String'</span>,1,<span class="string">'Tag'</span>,<span class="string">'response'</span>,<span class="string">'HorizontalAlignment'</span>,<span class="string">'left'</span>);
+0273 <span class="comment">%pos(1)=pos(1)+pos(3);</span>
+0274 <span class="comment">%[h,pos]=pushbutton(hpanel(1),pos,' select file ');</span>
+0275 
+0276 pos(1)=data.ymargin;
+0277 pos(2)=pos(2)+pos(4)+data.ygap;
+0278 [h,pos]=<a href="#_sub12" class="code" title="subfunction [h,pos]=textlabel(parent,pos,string,varargin)">textlabel</a>(hpanel(1),pos,<span class="string">'Relay efficiency: '</span>,<span class="keyword">...</span>
+0279     <span class="string">'HorizontalAlignment'</span>,<span class="string">'right'</span>);
+0280 pos(1)=pos(1)+pos(3);
+0281 [hedit,pos]=<a href="#_sub13" class="code" title="subfunction [h,pos]=editbox(parent,pos,string,varargin)">editbox</a>(hpanel(1),pos,filename0,<span class="keyword">...</span>
+0282     <span class="string">'String'</span>,1,<span class="string">'Tag'</span>,<span class="string">'gamma'</span>,<span class="string">'HorizontalAlignment'</span>,<span class="string">'left'</span>);
+0283 <span class="comment">%pos(1)=pos(1)+pos(3);</span>
+0284 <span class="comment">%[h,pos]=pushbutton(hpanel(1),pos,' select file ');</span>
+0285 
+0286 pos(1)=data.xmargin;
+0287 pos(2)=pos(2)+pos(4)+data.ygap;
+0288 [h,pos]=<a href="#_sub12" class="code" title="subfunction [h,pos]=textlabel(parent,pos,string,varargin)">textlabel</a>(hpanel(1),pos,<span class="string">'Collection diameter (mm): '</span>,<span class="keyword">...</span>
+0289     <span class="string">'HorizontalAlignment'</span>,<span class="string">'right'</span>);
+0290 pos(1)=pos(1)+pos(3);
+0291 [hedit,pos]=<a href="#_sub13" class="code" title="subfunction [h,pos]=editbox(parent,pos,string,varargin)">editbox</a>(hpanel(1),pos,number0,<span class="string">'String'</span>,1,<span class="string">'Tag'</span>,<span class="string">'maxdiameter'</span>);
+0292 pos(1)=pos(1)+pos(3);
+0293 [h,pos]=<a href="#_sub12" class="code" title="subfunction [h,pos]=textlabel(parent,pos,string,varargin)">textlabel</a>(hpanel(1),pos,<span class="string">'Max. collection angle (deg): '</span>,<span class="keyword">...</span>
+0294     <span class="string">'HorizontalAlignment'</span>,<span class="string">'right'</span>);
+0295 pos(1)=pos(1)+pos(3);
+0296 [hedit,pos]=<a href="#_sub13" class="code" title="subfunction [h,pos]=editbox(parent,pos,string,varargin)">editbox</a>(hpanel(1),pos,number0,<span class="string">'String'</span>,10,<span class="string">'Tag'</span>,<span class="string">'maxangle'</span>);
+0297 
+0298 pos(1)=data.ymargin;
+0299 pos(2)=pos(2)+pos(4)+data.ygap;
+0300 [h,pos]=<a href="#_sub12" class="code" title="subfunction [h,pos]=textlabel(parent,pos,string,varargin)">textlabel</a>(hpanel(1),pos,<span class="string">'Emissivity: '</span>,<span class="keyword">...</span>
+0301     <span class="string">'HorizontalAlignment'</span>,<span class="string">'right'</span>);
+0302 pos(1)=pos(1)+pos(3);
+0303 [hedit,pos]=<a href="#_sub13" class="code" title="subfunction [h,pos]=editbox(parent,pos,string,varargin)">editbox</a>(hpanel(1),pos,filename0,<span class="keyword">...</span>
+0304     <span class="string">'String'</span>,1,<span class="string">'Tag'</span>,<span class="string">'emissivity'</span>,<span class="string">'HorizontalAlignment'</span>,<span class="string">'left'</span>);
+0305 <span class="comment">%pos(1)=pos(1)+pos(3);</span>
+0306 <span class="comment">%[h,pos]=pushbutton(hpanel(1),pos,' select file ');</span>
+0307 
+0308 pos(1)=data.ymargin;
+0309 pos(2)=pos(2)+pos(4)+data.ygap;
+0310 [h,pos]=<a href="#_sub12" class="code" title="subfunction [h,pos]=textlabel(parent,pos,string,varargin)">textlabel</a>(hpanel(1),pos,<span class="string">'Temperature (K): '</span>,<span class="keyword">...</span>
+0311     <span class="string">'HorizontalAlignment'</span>,<span class="string">'right'</span>);
+0312 pos(1)=pos(1)+pos(3);
+0313 [hedit,pos]=<a href="#_sub13" class="code" title="subfunction [h,pos]=editbox(parent,pos,string,varargin)">editbox</a>(hpanel(1),pos,repmat(<span class="string">'0'</span>,[1 40]),<span class="keyword">...</span>
+0314     <span class="string">'String'</span>,1000,<span class="string">'HorizontalAlignment'</span>,<span class="string">'left'</span>,<span class="string">'Tag'</span>,<span class="string">'temperature'</span>);
+0315 pos(1)=pos(1)+pos(3);
+0316 [h,pos]=<a href="#_sub14" class="code" title="subfunction [h,pos]=pushbutton(parent,pos,string,varargin)">pushbutton</a>(hpanel(1),pos,<span class="string">' update '</span>,<span class="string">'Tag'</span>,<span class="string">'update'</span>);
+0317 
+0318 hc=get(hpanel(1),<span class="string">'Children'</span>);
+0319 width=0;
+0320 height=0;
+0321 <span class="keyword">for</span> k=1:numel(hc)
+0322     pos=get(hc(k),<span class="string">'Position'</span>);
+0323     width=max([width pos(1)+pos(3)+data.xmargin]);
+0324     height=max([height pos(2)+pos(4)+data.ymargin]);
+0325 <span class="keyword">end</span>
+0326 set(hpanel(1),<span class="string">'Position'</span>,[0 0 width height]);
+0327 
+0328 columnname={<span class="string">'Temperature|(K)'</span>,<span class="string">' Power |(W)'</span>,<span class="string">' Photon flux |(1/s)'</span>,<span class="string">' Signal|(V) '</span>};
+0329 columnwidth={100 100 100 100};
+0330 uitable(<span class="string">'Tag'</span>,<span class="string">'ResultsTable'</span>,<span class="string">'ColumnName'</span>,columnname,<span class="string">'RowName'</span>,[],<span class="keyword">...</span>
+0331     <span class="string">'ColumnWidth'</span>,columnwidth);
+0332 
+0333 hpanel(2)=uipanel(<span class="string">'Units'</span>,<span class="string">'pixels'</span>,<span class="string">'Tag'</span>,<span class="string">'PlotPanel'</span>,<span class="keyword">...</span>
+0334     <span class="string">'BorderType'</span>,<span class="string">'none'</span>);
+0335 
+0336 choice={<span class="string">'Power'</span>,<span class="string">'Photon flux'</span>,<span class="string">'Signal'</span>};
+0337 <a href="#_sub15" class="code" title="subfunction [h,pos]=popupmenu(parent,pos,string,varargin)">popupmenu</a>(hpanel(2),[],choice,<span class="keyword">...</span>
+0338     <span class="string">'Value'</span>,1,<span class="string">'Tag'</span>,<span class="string">'PlotSelect'</span>);
+0339 
+0340 pos=[0 0 1 0.95];
+0341 ha=axes(<span class="string">'Parent'</span>,hpanel(2),<span class="string">'OuterPosition'</span>,pos,<span class="string">'Tag'</span>,<span class="string">'ResultPlot'</span>,<span class="keyword">...</span>
+0342     <span class="string">'Box'</span>,<span class="string">'on'</span>);
+0343 xlabel(<span class="string">'Temperature (K)'</span>);
+0344 line(<span class="string">'Parent'</span>,ha,<span class="string">'Tag'</span>,<span class="string">'ResultLine'</span>,<span class="string">'Color'</span>,[0 0 0],<span class="string">'Marker'</span>,<span class="string">'.'</span>);
+0345 hc=uicontextmenu();
+0346 hsub=uimenu(hc,<span class="string">'Label'</span>,<span class="string">'Horizontal scaling'</span>);
+0347 uimenu(hsub,<span class="string">'Label'</span>,<span class="string">'Linear'</span>,<span class="string">'Tag'</span>,<span class="string">'linearx'</span>,<span class="keyword">...</span>
+0348     <span class="string">'Callback'</span>,{@<a href="#_sub10" class="code" title="subfunction AxesContextCallback(src,eventdata,target)">AxesContextCallback</a>,ha},<span class="string">'Checked'</span>,<span class="string">'on'</span>);
+0349 uimenu(hsub,<span class="string">'Label'</span>,<span class="string">'Logarithmic'</span>,<span class="string">'Tag'</span>,<span class="string">'logx'</span>,<span class="keyword">...</span>
+0350     <span class="string">'Callback'</span>,{@<a href="#_sub10" class="code" title="subfunction AxesContextCallback(src,eventdata,target)">AxesContextCallback</a>,ha});
+0351 hsub=uimenu(hc,<span class="string">'Label'</span>,<span class="string">'Vertical scaling'</span>);
+0352 uimenu(hsub,<span class="string">'Label'</span>,<span class="string">'Linear'</span>,<span class="string">'Tag'</span>,<span class="string">'lineary'</span>,<span class="keyword">...</span>
+0353     <span class="string">'Callback'</span>,{@<a href="#_sub10" class="code" title="subfunction AxesContextCallback(src,eventdata,target)">AxesContextCallback</a>,ha},<span class="string">'Checked'</span>,<span class="string">'on'</span>);
+0354 uimenu(hsub,<span class="string">'Label'</span>,<span class="string">'Logarithmic'</span>,<span class="string">'Tag'</span>,<span class="string">'logy'</span>,<span class="keyword">...</span>
+0355     <span class="string">'Callback'</span>,{@<a href="#_sub10" class="code" title="subfunction AxesContextCallback(src,eventdata,target)">AxesContextCallback</a>,ha});
+0356 set(ha,<span class="string">'UIContextMenu'</span>,hc);
+0357 
+0358 handles=guihandles(fig);
+0359 
+0360 movegui(fig,<span class="string">'center'</span>);
+0361 set(fig,<span class="string">'ResizeFcn'</span>,{@<a href="#_sub4" class="code" title="subfunction resizeGUI(src,eventdata,handles)">resizeGUI</a>,handles},<span class="string">'Visible'</span>,<span class="string">'on'</span>,<span class="keyword">...</span>
+0362     <span class="string">'HandleVisibility'</span>,<span class="string">'callback'</span>);
+0363 
+0364 <span class="comment">% set callbacks</span>
+0365 set(handles.update,<span class="string">'Callback'</span>,{@<a href="#_sub5" class="code" title="subfunction updateGUI(src,eventdata,handles)">updateGUI</a>,handles});
+0366 set(handles.PlotSelect,<span class="string">'Callback'</span>,{@<a href="#_sub7" class="code" title="subfunction PlotSelect(src,eventdata,handles)">PlotSelect</a>,handles});
+0367 
+0368 h=[handles.AboutProgram handles.SaveFigure handles.ExportResults handles.ExitProgram];
+0369 set(h,<span class="string">'Callback'</span>,{@<a href="#_sub8" class="code" title="subfunction ProgramMenuCallback(src,eventdata,handles)">ProgramMenuCallback</a>,handles});
+0370 
+0371 <span class="comment">%h=[handles.zoom handles.pan handles.datacursor ...</span>
+0372 <span class="comment">%    handles.linearscale handles.logscale];</span>
+0373 <span class="comment">%set(h,'Callback',{@PlotMenuCallback,handles});</span>
+0374 
+0375 <span class="comment">% analyze the default state</span>
+0376 <a href="#_sub5" class="code" title="subfunction updateGUI(src,eventdata,handles)">updateGUI</a>(handles.update,[],handles);
+0377 
+0378 <a name="_sub4" href="#_subfunctions" class="code">function resizeGUI(src,eventdata,handles)</a>
+0379 
+0380 <span class="comment">% enforce minimum size</span>
+0381 figunits=get(src,<span class="string">'Units'</span>);
+0382 set(src,<span class="string">'Units'</span>,<span class="string">'pixels'</span>);
+0383 figpos=get(src,<span class="string">'Position'</span>);
+0384 pos=get(handles.InputPanel,<span class="string">'Position'</span>);
+0385 <span class="keyword">if</span> figpos(3) &lt; pos(3)
+0386     figpos(3)=pos(3);
+0387 <span class="keyword">end</span>
+0388 Ly=2*pos(4);
+0389 <span class="keyword">if</span> figpos(4) &lt; Ly
+0390     dy=Ly-figpos(4);
+0391     figpos(2)=figpos(2)-dy;
+0392     figpos(4)=Ly;
+0393 <span class="keyword">end</span>
+0394 set(src,<span class="string">'Position'</span>,figpos);
+0395 set(src,<span class="string">'Units'</span>,figunits);
+0396 
+0397 <span class="comment">% locate parameter panel</span>
+0398 pos=get(handles.InputPanel,<span class="string">'Position'</span>);
+0399 pos(1)=0;
+0400 pos(2)=figpos(4)-pos(4);
+0401 set(handles.InputPanel,<span class="string">'Position'</span>,pos);
+0402 Ly=pos(2);
+0403 
+0404 <span class="comment">% size and locate results table</span>
+0405 extent=get(handles.ResultsTable,<span class="string">'Extent'</span>);
+0406 pos(1)=0;
+0407 pos(2)=0;
+0408 pos(3)=extent(3);
+0409 pos(4)=Ly;
+0410 set(handles.ResultsTable,<span class="string">'Position'</span>,pos);
+0411 x0=pos(1)+pos(3);
+0412 
+0413 <span class="comment">% size and locate plot panel</span>
+0414 pos=get(handles.PlotPanel,<span class="string">'Position'</span>);
+0415 pos(1)=x0;
+0416 pos(2)=0;
+0417 pos(3)=figpos(3)-x0;
+0418 pos(4)=Ly;
+0419 set(handles.PlotPanel,<span class="string">'Position'</span>,pos);
+0420 
+0421 <span class="comment">% locate plot selection popup</span>
+0422 pos=get(handles.PlotSelect,<span class="string">'Position'</span>);
+0423 pos(1)=0;
+0424 pos(2)=Ly-pos(4);
+0425 set(handles.PlotSelect,<span class="string">'Position'</span>,pos);
+0426 
+0427 <a name="_sub5" href="#_subfunctions" class="code">function updateGUI(src,eventdata,handles)</a>
+0428 
+0429 <span class="comment">% read temperature entry</span>
+0430 inp=get(handles.temperature,<span class="string">'String'</span>);
+0431 T=[];
+0432 <span class="keyword">while</span> numel(inp)&gt;0
+0433     [chunk,count,err,next]=sscanf(inp,<span class="string">'%s'</span>,1);
+0434     Ncolon=sum(chunk==<span class="string">':'</span>);
+0435     <span class="keyword">if</span> count==0 <span class="comment">% no data read</span>
+0436         inp=<span class="string">''</span>;
+0437         <span class="keyword">continue</span>
+0438     <span class="keyword">elseif</span> Ncolon==0
+0439         val=sscanf(chunk,<span class="string">'%g'</span>,1);
+0440     <span class="keyword">elseif</span> Ncolon==1
+0441         val=sscanf(chunk,<span class="string">'%g%*c%g'</span>,2);
+0442         val=val(1):val(2);
+0443     <span class="keyword">elseif</span> Ncolon==2
+0444         val=sscanf(chunk,<span class="string">'%g%*c%g%*c%g'</span>,3);
+0445         val=val(1):val(2):val(3);
+0446     <span class="keyword">else</span>
+0447         error(<span class="string">'ERROR: invalid numeric input: %g'</span>,chunk);
+0448     <span class="keyword">end</span>
+0449     T=[T val];
+0450     inp=inp(next:end);
+0451 <span class="keyword">end</span>
+0452 T=<a href="#_sub6" class="code" title="subfunction value=validate_input(value,handle)">validate_input</a>(T,handles.temperature);
+0453 
+0454 <span class="comment">% read emissivity entry</span>
+0455 inp=get(handles.emissivity,<span class="string">'String'</span>);
+0456 <span class="keyword">if</span> exist(inp,<span class="string">'file'</span>)
+0457     emissivity=inp;
+0458 <span class="keyword">else</span>
+0459     emissivity=sscanf(inp,<span class="string">'%g'</span>,1);
+0460 <span class="keyword">end</span>
+0461 emissivity=<a href="#_sub6" class="code" title="subfunction value=validate_input(value,handle)">validate_input</a>(emissivity,handles.emissivity);
+0462 
+0463 <span class="comment">% read geometry entries</span>
+0464 <span class="comment">%collect=[0 0];</span>
+0465 inp=get(handles.maxdiameter,<span class="string">'String'</span>);
+0466 <span class="comment">%collect(1)=sscanf(inp,'%g',1);</span>
+0467 diameter=sscanf(inp,<span class="string">'%g'</span>,1);
+0468 diameter=<a href="#_sub6" class="code" title="subfunction value=validate_input(value,handle)">validate_input</a>(diameter,handles.maxdiameter);
+0469 
+0470 inp=get(handles.maxangle,<span class="string">'String'</span>);
+0471 <span class="comment">%collect(2)=sscanf(inp,'%g',1);</span>
+0472 max_angle=sscanf(inp,<span class="string">'%g'</span>,1);
+0473 max_angle=<a href="#_sub6" class="code" title="subfunction value=validate_input(value,handle)">validate_input</a>(max_angle,handles.maxangle);
+0474 
+0475 <span class="comment">% read efficiency entry</span>
+0476 inp=get(handles.gamma,<span class="string">'String'</span>);
+0477 <span class="keyword">if</span> exist(inp,<span class="string">'file'</span>)
+0478     gamma=inp;
+0479 <span class="keyword">else</span>
+0480     gamma=sscanf(inp,<span class="string">'%g'</span>,1);
+0481 <span class="keyword">end</span>
+0482 gamma=<a href="#_sub6" class="code" title="subfunction value=validate_input(value,handle)">validate_input</a>(gamma,handles.gamma);
+0483 
+0484 <span class="comment">% read response entry</span>
+0485 inp=get(handles.response,<span class="string">'String'</span>);
+0486 <span class="keyword">if</span> exist(inp,<span class="string">'file'</span>)
+0487     response=inp;
+0488 <span class="keyword">else</span>
+0489     response=sscanf(inp,<span class="string">'%g'</span>,1);
+0490 <span class="keyword">end</span>
+0491 response=<a href="#_sub6" class="code" title="subfunction value=validate_input(value,handle)">validate_input</a>(response,handles.response);
+0492 
+0493 <span class="comment">% read integration entries</span>
+0494 inp=get(handles.min_wavelength,<span class="string">'String'</span>);
+0495 min_wavelength=sscanf(inp,<span class="string">'%g'</span>,1);
+0496 min_wavelength=<a href="#_sub6" class="code" title="subfunction value=validate_input(value,handle)">validate_input</a>(min_wavelength,handles.min_wavelength);
+0497 
+0498 inp=get(handles.max_wavelength,<span class="string">'String'</span>);
+0499 max_wavelength=sscanf(inp,<span class="string">'%g'</span>,1);
+0500 max_wavelength=<a href="#_sub6" class="code" title="subfunction value=validate_input(value,handle)">validate_input</a>(max_wavelength,handles.max_wavelength);
+0501 
+0502 inp=get(handles.num_wavelength,<span class="string">'String'</span>);
+0503 num_wavelength=round(sscanf(inp,<span class="string">'%g'</span>,1));
+0504 num_wavelength=<a href="#_sub6" class="code" title="subfunction value=validate_input(value,handle)">validate_input</a>(num_wavelength,handles.num_wavelength);
+0505 
+0506 <span class="comment">% run calculation</span>
+0507 <span class="comment">%[phi,phiN,signal]=CalculatePower(T,emissivity,collect,gamma,response);</span>
+0508 [phi,phiN,signal]=<a href="#_sub1" class="code" title="subfunction varargout=CalculatePower(varargin)">CalculatePower</a>(<span class="keyword">...</span>
+0509     <span class="string">'temperature'</span>,T,<span class="string">'emissivity'</span>,emissivity,<span class="keyword">...</span>
+0510     <span class="string">'diameter'</span>,diameter,<span class="string">'max_angle'</span>,max_angle,<span class="keyword">...</span>
+0511     <span class="string">'relay'</span>,gamma,<span class="string">'response'</span>,response,<span class="keyword">...</span>
+0512     <span class="string">'min_wavelength'</span>,min_wavelength,<span class="string">'max_wavelength'</span>,max_wavelength,<span class="keyword">...</span>
+0513     <span class="string">'num_wavelength'</span>,num_wavelength);
+0514 
+0515 <span class="comment">% update result table</span>
+0516 NT=numel(T);
+0517 data=cell(NT,4);
+0518 <span class="keyword">for</span> k=1:NT
+0519     data{k,1}=T(k);
+0520     data{k,2}=phi(k);
+0521     data{k,3}=phiN(k);
+0522     data{k,4}=signal(k);
+0523 <span class="keyword">end</span>
+0524 set(handles.ResultsTable,<span class="string">'Data'</span>,data);
+0525 set(handles.ResultsTable,<span class="string">'ColumnFormat'</span>,{<span class="string">'short'</span>,<span class="string">'short'</span>,<span class="string">'short'</span>,<span class="string">'short'</span>});
+0526 
+0527 <span class="comment">% update result plot</span>
+0528 data=struct();
+0529 data.T=T;
+0530 data.phi=phi;
+0531 data.phiN=phiN;
+0532 data.signal=signal;
+0533 set(handles.ResultLine,<span class="string">'UserData'</span>,data);
+0534 <a href="#_sub7" class="code" title="subfunction PlotSelect(src,eventdata,handles)">PlotSelect</a>(src,eventdata,handles);
+0535 
+0536 <a name="_sub6" href="#_subfunctions" class="code">function value=validate_input(value,handle)</a>
+0537 
+0538 data=get(handle,<span class="string">'UserData'</span>);
+0539 <span class="keyword">if</span> isempty(value)
+0540     value=data.value;
+0541     set(handle,<span class="string">'String'</span>,data.string);
+0542 <span class="keyword">else</span>
+0543     data.value=value;
+0544     data.string=get(handle,<span class="string">'String'</span>);
+0545     set(handle,<span class="string">'UserData'</span>,data)
+0546 <span class="keyword">end</span>
+0547 
+0548 <a name="_sub7" href="#_subfunctions" class="code">function PlotSelect(src,eventdata,handles)</a>
+0549 
+0550 data=get(handles.ResultLine,<span class="string">'UserData'</span>);
+0551 x=data.T;
+0552 
+0553 choice=get(handles.PlotSelect,<span class="string">'String'</span>);
+0554 value=get(handles.PlotSelect,<span class="string">'Value'</span>);
+0555 choice=choice{value};
+0556 <span class="keyword">switch</span> choice
+0557     <span class="keyword">case</span> <span class="string">'Power'</span>
+0558         y=data.phi;
+0559         label=<span class="string">'Power (W)'</span>;
+0560     <span class="keyword">case</span> <span class="string">'Photon flux'</span>
+0561         y=data.phiN;
+0562         label=<span class="string">'Photon flux (1/s)'</span>;
+0563     <span class="keyword">case</span> <span class="string">'Signal'</span>
+0564         y=data.signal;
+0565         label=<span class="string">'Signal (V)'</span>;
+0566 <span class="keyword">end</span>
+0567 set(handles.ResultLine,<span class="string">'XData'</span>,x,<span class="string">'YData'</span>,y);
+0568 
+0569 ylabel(handles.ResultPlot,label);
+0570 axis(handles.ResultPlot,<span class="string">'auto'</span>);
+0571 
+0572 <a name="_sub8" href="#_subfunctions" class="code">function ProgramMenuCallback(src,eventdata,handles)</a>
+0573 
+0574 fig=handles.pyrosim;
+0575 <span class="keyword">switch</span> get(src,<span class="string">'Tag'</span>)
+0576     <span class="keyword">case</span> <span class="string">'AboutProgram'</span>
+0577         msg{1}=<span class="string">'Pyrometer simulator (pyrosim)'</span>;
+0578         msg{2}=<span class="string">'Version 1.1 (August 2011)'</span>;
+0579         msg{3}=<span class="string">'Daniel Dolan (Sandia National Laboratories)'</span>;
+0580         msgbox(msg,<span class="string">'About pyrosim'</span>);
+0581     <span class="keyword">case</span> <span class="string">'SaveFigure'</span> <span class="comment">% feature disabled</span>
+0582 <span class="comment">%         [fname,pname]=uiputfile({'*.tif;*.TIF'},...</span>
+0583 <span class="comment">%             'Select screenshot file name','screenshot.tif');</span>
+0584 <span class="comment">%         if isnumeric(fname) % user pressed cancel</span>
+0585 <span class="comment">%             return</span>
+0586 <span class="comment">%         end</span>
+0587 <span class="comment">%         file=fullfile(pname,fname);</span>
+0588 <span class="comment">%         [pname,fname,ext]=fileparts(file);</span>
+0589 <span class="comment">%         %saveas(fig,file,'tiffn');</span>
+0590 <span class="comment">%         %print(fig,file,'-dtiff','-r300');</span>
+0591 <span class="comment">%         print(fig,file,'-dpdf');</span>
+0592 <span class="comment">%         %saveas(fig,file,'pdf');</span>
+0593 <span class="comment">%         %filemenufcn(fig,'FileSaveAs');</span>
+0594     <span class="keyword">case</span> <span class="string">'ExportResults'</span>
+0595         data=get(handles.ResultsTable,<span class="string">'Data'</span>);
+0596         data=cell2mat(data);
+0597         [filename,pathname]=uiputfile(<span class="string">'*.*'</span>,<span class="string">'Select export file'</span>);
+0598         <span class="keyword">if</span> isnumeric(filename)
+0599             <span class="keyword">return</span>
+0600         <span class="keyword">end</span>
+0601         filename=fullfile(pathname,filename);       
+0602         fid=fopen(filename,<span class="string">'wt'</span>);
+0603         <span class="comment">% document settings</span>
+0604         fprintf(fid,<span class="string">'pyrosim results generated %s using...\n'</span>,datestr(now));
+0605         emissivity=get(handles.emissivity,<span class="string">'UserData'</span>);
+0606         fprintf(fid,<span class="string">'emissivity : %g\n'</span>,emissivity.value);
+0607         diameter=get(handles.maxdiameter,<span class="string">'UserData'</span>);
+0608         fprintf(fid,<span class="string">'diameter : %g [mm] \n'</span>,diameter.value);
+0609         maxangle=get(handles.maxangle,<span class="string">'UserData'</span>);
+0610         fprintf(fid,<span class="string">'max angle: %g [deg] \n'</span>,maxangle.value);
+0611         relay=get(handles.gamma,<span class="string">'UserData'</span>);
+0612         fprintf(fid,<span class="string">'relay: %s\n'</span>,relay.string);        
+0613         response=get(handles.response,<span class="string">'UserData'</span>);
+0614         fprintf(fid,<span class="string">'response : %s \n'</span>,response.string);
+0615         min_wavelength=get(handles.min_wavelength,<span class="string">'UserData'</span>);
+0616         max_wavelength=get(handles.max_wavelength,<span class="string">'UserData'</span>);
+0617         num_wavelength=get(handles.num_wavelength,<span class="string">'UserData'</span>);
+0618         fprintf(fid,<span class="string">'integrating from %g [um] to %g [um] in %d steps\n'</span>,<span class="keyword">...</span>
+0619             min_wavelength.value,max_wavelength.value,num_wavelength.value);
+0620         <span class="comment">% data header and table</span>
+0621         label={<span class="string">'Temperature (K)'</span>,<span class="string">'Power (W)'</span>,<span class="string">'Photon flux (1/s)'</span>,<span class="string">'Signal (V)'</span>};
+0622         fprintf(fid,<span class="string">'%18s'</span>,label{:});
+0623         fprintf(fid,<span class="string">'\n'</span>);
+0624         format=<span class="string">'%18.2f%18.6g%18.6e%18.6g\n'</span>;
+0625         fprintf(fid,format,transpose(data));
+0626         fclose(fid);        
+0627     <span class="keyword">case</span> <span class="string">'ExitProgram'</span>
+0628         <a href="#_sub9" class="code" title="subfunction exit_pyrosim(src,varargin)">exit_pyrosim</a>(fig);      
+0629 <span class="keyword">end</span>
+0630 
+0631 <a name="_sub9" href="#_subfunctions" class="code">function exit_pyrosim(src,varargin)</a>
+0632 
+0633 fig=ancestor(src,<span class="string">'figure'</span>);
+0634 choice=questdlg(<span class="string">'Exit pyrosim?'</span>,<span class="string">'Exit?'</span>,<span class="string">'Yes'</span>,<span class="string">'No'</span>,<span class="string">'No'</span>);
+0635 <span class="keyword">if</span> strcmpi(choice,<span class="string">'yes'</span>)
+0636     delete(fig);
+0637 <span class="keyword">end</span>
+0638 
+0639 <a name="_sub10" href="#_subfunctions" class="code">function AxesContextCallback(src,eventdata,target)</a>
+0640 
+0641 tag=get(src,<span class="string">'Tag'</span>);
+0642 <span class="keyword">switch</span> tag
+0643     <span class="keyword">case</span> <span class="string">'linearx'</span>
+0644         set(target,<span class="string">'XScale'</span>,<span class="string">'linear'</span>);
+0645     <span class="keyword">case</span> <span class="string">'logx'</span>
+0646         set(target,<span class="string">'XScale'</span>,<span class="string">'log'</span>);
+0647     <span class="keyword">case</span> <span class="string">'lineary'</span>
+0648         set(target,<span class="string">'YScale'</span>,<span class="string">'linear'</span>);
+0649     <span class="keyword">case</span> <span class="string">'logy'</span>
+0650         set(target,<span class="string">'YScale'</span>,<span class="string">'log'</span>);
+0651 <span class="keyword">end</span>
+0652 axis(target,<span class="string">'auto'</span>);
+0653 fig=ancestor(target,<span class="string">'figure'</span>);
+0654 zoom(fig,<span class="string">'reset'</span>);
+0655 
+0656 parent=get(src,<span class="string">'Parent'</span>);
+0657 children=get(parent,<span class="string">'Children'</span>);
+0658 set(children,<span class="string">'Checked'</span>,<span class="string">'off'</span>);
+0659 set(src,<span class="string">'Checked'</span>,<span class="string">'on'</span>);
+0660 
+0661 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0662 <span class="comment">% custom uicontrol functions %</span>
+0663 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0664 <a name="_sub11" href="#_subfunctions" class="code">function [h,pos]=custom_uicontrol(varargin)</a>
+0665 
+0666 h=uicontrol(varargin{:});
+0667 style=get(h,<span class="string">'Style'</span>);
+0668 
+0669 <span class="comment">% set font</span>
+0670 <span class="keyword">persistent</span> fontname
+0671 <span class="keyword">if</span> isempty(fontname)
+0672     fonts=listfonts;
+0673     fontname=<span class="string">''</span>;
+0674     <span class="keyword">for</span> ii=1:numel(fonts)
+0675         <span class="keyword">if</span> strcmpi(fonts{ii},<span class="string">'helvetica'</span>)
+0676             fontname=fonts{ii};
+0677             <span class="keyword">break</span>
+0678         <span class="keyword">end</span>
+0679     <span class="keyword">end</span>
+0680     <span class="keyword">if</span> isempty(fontname)
+0681         fontname=<span class="string">'fixedwidth'</span>;
+0682     <span class="keyword">end</span>
+0683 <span class="keyword">end</span>
+0684 set(h,<span class="string">'FontName'</span>,fontname,<span class="string">'FontUnits'</span>,<span class="string">'points'</span>,<span class="string">'FontSize'</span>,10);
+0685 
+0686 <span class="comment">% set units</span>
+0687 set(h,<span class="string">'Units'</span>,<span class="string">'pixels'</span>);
+0688 
+0689 <span class="comment">% size object based on its contents</span>
+0690 pos=get(h,<span class="string">'Position'</span>);
+0691 extent=get(h,<span class="string">'Extent'</span>);
+0692 pos(3)=extent(3);
+0693 Lymin=1.5*extent(4);
+0694 <span class="keyword">switch</span> style
+0695     <span class="keyword">case</span> <span class="string">'popupmenu'</span>
+0696         <span class="comment">% do nothing</span>
+0697     <span class="keyword">otherwise</span>
+0698         pos(4)=Lymin;
+0699 <span class="keyword">end</span>
+0700 set(h,<span class="string">'Position'</span>,pos);
+0701 
+0702 <a name="_sub12" href="#_subfunctions" class="code">function [h,pos]=textlabel(parent,pos,string,varargin)</a>
+0703 
+0704 <span class="keyword">if</span> isempty(pos)
+0705     pos=[1 1];
+0706 <span class="keyword">end</span>
+0707 
+0708 [h,posA]=<a href="#_sub11" class="code" title="subfunction [h,pos]=custom_uicontrol(varargin)">custom_uicontrol</a>(<span class="string">'Parent'</span>,parent,<span class="string">'Style'</span>,<span class="string">'text'</span>,<span class="string">'String'</span>,string);
+0709 pos=[pos(1:2) posA(3:4)];
+0710 set(h,<span class="string">'Position'</span>,pos,varargin{:});
+0711 
+0712 <span class="comment">% match the parent color</span>
+0713 <span class="keyword">switch</span> lower(get(parent,<span class="string">'Type'</span>))
+0714     <span class="keyword">case</span> <span class="string">'figure'</span>
+0715         bgcolor=get(parent,<span class="string">'Color'</span>);
+0716     <span class="keyword">otherwise</span>
+0717         bgcolor=get(parent,<span class="string">'BackgroundColor'</span>);
+0718 <span class="keyword">end</span>
+0719 set(h,<span class="string">'BackgroundColor'</span>,bgcolor);
+0720 
+0721 <span class="comment">% vertically nudge for alignment with other uicontrols</span>
+0722     string=get(h,<span class="string">'String'</span>);
+0723     set(h,<span class="string">'String'</span>,<span class="string">''</span>);
+0724     temppos=get(h,<span class="string">'Position'</span>);
+0725     extent=get(h,<span class="string">'Extent'</span>);
+0726     temppos(2)=temppos(2)-2*extent(4);
+0727     set(h,<span class="string">'Position'</span>,temppos,<span class="string">'String'</span>,string);
+0728 
+0729 <a name="_sub13" href="#_subfunctions" class="code">function [h,pos]=editbox(parent,pos,string,varargin)</a>
+0730 
+0731 <span class="keyword">if</span> isempty(pos)
+0732     pos=[1 1];
+0733 <span class="keyword">end</span>
+0734 
+0735 [h,posA]=<a href="#_sub11" class="code" title="subfunction [h,pos]=custom_uicontrol(varargin)">custom_uicontrol</a>(<span class="string">'Parent'</span>,parent,<span class="string">'Style'</span>,<span class="string">'edit'</span>,<span class="string">'String'</span>,string);
+0736 pos=[pos(1:2) posA(3:4)];
+0737 set(h,<span class="string">'Position'</span>,pos,varargin{:});
+0738 
+0739 set(h,<span class="string">'BackgroundColor'</span>,[1 1 1]);
+0740 
+0741 <a name="_sub14" href="#_subfunctions" class="code">function [h,pos]=pushbutton(parent,pos,string,varargin)</a>
+0742 
+0743 <span class="keyword">if</span> isempty(pos)
+0744     pos=[1 1];
+0745 <span class="keyword">end</span>
+0746 
+0747 [h,posA]=<a href="#_sub11" class="code" title="subfunction [h,pos]=custom_uicontrol(varargin)">custom_uicontrol</a>(<span class="string">'Parent'</span>,parent,<span class="string">'Style'</span>,<span class="string">'pushbutton'</span>,<span class="string">'string'</span>,string);
+0748 pos=[pos(1:2) posA(3:4)];
+0749 set(h,<span class="string">'Position'</span>,pos,varargin{:});
+0750 
+0751 <a name="_sub15" href="#_subfunctions" class="code">function [h,pos]=popupmenu(parent,pos,string,varargin)</a>
+0752 
+0753 <span class="keyword">if</span> isempty(pos)
+0754     pos=[1 1];
+0755 <span class="keyword">end</span>
+0756 
+0757 extra=repmat(<span class="string">'M'</span>,[1 5]);
+0758 [maxchar,kmax]=max(cellfun(@numel,string));
+0759 teststring=[string{kmax} extra];
+0760 [h,posA]=<a href="#_sub11" class="code" title="subfunction [h,pos]=custom_uicontrol(varargin)">custom_uicontrol</a>(<span class="string">'Parent'</span>,parent,<span class="keyword">...</span>
+0761     <span class="string">'Style'</span>,<span class="string">'text'</span>,<span class="string">'string'</span>,teststring);
+0762 pos=[pos(1:2) posA(3:4)];
+0763 set(h,<span class="string">'Position'</span>,pos,varargin{:});
+0764 set(h,<span class="string">'Style'</span>,<span class="string">'popupmenu'</span>,<span class="string">'String'</span>,string);
+0765 
+0766 <span class="keyword">if</span> ispc
+0767     bgcolor=[1 1 1];
+0768 <span class="keyword">end</span>
+0769 <span class="keyword">if</span> ismac
+0770     <span class="keyword">switch</span> lower(get(parent,<span class="string">'Type'</span>))
+0771         <span class="keyword">case</span> <span class="string">'figure'</span>
+0772             bgcolor=get(parent,<span class="string">'Color'</span>);
+0773         <span class="keyword">otherwise</span>
+0774             bgcolor=get(parent,<span class="string">'BackgroundColor'</span>);
+0775     <span class="keyword">end</span>
+0776 <span class="keyword">end</span>
+0777 set(h,<span class="string">'BackgroundColor'</span>,bgcolor);</pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

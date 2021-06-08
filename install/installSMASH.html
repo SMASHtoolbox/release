@@ -1,0 +1,241 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of installSMASH</title>
+  <meta name="keywords" content="installSMASH">
+  <meta name="description" content="installSMASH Install SMASH toolbox">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../index.html">SMASHtoolbox</a> &gt; <a href="index.html">install</a> &gt; installSMASH.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/install&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>installSMASH
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>installSMASH Install SMASH toolbox</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function installSMASH(mode) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> installSMASH Install SMASH toolbox
+
+ This function installs the SMASH toolbox.
+    installSMASH
+ The user is prompted to accept the default location or specify an
+ alternative. A warning is generated if the toolbox is already installed.
+ To bypass this warning and reinstall the toolbox, type:
+    installSMASH -force
+
+ Installation makes the toolbox available to the current MATLAB
+ session.  A startup file (for future sessions) is also created unless one
+ already exists; instructions for modifying the startup file are printed
+ in the command window for the latter case.
+
+ To uninstall the toolbox, type:
+    installSMASH -remove
+
+ See also SMASHtoolbox</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function installToolbox(location)</a></li><li><a href="#_sub2" class="code">function removeToolbox(existing)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% installSMASH Install SMASH toolbox</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This function installs the SMASH toolbox.</span>
+0004 <span class="comment">%    installSMASH</span>
+0005 <span class="comment">% The user is prompted to accept the default location or specify an</span>
+0006 <span class="comment">% alternative. A warning is generated if the toolbox is already installed.</span>
+0007 <span class="comment">% To bypass this warning and reinstall the toolbox, type:</span>
+0008 <span class="comment">%    installSMASH -force</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% Installation makes the toolbox available to the current MATLAB</span>
+0011 <span class="comment">% session.  A startup file (for future sessions) is also created unless one</span>
+0012 <span class="comment">% already exists; instructions for modifying the startup file are printed</span>
+0013 <span class="comment">% in the command window for the latter case.</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% To uninstall the toolbox, type:</span>
+0016 <span class="comment">%    installSMASH -remove</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% See also SMASHtoolbox</span>
+0019 <span class="comment">%</span>
+0020 
+0021 <span class="comment">%</span>
+0022 <span class="comment">% created March 27, 2018 by Daniel Dolan (Sandia National Laboratories)</span>
+0023 <span class="comment">%    -This utility can be used on any system, but it's particularly useful</span>
+0024 <span class="comment">%    in situations where path changes cannot be saved because the user does</span>
+0025 <span class="comment">%    not have write permission to the root MATLAB directory.</span>
+0026 <span class="comment">%</span>
+0027 <a name="_sub0" href="#_subfunctions" class="code">function installSMASH(mode)</a>
+0028 
+0029 <span class="comment">%% manage input</span>
+0030 <span class="keyword">if</span> (nargin &lt; 1) || strcmpi(mode,<span class="string">'-standard'</span>)
+0031     mode=<span class="string">'-standard'</span>;
+0032 <span class="keyword">elseif</span> strcmpi(mode,<span class="string">'-force'</span>) || strcmpi(mode,<span class="string">'-remove'</span>)
+0033     mode=lower(mode);
+0034 <span class="keyword">else</span>
+0035     error(<span class="string">'ERROR: invalid mode'</span>);
+0036 <span class="keyword">end</span>
+0037 
+0038 <span class="comment">%% check installation status</span>
+0039 <span class="keyword">try</span>
+0040     existing=smashroot();
+0041     installed=true;
+0042 <span class="keyword">catch</span>
+0043     installed=false;
+0044 <span class="keyword">end</span>
+0045 
+0046 temp=mfilename(<span class="string">'fullpath'</span>);
+0047 location=fileparts(fileparts(temp));
+0048 
+0049 <span class="comment">%% use specified mode</span>
+0050 <span class="keyword">switch</span> mode
+0051     <span class="keyword">case</span> <span class="string">'-standard'</span>
+0052         msg{1}=<span class="string">'ERROR: toolbox already installed'</span>;
+0053         msg{end+1}=<span class="string">'Use &quot;installSMASH -force&quot; to overwrite'</span>;
+0054         assert(~installed,<span class="string">'%s\n'</span>,msg{:});
+0055         <a href="#_sub1" class="code" title="subfunction installToolbox(location)">installToolbox</a>(location);
+0056     <span class="keyword">case</span> <span class="string">'-force'</span>
+0057         <a href="#_sub2" class="code" title="subfunction removeToolbox(existing)">removeToolbox</a>(existing);
+0058         <a href="#_sub1" class="code" title="subfunction installToolbox(location)">installToolbox</a>(location);
+0059     <span class="keyword">case</span> <span class="string">'-remove'</span>
+0060         assert(installed,<span class="keyword">...</span>
+0061             <span class="string">'ERROR: cannot remove toolbox because it is not installed'</span>);
+0062         fprintf(<span class="string">'Are you sure about removing the SMASH toolbox?\n'</span>);
+0063         choice=input(<span class="string">'(y)es or (n)o : '</span>,<span class="string">'s'</span>);
+0064         <span class="keyword">switch</span> lower(choice)
+0065             <span class="keyword">case</span> {<span class="string">'y'</span> <span class="string">'yes'</span>}
+0066                 <a href="#_sub2" class="code" title="subfunction removeToolbox(existing)">removeToolbox</a>(existing);
+0067         <span class="keyword">end</span>
+0068         file=which(<span class="string">'startup'</span>);
+0069         <span class="keyword">if</span> ~isempty(file)
+0070             fid=fopen(file,<span class="string">'r'</span>);
+0071             number=0;
+0072             <span class="keyword">while</span> ~feof(fid)
+0073                 temp=fgetl(fid);
+0074                 number=number+1;
+0075                 <span class="keyword">if</span> any(regexpi(temp,<span class="string">'SMASHtoolbox'</span>))
+0076                     fprintf(2,<span class="string">'Remove toolbox reference on line %d of the startup file\n'</span>,number);
+0077                 <span class="keyword">end</span>
+0078             <span class="keyword">end</span>
+0079             fclose(fid);
+0080         <span class="keyword">end</span>
+0081 <span class="keyword">end</span>
+0082 
+0083 <span class="keyword">end</span>
+0084 
+0085 <span class="comment">%%</span>
+0086 <a name="_sub1" href="#_subfunctions" class="code">function installToolbox(location)</a>
+0087 
+0088 repo=fullfile(location,<span class="string">'.git'</span>);
+0089 <span class="keyword">if</span> exist(repo,<span class="string">'dir'</span>) <span class="comment">% Git repository</span>
+0090     new=location;
+0091 <span class="keyword">else</span> <span class="comment">% ZIP download</span>
+0092     new=fullfile(userpath(),<span class="string">'SMASHtoolbox'</span>);
+0093     fprintf(<span class="string">'Installing toolbox in:\n'</span>);
+0094     fprintf(<span class="string">'   %s\n'</span>,new);
+0095     fprintf(<span class="string">'Press return to accept or type an alternate location\n'</span>);
+0096     choice=input(<span class="string">'location : '</span>,<span class="string">'s'</span>);
+0097     <span class="keyword">if</span> ~isempty(choice)
+0098         new=choice;
+0099     <span class="keyword">end</span>
+0100     <span class="keyword">if</span> exist(new,<span class="string">'dir'</span>)
+0101         error(<span class="string">'ERROR: location already in use. Use  &quot;installSMASH -force to overwrite.'</span>);
+0102     <span class="keyword">end</span>
+0103     <span class="keyword">try</span>
+0104         copyfile(location,new,<span class="string">'f'</span>);
+0105     <span class="keyword">catch</span>
+0106         error(<span class="string">'ERROR: invalid toolbox location'</span>);
+0107     <span class="keyword">end</span>
+0108 <span class="keyword">end</span>
+0109 
+0110 cd(new)
+0111 fprintf(<span class="string">'Adding toolbox to MATLAB path...'</span>);
+0112 addpath(smashroot());
+0113 fprintf(<span class="string">'done\n'</span>);
+0114 command=sprintf(<span class="string">'addpath(''%s'');'</span>,smashroot());
+0115 userpath(<span class="string">'reset'</span>);
+0116 cd(userpath());
+0117 
+0118 file=which(<span class="string">'startup.m'</span>);
+0119 <span class="keyword">if</span> isempty(file)
+0120     fprintf(<span class="string">'Creating startup file for future sessions...'</span>);
+0121     userpath(<span class="string">'reset'</span>);
+0122     fid=fopen(fullfile(userpath(),<span class="string">'startup.m'</span>),<span class="string">'w'</span>);
+0123     fprintf(fid,<span class="string">'%% Startup function generated by installSMASH %s\n'</span>,<span class="keyword">...</span>
+0124         datestr(now));
+0125     fprintf(fid,<span class="string">'function startup()\n'</span>);
+0126     fprintf(fid,<span class="string">'\n'</span>);
+0127     fprintf(fid,<span class="string">'%s\n'</span>,command);
+0128     fprintf(fid,<span class="string">'\n'</span>);
+0129     fprintf(fid,<span class="string">'end\n'</span>);
+0130     fclose(fid);
+0131     fprintf(<span class="string">'done\n'</span>);
+0132 <span class="keyword">else</span>
+0133     fprintf(<span class="string">'Add this command:\n'</span>);
+0134     fprintf(<span class="string">'   %s\n'</span>,command);
+0135     fprintf(<span class="string">'to the startup file located:\n'</span>);
+0136     fprintf(<span class="string">'   %s\n'</span>,file);
+0137     fprintf(<span class="string">'to use SMASH in future sessions.\n\n'</span>);
+0138     choice=input(<span class="string">'Edit startup file now? (y)es or (n)o : '</span>,<span class="string">'s'</span>);
+0139     <span class="keyword">switch</span> lower(choice)
+0140         <span class="keyword">case</span> {<span class="string">'y'</span> <span class="string">'yes'</span>}
+0141             edit(file);
+0142     <span class="keyword">end</span>
+0143 <span class="keyword">end</span>
+0144 
+0145 <span class="keyword">end</span>
+0146 
+0147 <span class="comment">%%</span>
+0148 <a name="_sub2" href="#_subfunctions" class="code">function removeToolbox(existing)</a>
+0149 
+0150 old=path;
+0151 start=1;
+0152 stop=regexp(old,pathsep);
+0153 new=<span class="string">''</span>;
+0154 <span class="keyword">for</span> k=1:(numel(stop)+1)
+0155     <span class="keyword">if</span> k &lt; numel(stop)
+0156         temp=old(start:(stop(k)-1));
+0157         start=stop(k)+1;
+0158     <span class="keyword">else</span>
+0159         temp=old(start:end);
+0160     <span class="keyword">end</span>
+0161     <span class="keyword">if</span> regexp(temp,existing)
+0162         <span class="keyword">continue</span>
+0163     <span class="keyword">else</span>
+0164         new=[new pathsep temp]; <span class="comment">%#ok&lt;AGROW&gt;</span>
+0165     <span class="keyword">end</span>
+0166 <span class="keyword">end</span>
+0167 path(new);
+0168 
+0169 warning off
+0170 rmdir(existing,<span class="string">'s'</span>);
+0171 warning on
+0172 userpath(<span class="string">'reset'</span>);
+0173 cd(userpath());
+0174 
+0175 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

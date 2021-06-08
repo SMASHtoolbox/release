@@ -1,0 +1,166 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of LoadSignals</title>
+  <meta name="keywords" content="LoadSignals">
+  <meta name="description" content="LOADSIGNALS   Loads raw signals into PointVISAR">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">PointVISAR</a> &gt; <a href="index.html">private</a> &gt; LoadSignals.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/PointVISAR/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>LoadSignals
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>LOADSIGNALS   Loads raw signals into PointVISAR</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function VisarData = LoadSignals(VisarData) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> LOADSIGNALS   Loads raw signals into PointVISAR</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="ColumnReader.html" class="code" title="function [data,header,filename]=ColumnReader(filename,delim,mincolumn)">ColumnReader</a>	ColumnReader : extract column data from a file</li><li><a href="agilent_h5read.html" class="code" title="function [signal,time,label]=agilent_h5read(filename,index)">agilent_h5read</a>	agilent_h5read : read Agilent HDF5 binary data files</li><li><a href="digread.html" class="code" title="function [signal,time,info]=digread(filename)">digread</a>	digread : Read DIG binary files</li><li><a href="wfmread.html" class="code" title="function [y,t,info,iover,iunder]=wfmread(filename)">wfmread</a>	wfmread : Read Tektronix binary data files</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="VisarAnalysis.html" class="code" title="function record = VisarAnalysis(record, varargin)">VisarAnalysis</a>	VisarAnalysis Provides a gateway to different stages of Visar</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function [time, signal] = ReadDataFile(filename)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function VisarData = LoadSignals(VisarData)</a>
+0002 <span class="comment">% LOADSIGNALS   Loads raw signals into PointVISAR</span>
+0003  
+0004 <span class="comment">% old=pwd;</span>
+0005 filterspec={<span class="keyword">...</span>
+0006      <span class="string">'*.wfm;*.WFM'</span>,<span class="string">'Tektronix binary files'</span>;<span class="keyword">...</span>
+0007      <span class="string">'*.h5;*.H5'</span>,<span class="string">'Agilent binary files'</span>;<span class="keyword">...</span>
+0008      <span class="string">'*.dig;*.DIG'</span>,<span class="string">'NTS binary files'</span>;<span class="keyword">...</span>
+0009      <span class="string">'*.txt;*.TXT;*.dat;*.DAT;*.csv;*.CSV;*.asc;*.ASC;'</span>,<span class="string">'Text files'</span>;<span class="keyword">...</span>
+0010      <span class="string">'*.*'</span>,<span class="string">'All files'</span>;};
+0011 extension=<span class="string">'txt'</span>; <span class="comment">% default extension</span>
+0012 
+0013 <span class="keyword">if</span> numel(VisarData.InputFiles)==1 
+0014     filename=VisarData.InputFiles{1};
+0015     [~,~,ext]=fileparts(filename);
+0016     <span class="keyword">if</span> strcmpi(ext,<span class="string">'.h5'</span>) <span class="comment">% Agilent binary file</span>
+0017         [signal,time]=<a href="agilent_h5read.html" class="code" title="function [signal,time,label]=agilent_h5read(filename,index)">agilent_h5read</a>(filename,1:VisarData.NumSignals);
+0018         <span class="keyword">for</span> ii=1:VisarData.NumSignals
+0019             VisarData.RawSignalTime{ii}=time{ii};
+0020             VisarData.SignalTime{ii}=time{ii};
+0021             VisarData.RawSignal{ii}=signal{ii};
+0022             VisarData.Signal{ii}=signal{ii};
+0023         <span class="keyword">end</span>
+0024     <span class="keyword">else</span> <span class="comment">% text file</span>
+0025         data=<a href="ColumnReader.html" class="code" title="function [data,header,filename]=ColumnReader(filename,delim,mincolumn)">ColumnReader</a>(filename);
+0026         <span class="keyword">for</span> ii=1:VisarData.NumSignals
+0027             VisarData.RawSignalTime{ii}=data(:,1);
+0028             VisarData.SignalTime{ii}=data(:,1);
+0029             VisarData.RawSignal{ii}=data(:,1+ii);
+0030             VisarData.Signal{ii}=data(:,1+ii);
+0031         <span class="keyword">end</span>
+0032     <span class="keyword">end</span>
+0033     
+0034 <span class="keyword">else</span> <span class="comment">% multiple input files (text or binary)</span>
+0035     <span class="keyword">for</span> ii=1:VisarData.NumSignals
+0036         filename=VisarData.InputFiles{ii};
+0037         [~,~,extension]=fileparts(filename);
+0038         <span class="keyword">switch</span> lower(extension)
+0039             <span class="keyword">case</span> {<span class="string">'.txt'</span>,<span class="string">'.dat'</span>,<span class="string">'.csv'</span>,<span class="string">'.asc'</span>} <span class="comment">% text files</span>
+0040                 data=<a href="ColumnReader.html" class="code" title="function [data,header,filename]=ColumnReader(filename,delim,mincolumn)">ColumnReader</a>(filename);
+0041                 time=data(:,1);
+0042                 signal=data(:,2);
+0043             <span class="keyword">case</span> <span class="string">'.isf'</span> <span class="comment">% Tektronix binary file</span>
+0044                 src=SMASH.SignalAnalysis.Signal(filename);
+0045                 time=src.Grid;
+0046                 signal=src.Data;
+0047             <span class="keyword">case</span> <span class="string">'.wfm'</span> <span class="comment">% Tektronix binary file</span>
+0048                 <span class="comment">%[time,signal]=wfmread(filename);</span>
+0049                 [signal,time]=<a href="wfmread.html" class="code" title="function [y,t,info,iover,iunder]=wfmread(filename)">wfmread</a>(filename);                
+0050             <span class="keyword">case</span> <span class="string">'.dig'</span> <span class="comment">% NTS binary file</span>
+0051                 [signal,time]=<a href="digread.html" class="code" title="function [signal,time,info]=digread(filename)">digread</a>(filename);
+0052             <span class="keyword">case</span> <span class="string">'.h5'</span> <span class="comment">% Agilent HDF5 files</span>
+0053                 [signal,time]=<a href="agilent_h5read.html" class="code" title="function [signal,time,label]=agilent_h5read(filename,index)">agilent_h5read</a>(filename);
+0054             <span class="keyword">otherwise</span>
+0055                 error(<span class="string">'Error: \n %s \n does not match any known file type'</span>,<span class="keyword">...</span>
+0056                     filename);
+0057         <span class="keyword">end</span>
+0058         VisarData.RawSignalTime{ii}=time;
+0059         VisarData.SignalTime{ii}=time;
+0060         VisarData.RawSignal{ii}=signal;
+0061         VisarData.Signal{ii}=signal;
+0062     <span class="keyword">end</span>
+0063 <span class="keyword">end</span>
+0064 
+0065 <span class="comment">% for ii=1:VisarData.NumSignals</span>
+0066 <span class="comment">%     if isempty(VisarData.InputFiles{ii}) % prompt user for missing file names</span>
+0067 <span class="comment">%         % preserve previous filterspec</span>
+0068 <span class="comment">%         for jj=1:Nspec</span>
+0069 <span class="comment">%             search=strfind(filterspec{jj,1},extension);</span>
+0070 <span class="comment">%             if isempty(search)</span>
+0071 <span class="comment">%                 % do nothing</span>
+0072 <span class="comment">%             else</span>
+0073 <span class="comment">%                 temp=filterspec(1,:);</span>
+0074 <span class="comment">%                 filterspec(1,:)=filterspec(jj,:);</span>
+0075 <span class="comment">%                 filterspec(jj,:)=temp;</span>
+0076 <span class="comment">%                 continue</span>
+0077 <span class="comment">%             end</span>
+0078 <span class="comment">%         end</span>
+0079 <span class="comment">%         label=['Choose ' VisarData.SignalLabels{ii} ' file'];</span>
+0080 <span class="comment">%         [filename,pathname]=uigetfile(filterspec,label);</span>
+0081 <span class="comment">%         if isnumeric(filename) % user pressed cancel</span>
+0082 <span class="comment">%             cd(old);</span>
+0083 <span class="comment">%             return</span>
+0084 <span class="comment">%         end</span>
+0085 <span class="comment">%         filename=fullfile(pathname,filename);</span>
+0086 <span class="comment">%         cd(pathname);</span>
+0087 <span class="comment">%         VisarData.InputFiles{ii}=filename;</span>
+0088 <span class="comment">%         [pathstr,name,extension]=fileparts(filename);</span>
+0089 <span class="comment">%     end</span>
+0090 <span class="comment">%     [time,signal]=ReadDataFile(VisarData.InputFiles{ii});</span>
+0091 <span class="comment">%     VisarData.RawSignalTime{ii}=time;</span>
+0092 <span class="comment">%     VisarData.SignalTime{ii}=time;</span>
+0093 <span class="comment">%     VisarData.RawSignal{ii}=signal;</span>
+0094 <span class="comment">%     VisarData.Signal{ii}=signal;</span>
+0095 <span class="comment">% end</span>
+0096 <span class="comment">% cd(old);</span>
+0097 
+0098 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0099 <a name="_sub1" href="#_subfunctions" class="code">function [time, signal] = ReadDataFile(filename)</a>
+0100 <span class="comment">% READDATAFILE  Reads a data file containing a visar signal.</span>
+0101 
+0102 <span class="comment">% Get the extension of the filename</span>
+0103 [pathstr,name,extension]=fileparts(filename);
+0104 
+0105 <span class="comment">% Based on the type of signal file, call the appropriate read function</span>
+0106 <span class="keyword">switch</span> lower(extension)
+0107     <span class="keyword">case</span> {<span class="string">'.txt'</span>,<span class="string">'.dat'</span>,<span class="string">'.csv'</span>,<span class="string">'.asc'</span>} <span class="comment">% text files</span>
+0108         data=<a href="ColumnReader.html" class="code" title="function [data,header,filename]=ColumnReader(filename,delim,mincolumn)">ColumnReader</a>(filename);
+0109         time=data(:,1);
+0110         signal=data(:,2);
+0111     <span class="keyword">case</span> <span class="string">'.wfm'</span> <span class="comment">% Tektronix binary file</span>
+0112         [time, signal] = <a href="wfmread.html" class="code" title="function [y,t,info,iover,iunder]=wfmread(filename)">wfmread</a>(filename);
+0113     <span class="keyword">otherwise</span>
+0114         errmsg = [filename <span class="string">' does not match any known file type'</span>];
+0115         errordlg(errmsg,<span class="string">'File Error'</span>);
+0116         <span class="keyword">return</span>
+0117 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

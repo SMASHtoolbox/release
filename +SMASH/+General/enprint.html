@@ -1,0 +1,147 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of enprint</title>
+  <meta name="keywords" content="enprint">
+  <meta name="description" content="enprint Print with engineering notation">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../index.html">SMASHtoolbox</a> &gt; <a href="../index.html">+SMASH</a> &gt; <a href="index.html">+General</a> &gt; enprint.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../index.html"><img alt="<" border="0" src="../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+General&nbsp;<img alt=">" border="0" src="../../../../right.png"></a></td></tr></table>-->
+
+<h1>enprint
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>enprint Print with engineering notation</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function varargout=enprint(number,digits) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> enprint Print with engineering notation
+
+ This function prints a number with engineering notation.
+    result=enprint(number);
+ The output &quot;result&quot; displays the number in modified scientific notation.
+   -Exponents are always factors of three.
+   -Mantissa and exponents signs are always displayed.
+ The default number of mantissa digits is three.  The number of mantissa
+ digits can be changed with a second input.
+   result=enprint(number,digits);
+
+ The input &quot;digits&quot; can be a two-element array.  The second element
+ controls the *minimum* number of exponent digits.  For example:
+    result=enprint(number,[6 2]);
+ prints 6 digits of mantissa and two exponent digits.  Minimum exponent
+ digits can be 1, 2, or 3 (default).  Exponents that exceed the requessted
+ number of digits are always printed correctly.
+
+ If no output is specified, the formatted result is printed in the command
+ window.
+
+ See also SMASH.General, <a href="sigprint.html" class="code" title="function varargout=sigprint(value,uncertainty,varargin)">sigprint</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% enprint Print with engineering notation</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This function prints a number with engineering notation.</span>
+0004 <span class="comment">%    result=enprint(number);</span>
+0005 <span class="comment">% The output &quot;result&quot; displays the number in modified scientific notation.</span>
+0006 <span class="comment">%   -Exponents are always factors of three.</span>
+0007 <span class="comment">%   -Mantissa and exponents signs are always displayed.</span>
+0008 <span class="comment">% The default number of mantissa digits is three.  The number of mantissa</span>
+0009 <span class="comment">% digits can be changed with a second input.</span>
+0010 <span class="comment">%   result=enprint(number,digits);</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% The input &quot;digits&quot; can be a two-element array.  The second element</span>
+0013 <span class="comment">% controls the *minimum* number of exponent digits.  For example:</span>
+0014 <span class="comment">%    result=enprint(number,[6 2]);</span>
+0015 <span class="comment">% prints 6 digits of mantissa and two exponent digits.  Minimum exponent</span>
+0016 <span class="comment">% digits can be 1, 2, or 3 (default).  Exponents that exceed the requessted</span>
+0017 <span class="comment">% number of digits are always printed correctly.</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% If no output is specified, the formatted result is printed in the command</span>
+0020 <span class="comment">% window.</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">% See also SMASH.General, sigprint</span>
+0023 <span class="comment">%</span>
+0024 
+0025 <span class="comment">%</span>
+0026 <span class="comment">% created December 3, 2015 by Daniel Dolan (Sandia National Laboratories)</span>
+0027 <span class="comment">% updated March 8, 2019 by Chris De La Cruz</span>
+0028 <span class="comment">%    -Minimum number of exponent digits (1, 2, or 3) now supported</span>
+0029 <span class="comment">%</span>
+0030 <a name="_sub0" href="#_subfunctions" class="code">function varargout=enprint(number,digits)</a>
+0031 
+0032 <span class="comment">% manage input</span>
+0033 assert(nargin&gt;=1,<span class="string">'ERROR: insufficient input'</span>);
+0034 
+0035 assert(isnumeric(number) &amp;&amp; isscalar(number),<span class="keyword">...</span>
+0036     <span class="string">'ERROR: invalid number'</span>);
+0037 
+0038 <span class="keyword">if</span> (nargin&lt;2) || isempty(digits)
+0039     digits=3;
+0040 <span class="keyword">end</span>
+0041 assert(isnumeric(digits),<span class="string">'ERROR: invalid digits value'</span>);
+0042 <span class="keyword">if</span> isscalar(digits)
+0043     digits(2)=3;
+0044 <span class="keyword">end</span>
+0045 assert((numel(digits)==2) &amp;&amp; all(digits&gt;0) &amp;&amp; all(digits==round(digits)),<span class="keyword">...</span>
+0046     <span class="string">'ERROR: invalid digits value'</span>);
+0047 assert(any(digits(2)==[1 2 3]),<span class="string">'ERROR: invalid digits value'</span>);
+0048 
+0049 <span class="comment">% process number</span>
+0050 <span class="keyword">if</span> isnan(number) || isinf(number)
+0051     result=sprintf(<span class="string">'%+g'</span>,number);
+0052 <span class="keyword">else</span>
+0053     <span class="keyword">if</span> number&gt;=0
+0054         result=<span class="string">'+'</span>;
+0055     <span class="keyword">else</span>
+0056         result=<span class="string">'-'</span>;
+0057     <span class="keyword">end</span>
+0058     number=abs(number);    
+0059     <span class="keyword">if</span> number==0
+0060         mantissa=0;
+0061         exponent=0;
+0062     <span class="keyword">else</span>
+0063         exponent=3*floor(log10(number)/3);
+0064         mantissa=number/(10^exponent);
+0065     <span class="keyword">end</span>
+0066     
+0067     format=sprintf(<span class="string">'%%c%%#.%dgE%%+0%dd'</span>,digits(1),digits(2)+1);
+0068     result=sprintf(format,result,mantissa,exponent);
+0069     
+0070 <span class="keyword">end</span>
+0071 
+0072 <span class="comment">% manage output</span>
+0073 <span class="keyword">if</span> nargout&gt;0
+0074     varargout{1}=result;
+0075 <span class="keyword">else</span>
+0076     fprintf(<span class="string">'%s\n'</span>,result);
+0077 <span class="keyword">end</span>
+0078 
+0079 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

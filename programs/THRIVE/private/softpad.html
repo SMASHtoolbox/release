@@ -1,0 +1,123 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of softpad</title>
+  <meta name="keywords" content="softpad">
+  <meta name="description" content="softpad : signal padding with soft transitions to zero">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">THRIVE</a> &gt; <a href="index.html">private</a> &gt; softpad.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/THRIVE/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>softpad
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>softpad : signal padding with soft transitions to zero</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function xpad=softpad(x,fraction,N2) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> softpad : signal padding with soft transitions to zero
+
+ Given a 1D array, this function returns a zero padded array with a soft
+ boundary transitions.  The transition extends over a specified fraction (5% by
+ default) of the input array size.  The output array size is smallest power of
+ two sufficient to contain the array and left/right padding. The user may also
+ specify the number of output elements.  Note that the DC component is removed
+ prior to padding.
+
+ Usage:
+ &gt;&gt; x=softpad(x);
+ &gt;&gt; x=softpad(x,fraction);
+ &gt;&gt; x=softpad(x,fraction,N);</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% softpad : signal padding with soft transitions to zero</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% Given a 1D array, this function returns a zero padded array with a soft</span>
+0004 <span class="comment">% boundary transitions.  The transition extends over a specified fraction (5% by</span>
+0005 <span class="comment">% default) of the input array size.  The output array size is smallest power of</span>
+0006 <span class="comment">% two sufficient to contain the array and left/right padding. The user may also</span>
+0007 <span class="comment">% specify the number of output elements.  Note that the DC component is removed</span>
+0008 <span class="comment">% prior to padding.</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% Usage:</span>
+0011 <span class="comment">% &gt;&gt; x=softpad(x);</span>
+0012 <span class="comment">% &gt;&gt; x=softpad(x,fraction);</span>
+0013 <span class="comment">% &gt;&gt; x=softpad(x,fraction,N);</span>
+0014 
+0015 <span class="comment">% created 12/5/2007 by Daniel Dolan</span>
+0016 
+0017 <a name="_sub0" href="#_subfunctions" class="code">function xpad=softpad(x,fraction,N2)</a>
+0018 
+0019 <span class="comment">% allocate missing input</span>
+0020 <span class="keyword">if</span> nargin&lt;2
+0021     fraction=[];
+0022 <span class="keyword">end</span>
+0023 <span class="keyword">if</span> nargin&lt;3
+0024     N2=[];
+0025 <span class="keyword">end</span>
+0026 
+0027 <span class="comment">% default input</span>
+0028 <span class="keyword">if</span> isempty(fraction)
+0029     fraction=0.05;
+0030 <span class="keyword">end</span>
+0031 
+0032 <span class="comment">% minimum output size</span>
+0033 N=numel(x);
+0034 Nsoft=round(N*fraction);
+0035 N2min=pow2(nextpow2(N+2*Nsoft));
+0036 <span class="keyword">if</span> isempty(N2)
+0037     N2=N2min;
+0038 <span class="keyword">elseif</span> N2&lt;N2min
+0039     fprintf(<span class="string">'Insufficient padded array size specified: using N2=%d\n'</span>,N2min);
+0040     N2=N2min;
+0041 <span class="keyword">end</span>
+0042 
+0043 <span class="comment">% array preparations</span>
+0044 k=1:N;
+0045 xmean=mean(x);
+0046 x=x-xmean;
+0047 x=reshape(x,[1 N]);
+0048 
+0049 <span class="comment">% right side padding</span>
+0050 slope=x(end)-x(end-1);
+0051 kr=k(end)+(1:Nsoft);
+0052 window=(1+cos(pi*(kr-kr(1))/(kr(end)-kr(1))))/2;
+0053 xr=(x(end)+slope*(kr-k(end))).*window;
+0054 
+0055 <span class="comment">% left side padding</span>
+0056 slope=x(2)-x(1);
+0057 kl=k(1)-(1:Nsoft);
+0058 window=(1+cos(pi*(kl-kl(1))/(kl(end)-kl(1))))/2;
+0059 xl=(x(1)+slope*(kl-k(1))).*window;
+0060 
+0061 Nzero=N2-N-2*Nsoft;
+0062 xzero=zeros(1,Nzero);
+0063 xpad=[x xr xzero xl(end:-1:1)];
+0064 xpad=xpad+xmean;</pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

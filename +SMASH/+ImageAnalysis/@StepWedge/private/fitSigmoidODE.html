@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of fitSigmoidODE</title>
+  <meta name="keywords" content="fitSigmoidODE">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../../index.html">SMASHtoolbox</a> &gt; <a href="../../../index.html">+SMASH</a> &gt; <a href="../../index.html">+ImageAnalysis</a> &gt; <a href="../index.html">@StepWedge</a> &gt; <a href="index.html">private</a> &gt; fitSigmoidODE.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../../index.html"><img alt="<" border="0" src="../../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+ImageAnalysis/@StepWedge/private&nbsp;<img alt=">" border="0" src="../../../../../../right.png"></a></td></tr></table>-->
+
+<h1>fitSigmoidODE
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>function varargout=fitSigmoidODE(x,y) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function dydx=derivative(xd,yd)</a></li><li><a href="#_sub2" class="code">function chi2=residual(param)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function varargout=fitSigmoidODE(x,y)</a>
+0002 
+0003 N=numel(x);
+0004 x=x(:);
+0005 y=y(:);
+0006 [x,index]=sort(x);
+0007 y=y(index);
+0008 
+0009 <span class="comment">% sigmoid derivative</span>
+0010 xA=[];
+0011 LA=[];
+0012 xB=[];
+0013 LB=[];
+0014 gamma=[];
+0015     <a name="_sub1" href="#_subfunctions" class="code">function dydx=derivative(xd,yd)</a>
+0016         g=zeros(size(yd));
+0017         index=(xd&lt;=xA);
+0018         g(index)=exp(+(xd(index)-xA)/LA);       
+0019         index=(xd&gt;xA) &amp; (xd&lt;=xB);
+0020         g(index)=1;
+0021         arg=(xd(index)-xA)/(xB-xA);
+0022         <span class="keyword">for</span> k=1:numel(gamma)            
+0023             g(index)=g(index)+gamma(k)*arg.^k;
+0024         <span class="keyword">end</span>
+0025         index=(xd&gt;xB);
+0026         g(index)=(1+sum(gamma))*exp(-(xd(index)-xB)/LB);
+0027         dydx=g.^2;
+0028     <span class="keyword">end</span>
+0029 
+0030 <span class="comment">% curve fit</span>
+0031 fit=[];
+0032 vector=[];
+0033 matrix=ones(N,2);
+0034 options=odeset(<span class="string">'RelTol'</span>,1e-6);
+0035     <a name="_sub2" href="#_subfunctions" class="code">function chi2=residual(param)</a>
+0036         xA=param(1);
+0037         LA=(L/10)+param(2)^2;
+0038         xB=param(3);
+0039         LB=(L/100)+param(4)^2;
+0040         gamma=param(5:end);
+0041         [~,matrix(:,2)]=ode45(@<a href="#_sub1" class="code" title="subfunction dydx=derivative(xd,yd)">derivative</a>,x,0,options);
+0042         vector=matrix\y;
+0043         fit=matrix*vector;
+0044         chi2=(y-fit).^2;
+0045         chi2=mean(chi2)/N;
+0046     <span class="keyword">end</span>
+0047 L=max(x)-min(x);
+0048 guess=[min(x)+L/4 0 max(x)-L/4 0];
+0049 guess(end+1:end+2)=0;
+0050 <span class="comment">%guess(end+1:end+4)=0;</span>
+0051 result=fminsearch(@<a href="#_sub2" class="code" title="subfunction chi2=residual(param)">residual</a>,guess)
+0052 
+0053 xf=linspace(min(x),max(x),1000);
+0054 [~,yf]=ode45(@<a href="#_sub1" class="code" title="subfunction dydx=derivative(xd,yd)">derivative</a>,xf,0,options);
+0055 yf=vector(1)+vector(2)*yf;
+0056 plot(x,y,<span class="string">'o'</span>,xf,yf);
+0057 
+0058 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

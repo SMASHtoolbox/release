@@ -1,0 +1,112 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of checkInternet</title>
+  <meta name="keywords" content="checkInternet">
+  <meta name="description" content="checkInternet Determine Internet status">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../index.html">SMASHtoolbox</a> &gt; <a href="../index.html">+SMASH</a> &gt; <a href="index.html">+System</a> &gt; checkInternet.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../index.html"><img alt="<" border="0" src="../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+System&nbsp;<img alt=">" border="0" src="../../../../right.png"></a></td></tr></table>-->
+
+<h1>checkInternet
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>checkInternet Determine Internet status</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function [available,firewall]=checkInternet(timeout) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> checkInternet Determine Internet status
+
+ This function returns a logical flag indicating if an Internet connection
+ is available.
+    available=checkInternet();
+ Requesting a second output:
+    [available,firewall]=checkInternet();
+ returns another logical flag indicating if a firewall is present. 
+ NOTE: The second test is *considerably* slower than the first!
+
+ See also SMASH.System, <a href="ping.html" class="code" title="function varargout=ping(address,timeout,mode)">ping</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% checkInternet Determine Internet status</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This function returns a logical flag indicating if an Internet connection</span>
+0004 <span class="comment">% is available.</span>
+0005 <span class="comment">%    available=checkInternet();</span>
+0006 <span class="comment">% Requesting a second output:</span>
+0007 <span class="comment">%    [available,firewall]=checkInternet();</span>
+0008 <span class="comment">% returns another logical flag indicating if a firewall is present.</span>
+0009 <span class="comment">% NOTE: The second test is *considerably* slower than the first!</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% See also SMASH.System, ping</span>
+0012 <span class="comment">%</span>
+0013 
+0014 <span class="comment">%</span>
+0015 <span class="comment">% created July 24, 2018 by Daniel Dolan (Sandia National Laboratories)</span>
+0016 <span class="comment">%</span>
+0017 <a name="_sub0" href="#_subfunctions" class="code">function [available,firewall]=checkInternet(timeout)</a>
+0018 
+0019 <span class="comment">% manage input</span>
+0020 <span class="keyword">if</span> nargin &lt; 1
+0021     timeout=[];
+0022 <span class="keyword">end</span>
+0023 
+0024 <span class="comment">% look for connection</span>
+0025 available=true;
+0026 <span class="keyword">try</span>
+0027     address=java.net.InetAddress.getByName(<span class="string">'www.google.com'</span>);
+0028 <span class="keyword">catch</span>
+0029     address=<span class="string">''</span>;
+0030     available=false;
+0031 <span class="keyword">end</span>
+0032 
+0033 <span class="comment">% look for firewall</span>
+0034 <span class="keyword">if</span> nargout &gt;= 2
+0035     <span class="keyword">if</span> isempty(address)
+0036         firewall=false;
+0037     <span class="keyword">else</span>
+0038         address=char(address);
+0039         index=strfind(address,<span class="string">'/'</span>);
+0040         <span class="keyword">if</span> numel(index) &gt;= 1
+0041             index=index(end)+1;
+0042         <span class="keyword">else</span>
+0043             index=1;
+0044         <span class="keyword">end</span>
+0045         address=address(index:end);
+0046         delay=SMASH.System.ping(address,timeout);
+0047         <span class="keyword">if</span> isnan(delay)
+0048             firewall=true;
+0049         <span class="keyword">else</span>
+0050             firewall=false;
+0051         <span class="keyword">end</span>
+0052     <span class="keyword">end</span>    
+0053 <span class="keyword">end</span>
+0054 
+0055 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

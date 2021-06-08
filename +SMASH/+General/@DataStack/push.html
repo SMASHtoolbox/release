@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of push</title>
+  <meta name="keywords" content="push">
+  <meta name="description" content="push Push value onto data stack">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="../../index.html">+SMASH</a> &gt; <a href="../index.html">+General</a> &gt; <a href="index.html">@DataStack</a> &gt; push.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+General/@DataStack&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>push
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>push Push value onto data stack</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function push(name,value) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> push Push value onto data stack
+
+ This method pushes a value onto a named data stack.
+    DataStack.push(name,value);
+ The input &quot;name&quot; must be a valid MATLAB variable name.  The input &quot;value&quot;
+ is pushed onto that stack.
+ 
+ See also <a href="pop.html" class="code" title="function value=pop(name)">pop</a>, <a href="probe.html" class="code" title="function varargout=probe(name)">probe</a>, isvarname</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="DataStack.html" class="code" title="">DataStack</a>	DataStack Data stack class</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% push Push value onto data stack</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This method pushes a value onto a named data stack.</span>
+0004 <span class="comment">%    DataStack.push(name,value);</span>
+0005 <span class="comment">% The input &quot;name&quot; must be a valid MATLAB variable name.  The input &quot;value&quot;</span>
+0006 <span class="comment">% is pushed onto that stack.</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% See also pop, probe, isvarname</span>
+0009 <span class="comment">%</span>
+0010 
+0011 <span class="comment">%</span>
+0012 <span class="comment">% created November 11, 2018 by Daniel Dolan (Sandia National Laboratories)</span>
+0013 <span class="comment">%</span>
+0014 <a name="_sub0" href="#_subfunctions" class="code">function push(name,value)</a>
+0015 
+0016 <span class="comment">% manage input</span>
+0017 assert(nargin == 2,<span class="string">'ERROR: invalid number of inputs'</span>);
+0018 assert(isvarname(name),<span class="string">'ERROR: invalid stack name'</span>);
+0019 
+0020 <span class="comment">% access stack</span>
+0021 manageStack(<span class="string">'push'</span>,name,value);
+0022 
+0023 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

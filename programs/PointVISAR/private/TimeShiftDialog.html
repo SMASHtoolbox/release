@@ -1,0 +1,254 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of TimeShiftDialog</title>
+  <meta name="keywords" content="TimeShiftDialog">
+  <meta name="description" content="%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">PointVISAR</a> &gt; <a href="index.html">private</a> &gt; TimeShiftDialog.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/PointVISAR/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>TimeShiftDialog
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function TimeShiftDialog(data) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="ActiveRecord.html" class="code" title="function active=ActiveRecord(data)">ActiveRecord</a>	determine active PointVISAR record</li><li><a href="PointVISARGUI.html" class="code" title="function fig=PointVISARGUI(data)">PointVISARGUI</a>	PointVISARGUI</li><li><a href="VisarAnalysis.html" class="code" title="function record = VisarAnalysis(record, varargin)">VisarAnalysis</a>	VisarAnalysis Provides a gateway to different stages of Visar</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="PointVISARGUI.html" class="code" title="function fig=PointVISARGUI(data)">PointVISARGUI</a>	PointVISARGUI</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function [fig,select]=CreateDialog()</a></li><li><a href="#_sub2" class="code">function [ShiftData,selection]=CurrentShiftData(src)</a></li><li><a href="#_sub3" class="code">function UpdateDialog()</a></li><li><a href="#_sub4" class="code">function UpdateMainGUI()</a></li><li><a href="#_sub5" class="code">function TimeShiftEdit(src,varargin)</a></li><li><a href="#_sub6" class="code">function ExitDialog(src,varargin)</a></li><li><a href="#_sub7" class="code">function RecordSelectCallback(varargin)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 
+0002 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0003 <a name="_sub0" href="#_subfunctions" class="code">function TimeShiftDialog(data)</a>
+0004 
+0005 mainfig=findall(0,<span class="string">'Type'</span>,<span class="string">'figure'</span>,<span class="string">'Tag'</span>,<span class="string">'PointVISAR'</span>);
+0006 maindata=get(mainfig,<span class="string">'UserData'</span>);
+0007 
+0008 <span class="comment">% create dialog (if necessary)</span>
+0009 dlg=findall(0,<span class="string">'Type'</span>,<span class="string">'figure'</span>,<span class="string">'Tag'</span>,<span class="string">'PointVISAR:TimeShift'</span>);
+0010 <span class="keyword">if</span> ishandle(dlg)
+0011     figure(dlg);
+0012     select=findobj(dlg,<span class="string">'Tag'</span>,<span class="string">'RecordSelect'</span>);
+0013 <span class="keyword">else</span>
+0014     [dlg,select]=<a href="#_sub1" class="code" title="subfunction [fig,select]=CreateDialog()">CreateDialog</a>;
+0015 <span class="keyword">end</span>
+0016 
+0017 <span class="comment">% store necessary information and update list selection</span>
+0018 <span class="keyword">for</span> ii=1:numel(data)
+0019     DialogData{ii}.TimeShift=data{ii}.TimeShift;
+0020     DialogData{ii}.OldTimeShift=data{ii}.TimeShift;
+0021     DialogData{ii}.OldAddJumps=data{ii}.AddJumps;
+0022     DialogData{ii}.OldSubtractJumps=data{ii}.SubtractJumps;
+0023     label{ii}=[<span class="string">'Record #'</span> num2str(ii,<span class="string">'%d'</span>) <span class="string">':  '</span> data{ii}.Label];
+0024 <span class="keyword">end</span>
+0025 set(select,<span class="string">'String'</span>,label,<span class="string">'Value'</span>,<a href="ActiveRecord.html" class="code" title="function active=ActiveRecord(data)">ActiveRecord</a>(maindata));
+0026 set(dlg,<span class="string">'UserData'</span>,DialogData);
+0027 
+0028 <a href="#_sub3" class="code" title="subfunction UpdateDialog()">UpdateDialog</a>;
+0029 
+0030 <span class="comment">%%%%%%%%%%%%%%%%</span>
+0031 <span class="comment">% subfunctions %</span>
+0032 <span class="comment">%%%%%%%%%%%%%%%%</span>
+0033 
+0034 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0035 <a name="_sub1" href="#_subfunctions" class="code">function [fig,select]=CreateDialog()</a>
+0036 
+0037 <span class="comment">% spacing parameters (characters)</span>
+0038 dx=5;
+0039 dy=1;
+0040 ControlHeight=2;
+0041 TextWidth=20;
+0042 TextHeight=1.5;
+0043 
+0044 FigWidth=2*TextWidth+3*dx;
+0045 FigHeight=TextHeight+2*ControlHeight+4*dy;
+0046 
+0047 fig=figure(<span class="string">'Visible'</span>,<span class="string">'off'</span>,<span class="keyword">...</span>
+0048     <span class="string">'MenuBar'</span>,<span class="string">'none'</span>,<span class="string">'Toolbar'</span>,<span class="string">'none'</span>,<span class="keyword">...</span>
+0049     <span class="string">'Tag'</span>,<span class="string">'PointVISAR:TimeShift'</span>,<span class="string">'Resize'</span>,<span class="string">'off'</span>,<span class="keyword">...</span>
+0050     <span class="string">'NumberTitle'</span>,<span class="string">'off'</span>,<span class="string">'Name'</span>,<span class="string">'Time Shifting'</span>,<span class="keyword">...</span>
+0051     <span class="string">'Units'</span>,<span class="string">'characters'</span>,<span class="string">'Position'</span>,[0 0 FigWidth FigHeight],<span class="keyword">...</span>
+0052     <span class="string">'CloseRequestFcn'</span>,@<a href="#_sub6" class="code" title="subfunction ExitDialog(src,varargin)">ExitDialog</a>);
+0053 movegui(fig,<span class="string">'center'</span>);
+0054 figure(fig);
+0055 figpos=get(fig,<span class="string">'Position'</span>);
+0056 
+0057 <span class="comment">% record selection popup</span>
+0058 x0=dx;
+0059 y0=figpos(4)-dy-ControlHeight;
+0060 width=figpos(3)-2*dx;
+0061 height=ControlHeight;
+0062 select=uicontrol(<span class="string">'Style'</span>,<span class="string">'popup'</span>,<span class="keyword">...</span>
+0063     <span class="string">'Tag'</span>,<span class="string">'RecordSelect'</span>,<span class="string">'String'</span>,<span class="string">' '</span>,<span class="keyword">...</span>
+0064     <span class="string">'Callback'</span>,@<a href="#_sub7" class="code" title="subfunction RecordSelectCallback(varargin)">RecordSelectCallback</a>,<span class="keyword">...</span>
+0065     <span class="string">'Units'</span>,<span class="string">'characters'</span>,<span class="string">'Position'</span>,[x0 y0 width height]);
+0066 
+0067 <span class="comment">% create text label and edit box</span>
+0068 x0=dx;
+0069 y0=figpos(4)-dy-ControlHeight-dy-TextHeight;
+0070 htext=uicontrol(<span class="string">'Style'</span>,<span class="string">'text'</span>,<span class="keyword">...</span>
+0071     <span class="string">'Tag'</span>,<span class="string">'TimeShiftLabel'</span>,<span class="string">'String'</span>,<span class="string">'Time shift='</span>,<span class="keyword">...</span>
+0072     <span class="string">'HorizontalAlignment'</span>,<span class="string">'right'</span>,<span class="keyword">...</span>
+0073     <span class="string">'BackgroundColor'</span>,get(fig,<span class="string">'Color'</span>),<span class="keyword">...</span>
+0074     <span class="string">'Units'</span>,<span class="string">'characters'</span>,<span class="string">'Position'</span>,[x0 y0 TextWidth TextHeight]);
+0075 
+0076 x0=x0+TextWidth;
+0077 hedit=uicontrol(<span class="string">'Style'</span>,<span class="string">'edit'</span>,<span class="keyword">...</span>
+0078     <span class="string">'Interruptible'</span>,<span class="string">'off'</span>,<span class="keyword">...</span>
+0079     <span class="string">'Tag'</span>,<span class="string">'TimeShiftEditBox'</span>,<span class="string">'String'</span>,<span class="string">''</span>,<span class="keyword">...</span>
+0080     <span class="string">'BackgroundColor'</span>,[1 1 1],<span class="keyword">...</span>
+0081     <span class="string">'Callback'</span>,@<a href="#_sub5" class="code" title="subfunction TimeShiftEdit(src,varargin)">TimeShiftEdit</a>,<span class="keyword">...</span>
+0082     <span class="string">'Units'</span>,<span class="string">'characters'</span>,<span class="string">'Position'</span>,[x0 y0 TextWidth TextHeight]);
+0083 
+0084 <span class="comment">% ok/cancel buttons at the bottom</span>
+0085 y0=dy; 
+0086 cancel=uicontrol(<span class="string">'Style'</span>,<span class="string">'pushbutton'</span>,<span class="keyword">...</span>
+0087     <span class="string">'String'</span>,<span class="string">'Cancel'</span>,<span class="string">'Tag'</span>,<span class="string">'cancel'</span>,<span class="string">'Units'</span>,<span class="string">'characters'</span>); 
+0088 extent=get(cancel,<span class="string">'Extent'</span>);
+0089 width=1.25*extent(3);
+0090 x0=figpos(3)-dx-width;
+0091 set(cancel,<span class="string">'Position'</span>,[x0 y0 width ControlHeight]);
+0092 
+0093 ok=uicontrol(<span class="string">'Style'</span>,<span class="string">'pushbutton'</span>,<span class="keyword">...</span>
+0094     <span class="string">'String'</span>,<span class="string">'OK'</span>,<span class="string">'Tag'</span>,<span class="string">'ok'</span>,<span class="string">'Units'</span>,<span class="string">'characters'</span>); 
+0095 x0=x0-dx/2-width;
+0096 set(ok,<span class="string">'Position'</span>,[x0 y0 width ControlHeight]);
+0097 set([ok cancel],<span class="string">'Callback'</span>,@<a href="#_sub6" class="code" title="subfunction ExitDialog(src,varargin)">ExitDialog</a>);
+0098 
+0099 children=[select htext hedit ok cancel];
+0100 set(fig,<span class="string">'Children'</span>,children(end:-1:1));
+0101 
+0102 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0103 <a name="_sub2" href="#_subfunctions" class="code">function [ShiftData,selection]=CurrentShiftData(src)</a>
+0104 
+0105 ShiftData=get(src,<span class="string">'UserData'</span>);
+0106 h=findobj(src,<span class="string">'Tag'</span>,<span class="string">'RecordSelect'</span>);
+0107 selection=get(h,<span class="string">'Value'</span>);
+0108 
+0109 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0110 <a name="_sub3" href="#_subfunctions" class="code">function UpdateDialog()</a>
+0111 
+0112 <span class="comment">% extract current shift</span>
+0113 dlg=findall(0,<span class="string">'Type'</span>,<span class="string">'figure'</span>,<span class="string">'Tag'</span>,<span class="string">'PointVISAR:TimeShift'</span>);
+0114 [ShiftData,selection]=<a href="#_sub2" class="code" title="subfunction [ShiftData,selection]=CurrentShiftData(src)">CurrentShiftData</a>(dlg);
+0115 ShiftData=ShiftData{selection};
+0116 
+0117 hedit=findobj(dlg,<span class="string">'Tag'</span>,<span class="string">'TimeShiftEditBox'</span>);
+0118 set(hedit,<span class="string">'String'</span>,num2str(ShiftData.TimeShift));
+0119 
+0120 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0121 <a name="_sub4" href="#_subfunctions" class="code">function UpdateMainGUI()</a>
+0122 
+0123 dlg=findall(0,<span class="string">'type'</span>,<span class="string">'figure'</span>,<span class="string">'Tag'</span>,<span class="string">'PointVISAR:TimeShift'</span>);
+0124 DialogData=get(dlg,<span class="string">'UserData'</span>);
+0125 main=findall(0,<span class="string">'type'</span>,<span class="string">'figure'</span>,<span class="string">'Tag'</span>,<span class="string">'PointVISAR'</span>);
+0126 data=get(main,<span class="string">'UserData'</span>);
+0127 
+0128 popup=findobj(dlg,<span class="string">'Tag'</span>,<span class="string">'RecordSelect'</span>);
+0129 current=get(popup,<span class="string">'Value'</span>);
+0130 
+0131 <span class="comment">% update all time quantities and redo analysis</span>
+0132 data{current}.InitialTime=data{current}.InitialTime<span class="keyword">...</span>
+0133     -data{current}.TimeShift+DialogData{current}.TimeShift;
+0134 data{current}.ExperimentTime=data{current}.ExperimentTime<span class="keyword">...</span>
+0135     -data{current}.TimeShift+DialogData{current}.TimeShift;
+0136 data{current}.AddJumps=data{current}.AddJumps<span class="keyword">...</span>
+0137     -data{current}.TimeShift+DialogData{current}.TimeShift;
+0138 data{current}.SubtractJumps=data{current}.SubtractJumps<span class="keyword">...</span>
+0139     -data{current}.TimeShift+DialogData{current}.TimeShift;
+0140 data{current}.TimeShift=DialogData{current}.TimeShift;
+0141 data{current}=<a href="VisarAnalysis.html" class="code" title="function record = VisarAnalysis(record, varargin)">VisarAnalysis</a>(data{current},<span class="string">'PreProcessing'</span>,<span class="string">'Velocity'</span>);
+0142 
+0143 <a href="PointVISARGUI.html" class="code" title="function fig=PointVISARGUI(data)">PointVISARGUI</a>(data);
+0144 figure(dlg);
+0145 
+0146 <span class="comment">%%%%%%%%%%%%%</span>
+0147 <span class="comment">% callbacks %</span>
+0148 <span class="comment">%%%%%%%%%%%%%</span>
+0149 
+0150 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0151 <a name="_sub5" href="#_subfunctions" class="code">function TimeShiftEdit(src,varargin)</a>
+0152 
+0153 dlg=ancestor(src,<span class="string">'figure'</span>);
+0154 [ShiftData,selection]=<a href="#_sub2" class="code" title="subfunction [ShiftData,selection]=CurrentShiftData(src)">CurrentShiftData</a>(dlg);
+0155 
+0156 value=get(src,<span class="string">'String'</span>);
+0157 <span class="comment">%value=str2num(value);</span>
+0158 value=str2double(value);
+0159 <span class="keyword">if</span> isempty(value)
+0160     value=ShiftData{selection}.TimeShift;
+0161     set(src,<span class="string">'String'</span>,num2str(value,<span class="string">'%g'</span>));
+0162     message{1}=<span class="string">'Invalid numeric input given'</span>;
+0163     message{2}=<span class="string">'Previous value retained'</span>;
+0164     warndlg(message,<span class="string">'Invalid input'</span>);
+0165 <span class="keyword">else</span>
+0166     ShiftData{selection}.TimeShift=value;
+0167     set(dlg,<span class="string">'UserData'</span>,ShiftData);
+0168 <span class="keyword">end</span>
+0169 
+0170 <a href="#_sub4" class="code" title="subfunction UpdateMainGUI()">UpdateMainGUI</a>;
+0171 
+0172 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0173 <a name="_sub6" href="#_subfunctions" class="code">function ExitDialog(src,varargin)</a>
+0174 
+0175 fig=ancestor(src,<span class="string">'figure'</span>);
+0176 main=findall(0,<span class="string">'Type'</span>,<span class="string">'figure'</span>,<span class="string">'Tag'</span>,<span class="string">'PointVISAR'</span>);
+0177 choice=get(src,<span class="string">'Tag'</span>);
+0178 <span class="keyword">if</span> strcmp(choice,<span class="string">'ok'</span>) <span class="comment">% user chose Ok button</span>
+0179     delete(fig);
+0180     figure(main);
+0181     <span class="keyword">return</span>
+0182 <span class="keyword">end</span>
+0183 
+0184 <span class="comment">% see if the user is serious about cancel</span>
+0185 prompt{1}=<span class="string">'All time shift changes be lost! Continue?'</span>;
+0186 answer=questdlg(prompt,<span class="string">'Cancel time shifts'</span>);
+0187 <span class="keyword">if</span> strcmpi(answer,<span class="string">'yes'</span>)
+0188     DialogData=get(fig,<span class="string">'UserData'</span>);
+0189     data=get(main,<span class="string">'UserData'</span>);
+0190     <span class="keyword">for</span> ii=1:numel(data)
+0191         data{ii}.AddJumps=DialogData{ii}.OldAddJumps;
+0192         data{ii}.SubtractJumps=DialogData{ii}.OldSubtractJumps;
+0193         data{ii}.TimeShift=DialogData{ii}.OldTimeShift;
+0194         data{ii}=<a href="VisarAnalysis.html" class="code" title="function record = VisarAnalysis(record, varargin)">VisarAnalysis</a>(data{ii},<span class="string">'PreProcessing'</span>,<span class="string">'Velocity'</span>);       
+0195     <span class="keyword">end</span>
+0196     <a href="PointVISARGUI.html" class="code" title="function fig=PointVISARGUI(data)">PointVISARGUI</a>(data);
+0197     delete(fig);
+0198 <span class="keyword">else</span>
+0199     <span class="keyword">return</span>
+0200 <span class="keyword">end</span>
+0201 
+0202 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0203 <a name="_sub7" href="#_subfunctions" class="code">function RecordSelectCallback(varargin)</a>
+0204 
+0205 <a href="#_sub3" class="code" title="subfunction UpdateDialog()">UpdateDialog</a>;</pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

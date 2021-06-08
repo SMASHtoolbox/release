@@ -1,0 +1,5 @@
+Version 1.0 was released in fall 2016.  A user manual was released as a technical report (SAND2016-6848).
+
+Version 1.1 is tentatively scheduled for summer 2016.  Changes from version 1.0 are noted below.
+	-The FileAccess package now has a 'block' format to support text files with multiple blocks of column data..
+	

@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of agilent_h5read</title>
+  <meta name="keywords" content="agilent_h5read">
+  <meta name="description" content="agilent_h5read : read Agilent HDF5 binary data files">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">PointVISAR</a> &gt; <a href="index.html">private</a> &gt; agilent_h5read.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/PointVISAR/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>agilent_h5read
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>agilent_h5read : read Agilent HDF5 binary data files</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function [signal,time,label]=agilent_h5read(filename,index) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> agilent_h5read : read Agilent HDF5 binary data files
+
+ This function reads files data created by Agilent digitizers
+ stored in the HDF5 format (*.h5).  These files contain one or more
+ signals in a binary format.
+
+ Usage:
+   &gt;&gt; [signal,time,label]=agilent_h5read(filename,index);
+ If filename is omitted or empty (''), the user will be prompted to
+ select a file.  If the index is omitted, the function returns the first
+ signal stored in the file.  Specific signals can be accessed by passing
+ an integer:
+   &gt;&gt; [signal,time]=agilent_h5read(filename,2);
+ Setting index='all' returns every signal from the file; passing
+ index='gui' prompts the user to select a *single* signal within the file.
+
+ When a single signal is extracted, the function return numerical
+ (signal/time) and textual (label) arrays.  Cell array outputs are used
+ for multiple signal extraction.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="LoadSignals.html" class="code" title="function VisarData = LoadSignals(VisarData)">LoadSignals</a>	LOADSIGNALS   Loads raw signals into PointVISAR</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% agilent_h5read : read Agilent HDF5 binary data files</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This function reads files data created by Agilent digitizers</span>
+0004 <span class="comment">% stored in the HDF5 format (*.h5).  These files contain one or more</span>
+0005 <span class="comment">% signals in a binary format.</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% Usage:</span>
+0008 <span class="comment">%   &gt;&gt; [signal,time,label]=agilent_h5read(filename,index);</span>
+0009 <span class="comment">% If filename is omitted or empty (''), the user will be prompted to</span>
+0010 <span class="comment">% select a file.  If the index is omitted, the function returns the first</span>
+0011 <span class="comment">% signal stored in the file.  Specific signals can be accessed by passing</span>
+0012 <span class="comment">% an integer:</span>
+0013 <span class="comment">%   &gt;&gt; [signal,time]=agilent_h5read(filename,2);</span>
+0014 <span class="comment">% Setting index='all' returns every signal from the file; passing</span>
+0015 <span class="comment">% index='gui' prompts the user to select a *single* signal within the file.</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">% When a single signal is extracted, the function return numerical</span>
+0018 <span class="comment">% (signal/time) and textual (label) arrays.  Cell array outputs are used</span>
+0019 <span class="comment">% for multiple signal extraction.</span>
+0020 
+0021 <span class="comment">% created December 19, 2011 by Daniel Dolan (Sandia National Labs)</span>
+0022 <a name="_sub0" href="#_subfunctions" class="code">function [signal,time,label]=agilent_h5read(filename,index)</a>
+0023 
+0024 <span class="comment">% handle input</span>
+0025 <span class="keyword">if</span> (nargin&lt;1) || isempty(filename)
+0026     types={};
+0027     types(end+1,:)={<span class="string">'*.h5;*.H5'</span>,<span class="string">'Agilent HDF5 files'</span>};
+0028     types(end+1,:)={<span class="string">'*.*'</span>,<span class="string">'All files'</span>};
+0029     [filename,pathname]=uigetfile(types,<span class="string">'Select Agilent data file'</span>);
+0030     <span class="keyword">if</span> isnumeric(filename) <span class="comment">% user pressed cancel</span>
+0031         <span class="keyword">return</span>
+0032     <span class="keyword">end</span>
+0033     filename=fullfile(pathname,filename);
+0034 <span class="keyword">end</span>
+0035 
+0036 <span class="keyword">if</span> (nargin&lt;2) || isempty(index)
+0037     index=1;
+0038 <span class="keyword">end</span>
+0039 
+0040 <span class="comment">% extract header information</span>
+0041 info=hdf5info(filename);
+0042 info=info.GroupHierarchy.Groups(3);
+0043 num_signal=info.Attributes.Value;
+0044 
+0045 <span class="comment">% prompt user to select signal (GUI mode)</span>
+0046 <span class="keyword">if</span> strcmpi(index,<span class="string">'gui'</span>)
+0047     choice=cell(num_signal,1);
+0048     <span class="keyword">for</span> n=1:num_signal
+0049         [~,choice{n}]=fileparts(info.Groups(n).Name);
+0050     <span class="keyword">end</span>
+0051     [index,ok]=listdlg(<span class="keyword">...</span>
+0052         <span class="string">'PromptString'</span>,<span class="string">'Select signal for import'</span>,<span class="keyword">...</span>
+0053         <span class="string">'Name'</span>,<span class="string">'Select signal'</span>,<span class="keyword">...</span>
+0054         <span class="string">'ListString'</span>,choice,<span class="keyword">...</span>
+0055         <span class="string">'SelectionMode'</span>,<span class="string">'single'</span>);
+0056     <span class="keyword">if</span> ~ok <span class="comment">% user pressed cancel or closed the dialog</span>
+0057         <span class="keyword">return</span>
+0058     <span class="keyword">end</span>    
+0059 <span class="keyword">elseif</span> strcmp(index,<span class="string">'all'</span>)
+0060     index=1:num_signal;
+0061 <span class="keyword">end</span>  
+0062 
+0063 <span class="comment">% extract data</span>
+0064 [signal,time,label]=deal(cell(numel(index),1));
+0065 <span class="keyword">for</span> n=1:numel(index)
+0066     group=info.Groups(index(n));
+0067     label{n}=group.Name;
+0068     name=group.Datasets.Name;
+0069     signal{n}=h5read(filename,name);
+0070     signal{n}=signal{n}(:);
+0071     numpoints=numel(signal{n});
+0072     dx=group.Attributes(8).Value;
+0073     left=group.Attributes(9).Value;    
+0074     right=left+(numpoints-1)*dx;
+0075     time{n}=left:dx:right;
+0076     time{n}=time{n}(:);
+0077 <span class="keyword">end</span>
+0078 
+0079 <span class="keyword">if</span> numel(signal)==1
+0080     signal=signal{1};
+0081     time=time{1};
+0082     label=label{1};
+0083 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

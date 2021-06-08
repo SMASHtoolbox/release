@@ -1,0 +1,86 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of SmartFormat</title>
+  <meta name="keywords" content="SmartFormat">
+  <meta name="description" content="SmartFormat : intelligent output format for numerical data">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">PointVISAR</a> &gt; <a href="index.html">private</a> &gt; SmartFormat.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/PointVISAR/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>SmartFormat
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>SmartFormat : intelligent output format for numerical data</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function [format,width]=SmartFormat(data,digits) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> SmartFormat : intelligent output format for numerical data</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="SaveSignals.html" class="code" title="function record=SaveSignals(record)">SaveSignals</a>	Saves signals for a single VISAR record</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% SmartFormat : intelligent output format for numerical data</span>
+0002 <a name="_sub0" href="#_subfunctions" class="code">function [format,width]=SmartFormat(data,digits)</a>
+0003 
+0004 <span class="comment">% defaults</span>
+0005 <span class="keyword">if</span> nargin&lt;1
+0006     data=[];
+0007 <span class="keyword">end</span>
+0008 <span class="keyword">if</span> isempty(data)
+0009     data=0;
+0010 <span class="keyword">end</span>
+0011 
+0012 <span class="keyword">if</span> nargin &lt; 2
+0013     digits = [];
+0014 <span class="keyword">end</span>
+0015 <span class="keyword">if</span> isempty(digits)
+0016     digits=6;
+0017 <span class="keyword">end</span>
+0018 
+0019 <span class="comment">% determine the proper output mode</span>
+0020 limit=[1e-4 1e5]; <span class="comment">% set by %g format</span>
+0021 Dmax=max(abs(data));
+0022 Dmin=min(abs(data));
+0023 <span class="keyword">if</span> (Dmax&lt;limit(1)) | (Dmin&gt;=limit(2)) <span class="comment">% use exponential notation</span>
+0024     dleft=1;
+0025     dright=digits-dleft;
+0026     extra=7; <span class="comment">% counts signs (2), decimal point(1), and exponent (4)</span>
+0027     width=digits+extra;
+0028     format=[<span class="string">'%+'</span> num2str(width,<span class="string">'%d'</span>) <span class="string">'.'</span> num2str(dright,<span class="string">'%d'</span>) <span class="string">'e'</span>];
+0029 <span class="keyword">else</span> <span class="comment">% use fixed notation</span>
+0030     dleft=floor(log10(Dmax))+1;
+0031     <span class="keyword">if</span> dleft&gt;0
+0032         dright=max([digits-dleft 0]);
+0033     <span class="keyword">else</span>
+0034         dright=digits+abs(dleft);
+0035     <span class="keyword">end</span>
+0036     extra=2; <span class="comment">% counts sign (1) and decimal point (1)</span>
+0037     width=abs(dleft)+dright+extra;
+0038     format=[<span class="string">'%+'</span> num2str(width,<span class="string">'%d'</span>) <span class="string">'.'</span> num2str(dright,<span class="string">'%d'</span>) <span class="string">'f'</span>];
+0039 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

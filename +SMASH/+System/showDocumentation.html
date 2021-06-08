@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of showDocumentation</title>
+  <meta name="keywords" content="showDocumentation">
+  <meta name="description" content="UNDER CONSTRUCTION">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../index.html">SMASHtoolbox</a> &gt; <a href="../index.html">+SMASH</a> &gt; <a href="index.html">+System</a> &gt; showDocumentation.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../index.html"><img alt="<" border="0" src="../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+System&nbsp;<img alt=">" border="0" src="../../../../right.png"></a></td></tr></table>-->
+
+<h1>showDocumentation
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>UNDER CONSTRUCTION</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function showDocumentation(name,location) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> UNDER CONSTRUCTION
+ showDocumentation Show published documentation
+
+ This function shows formatted documentation associated with the SMASH
+ toolbox.  Documentation files are scripts displayed in HTML format. These
+ files are always located in a subdirectory name &quot;doc&quot; within the relevant
+ package/class directory.
+
+ See also SMASH.System</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% UNDER CONSTRUCTION</span>
+0002 <span class="comment">% showDocumentation Show published documentation</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% This function shows formatted documentation associated with the SMASH</span>
+0005 <span class="comment">% toolbox.  Documentation files are scripts displayed in HTML format. These</span>
+0006 <span class="comment">% files are always located in a subdirectory name &quot;doc&quot; within the relevant</span>
+0007 <span class="comment">% package/class directory.</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% See also SMASH.System</span>
+0010 <span class="comment">%</span>
+0011 
+0012 <span class="comment">%</span>
+0013 <span class="comment">% creaed March 28, 2018 by Daniel Dolan (Sandia National Laboratories)</span>
+0014 <span class="comment">%</span>
+0015 <a name="_sub0" href="#_subfunctions" class="code">function showDocumentation(name,location)</a>
+0016 
+0017 <span class="comment">% manage input</span>
+0018 assert(nargin &gt; 0,<span class="string">'ERROR: script name is required'</span>);
+0019 
+0020 <span class="keyword">if</span> (nargin &lt; 2) || isempty(location)
+0021     location=evalin(<span class="string">'caller'</span>,<span class="string">'mfilename(''fullpath'')'</span>);
+0022     location=fileparts(location);
+0023 <span class="keyword">end</span>
+0024 
+0025 source=fullfile(location,<span class="string">'doc'</span>);
+0026 assert(logical(exist(source,<span class="string">'dir'</span>)),<span class="string">'ERROR: invalid script location'</span>);
+0027 
+0028 <span class="comment">% look for script file</span>
+0029 errmsg=<span class="string">'ERROR: invalid script name'</span>;
+0030 [~,short,ext]=fileparts(name);
+0031 <span class="keyword">if</span> isempty(ext)
+0032     temp=dir(fullfile(source,[short <span class="string">'.*'</span>]));    
+0033     assert(numel(temp) &gt;= 1,errmsg);
+0034     [~,~,ext]=fileparts(temp(1).name);
+0035 <span class="keyword">end</span>
+0036 
+0037 assert(strcmpi(ext,<span class="string">'.m'</span>),errmsg);
+0038 source=fullfile(source,[short ext]);
+0039 assert(logical(exist(source,<span class="string">'file'</span>)),errmsg);
+0040 
+0041 <span class="comment">% copy valid script files</span>
+0042 drop=(location == <span class="string">'+'</span>) | (location == <span class="string">'@'</span>);
+0043 new=location(~drop);
+0044 new=fullfile(tempdir,<span class="string">'doc'</span>,new);
+0045 <span class="keyword">if</span> ~exist(new,<span class="string">'dir'</span>)
+0046     mkdir(new);
+0047 <span class="keyword">end</span>
+0048 copyfile(source,new,<span class="string">'f'</span>);
+0049 
+0050 new=fullfile(new,[short ext]);
+0051 publish(new,<span class="string">'format'</span>,<span class="string">'html'</span>,<span class="string">'evalCode'</span>,false);           
+0052 target=fileparts(new);
+0053 target=fullfile(target,<span class="string">'html'</span>,[short <span class="string">'.html'</span>]);
+0054 web(target);
+0055 
+0056 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,883 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of EllipseFittingGUI</title>
+  <meta name="keywords" content="EllipseFittingGUI">
+  <meta name="description" content="ELLIPSEFITTINGGUI - Generates a GUI for user to update Ellipse parameters">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">PointVISAR</a> &gt; <a href="index.html">private</a> &gt; EllipseFittingGUI.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/PointVISAR/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>EllipseFittingGUI
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>ELLIPSEFITTINGGUI - Generates a GUI for user to update Ellipse parameters</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function func = EllipseFittingGUI(recordData) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> ELLIPSEFITTINGGUI - Generates a GUI for user to update Ellipse parameters
+                   - Takes in a Data Record and displays the current
+                     ellipse parameters and produces a smaller version of 
+                     quadrature plot from ReadEditRecordGUI. The user can
+                     then update the ellipse params or use two ellipse
+                     fitting routines. (The code for the ellipse fitting
+                     routines have not yet been provided.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="DirectEllipseFit.html" class="code" title="function [params1, params2] = DirectEllipseFit(x, y)">DirectEllipseFit</a>	DirectEllipseFit : direct ellipse fitting</li><li><a href="EllipsePlot.html" class="code" title="function varargout = EllipsePlot(params, mode, AxesHandle, numpoints)">EllipsePlot</a>	EllipsePlot : add an ellipse to an axes</li><li><a href="IterativeEllipseFit.html" class="code" title="function [params, fval, exitflag, output] = IterativeEllipseFit(x, y,guess, fixed, options)">IterativeEllipseFit</a>	EllipseFit : Fit an ellipse to (x,y) data</li><li><a href="MinimalFigure.html" class="code" title="function varargout=MinimalFigure(varargin)">MinimalFigure</a>	MinimalFigure: create a minimalistic figure useful for GUIs</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="ReadEditRecordGUI.html" class="code" title="function fig=ReadEditRecordGUI(record)">ReadEditRecordGUI</a>	read/edit records for PointVISARGUI</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function button_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub2" class="code">function textbox_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub3" class="code">function checkbox_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub4" class="code">function replotQuadrature(userData)</a></li><li><a href="#_sub5" class="code">function updateEllipseFittingGUI()</a></li><li><a href="#_sub6" class="code">function ExitEllipseGUI(obj, event, arg1)</a></li><li><a href="#_sub7" class="code">function doFigureKeyPress(obj, evd)</a></li><li><a href="#_sub8" class="code">function doControlKeyPress(obj, evd)</a></li><li><a href="#_sub9" class="code">function populatedData = populateFigureUserData(recordData)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function func = EllipseFittingGUI(recordData)</a>
+0002 <span class="comment">% ELLIPSEFITTINGGUI - Generates a GUI for user to update Ellipse parameters</span>
+0003 <span class="comment">%                   - Takes in a Data Record and displays the current</span>
+0004 <span class="comment">%                     ellipse parameters and produces a smaller version of</span>
+0005 <span class="comment">%                     quadrature plot from ReadEditRecordGUI. The user can</span>
+0006 <span class="comment">%                     then update the ellipse params or use two ellipse</span>
+0007 <span class="comment">%                     fitting routines. (The code for the ellipse fitting</span>
+0008 <span class="comment">%                     routines have not yet been provided.</span>
+0009 
+0010 MainFig = findall(0,<span class="string">'Type'</span>,<span class="string">'figure'</span>,<span class="string">'Tag'</span>,<span class="string">'PointVISAR'</span>);
+0011 MainPos = get(MainFig,<span class="string">'Position'</span>);
+0012 
+0013 theUserData = <a href="#_sub9" class="code" title="subfunction populatedData = populateFigureUserData(recordData)">populateFigureUserData</a>(recordData);
+0014 
+0015 <span class="comment">% Create the main figure</span>
+0016 <span class="comment">% h = figure('Tag', 'ellipseGUI', ...</span>
+0017 <span class="comment">%    'Units', 'pixels', ...</span>
+0018 <span class="comment">%    'Visible', 'off', ...</span>
+0019 <span class="comment">%    'Position', [632 315 540 410], ...</span>
+0020 <span class="comment">%    'MenuBar', 'none', ...</span>
+0021 <span class="comment">%    'ToolBar', 'none', ...</span>
+0022 <span class="comment">%    'NumberTitle', 'off', ...</span>
+0023 <span class="comment">%    'Name', 'Ellipse Fitting', ...</span>
+0024 <span class="comment">%    'Resize', 'off', ...</span>
+0025 <span class="comment">%    'UserData', theUserData, ...</span>
+0026 <span class="comment">%    'WindowStyle', 'normal');</span>
+0027 
+0028 h = <a href="MinimalFigure.html" class="code" title="function varargout=MinimalFigure(varargin)">MinimalFigure</a>(<span class="string">'Tag'</span>, <span class="string">'ellipseGUI'</span>, <span class="string">'NumberTitle'</span>, <span class="string">'off'</span>, <span class="keyword">...</span>
+0029     <span class="string">'Units'</span>, <span class="string">'pixels'</span>, <span class="string">'Position'</span>, [632 315 540 410], <span class="keyword">...</span>
+0030     <span class="string">'Name'</span>, <span class="string">'Ellipse Fitting'</span>, <span class="string">'Resize'</span>, <span class="string">'off'</span>, <span class="keyword">...</span>
+0031     <span class="string">'UserData'</span>, theUserData);
+0032 
+0033 movegui(h,<span class="string">'center'</span>);
+0034        
+0035 <span class="comment">% Create a panel that will span the entire figure</span>
+0036 mainEllipsePanel = uipanel(<span class="string">'Title'</span>, <span class="string">''</span>, <span class="keyword">...</span>
+0037                            <span class="string">'Units'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0038                            <span class="string">'Parent'</span>, h, <span class="keyword">...</span>
+0039                            <span class="string">'Tag'</span>, <span class="string">'ellipseGUIMainPanel'</span>, <span class="keyword">...</span>
+0040                            <span class="string">'Position'</span>, [0 0 540 410]);
+0041 
+0042 <span class="comment">% Create a sub-panel that will contain all labels, textfields, and</span>
+0043 <span class="comment">% checkboxes associated with the ellipse parameters</span>
+0044 ellipseParamPanel = uipanel(<span class="string">'Title'</span>, <span class="string">''</span>, <span class="keyword">...</span>
+0045                             <span class="string">'Units'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0046                             <span class="string">'Parent'</span>, mainEllipsePanel, <span class="keyword">...</span>
+0047                             <span class="string">'FontUnits'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0048                             <span class="string">'FontSize'</span>, 12, <span class="keyword">...</span>
+0049                             <span class="string">'Position'</span>, [10 150 195 204], <span class="keyword">...</span>
+0050                             <span class="string">'BorderType'</span>, <span class="string">'etchedin'</span>, <span class="keyword">...</span>
+0051                             <span class="string">'ForegroundColor'</span>, <span class="string">'white'</span>, <span class="keyword">...</span>
+0052                             <span class="string">'Tag'</span>, <span class="string">'ellipseGUIParamPanel'</span>);
+0053                         
+0054 <span class="comment">% Create a sub-panel that will contain the quadrature plot</span>
+0055 ellipseFigurePanel = uipanel(<span class="string">'Title'</span>, <span class="string">''</span>, <span class="keyword">...</span>
+0056                              <span class="string">'Units'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0057                              <span class="string">'Parent'</span>, mainEllipsePanel, <span class="keyword">...</span>
+0058                              <span class="string">'FontUnits'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0059                              <span class="string">'FontSize'</span>, 12, <span class="keyword">...</span>
+0060                              <span class="string">'Position'</span>, [220 50 300 300], <span class="keyword">...</span>
+0061                              <span class="string">'BorderType'</span>, <span class="string">'etchedin'</span>, <span class="keyword">...</span>
+0062                              <span class="string">'BackgroundColor'</span>, <span class="string">'white'</span>, <span class="keyword">...</span>
+0063                              <span class="string">'ForegroundColor'</span>, <span class="string">'black'</span>, <span class="keyword">...</span>
+0064                              <span class="string">'Tag'</span>, <span class="string">'ellipseGUIFigurePanel'</span>);
+0065 
+0066 <span class="comment">% Create a sub-panel will contain the push buttons for the ellipse fitting</span>
+0067 <span class="comment">% routines.</span>
+0068 ellipseFigureButtonPanel = uipanel(<span class="string">'Title'</span>, <span class="string">''</span>, <span class="keyword">...</span>
+0069                                    <span class="string">'Units'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0070                                    <span class="string">'FontUnits'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0071                                    <span class="string">'Parent'</span>, mainEllipsePanel, <span class="keyword">...</span>
+0072                                    <span class="string">'FontSize'</span>, 12, <span class="keyword">...</span>
+0073                                    <span class="string">'Position'</span>, [45 50 85 100], <span class="keyword">...</span>
+0074                                    <span class="string">'BorderType'</span>, <span class="string">'etchedin'</span>, <span class="keyword">...</span>
+0075                                    <span class="string">'ForegroundColor'</span>, <span class="string">'white'</span>, <span class="keyword">...</span>
+0076                                    <span class="string">'Tag'</span>, <span class="string">'ellipseGuiFigureButtonPanel'</span>);
+0077 
+0078 <span class="comment">% Create a sub-panel that will contain the push buttons to either apply the</span>
+0079 <span class="comment">% changes, or cancel out and return to the ReadEditRecordGUI</span>
+0080 ellipseGUIControlButtonPanel = uipanel(<span class="string">'Title'</span>, <span class="string">''</span>, <span class="keyword">...</span>
+0081                                        <span class="string">'Units'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0082                                        <span class="string">'Parent'</span>, mainEllipsePanel, <span class="keyword">...</span>
+0083                                        <span class="string">'FontUnits'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0084                                        <span class="string">'FontSize'</span>, 12, <span class="keyword">...</span>
+0085                                        <span class="string">'Position'</span>, [357 5 163 33], <span class="keyword">...</span>
+0086                                        <span class="string">'BorderType'</span>, <span class="string">'etchedin'</span>, <span class="keyword">...</span>
+0087                                        <span class="string">'ForegroundColor'</span>, <span class="string">'white'</span>, <span class="keyword">...</span>
+0088                                        <span class="string">'Tag'</span>, <span class="string">'ellipseGuiControlButtonPanel'</span>);
+0089 <span class="comment">% Create the &quot;OK&quot; button</span>
+0090 okButton = uicontrol(<span class="string">'Style'</span>, <span class="string">'pushbutton'</span>, <span class="keyword">...</span>
+0091                      <span class="string">'Parent'</span>, ellipseGUIControlButtonPanel, <span class="keyword">...</span>
+0092                      <span class="string">'Units'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0093                      <span class="string">'String'</span>, <span class="string">'OK'</span>, <span class="keyword">...</span>
+0094                      <span class="string">'UserData'</span>, <span class="string">'OK'</span>, <span class="keyword">...</span>
+0095                      <span class="string">'FontUnits'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0096                      <span class="string">'FontSize'</span>, 15, <span class="keyword">...</span>
+0097                      <span class="string">'HorizontalAlignment'</span>, <span class="string">'center'</span>, <span class="keyword">...</span>
+0098                      <span class="string">'Position'</span>, [5 5 75 25], <span class="keyword">...</span>
+0099                      <span class="string">'KeyPressFcn'</span>,@<a href="#_sub8" class="code" title="subfunction doControlKeyPress(obj, evd)">doControlKeyPress</a> , <span class="keyword">...</span>
+0100                      <span class="string">'Callback'</span>, {@<a href="#_sub6" class="code" title="subfunction ExitEllipseGUI(obj, event, arg1)">ExitEllipseGUI</a>, <span class="string">'OK'</span>}, <span class="keyword">...</span>
+0101                      <span class="string">'Tag'</span>, <span class="string">'ellipseGUIOkButon'</span>);
+0102                      
+0103 <span class="comment">% Create the &quot;Cancel&quot; button</span>
+0104 cancelButton = uicontrol(<span class="string">'Style'</span>, <span class="string">'pushbutton'</span>, <span class="keyword">...</span>
+0105                          <span class="string">'Parent'</span>, ellipseGUIControlButtonPanel, <span class="keyword">...</span>
+0106                          <span class="string">'Units'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0107                          <span class="string">'String'</span>, <span class="string">'Cancel'</span>, <span class="keyword">...</span>
+0108                          <span class="string">'UserData'</span>, <span class="string">'Cancel'</span>, <span class="keyword">...</span>
+0109                          <span class="string">'FontUnits'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0110                          <span class="string">'FontSize'</span>, 15, <span class="keyword">...</span>
+0111                          <span class="string">'HorizontalAlignment'</span>, <span class="string">'center'</span>, <span class="keyword">...</span>
+0112                          <span class="string">'Position'</span>, [85 5 75 25], <span class="keyword">...</span>
+0113                          <span class="string">'KeyPressFcn'</span>,@<a href="#_sub8" class="code" title="subfunction doControlKeyPress(obj, evd)">doControlKeyPress</a> , <span class="keyword">...</span>
+0114                          <span class="string">'Callback'</span>, {@<a href="#_sub6" class="code" title="subfunction ExitEllipseGUI(obj, event, arg1)">ExitEllipseGUI</a>, <span class="string">'Cancel'</span>}, <span class="keyword">...</span>
+0115                          <span class="string">'Tag'</span>, <span class="string">'ellipseGUICancelButon'</span>);
+0116 
+0117 <span class="comment">% Create the &quot;Optimize&quot; button</span>
+0118 optimizeButton = uicontrol(<span class="string">'Style'</span>, <span class="string">'pushbutton'</span>, <span class="keyword">...</span>
+0119                            <span class="string">'Parent'</span>, ellipseFigureButtonPanel, <span class="keyword">...</span>
+0120                            <span class="string">'Units'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0121                            <span class="string">'String'</span>, <span class="string">'Optimize'</span>, <span class="keyword">...</span>
+0122                            <span class="string">'Callback'</span>, @<a href="#_sub1" class="code" title="subfunction button_Callback(hObject, eventdata, handles)">button_Callback</a>, <span class="keyword">...</span>
+0123                            <span class="string">'FontUnits'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0124                            <span class="string">'FontSize'</span>, 15, <span class="keyword">...</span>
+0125                            <span class="string">'HorizontalAlignment'</span>, <span class="string">'center'</span>, <span class="keyword">...</span>
+0126                            <span class="string">'Position'</span>, [5 5 75 25], <span class="keyword">...</span>
+0127                            <span class="string">'Tag'</span>, <span class="string">'ellipseGUIOptimizeButton'</span>);
+0128 
+0129 <span class="comment">% Create the &quot;Guess&quot; button</span>
+0130 guessButton = uicontrol(<span class="string">'Style'</span>, <span class="string">'pushbutton'</span>, <span class="keyword">...</span>
+0131                         <span class="string">'Parent'</span>, ellipseFigureButtonPanel, <span class="keyword">...</span>
+0132                         <span class="string">'Units'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0133                         <span class="string">'String'</span>, <span class="string">'Guess'</span>, <span class="keyword">...</span>
+0134                         <span class="string">'Callback'</span>, @<a href="#_sub1" class="code" title="subfunction button_Callback(hObject, eventdata, handles)">button_Callback</a>, <span class="keyword">...</span>
+0135                         <span class="string">'FontUnits'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0136                         <span class="string">'FontSize'</span>, 15, <span class="keyword">...</span>
+0137                         <span class="string">'HorizontalAlignment'</span>, <span class="string">'center'</span>, <span class="keyword">...</span>
+0138                         <span class="string">'Position'</span>, [5 65 75 25], <span class="keyword">...</span>
+0139                         <span class="string">'Tag'</span>, <span class="string">'ellipseGUIGuessButton'</span>);
+0140                     
+0141 <span class="comment">% Create the &quot;Center&quot; button</span>
+0142 centerButton = uicontrol(<span class="keyword">...</span><span class="comment">.</span>
+0143     <span class="string">'Style'</span>, <span class="string">'pushbutton'</span>, <span class="keyword">...</span>
+0144     <span class="string">'Enable'</span>,<span class="string">'on'</span>,<span class="keyword">...</span>
+0145     <span class="string">'Parent'</span>, ellipseFigureButtonPanel, <span class="keyword">...</span>
+0146     <span class="string">'Units'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0147     <span class="string">'String'</span>, <span class="string">'Center'</span>, <span class="keyword">...</span>
+0148     <span class="string">'Callback'</span>, @<a href="#_sub1" class="code" title="subfunction button_Callback(hObject, eventdata, handles)">button_Callback</a>, <span class="keyword">...</span>
+0149     <span class="string">'FontUnits'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0150     <span class="string">'FontSize'</span>, 15, <span class="keyword">...</span>
+0151     <span class="string">'HorizontalAlignment'</span>, <span class="string">'center'</span>, <span class="keyword">...</span>
+0152     <span class="string">'Position'</span>, [5 35 75 25], <span class="keyword">...</span>
+0153     <span class="string">'Tag'</span>, <span class="string">'ellipseGUICenterButton'</span>);
+0154 
+0155 <span class="comment">% Create a sub-panel for the EllipseParam panel, that contains the label,</span>
+0156 <span class="comment">% textfield, and checkbox for the x0 parameter</span>
+0157 x0Panel = uipanel(<span class="string">'Parent'</span>, ellipseParamPanel, <span class="keyword">...</span>
+0158                   <span class="string">'Title'</span>, <span class="string">''</span>, <span class="keyword">...</span>
+0159                   <span class="string">'Units'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0160                   <span class="string">'FontUnits'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0161                   <span class="string">'FontSize'</span>, 12, <span class="keyword">...</span>
+0162                   <span class="string">'Position'</span>, [5 166 185 33], <span class="keyword">...</span>
+0163                   <span class="string">'Units'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0164                   <span class="string">'BorderType'</span>, <span class="string">'etchedin'</span>, <span class="keyword">...</span>
+0165                   <span class="string">'Tag'</span>, <span class="string">'ellipseGUIX0Panel'</span>);
+0166               
+0167 <span class="comment">% Create a sub-panel for the EllipseParam panel, that contains the label,</span>
+0168 <span class="comment">% textfield, and checkbox for the y0 parameter</span>
+0169 y0Panel = uipanel(<span class="string">'Parent'</span>, ellipseParamPanel, <span class="keyword">...</span>
+0170                   <span class="string">'Title'</span>, <span class="string">''</span>, <span class="keyword">...</span>
+0171                   <span class="string">'Units'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0172                   <span class="string">'FontUnits'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0173                   <span class="string">'FontSize'</span>, 12, <span class="keyword">...</span>
+0174                   <span class="string">'Position'</span>, [5 126 185 33], <span class="keyword">...</span>
+0175                   <span class="string">'Units'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0176                   <span class="string">'BorderType'</span>, <span class="string">'etchedin'</span>, <span class="keyword">...</span>
+0177                   <span class="string">'Tag'</span>, <span class="string">'ellipseGUIY0Panel'</span>);
+0178 
+0179 <span class="comment">% Create a sub-panel for the EllipseParam panel, that contains the label,</span>
+0180 <span class="comment">% textfield, and checkbox for the Lx parameter</span>
+0181 LxPanel = uipanel(<span class="string">'Parent'</span>, ellipseParamPanel, <span class="keyword">...</span>
+0182                   <span class="string">'Title'</span>, <span class="string">''</span>, <span class="keyword">...</span>
+0183                   <span class="string">'Units'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0184                   <span class="string">'FontUnits'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0185                   <span class="string">'FontSize'</span>, 12, <span class="keyword">...</span>
+0186                   <span class="string">'Position'</span>, [5 86 185 33], <span class="keyword">...</span>
+0187                   <span class="string">'Units'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0188                   <span class="string">'BorderType'</span>, <span class="string">'etchedin'</span>, <span class="keyword">...</span>
+0189                   <span class="string">'Tag'</span>, <span class="string">'ellipseGUILxPanel'</span>);
+0190 
+0191 <span class="comment">% Create a sub-panel for the EllipseParam panel, that contains the label,</span>
+0192 <span class="comment">% textfield, and checkbox for the Ly parameter</span>
+0193 LyPanel = uipanel(<span class="string">'Parent'</span>, ellipseParamPanel, <span class="keyword">...</span>
+0194                   <span class="string">'Title'</span>, <span class="string">''</span>, <span class="keyword">...</span>
+0195                   <span class="string">'Units'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0196                   <span class="string">'FontUnits'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0197                   <span class="string">'FontSize'</span>, 12, <span class="keyword">...</span>
+0198                   <span class="string">'Position'</span>, [5 46 185 33], <span class="keyword">...</span>
+0199                   <span class="string">'Units'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0200                   <span class="string">'BorderType'</span>, <span class="string">'etchedin'</span>, <span class="keyword">...</span>
+0201                   <span class="string">'Tag'</span>, <span class="string">'ellipseGUILyPanel'</span>);
+0202 
+0203 <span class="comment">% Create a sub-panel for the EllipseParam panel, that contains the label,</span>
+0204 <span class="comment">% textfield, and checkbox for the Phi parameter</span>
+0205 phiPanel = uipanel(<span class="string">'Parent'</span>, ellipseParamPanel, <span class="keyword">...</span>
+0206                   <span class="string">'Title'</span>, <span class="string">''</span>, <span class="keyword">...</span>
+0207                   <span class="string">'Units'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0208                   <span class="string">'FontUnits'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0209                   <span class="string">'FontSize'</span>, 12, <span class="keyword">...</span>
+0210                   <span class="string">'Position'</span>, [5 6 185 33], <span class="keyword">...</span>
+0211                   <span class="string">'Units'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0212                   <span class="string">'BorderType'</span>, <span class="string">'etchedin'</span>, <span class="keyword">...</span>
+0213                   <span class="string">'Tag'</span>, <span class="string">'ellipseGUIPhiPanel'</span>);
+0214 
+0215 <span class="comment">% Create the &quot;X0&quot; label</span>
+0216 x0Label = uicontrol(<span class="string">'Style'</span>, <span class="string">'text'</span>, <span class="keyword">...</span>
+0217                     <span class="string">'Units'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0218                     <span class="string">'Parent'</span>, x0Panel, <span class="keyword">...</span>
+0219                     <span class="string">'String'</span>, <span class="string">'X0'</span>, <span class="keyword">...</span>
+0220                     <span class="string">'FontUnits'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0221                     <span class="string">'FontSize'</span>, 15, <span class="keyword">...</span>
+0222                     <span class="string">'HorizontalAlignment'</span>, <span class="string">'center'</span>, <span class="keyword">...</span>
+0223                     <span class="string">'Position'</span>, [5 5 50 25], <span class="keyword">...</span>
+0224                     <span class="string">'Tag'</span>, <span class="string">'ellipseGUIX0Label'</span>);
+0225                     
+0226 <span class="comment">% Create the &quot;Y0&quot; label</span>
+0227 y0Label = uicontrol(<span class="string">'Style'</span>, <span class="string">'text'</span>, <span class="keyword">...</span>
+0228                     <span class="string">'Units'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0229                     <span class="string">'Parent'</span>, y0Panel, <span class="keyword">...</span>
+0230                     <span class="string">'String'</span>, <span class="string">'Y0'</span>, <span class="keyword">...</span>
+0231                     <span class="string">'FontUnits'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0232                     <span class="string">'FontSize'</span>, 15, <span class="keyword">...</span>
+0233                     <span class="string">'HorizontalAlignment'</span>, <span class="string">'center'</span>, <span class="keyword">...</span>
+0234                     <span class="string">'Position'</span>, [5 5 50 25], <span class="keyword">...</span>
+0235                     <span class="string">'Tag'</span>, <span class="string">'ellipseGUIY0Label'</span>);
+0236                     
+0237 <span class="comment">% Create the &quot;Lx&quot; label</span>
+0238 LxLabel = uicontrol(<span class="string">'Style'</span>, <span class="string">'text'</span>, <span class="keyword">...</span>
+0239                     <span class="string">'Units'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0240                     <span class="string">'Parent'</span>, LxPanel, <span class="keyword">...</span>
+0241                     <span class="string">'String'</span>, <span class="string">'Lx'</span>, <span class="keyword">...</span>
+0242                     <span class="string">'FontUnits'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0243                     <span class="string">'FontSize'</span>, 15, <span class="keyword">...</span>
+0244                     <span class="string">'HorizontalAlignment'</span>, <span class="string">'center'</span>, <span class="keyword">...</span>
+0245                     <span class="string">'Position'</span>, [5 5 50 25], <span class="keyword">...</span>
+0246                     <span class="string">'Tag'</span>, <span class="string">'ellipseGUILxLabel'</span>);
+0247                    
+0248 <span class="comment">% Create the &quot;Ly&quot; label</span>
+0249 LyLabel = uicontrol(<span class="string">'Style'</span>, <span class="string">'text'</span>, <span class="keyword">...</span>
+0250                     <span class="string">'Units'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0251                     <span class="string">'Parent'</span>, LyPanel, <span class="keyword">...</span>
+0252                     <span class="string">'String'</span>, <span class="string">'Ly'</span>, <span class="keyword">...</span>
+0253                     <span class="string">'FontUnits'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0254                     <span class="string">'FontSize'</span>, 15, <span class="keyword">...</span>
+0255                     <span class="string">'HorizontalAlignment'</span>, <span class="string">'center'</span>, <span class="keyword">...</span>
+0256                     <span class="string">'Position'</span>, [5 5 50 25], <span class="keyword">...</span>
+0257                     <span class="string">'Tag'</span>, <span class="string">'ellipseGUILyLabel'</span>);
+0258                     
+0259 <span class="comment">% Create the &quot;Phi&quot; label</span>
+0260 
+0261 phiLabel = uicontrol(<span class="string">'Style'</span>, <span class="string">'text'</span>, <span class="keyword">...</span>
+0262                     <span class="string">'Units'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0263                     <span class="string">'Parent'</span>, phiPanel, <span class="keyword">...</span>
+0264                     <span class="string">'String'</span>, <span class="string">'Epsilon'</span>, <span class="keyword">...</span>
+0265                     <span class="string">'FontUnits'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0266                     <span class="string">'FontSize'</span>, 15, <span class="keyword">...</span>
+0267                     <span class="string">'HorizontalAlignment'</span>, <span class="string">'center'</span>, <span class="keyword">...</span>
+0268                     <span class="string">'Position'</span>, [5 5 50 25], <span class="keyword">...</span>
+0269                     <span class="string">'Tag'</span>, <span class="string">'ellipseGUIPhiLabel'</span>);
+0270                     
+0271 <span class="comment">% Create the x0 textfield</span>
+0272 x0TextField = uicontrol(<span class="string">'Style'</span>, <span class="string">'edit'</span>, <span class="keyword">...</span>
+0273                         <span class="string">'Units'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0274                         <span class="string">'Parent'</span>, x0Panel, <span class="keyword">...</span>
+0275                         <span class="string">'String'</span>, <span class="string">''</span>, <span class="keyword">...</span>
+0276                         <span class="string">'FontUnits'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0277                         <span class="string">'FontSize'</span>, 15, <span class="keyword">...</span>
+0278                         <span class="string">'HorizontalAlignment'</span>, <span class="string">'left'</span>, <span class="keyword">...</span>
+0279                         <span class="string">'Position'</span>, [60 5 70 25], <span class="keyword">...</span>
+0280                         <span class="string">'Callback'</span>, @<a href="#_sub2" class="code" title="subfunction textbox_Callback(hObject, eventdata, handles)">textbox_Callback</a>, <span class="keyword">...</span>
+0281                         <span class="string">'BackgroundColor'</span>, [1 1 1], <span class="keyword">...</span>
+0282                         <span class="string">'Tag'</span>, <span class="string">'ellipseGUIx0TextField'</span>);
+0283                         
+0284 <span class="comment">% Create the y0 textfield</span>
+0285 y0TextField = uicontrol(<span class="string">'Style'</span>, <span class="string">'edit'</span>, <span class="keyword">...</span>
+0286                         <span class="string">'Units'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0287                         <span class="string">'Parent'</span>, y0Panel, <span class="keyword">...</span>
+0288                         <span class="string">'String'</span>, <span class="string">''</span>, <span class="keyword">...</span>
+0289                         <span class="string">'FontUnits'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0290                         <span class="string">'FontSize'</span>, 15, <span class="keyword">...</span>
+0291                         <span class="string">'HorizontalAlignment'</span>, <span class="string">'left'</span>, <span class="keyword">...</span>
+0292                         <span class="string">'Position'</span>, [60 5 70 25], <span class="keyword">...</span>
+0293                         <span class="string">'Callback'</span>, @<a href="#_sub2" class="code" title="subfunction textbox_Callback(hObject, eventdata, handles)">textbox_Callback</a>, <span class="keyword">...</span>
+0294                         <span class="string">'Tag'</span>, <span class="string">'ellipseGUIy0TextField'</span>, <span class="keyword">...</span>
+0295                         <span class="string">'BackgroundColor'</span>, [1 1 1]);
+0296                         
+0297 <span class="comment">% Create the Lx textfield</span>
+0298 LxTextField = uicontrol(<span class="string">'Style'</span>, <span class="string">'edit'</span>, <span class="keyword">...</span>
+0299                         <span class="string">'Units'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0300                         <span class="string">'Parent'</span>, LxPanel, <span class="keyword">...</span>
+0301                         <span class="string">'String'</span>, <span class="string">''</span>, <span class="keyword">...</span>
+0302                         <span class="string">'FontUnits'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0303                         <span class="string">'FontSize'</span>, 15, <span class="keyword">...</span>
+0304                         <span class="string">'HorizontalAlignment'</span>, <span class="string">'left'</span>, <span class="keyword">...</span>
+0305                         <span class="string">'Position'</span>, [60 5 70 25], <span class="keyword">...</span>
+0306                         <span class="string">'Callback'</span>, @<a href="#_sub2" class="code" title="subfunction textbox_Callback(hObject, eventdata, handles)">textbox_Callback</a>, <span class="keyword">...</span>
+0307                         <span class="string">'Tag'</span>, <span class="string">'ellipseGUILxTextField'</span>, <span class="keyword">...</span>
+0308                         <span class="string">'BackgroundColor'</span>, [1 1 1]);
+0309                         
+0310 <span class="comment">% Create the Ly textfield</span>
+0311 LyTextField = uicontrol(<span class="string">'Style'</span>, <span class="string">'edit'</span>, <span class="keyword">...</span>
+0312                         <span class="string">'Units'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0313                         <span class="string">'Parent'</span>, LyPanel, <span class="keyword">...</span>
+0314                         <span class="string">'String'</span>, <span class="string">''</span>, <span class="keyword">...</span>
+0315                         <span class="string">'FontUnits'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0316                         <span class="string">'FontSize'</span>, 15, <span class="keyword">...</span>
+0317                         <span class="string">'HorizontalAlignment'</span>, <span class="string">'left'</span>, <span class="keyword">...</span>
+0318                         <span class="string">'Position'</span>, [60 5 70 25], <span class="keyword">...</span>
+0319                         <span class="string">'Callback'</span>, @<a href="#_sub2" class="code" title="subfunction textbox_Callback(hObject, eventdata, handles)">textbox_Callback</a>, <span class="keyword">...</span>
+0320                         <span class="string">'Tag'</span>, <span class="string">'ellipseGUILyTextField'</span>, <span class="keyword">...</span>
+0321                         <span class="string">'BackgroundColor'</span>, [1 1 1]);
+0322                         
+0323 <span class="comment">% Create the Phi textfield</span>
+0324 phiTextField = uicontrol(<span class="string">'Style'</span>, <span class="string">'edit'</span>, <span class="keyword">...</span>
+0325                         <span class="string">'Units'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0326                         <span class="string">'Parent'</span>, phiPanel, <span class="keyword">...</span>
+0327                         <span class="string">'String'</span>, <span class="string">''</span>, <span class="keyword">...</span>
+0328                         <span class="string">'FontUnits'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0329                         <span class="string">'FontSize'</span>, 15, <span class="keyword">...</span>
+0330                         <span class="string">'HorizontalAlignment'</span>, <span class="string">'left'</span>, <span class="keyword">...</span>
+0331                         <span class="string">'Position'</span>, [60 5 70 25], <span class="keyword">...</span>
+0332                         <span class="string">'Callback'</span>, @<a href="#_sub2" class="code" title="subfunction textbox_Callback(hObject, eventdata, handles)">textbox_Callback</a>, <span class="keyword">...</span>
+0333                         <span class="string">'Tag'</span>, <span class="string">'ellipseGUIphiTextField'</span>, <span class="keyword">...</span>
+0334                         <span class="string">'BackgroundColor'</span>, [1 1 1]);
+0335                         
+0336 <span class="comment">% Create the x0 checkbox</span>
+0337 x0Checkbox = uicontrol(<span class="string">'Style'</span>, <span class="string">'checkbox'</span>, <span class="keyword">...</span>
+0338                        <span class="string">'Units'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0339                        <span class="string">'Parent'</span>, x0Panel, <span class="keyword">...</span>
+0340                        <span class="string">'Callback'</span>, @<a href="#_sub3" class="code" title="subfunction checkbox_Callback(hObject, eventdata, handles)">checkbox_Callback</a>, <span class="keyword">...</span>
+0341                        <span class="string">'String'</span>, <span class="string">'Fix'</span>, <span class="keyword">...</span>
+0342                        <span class="string">'HorizontalAlignment'</span>, <span class="string">'center'</span>, <span class="keyword">...</span>
+0343                        <span class="string">'FontUnits'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0344                        <span class="string">'FontSize'</span>, 15, <span class="keyword">...</span>
+0345                        <span class="string">'Tag'</span>, <span class="string">'ellipseGUIx0Checkbox'</span>, <span class="keyword">...</span>
+0346                        <span class="string">'Position'</span>, [135 5 45 25]);
+0347                    
+0348 <span class="comment">% Create the y0 checkbox</span>
+0349 y0Checkbox = uicontrol(<span class="string">'Style'</span>, <span class="string">'checkbox'</span>, <span class="keyword">...</span>
+0350                        <span class="string">'Units'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0351                        <span class="string">'Parent'</span>, y0Panel, <span class="keyword">...</span>
+0352                        <span class="string">'Callback'</span>, @<a href="#_sub3" class="code" title="subfunction checkbox_Callback(hObject, eventdata, handles)">checkbox_Callback</a>, <span class="keyword">...</span>
+0353                        <span class="string">'String'</span>, <span class="string">'Fix'</span>, <span class="keyword">...</span>
+0354                        <span class="string">'HorizontalAlignment'</span>, <span class="string">'center'</span>, <span class="keyword">...</span>
+0355                        <span class="string">'FontUnits'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0356                        <span class="string">'FontSize'</span>, 15, <span class="keyword">...</span>
+0357                        <span class="string">'Tag'</span>, <span class="string">'ellipseGUIy0Checkbox'</span>, <span class="keyword">...</span>
+0358                        <span class="string">'Position'</span>, [135 5 45 25]);
+0359                        
+0360 <span class="comment">% Create the Lx checkbox</span>
+0361 LxCheckbox = uicontrol(<span class="string">'Style'</span>, <span class="string">'checkbox'</span>, <span class="keyword">...</span>
+0362                        <span class="string">'Units'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0363                        <span class="string">'Parent'</span>, LxPanel, <span class="keyword">...</span>
+0364                        <span class="string">'Callback'</span>, @<a href="#_sub3" class="code" title="subfunction checkbox_Callback(hObject, eventdata, handles)">checkbox_Callback</a>, <span class="keyword">...</span>
+0365                        <span class="string">'String'</span>, <span class="string">'Fix'</span>, <span class="keyword">...</span>
+0366                        <span class="string">'HorizontalAlignment'</span>, <span class="string">'center'</span>, <span class="keyword">...</span>
+0367                        <span class="string">'FontUnits'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0368                        <span class="string">'FontSize'</span>, 15, <span class="keyword">...</span>
+0369                        <span class="string">'Tag'</span>, <span class="string">'ellipseGUILxCheckbox'</span>, <span class="keyword">...</span>
+0370                        <span class="string">'Position'</span>, [135 5 45 25]);
+0371                        
+0372 <span class="comment">% Create the Ly checkbox</span>
+0373 LyCheckbox = uicontrol(<span class="string">'Style'</span>, <span class="string">'checkbox'</span>, <span class="keyword">...</span>
+0374                        <span class="string">'Units'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0375                        <span class="string">'Parent'</span>, LyPanel, <span class="keyword">...</span>
+0376                        <span class="string">'Callback'</span>, @<a href="#_sub3" class="code" title="subfunction checkbox_Callback(hObject, eventdata, handles)">checkbox_Callback</a>, <span class="keyword">...</span>
+0377                        <span class="string">'String'</span>, <span class="string">'Fix'</span>, <span class="keyword">...</span>
+0378                        <span class="string">'HorizontalAlignment'</span>, <span class="string">'center'</span>, <span class="keyword">...</span>
+0379                        <span class="string">'FontUnits'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0380                        <span class="string">'FontSize'</span>, 15, <span class="keyword">...</span>
+0381                        <span class="string">'Tag'</span>, <span class="string">'ellipseGUILyCheckbox'</span>, <span class="keyword">...</span>
+0382                        <span class="string">'Position'</span>, [135 5 45 25]);
+0383                        
+0384 <span class="comment">% Create the Phi checkbox</span>
+0385 phiCheckbox = uicontrol(<span class="string">'Style'</span>, <span class="string">'checkbox'</span>, <span class="keyword">...</span>
+0386                        <span class="string">'Units'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0387                        <span class="string">'Parent'</span>, phiPanel, <span class="keyword">...</span>
+0388                        <span class="string">'Callback'</span>, @<a href="#_sub3" class="code" title="subfunction checkbox_Callback(hObject, eventdata, handles)">checkbox_Callback</a>, <span class="keyword">...</span>
+0389                        <span class="string">'String'</span>, <span class="string">'Fix'</span>, <span class="keyword">...</span>
+0390                        <span class="string">'HorizontalAlignment'</span>, <span class="string">'center'</span>, <span class="keyword">...</span>
+0391                        <span class="string">'FontUnits'</span>, <span class="string">'pixels'</span>, <span class="keyword">...</span>
+0392                        <span class="string">'FontSize'</span>, 15, <span class="keyword">...</span>
+0393                        <span class="string">'Tag'</span>, <span class="string">'ellipseGUIphiCheckbox'</span>, <span class="keyword">...</span>
+0394                        <span class="string">'Position'</span>, [135 5 45 25]);
+0395                    
+0396 <span class="comment">% Fill in ellipse values</span>
+0397 <span class="comment">% hData = get(h, 'UserData');</span>
+0398 
+0399 <span class="comment">% Display the GUI</span>
+0400 set(h,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0401 
+0402 <span class="comment">% ellipseParams = theUserData{1,3};</span>
+0403 
+0404 <span class="comment">% set(x0TextField, 'String', ellipseParams(1));</span>
+0405 <span class="comment">% set(y0TextField, 'String', ellipseParams(2));</span>
+0406 <span class="comment">% set(LxTextField, 'String', ellipseParams(3));</span>
+0407 <span class="comment">% set(LyTextField, 'String', ellipseParams(4));</span>
+0408 <span class="comment">% set(phiTextField, 'String', ellipseParams(5));</span>
+0409 
+0410 <span class="comment">% Create the axes for the quadrature plot</span>
+0411 axisHandle = axes(<span class="string">'Parent'</span>, ellipseFigurePanel, <span class="string">'Tag'</span>, <span class="keyword">...</span>
+0412     <span class="string">'ellipseFittingQuadraturePlot'</span>, <span class="string">'DataAspectRatioMode'</span>, <span class="string">'manual'</span>, <span class="keyword">...</span>
+0413     <span class="string">'DataAspectRatio'</span>,[1 1 1], <span class="string">'PlotBoxAspectRatioMode'</span>, <span class="string">'manual'</span>, <span class="keyword">...</span>
+0414     <span class="string">'PlotBoxAspectRatio'</span>,[1 1 1]);
+0415 <span class="comment">% axisHandle = axes('Parent', ellipseFigurePanel, 'Tag', 'ellipseFittingQuadraturePlot');</span>
+0416 xlabel(<span class="string">'D1'</span>);
+0417 ylabel(<span class="string">'D2'</span>);
+0418 title(<span class="string">'Quadrature Plot'</span>,<span class="string">'FontWeight'</span>,<span class="string">'bold'</span>);
+0419 <span class="comment">% axis equal</span>
+0420 grid on
+0421 
+0422 <span class="comment">% Create the quadrature line for the plot</span>
+0423 line(0,0,<span class="string">'Color'</span>,[0 0 1],<span class="keyword">...</span>
+0424     <span class="string">'Tag'</span>,<span class="string">'ellipseFittingQuadratureLine'</span>,<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+0425 <span class="comment">% ellipseFittingQuadratureLine = findobj(gcf, 'Tag', 'ellipseFittingQuadratureLine');</span>
+0426 <span class="comment">% set(ellipseFittingQuadratureLine, 'XData', theUserData{1,5}, 'YData', ...</span>
+0427 <span class="comment">%    theUserData{1,6});</span>
+0428 <span class="comment">% set(ellipseFittingQuadratureLine, 'Visible', 'on');</span>
+0429 
+0430 <span class="comment">% EllipsePlot(ellipseParams, 'overwrite', axisHandle);</span>
+0431 
+0432 <span class="comment">% axis equal</span>
+0433 axis tight
+0434 
+0435 <span class="comment">% movegui(h, 'center');</span>
+0436 drawnow;
+0437 <a href="#_sub5" class="code" title="subfunction updateEllipseFittingGUI()">updateEllipseFittingGUI</a>
+0438     
+0439 <span class="comment">% This dialog needs to block until the user has clicked OK or Cancel</span>
+0440  uiwait(h);
+0441     
+0442 <span class="comment">% check if user clicked OK or Cancel</span>
+0443 <span class="keyword">if</span> ishandle(h)
+0444     userData = get(h, <span class="string">'UserData'</span>);
+0445     closeAction = userData{1,4};
+0446     <span class="keyword">if</span> strcmp(closeAction, <span class="string">'OK'</span>)
+0447         <span class="comment">% Do something here</span>
+0448         userData{1,1}.Ellipse = userData{1,3};
+0449         userData{1,1}.EllipseFixed = userData{1,2};
+0450         userData{1,1}.EllipseFit = <span class="string">'true'</span>;
+0451         func = userData{1,1};
+0452     <span class="keyword">elseif</span> strcmp(closeAction, <span class="string">'Cancel'</span>)
+0453         func = recordData;
+0454     <span class="keyword">end</span>
+0455     delete(h);
+0456 <span class="keyword">end</span>                       
+0457 
+0458 <a name="_sub1" href="#_subfunctions" class="code">function button_Callback(hObject, eventdata, handles)</a>
+0459 <span class="comment">% BUTTON_CALLBACK   Callback executed when a user clicks on one of buttons.</span>
+0460 
+0461 buttonTag = get(hObject, <span class="string">'Tag'</span>);    <span class="comment">% Get the tag for the button</span>
+0462 
+0463 theFig = findobj(<span class="string">'Tag'</span>, <span class="string">'ellipseGUI'</span>);
+0464 figData = get(theFig, <span class="string">'UserData'</span>);
+0465 ellipseParams = figData{1,3};
+0466 fixedParams = figData{1,2};
+0467 ellipseD1 = figData{1,5};
+0468 ellipseD2 = figData{1,6};
+0469 
+0470 <span class="comment">% Based on which button was clicked, call the approriate function</span>
+0471 <span class="keyword">switch</span> buttonTag
+0472     <span class="keyword">case</span> <span class="string">'ellipseGUICenterButton'</span>
+0473         <span class="comment">% Need to enable zooming on the axis to fully implement</span>
+0474         <span class="comment">% the functionality of the center button</span>
+0475         theXLim = get(gca, <span class="string">'XLim'</span>);
+0476         theYLim = get(gca, <span class="string">'YLim'</span>);
+0477         
+0478         <span class="comment">% Average all values in D1 within the bounds of the limits</span>
+0479         ii=(ellipseD1&gt;theXLim(1)) &amp; (ellipseD1&lt;theXLim(2));
+0480         newX0=mean(ellipseD1(ii));
+0481         <span class="comment">%runningSum = 0;</span>
+0482         <span class="comment">%numOfIndicies = 0;</span>
+0483         <span class="comment">%for ii=1:numel(ellipseD1)</span>
+0484         <span class="comment">%    if ellipseD1(ii) &gt; theXLim(1) &amp; ellipseD1(ii) &lt; theXLim(2)</span>
+0485         <span class="comment">%        runningSum = runningSum + ellipseD1(ii);</span>
+0486         <span class="comment">%        numOfIndicies = numOfIndicies + 1;</span>
+0487         <span class="comment">%    end</span>
+0488         <span class="comment">%end</span>
+0489         <span class="comment">%newX0 = runningSum / numOfIndicies;</span>
+0490         
+0491         <span class="comment">% Average all values in D2 within the bounds of the limits</span>
+0492         ii=(ellipseD2&gt;theYLim(1)) &amp; (ellipseD2&lt;theYLim(2));
+0493         newY0=mean(ellipseD2(ii));
+0494         <span class="comment">%runningSum = 0;</span>
+0495         <span class="comment">%numOfIndicies = 0;</span>
+0496         <span class="comment">%for ii=1:numel(ellipseD2)</span>
+0497         <span class="comment">%    if ellipseD2(ii) &gt; theYLim(1) &amp; ellipseD2(ii) &lt; theYLim(2)</span>
+0498         <span class="comment">%        runningSum = runningSum + ellipseD2(ii);</span>
+0499         <span class="comment">%        numOfIndicies = numOfIndicies + 1;</span>
+0500         <span class="comment">%    end</span>
+0501         <span class="comment">%end</span>
+0502         <span class="comment">%newY0 = runningSum / numOfIndicies;</span>
+0503         
+0504         <span class="comment">% Check if X0 and Y0 check boxes are currently selected</span>
+0505         <span class="keyword">if</span> fixedParams(1) == 1 | fixedParams(2) == 1
+0506            
+0507             <span class="comment">% Warn the user that to center, X0 and Y0 cannot be fixed</span>
+0508             prompt{1} = <span class="string">'To use center, X0 and Y0 cannot be fixed. Clear fixed and continue?'</span>;
+0509             answer = questdlg(prompt, <span class="string">'Clear Fixed X0 and Y0 Parameters'</span>);
+0510             
+0511             <span class="comment">% If they select Ok</span>
+0512             <span class="keyword">if</span> strcmp(lower(answer),<span class="string">'yes'</span>)
+0513                 <span class="comment">% Clear the fixed parameters, update the FigureData</span>
+0514                 fixedParams(1) = 0;
+0515                 fixedParams(2) = 0;
+0516                 
+0517                 <span class="comment">% Set the new X0 and Y0</span>
+0518                 ellipseParams(1) = newX0;
+0519                 ellipseParams(2) = newY0;
+0520                 
+0521                 <span class="comment">% Update the userdata</span>
+0522                 figData{1,2} = fixedParams;
+0523                 figData{1,3} = ellipseParams;
+0524                 set(theFig, <span class="string">'UserData'</span>, figData);
+0525             <span class="keyword">end</span>
+0526         <span class="keyword">else</span>
+0527             ellipseParams(1) = newX0;
+0528             ellipseParams(2) = newY0;
+0529             
+0530             <span class="comment">% Update the userdata</span>
+0531             figData{1,3} = ellipseParams;
+0532             set(theFig, <span class="string">'UserData'</span>, figData);
+0533         <span class="keyword">end</span>
+0534         
+0535     <span class="keyword">case</span> <span class="string">'ellipseGUIGuessButton'</span>
+0536         <span class="comment">% Check if any of the fixed radio buttons are currently selected</span>
+0537         <span class="keyword">if</span> sum(fixedParams) ~= 0
+0538             <span class="comment">% One or mored of the fix radio buttons are selected</span>
+0539             
+0540             <span class="comment">% Warn the user that to Guess fix params will be unfixed</span>
+0541             prompt{1} = <span class="string">'To guess all fixed parameters will be cleared?'</span>;
+0542             answer = questdlg(prompt,<span class="string">'Clear Fixed Parameters'</span>);
+0543             
+0544             <span class="comment">% If they select OK</span>
+0545             <span class="keyword">if</span> strcmp(lower(answer),<span class="string">'yes'</span>)
+0546                 <span class="comment">% Clear the fixed parameters, update the FigureData</span>
+0547                 fixedParams = zeros(1,5);
+0548                 figData{1,2} = fixedParams;
+0549                 
+0550                 <span class="comment">% Call the ellipse fitting routine to get ellipse parameters</span>
+0551                 newEllipseParams = <a href="DirectEllipseFit.html" class="code" title="function [params1, params2] = DirectEllipseFit(x, y)">DirectEllipseFit</a>(ellipseD1, ellipseD2);
+0552                 
+0553                 <span class="comment">% Set the new parameters</span>
+0554                 figData{1,3} = newEllipseParams;
+0555                 set(theFig, <span class="string">'UserData'</span>, figData);
+0556             <span class="keyword">end</span>
+0557         <span class="keyword">else</span>
+0558             <span class="comment">% Call the ellipse fitting routine to get ellipse parameters</span>
+0559             newEllipseParams = <a href="DirectEllipseFit.html" class="code" title="function [params1, params2] = DirectEllipseFit(x, y)">DirectEllipseFit</a>(ellipseD1, ellipseD2);
+0560                 
+0561             <span class="comment">% Set the new parameters</span>
+0562             figData{1,3} = newEllipseParams;
+0563             set(theFig, <span class="string">'UserData'</span>, figData);
+0564         <span class="keyword">end</span>
+0565         
+0566     <span class="keyword">case</span> <span class="string">'ellipseGUIOptimizeButton'</span>
+0567         optimizedEllipseParams = <a href="IterativeEllipseFit.html" class="code" title="function [params, fval, exitflag, output] = IterativeEllipseFit(x, y,guess, fixed, options)">IterativeEllipseFit</a>(ellipseD1, <span class="keyword">...</span>
+0568             ellipseD2, ellipseParams, fixedParams);
+0569         
+0570         figData{1,3} = optimizedEllipseParams;
+0571         set(theFig, <span class="string">'UserData'</span>, figData);
+0572         
+0573     <span class="keyword">otherwise</span>
+0574         error(<span class="string">'ERROR: EllipseFitGUI:button_Callback - Unknown button!'</span>);
+0575 <span class="keyword">end</span>
+0576 
+0577 <a href="#_sub5" class="code" title="subfunction updateEllipseFittingGUI()">updateEllipseFittingGUI</a>;
+0578 
+0579 <a name="_sub2" href="#_subfunctions" class="code">function textbox_Callback(hObject, eventdata, handles)</a>
+0580 <span class="comment">% TEXTBOX_CALLBACK  Callback executed when a user changes a value in one</span>
+0581 <span class="comment">% of the textfields. This callback is called after the user clicks another</span>
+0582 <span class="comment">% component on the gui.</span>
+0583 
+0584 textboxTag = get(hObject, <span class="string">'Tag'</span>);   <span class="comment">% Get the tag for the textfield</span>
+0585 ellipseIndex = -1;                  <span class="comment">% Set the index out of range to start</span>
+0586 
+0587 <span class="comment">% Based on which textfield was edited, set the array index that corresponds</span>
+0588 <span class="comment">% to that ellipse value</span>
+0589 <span class="keyword">switch</span> textboxTag
+0590     <span class="keyword">case</span> <span class="string">'ellipseGUIx0TextField'</span>
+0591         ellipseIndex = 1;
+0592         <span class="comment">%disp('X0 text');</span>
+0593     <span class="keyword">case</span> <span class="string">'ellipseGUIy0TextField'</span>
+0594         ellipseIndex = 2;
+0595         <span class="comment">%disp('Y0 text');</span>
+0596     <span class="keyword">case</span> <span class="string">'ellipseGUILxTextField'</span>
+0597         ellipseIndex = 3;
+0598         <span class="comment">%disp('Lx text');</span>
+0599     <span class="keyword">case</span> <span class="string">'ellipseGUILyTextField'</span>
+0600         ellipseIndex = 4;
+0601         <span class="comment">%disp('Ly text');</span>
+0602     <span class="keyword">case</span> <span class="string">'ellipseGUIphiTextField'</span>
+0603         ellipseIndex = 5;
+0604         <span class="comment">%disp('Phi text');</span>
+0605     <span class="keyword">otherwise</span>
+0606         error(<span class="string">'ERROR: EllipseFitGUI:textbox_Callback - Unknown textbox!'</span>);
+0607 <span class="keyword">end</span>
+0608 
+0609 <span class="comment">% Get the value out of the text field and check that it is a number.</span>
+0610 <span class="comment">% If it is not display an error dialog</span>
+0611 user_entry = str2double(get(hObject,<span class="string">'string'</span>));
+0612 <span class="keyword">if</span> isnan(user_entry)
+0613     errordlg(<span class="string">'You must enter a numeric value'</span>,<span class="string">'Bad Input'</span>,<span class="string">'modal'</span>)
+0614 <span class="keyword">end</span>
+0615 
+0616 <span class="comment">% Update the local version of the ellipse, and call VisarAnalysis</span>
+0617 ellipseGUIHandle = findobj(<span class="string">'Tag'</span>, <span class="string">'ellipseGUI'</span>);
+0618 theRecordData = get(ellipseGUIHandle, <span class="string">'UserData'</span>);
+0619 theEllipseData = theRecordData{1,3};
+0620 <span class="keyword">if</span> ~isnan(user_entry)
+0621     theEllipseData(ellipseIndex) = user_entry;
+0622 <span class="keyword">end</span>
+0623 
+0624 theRecordData{1,3} = theEllipseData;
+0625 set(ellipseGUIHandle, <span class="string">'UserData'</span>, theRecordData);
+0626 
+0627 <span class="comment">% replotQuadrature(theRecordData);</span>
+0628 <a href="#_sub5" class="code" title="subfunction updateEllipseFittingGUI()">updateEllipseFittingGUI</a>;
+0629 
+0630 
+0631 <a name="_sub3" href="#_subfunctions" class="code">function checkbox_Callback(hObject, eventdata, handles)</a>
+0632 <span class="comment">% CHECKBOX_CALLBACK Callback executed when a users selects/unselects one of</span>
+0633 <span class="comment">% the checkboxes</span>
+0634 
+0635 checkboxTag = get(hObject, <span class="string">'Tag'</span>);  <span class="comment">% Get the tag for the checkboxed</span>
+0636 
+0637 <span class="comment">% Based on the checkbox, set the tag for the textfield that should be</span>
+0638 <span class="comment">% disabled</span>
+0639 <span class="keyword">switch</span> checkboxTag
+0640     <span class="keyword">case</span> <span class="string">'ellipseGUIx0Checkbox'</span>
+0641         checkParamIndex = 1;
+0642     <span class="keyword">case</span> <span class="string">'ellipseGUIy0Checkbox'</span>
+0643         checkParamIndex = 2;
+0644     <span class="keyword">case</span> <span class="string">'ellipseGUILxCheckbox'</span>
+0645         checkParamIndex = 3;
+0646     <span class="keyword">case</span> <span class="string">'ellipseGUILyCheckbox'</span>
+0647         checkParamIndex = 4;
+0648     <span class="keyword">case</span> <span class="string">'ellipseGUIphiCheckbox'</span>
+0649         checkParamIndex = 5;
+0650     <span class="keyword">otherwise</span>
+0651         error(<span class="string">'ERROR: EllipseFitGUI:checkbox_Callback - Unknown checkbox!'</span>);
+0652 <span class="keyword">end</span>
+0653 
+0654 theFig = findobj(<span class="string">'Tag'</span>, <span class="string">'ellipseGUI'</span>);
+0655 figData = get(theFig, <span class="string">'UserData'</span>);
+0656 checkParams = figData{1,2};
+0657 
+0658 <span class="comment">% Check whether the check box was selected or unselected</span>
+0659 <span class="keyword">if</span> (get(hObject,<span class="string">'Value'</span>) == get(hObject,<span class="string">'Max'</span>))
+0660     checkParams(checkParamIndex) = 1;
+0661 <span class="keyword">else</span>
+0662     checkParams(checkParamIndex) = 0;
+0663 <span class="keyword">end</span>
+0664 
+0665 figData{1,2} = checkParams;
+0666 set(theFig, <span class="string">'UserData'</span>, figData);
+0667 <a href="#_sub5" class="code" title="subfunction updateEllipseFittingGUI()">updateEllipseFittingGUI</a>
+0668 
+0669 <a name="_sub4" href="#_subfunctions" class="code">function replotQuadrature(userData)</a>
+0670 <span class="comment">% REPLOTQUADRATURE Updates the quadrature plot, should be called after a</span>
+0671 <span class="comment">% user has made a change to one of the ellipse settings or clicked one of</span>
+0672 <span class="comment">% the ellipse fitting buttons</span>
+0673 
+0674 <span class="comment">% QuadratureLine = findobj(gcf, 'Tag', 'QuadratureLine');</span>
+0675 <span class="comment">% set(QuadratureLine, 'XData', userData.D{1,1}, 'YData', userData.D{1,2});</span>
+0676 <span class="comment">% set(QuadratureLine, 'Visible', 'on');</span>
+0677 <span class="comment">% axis equal</span>
+0678 <span class="comment">% axis tight</span>
+0679 
+0680 <span class="comment">% QuadraturePlot = findobj(gca, 'Tag', 'QuadraturePlot');</span>
+0681 <span class="comment">% refresh(QuadraturePlot);</span>
+0682 <span class="comment">% drawnow;</span>
+0683 
+0684 <a name="_sub5" href="#_subfunctions" class="code">function updateEllipseFittingGUI()</a>
+0685 <span class="comment">% UPDATEELLIPSEFITTINGGUI   Updates the gui based on the current UserData</span>
+0686 
+0687 theFigure = findobj(<span class="string">'Tag'</span>, <span class="string">'ellipseGUI'</span>);
+0688 
+0689 theUserData = get(theFigure, <span class="string">'UserData'</span>);   <span class="comment">% Get the UserData</span>
+0690 theRecordData = theUserData{1,1};
+0691 
+0692 <span class="comment">% Update the textfields</span>
+0693 theEllipseParams = theUserData{1,3};
+0694 
+0695 x0TextField = findobj(<span class="string">'Tag'</span>, <span class="string">'ellipseGUIx0TextField'</span>);
+0696 set(x0TextField, <span class="string">'String'</span>, theEllipseParams(1));
+0697 
+0698 y0TextField = findobj(<span class="string">'Tag'</span>, <span class="string">'ellipseGUIy0TextField'</span>);
+0699 set(y0TextField, <span class="string">'String'</span>, theEllipseParams(2));
+0700 
+0701 LxTextField = findobj(<span class="string">'Tag'</span>, <span class="string">'ellipseGUILxTextField'</span>);
+0702 set(LxTextField, <span class="string">'String'</span>, theEllipseParams(3));
+0703 
+0704 LyTextField = findobj(<span class="string">'Tag'</span>, <span class="string">'ellipseGUILyTextField'</span>);
+0705 set(LyTextField, <span class="string">'String'</span>, theEllipseParams(4));
+0706 
+0707 phiTextField = findobj(<span class="string">'Tag'</span>, <span class="string">'ellipseGUIphiTextField'</span>);
+0708 set(phiTextField, <span class="string">'String'</span>, theEllipseParams(5));
+0709 
+0710 <span class="comment">% Update the checkboxes</span>
+0711 theFixedParams = theUserData{1,2};
+0712 <span class="keyword">for</span> ii=1:5
+0713     <span class="keyword">switch</span> ii
+0714         <span class="keyword">case</span> 1
+0715             textFieldTag = <span class="string">'ellipseGUIx0TextField'</span>;
+0716             checkBoxTag = <span class="string">'ellipseGUIx0Checkbox'</span>;
+0717         <span class="keyword">case</span> 2
+0718             textFieldTag = <span class="string">'ellipseGUIy0TextField'</span>;
+0719             checkBoxTag = <span class="string">'ellipseGUIy0Checkbox'</span>;
+0720         <span class="keyword">case</span> 3
+0721             textFieldTag = <span class="string">'ellipseGUILxTextField'</span>;
+0722             checkBoxTag = <span class="string">'ellipseGUILxCheckbox'</span>;
+0723         <span class="keyword">case</span> 4
+0724             textFieldTag = <span class="string">'ellipseGUILyTextField'</span>;
+0725             checkBoxTag = <span class="string">'ellipseGUILyCheckbox'</span>;
+0726         <span class="keyword">case</span> 5
+0727             textFieldTag = <span class="string">'ellipseGUIphiTextField'</span>;
+0728             checkBoxTag = <span class="string">'ellipseGUIphiCheckbox'</span>;
+0729         <span class="keyword">otherwise</span>
+0730             error(<span class="string">'ERROR: EllipseFitGUI:UpdateEllipseFittingGUI - Unknown checkbox!'</span>);
+0731     <span class="keyword">end</span>
+0732     
+0733     <span class="comment">% Find the handle for the textfield associated with this text box</span>
+0734     textFieldHandle = findobj(<span class="string">'Tag'</span>, textFieldTag);
+0735     checkBoxHandle = findobj(<span class="string">'Tag'</span>, checkBoxTag);
+0736     
+0737     checkBoxMaxValue = get(checkBoxHandle, <span class="string">'Max'</span>);
+0738     checkBoxMinValue = get(checkBoxHandle, <span class="string">'Min'</span>);
+0739     
+0740     <span class="comment">% Check whether the check box is selected or unselected</span>
+0741     <span class="keyword">if</span> theFixedParams(ii) == 0
+0742         set(textFieldHandle, <span class="string">'Enable'</span>, <span class="string">'on'</span>);  <span class="comment">% Not selected</span>
+0743         set(checkBoxHandle, <span class="string">'Value'</span>, checkBoxMinValue);
+0744     <span class="keyword">elseif</span> theFixedParams(ii) == 1
+0745         set(textFieldHandle, <span class="string">'Enable'</span>, <span class="string">'off'</span>); <span class="comment">% Is unselected</span>
+0746         set(checkBoxHandle, <span class="string">'Value'</span>, checkBoxMaxValue);
+0747     <span class="keyword">else</span>
+0748         error(<span class="string">'ERROR: EllipseFitGUI:UpdateEllipseFittingGUI - Fixed param other than 0 or 1'</span>);    
+0749     <span class="keyword">end</span>
+0750 <span class="keyword">end</span>
+0751 
+0752 <span class="comment">% Call VisarAnalysis</span>
+0753 <span class="comment">% theRecordData = VisarAnalysis(theRecordData, 'QuadratureSignals', ...</span>
+0754 <span class="comment">%    'Velocity');</span>
+0755 
+0756 theUserData{1,5} = theRecordData.D{1,1};
+0757 theUserData{1,6} = theRecordData.D{1,2};
+0758 
+0759 <span class="comment">% Update the plot</span>
+0760 ellipseFittingQuadratureLine = findobj(gcf, <span class="string">'Tag'</span>, <span class="string">'ellipseFittingQuadratureLine'</span>);
+0761 set(ellipseFittingQuadratureLine, <span class="string">'XData'</span>, theUserData{1,5}, <span class="string">'YData'</span>, theUserData{1,6});
+0762 set(ellipseFittingQuadratureLine, <span class="string">'Visible'</span>, <span class="string">'on'</span>);
+0763 
+0764 <a href="EllipsePlot.html" class="code" title="function varargout = EllipsePlot(params, mode, AxesHandle, numpoints)">EllipsePlot</a>(theEllipseParams, <span class="string">'overwrite'</span>);
+0765 
+0766 axis equal
+0767 axis tight
+0768 
+0769 
+0770 <a name="_sub6" href="#_subfunctions" class="code">function ExitEllipseGUI(obj, event, arg1)</a>
+0771 <span class="comment">% store which button, OK or Cancel, was clicked</span>
+0772 theUserData = get(gcbf, <span class="string">'UserData'</span>);
+0773 theUserData{1,4} = arg1;
+0774 set(gcbf, <span class="string">'UserData'</span>, theUserData);
+0775     
+0776 <span class="comment">% don't do a close here.  It will cause the list handles to become</span>
+0777 <span class="comment">% invalid.  The data will not be able to be retrieved from the lists.</span>
+0778 <span class="comment">% Do a uiresume so that the constructor method will wake up,</span>
+0779 <span class="comment">% fetch the new values, update the VisarData, and then return.</span>
+0780 uiresume(gcbf);
+0781 
+0782     
+0783 <a name="_sub7" href="#_subfunctions" class="code">function doFigureKeyPress(obj, evd)</a>
+0784 <span class="keyword">switch</span>(evd.Key)
+0785  <span class="keyword">case</span> {<span class="string">'return'</span>,<span class="string">'space'</span>}
+0786   set(gcbf,<span class="string">'UserData'</span>,<span class="string">'OK'</span>);
+0787   uiresume(gcbf);
+0788  <span class="keyword">case</span> {<span class="string">'escape'</span>}
+0789   set(gcbf,<span class="string">'UserData'</span>,<span class="string">'Cancel'</span>);
+0790   uiresume(gcbf);
+0791 <span class="keyword">end</span>
+0792 
+0793 
+0794 <a name="_sub8" href="#_subfunctions" class="code">function doControlKeyPress(obj, evd)</a>
+0795 <span class="keyword">switch</span>(evd.Key)
+0796  <span class="keyword">case</span> {<span class="string">'return'</span>}
+0797   <span class="keyword">if</span> ~strcmp(get(obj,<span class="string">'UserData'</span>),<span class="string">'Cancel'</span>)
+0798       set(gcbf,<span class="string">'UserData'</span>,<span class="string">'OK'</span>);
+0799       uiresume(gcbf);
+0800   <span class="keyword">else</span>
+0801       set(gcbf,<span class="string">'UserData'</span>,<span class="string">'Cancel'</span>);
+0802       uiresume(gcbf);
+0803   <span class="keyword">end</span>
+0804  <span class="keyword">case</span> <span class="string">'escape'</span>
+0805       set(gcbf,<span class="string">'UserData'</span>,<span class="string">'Cancel'</span>);
+0806       uiresume(gcbf);
+0807 <span class="keyword">end</span>
+0808 
+0809 <span class="comment">% function paramValues getEllipseParameters()</span>
+0810 <span class="comment">%   GETELLIPSEPARAMETERS    Returns an array with the all current values</span>
+0811 <span class="comment">%                           from the ellipse parameter text boxes of the</span>
+0812 <span class="comment">%                           GUI.</span>
+0813 <span class="comment">% paramValues(1) =</span>
+0814 
+0815 <a name="_sub9" href="#_subfunctions" class="code">function populatedData = populateFigureUserData(recordData)</a>
+0816 <span class="comment">%   POPULATEFIGUREUSERDATA  Returns a cell array that will be used for</span>
+0817 <span class="comment">%                           the UserData of the figure. The first cell</span>
+0818 <span class="comment">%                           contains the recordData passed in, the second</span>
+0819 <span class="comment">%                           contains an array representing the current</span>
+0820 <span class="comment">%                           values of the fixed checkboxes and the third</span>
+0821 <span class="comment">%                           contains an array representing the current</span>
+0822 <span class="comment">%                           ellipse parameters.</span>
+0823 populatedData{1,1} = recordData;
+0824 populatedData{1,2} = recordData.EllipseFixed;
+0825 populatedData{1,3} = recordData.Ellipse;
+0826 populatedData{1,4} = <span class="string">'NULL'</span>;
+0827 populatedData{1,5} = recordData.D{1,1};
+0828 populatedData{1,6} = recordData.D{1,2};</pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

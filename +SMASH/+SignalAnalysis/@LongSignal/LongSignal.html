@@ -1,0 +1,152 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of LongSignal</title>
+  <meta name="keywords" content="LongSignal">
+  <meta name="description" content="UNDER CONTRUCTION">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="../../index.html">+SMASH</a> &gt; <a href="../index.html">+SignalAnalysis</a> &gt; <a href="index.html">@LongSignal</a> &gt; LongSignal.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+SignalAnalysis/@LongSignal&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>LongSignal
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>UNDER CONTRUCTION</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> UNDER CONTRUCTION
+
+ This classes manages *long* signals, i.e. data that is too large to fit
+ in physical memory.  The goal is to mix features from the Signal and
+ SignalGroup classes with capabilities similar to MATLAB's datastore
+ class...
+
+    object=LongSignal(file); % HDF5 file (restrictions!)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="LongSignal.html" class="code" title="">LongSignal</a>	UNDER CONTRUCTION</li><li><a href="convertData.html" class="code" title="function convertData(file,format,record,varargin)">convertData</a>	UNDER CONSTRUCTION</li><li><a href="verifyFile.html" class="code" title="function [result,report]=verifyFile(object)">verifyFile</a>	verifyFile Verify data file</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="LongSignal.html" class="code" title="">LongSignal</a>	UNDER CONTRUCTION</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function value=get.NumberPoints(object)</a></li><li><a href="#_sub2" class="code">function value=get.NumberSignals(object)</a></li><li><a href="#_sub3" class="code">function value=get.Start(object)</a></li><li><a href="#_sub4" class="code">function value=get.Stop(object)</a></li><li><a href="#_sub5" class="code">function value=get.Increment(object)</a></li><li><a href="#_sub6" class="code">function object=LongSignal(file)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% UNDER CONTRUCTION</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This classes manages *long* signals, i.e. data that is too large to fit</span>
+0004 <span class="comment">% in physical memory.  The goal is to mix features from the Signal and</span>
+0005 <span class="comment">% SignalGroup classes with capabilities similar to MATLAB's datastore</span>
+0006 <span class="comment">% class...</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%    object=LongSignal(file); % HDF5 file (restrictions!)</span>
+0009 <span class="comment">%</span>
+0010 
+0011 
+0012 classdef <a href="LongSignal.html" class="code" title="">LongSignal</a> &lt; handle
+0013     <span class="comment">%%</span>
+0014     properties (SetAccess=protected)
+0015         File <span class="comment">% Signal file (*.h5)</span>
+0016     <span class="keyword">end</span>
+0017     <span class="comment">%%</span>
+0018     properties (SetAccess=protected, Dependent=true)
+0019         NumberPoints  <span class="comment">% Number of signal points</span>
+0020         NumberSignals <span class="comment">% Number of signal channels</span>
+0021     <span class="keyword">end</span>
+0022     methods
+0023         <a name="_sub0" href="#_subfunctions" class="code">function value=get.NumberPoints(object)   </a>
+0024             list=h5info(object.File);
+0025             value=list.Datasets.Dataspace.Size;
+0026             value=value(1);
+0027         <span class="keyword">end</span>
+0028         <a name="_sub1" href="#_subfunctions" class="code">function value=get.NumberSignals(object)</a>
+0029             list=h5info(object.File);
+0030             value=list.Datasets.Dataspace.Size;
+0031             value=value(2);
+0032         <span class="keyword">end</span>
+0033     <span class="keyword">end</span>
+0034     <span class="comment">%%</span>
+0035     properties (SetAccess=protected, Dependent=true)
+0036         Start <span class="comment">% Grid start (numeric scalar)</span>
+0037         Stop <span class="comment">% Grid stop value (numeric scalar)</span>
+0038         Increment <span class="comment">% Grid increment (numeric scalar)</span>
+0039     <span class="keyword">end</span>
+0040     methods
+0041         <a name="_sub2" href="#_subfunctions" class="code">function value=get.Start(object)</a>
+0042             [flag,data]=<a href="verifyFile.html" class="code" title="function [result,report]=verifyFile(object)">verifyFile</a>(object);
+0043             assert(flag);
+0044             value=data.Start;
+0045         <span class="keyword">end</span>
+0046         <a name="_sub3" href="#_subfunctions" class="code">function value=get.Stop(object)</a>
+0047             [flag,data]=<a href="verifyFile.html" class="code" title="function [result,report]=verifyFile(object)">verifyFile</a>(object);
+0048             assert(flag);
+0049             value=data.Stop;
+0050         <span class="keyword">end</span>
+0051         <a name="_sub4" href="#_subfunctions" class="code">function value=get.Increment(object)</a>
+0052             [flag,data]=<a href="verifyFile.html" class="code" title="function [result,report]=verifyFile(object)">verifyFile</a>(object);
+0053             assert(flag);
+0054             value=data.Increment;
+0055         <span class="keyword">end</span>
+0056     <span class="keyword">end</span>
+0057     <span class="comment">%%</span>
+0058     properties (SetAccess=protected)
+0059         <span class="comment">% Parition Analyisis partition settings</span>
+0060         <span class="comment">%</span>
+0061         <span class="comment">% This *protected* property contains a structure of partition settings</span>
+0062         <span class="comment">% (points, duration, etc.).  Changes can only be made via the</span>
+0063         <span class="comment">% partition method.</span>
+0064         <span class="comment">%</span>
+0065         <span class="comment">% See also partition</span>
+0066         Partition
+0067     <span class="keyword">end</span>
+0068     <span class="comment">%% constructor</span>
+0069     methods (Hidden=true)
+0070         <a name="_sub5" href="#_subfunctions" class="code">function object=LongSignal(file)</a>
+0071             <span class="comment">% manage input</span>
+0072             assert(nargin &gt; 0,<span class="string">'ERROR: no data file specified'</span>);
+0073             object.File=file;
+0074             assert(<a href="verifyFile.html" class="code" title="function [result,report]=verifyFile(object)">verifyFile</a>(object),<span class="string">'ERROR: invalid data file'</span>);                       
+0075         <span class="keyword">end</span>
+0076     <span class="keyword">end</span>
+0077     <span class="comment">%%</span>
+0078     methods (Static=true)
+0079         varargout=<a href="convertData.html" class="code" title="function convertData(file,format,record,varargin)">convertData</a>(varargin)
+0080     <span class="keyword">end</span>
+0081     <span class="comment">%% hide unused methods for clarity</span>
+0082     methods (Hidden=true)
+0083         varargout=addlistener(vararagin)
+0084         varargout=delete(varargin)
+0085         varargout=eq(vararagin)
+0086         varargout=findobj(varargin)
+0087         varagout=findprop(varargin)
+0088         varargout=ge(varargin)
+0089         varargout=gt(varargin)
+0090         varargout=le(varargin)
+0091         varargout=listener(varargin)
+0092         varargout=lt(varargin)
+0093         varargout=ne(varargin)
+0094         varargout=notify(varargin)
+0095     <span class="keyword">end</span>
+0096 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

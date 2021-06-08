@@ -1,0 +1,65 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of read_plate</title>
+  <meta name="keywords" content="read_plate">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../../index.html">SMASHtoolbox</a> &gt; <a href="../../../index.html">+SMASH</a> &gt; <a href="../../index.html">+FileAccess</a> &gt; <a href="../index.html">@ImageFile</a> &gt; <a href="index.html">private</a> &gt; read_plate.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../../index.html"><img alt="<" border="0" src="../../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+FileAccess/@ImageFile/private&nbsp;<img alt=">" border="0" src="../../../../../../right.png"></a></td></tr></table>-->
+
+<h1>read_plate
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>function [data,grid1,grid2]=read_plate(name) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="read_ditabis.html" class="code" title="function [img, dx, X, dy, Y ] = read_ditabis(varargin)">read_ditabis</a>	%  [img, dx, X, dy, Y ] = read_ditabis(varargin)</li><li><a href="read_fujiIMG.html" class="code" title="function [data,info]=read_fujiIMG(file)">read_fujiIMG</a>	imgread : read IMG file created by a Fuji image plate scanner</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [data,grid1,grid2]=read_plate(name)</a>
+0002 
+0003 [~,~,ext]=fileparts(name);
+0004 <span class="keyword">switch</span> lower(ext)
+0005     <span class="keyword">case</span> <span class="string">'.img'</span>
+0006         [data,info]=<a href="read_fujiIMG.html" class="code" title="function [data,info]=read_fujiIMG(file)">read_fujiIMG</a>(name);
+0007         dx=sscanf(info{4},<span class="string">'%g'</span>,1);
+0008         dy=sscanf(info{5},<span class="string">'%g'</span>,1);
+0009         grid1=1:size(data,2);
+0010         grid1=(grid1-1)*dx;
+0011         grid2=1:size(data,1);
+0012         grid2=(grid2-1)*dy;
+0013         grid2=grid2(:);
+0014     <span class="keyword">case</span> <span class="string">'.tif'</span>
+0015         [data,~,grid1,~,grid2] = <a href="read_ditabis.html" class="code" title="function [img, dx, X, dy, Y ] = read_ditabis(varargin)">read_ditabis</a>(name);
+0016 <span class="keyword">end</span>
+0017 
+0018 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

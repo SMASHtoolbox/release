@@ -1,0 +1,123 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of SaveSignals</title>
+  <meta name="keywords" content="SaveSignals">
+  <meta name="description" content="Saves signals for a single VISAR record">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">PointVISAR</a> &gt; <a href="index.html">private</a> &gt; SaveSignals.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/PointVISAR/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>SaveSignals
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>Saves signals for a single VISAR record</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function record=SaveSignals(record) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Saves signals for a single VISAR record</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="SmartFormat.html" class="code" title="function [format,width]=SmartFormat(data,digits)">SmartFormat</a>	SmartFormat : intelligent output format for numerical data</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="PointVISARGUI.html" class="code" title="function fig=PointVISARGUI(data)">PointVISARGUI</a>	PointVISARGUI</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% Saves signals for a single VISAR record</span>
+0002 
+0003 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0004 <a name="_sub0" href="#_subfunctions" class="code">function record=SaveSignals(record)</a>
+0005 
+0006 <span class="comment">% file admin</span>
+0007 file=record.OutputFile{1};
+0008 [pname,file,ext]=fileparts(file);
+0009 file=[file ext];
+0010 drop=repmat(false,size(file));
+0011 forbidden={<span class="string">'?'</span>,<span class="string">'*'</span>,<span class="string">'|'</span>,<span class="string">'&quot;'</span>,<span class="string">''''</span>,<span class="string">'='</span>,<span class="string">','</span>,<span class="string">';'</span>,<span class="string">':'</span>,<span class="keyword">...</span>
+0012     <span class="string">'('</span>,<span class="string">')'</span>,<span class="string">'&lt;'</span>,<span class="string">'&gt;'</span>,<span class="string">'['</span>,<span class="string">']'</span>,};
+0013 <span class="keyword">for</span> k=1:numel(forbidden)
+0014     drop=drop | (file==forbidden{k});
+0015 <span class="keyword">end</span>
+0016 <span class="keyword">if</span> any(drop)
+0017     fprintf(<span class="string">'Invalid file name characters detected:\n'</span>);
+0018     original=file;
+0019     file(drop)=<span class="string">''</span>;
+0020     fprintf(<span class="string">'\t%s\n\tchanged to\n\t%s\n'</span>,original,file);
+0021 <span class="keyword">end</span>
+0022 file=fullfile(pname,file);
+0023 record.OutputFile{1}=file;
+0024 
+0025 <span class="comment">%if exist(file)</span>
+0026 <span class="comment">%    delete(file);</span>
+0027 <span class="comment">%end</span>
+0028 
+0029 [fid,message]=fopen(file, <span class="string">'wt'</span>);
+0030 <span class="keyword">if</span> fid&lt;0
+0031     message{2}=<span class="string">'Unable to open file'</span>;
+0032     message=message([2 1]);
+0033     error(<span class="string">'%s\n'</span>,message{:});
+0034 <span class="keyword">end</span>
+0035 
+0036 <span class="comment">% main header</span>
+0037 label=record.Label;
+0038 header=[<span class="string">'% PointVISAR calculations for '</span> label <span class="string">' (generated '</span> datestr(now) <span class="string">')'</span>];
+0039 fprintf(fid, <span class="string">'%s\n'</span>, header);
+0040 
+0041 <span class="comment">% determine output mode</span>
+0042 mode=record.OutputFileMode;
+0043 <span class="keyword">switch</span> lower(mode)
+0044     <span class="keyword">case</span> <span class="string">'compact'</span>
+0045         heading={<span class="string">'Time'</span> <span class="string">'Velocity'</span>};
+0046         data(1,:)=record.Time;
+0047         data(2,:)=record.Velocity;      
+0048     <span class="keyword">case</span> <span class="string">'full'</span>
+0049         heading={<span class="string">'Time'</span> <span class="string">'Velocity'</span> <span class="string">'Phase'</span> <span class="string">'BIM'</span> <span class="string">'Contrast'</span> <span class="string">'D1'</span> <span class="string">'D2'</span>};
+0050         data(1,:)=record.Time;
+0051         data(2,:)=record.Velocity;
+0052         data(3,:)=record.Phase;
+0053         data(4,:)=record.BIM;
+0054         data(5,:)=record.Contrast;
+0055         data(6,:)=record.D{1};
+0056         data(7,:)=record.D{2};
+0057     <span class="keyword">otherwise</span>
+0058         error(<span class="string">'Invalid output mode'</span>);
+0059 <span class="keyword">end</span>
+0060 
+0061 <span class="comment">% run through data columns to determine proper formats and column header</span>
+0062 sigfigs=7;
+0063 header=<span class="string">'%'</span>;
+0064 numformat=<span class="string">''</span>;
+0065 <span class="keyword">for</span> ii=1:numel(heading)
+0066     [format,width]=<a href="SmartFormat.html" class="code" title="function [format,width]=SmartFormat(data,digits)">SmartFormat</a>(data(ii,:),sigfigs);
+0067     textformat=[<span class="string">'\t%'</span> num2str(width,<span class="string">'%i'</span>) <span class="string">'s'</span>];
+0068     header=[header sprintf(textformat,heading{ii})];
+0069     numformat=[numformat <span class="string">'\t'</span> format];
+0070 <span class="keyword">end</span>
+0071 numformat = [numformat <span class="string">'\n'</span>];
+0072 
+0073 <span class="comment">% print column header and data</span>
+0074 fprintf(fid,<span class="string">'%s\n'</span>,header);
+0075 fprintf(fid, numformat, data);
+0076 fclose(fid);</pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

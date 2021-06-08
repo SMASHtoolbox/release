@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of local_uicontrol</title>
+  <meta name="keywords" content="local_uicontrol">
+  <meta name="description" content="% local uicontrol (could be pushed out to separate classes">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../../index.html">SMASHtoolbox</a> &gt; <a href="../../../index.html">+SMASH</a> &gt; <a href="../../index.html">+MUI</a> &gt; <a href="../index.html">@Dialog</a> &gt; <a href="index.html">private</a> &gt; local_uicontrol.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../../index.html"><img alt="<" border="0" src="../../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+MUI/@Dialog/private&nbsp;<img alt=">" border="0" src="../../../../../../right.png"></a></td></tr></table>-->
+
+<h1>local_uicontrol
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>% local uicontrol (could be pushed out to separate classes</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>function varargout=local_uicontrol(object,varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">% local uicontrol (could be pushed out to separate classes</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="button.html" class="code" title="function varargout=button(object,label,minwidth)">button</a>	dialog.button : add button block to dialog</li><li><a href="cedit.html" class="code" title="function varargout=cedit(object,label,minwidth,SkipLabel)">cedit</a>	handle input</li><li><a href="cedit_button.html" class="code" title="function varargout=cedit_button(object,label,minwidth,SkipLabel)">cedit_button</a>	Usage:</li><li><a href="cedit_check.html" class="code" title="function varargout=cedit_check(object,label,minwidth,SkipLabel)">cedit_check</a>	dialog.cedit_check : add edit/check block to dialog</li><li><a href="check.html" class="code" title="function varargout=check(object,label,minwidth)">check</a>	dialog.check : add check block to dialog</li><li><a href="edit.html" class="code" title="function varargout=edit(object,label,minwidth,SkipLabel)">edit</a>	handle input</li><li><a href="edit_button.html" class="code" title="function varargout=edit_button(object,label,minwidth,SkipLabel)">edit_button</a>	Usage:</li><li><a href="edit_check.html" class="code" title="function varargout=edit_check(object,label,minwidth,SkipLabel)">edit_check</a>	dialog.edit_check : add edit/check block to dialog</li><li><a href="listbox.html" class="code" title="function varargout=listbox(object,label,choices,minwidth,rows)">listbox</a>	dialog.popup : add popup block to dialog</li><li><a href="listbox_button.html" class="code" title="function varargout=listbox_button(object,label,choices,minwidth,rows)">listbox_button</a>	dialog.listbox_button : add listbox with button(s) block to dialog</li><li><a href="medit.html" class="code" title="function varargout=medit(object,label,minwidth,rows,fontname)">medit</a>	handle input</li><li><a href="popup.html" class="code" title="function varargout=popup(object,label,choices,minwidth,SkipLabel)">popup</a>	dialog.popup : add popup block to dialog</li><li><a href="popup_button.html" class="code" title="function varargout=popup_button(object,label,choices,minwidth)">popup_button</a>	dialog.popup_button : add popup/button block to dialog</li><li><a href="radio.html" class="code" title="function varargout=radio(object,label,minwidth)">radio</a>	dialog.radio : add radio block to dialog</li><li><a href="slider.html" class="code" title="function varargout=slider(object,label,minwidth,SkipLabel)">slider</a>	handle input</li><li><a href="table.html" class="code" title="function varargout=table(object,label,minwidth,rows)">table</a>	handle input</li><li><a href="text.html" class="code" title="function varargout=text(object,label,minwidth)">text</a>	handle input</li><li><a href="toggle.html" class="code" title="function varargout=toggle(object,label,minwidth)">toggle</a>	dialog.toggle : add toggle block to dialog</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">%% local uicontrol (could be pushed out to separate classes</span>
+0002 
+0003 <a name="_sub0" href="#_subfunctions" class="code">function varargout=local_uicontrol(object,varargin)</a>
+0004 
+0005 <span class="comment">% create uicontrol</span>
+0006 h=uicontrol(<span class="string">'Parent'</span>,object.Handle,<span class="string">'Units'</span>,<span class="string">'pixels'</span>);
+0007 set(h,varargin{:});
+0008 extent=get(h,<span class="string">'Extent'</span>);
+0009 position=[object.HorizontalMargin object.VerticalMargin extent(3:4)];
+0010 set(h,<span class="string">'Position'</span>,position);
+0011 <span class="comment">% style-specific tweaks</span>
+0012 style=get(h,<span class="string">'Style'</span>);
+0013 <span class="keyword">switch</span> style
+0014     <span class="keyword">case</span> {<span class="string">'pushbutton'</span>,<span class="string">'togglebutton'</span>}
+0015         position(4)=1.50*position(4);
+0016         set(h,<span class="string">'Position'</span>,position);
+0017     <span class="keyword">case</span> <span class="string">'checkbox'</span>
+0018     <span class="keyword">case</span> <span class="string">'text'</span>
+0019         parent=get(h,<span class="string">'Parent'</span>);
+0020         color=get(parent,<span class="string">'Color'</span>);
+0021         set(h,<span class="string">'BackgroundColor'</span>,color);
+0022     <span class="keyword">case</span> <span class="string">'edit'</span>
+0023         set(h,<span class="string">'BackgroundColor'</span>,[1 1 1]);
+0024         <span class="comment">%position(3)=1.20*position(3);</span>
+0025         position(4)=1.50*position(4);
+0026         set(h,<span class="string">'Position'</span>,position);
+0027     <span class="keyword">case</span> <span class="string">'popupmenu'</span>
+0028     <span class="keyword">case</span> <span class="string">'listbox'</span>
+0029         position(3)=extent(3)+extent(4);
+0030         string=get(h,<span class="string">'String'</span>);
+0031         <span class="keyword">if</span> iscell(string)
+0032             N=numel(string);
+0033         <span class="keyword">else</span>
+0034             N=1;
+0035         <span class="keyword">end</span>
+0036         position(4)=N*extent(4);
+0037         set(h,<span class="string">'String'</span>,<span class="string">''</span>);
+0038         extent=get(h,<span class="string">'Extent'</span>);
+0039         position(4)=position(4)-N*extent(4);
+0040         set(h,<span class="string">'Position'</span>,position);
+0041     <span class="keyword">case</span> <span class="string">'slider'</span>
+0042         parent=get(h,<span class="string">'Parent'</span>);
+0043         color=get(parent,<span class="string">'Color'</span>);
+0044         set(h,<span class="string">'BackgroundColor'</span>,color);
+0045 <span class="keyword">end</span>
+0046 
+0047 <span class="comment">% deal with fractional pixels</span>
+0048 pos=getpixelposition(h);
+0049 setpixelposition(h,ceil(pos));
+0050 
+0051 <span class="comment">% handle output</span>
+0052 <span class="keyword">if</span> nargout&gt;=1
+0053     varargout{1}=h;
+0054 <span class="keyword">end</span>
+0055 
+0056 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

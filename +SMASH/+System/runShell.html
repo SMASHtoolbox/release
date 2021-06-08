@@ -1,0 +1,155 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of runShell</title>
+  <meta name="keywords" content="runShell">
+  <meta name="description" content="runShell Run commands in an operating system shell">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../index.html">SMASHtoolbox</a> &gt; <a href="../index.html">+SMASH</a> &gt; <a href="index.html">+System</a> &gt; runShell.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../index.html"><img alt="<" border="0" src="../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+System&nbsp;<img alt=">" border="0" src="../../../../right.png"></a></td></tr></table>-->
+
+<h1>runShell
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>runShell Run commands in an operating system shell</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function varargout=runShell(command,mode) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> runShell Run commands in an operating system shell
+
+ This function passes commands to an operating system shell: 
+    Windows   : DOS
+    Macintosh : bash (typically)
+    Linux    : bash/csh/tcsh (depending on configuration)
+ The function can be used on any operating system, but caution
+ is needed when moving between between operating systems.  Command
+ validity is not tested prior to execution in the shell!
+
+ Individual shell commands are specified as a string
+    &gt;&gt; [output,err]=runShell('ls *.m'); % display *.m files in current directory
+ If successful, the command's results are stored as a string (&quot;output&quot;)
+ and the value of &quot;err&quot; is zero; nonzero values of &quot;err&quot; indicate that an
+ error was encountered.  By default, command output is also displayed in
+ MATLAB's command window.  To suppress this behavior, a second input
+ should be passed to the function.
+    &gt;&gt; [...]=runShell(command,'verbose'); % display output [default]
+    &gt;&gt; [...]=runShell(command,'silent'); % suppress output
+
+ Multiple shell commands are specified as a cell array of strings.
+    &gt;&gt; runShell({'ls' 'pwd'});
+ Command separators, such as semicolons, are generated internally and
+ should NOT be specified in the cell array.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% runShell Run commands in an operating system shell</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This function passes commands to an operating system shell:</span>
+0004 <span class="comment">%    Windows   : DOS</span>
+0005 <span class="comment">%    Macintosh : bash (typically)</span>
+0006 <span class="comment">%    Linux    : bash/csh/tcsh (depending on configuration)</span>
+0007 <span class="comment">% The function can be used on any operating system, but caution</span>
+0008 <span class="comment">% is needed when moving between between operating systems.  Command</span>
+0009 <span class="comment">% validity is not tested prior to execution in the shell!</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% Individual shell commands are specified as a string</span>
+0012 <span class="comment">%    &gt;&gt; [output,err]=runShell('ls *.m'); % display *.m files in current directory</span>
+0013 <span class="comment">% If successful, the command's results are stored as a string (&quot;output&quot;)</span>
+0014 <span class="comment">% and the value of &quot;err&quot; is zero; nonzero values of &quot;err&quot; indicate that an</span>
+0015 <span class="comment">% error was encountered.  By default, command output is also displayed in</span>
+0016 <span class="comment">% MATLAB's command window.  To suppress this behavior, a second input</span>
+0017 <span class="comment">% should be passed to the function.</span>
+0018 <span class="comment">%    &gt;&gt; [...]=runShell(command,'verbose'); % display output [default]</span>
+0019 <span class="comment">%    &gt;&gt; [...]=runShell(command,'silent'); % suppress output</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">% Multiple shell commands are specified as a cell array of strings.</span>
+0022 <span class="comment">%    &gt;&gt; runShell({'ls' 'pwd'});</span>
+0023 <span class="comment">% Command separators, such as semicolons, are generated internally and</span>
+0024 <span class="comment">% should NOT be specified in the cell array.</span>
+0025 <span class="comment">%</span>
+0026 
+0027 <span class="comment">%</span>
+0028 <span class="comment">% created June 9, 2014 by Daniel Dolan (Sandia National Laboratories)</span>
+0029 <span class="comment">%</span>
+0030 <a name="_sub0" href="#_subfunctions" class="code">function varargout=runShell(command,mode)</a>
+0031 
+0032 <span class="comment">% handle input</span>
+0033 assert(nargin&gt;0,<span class="string">'ERROR: no shell command(s) given'</span>);
+0034 <span class="keyword">if</span> ischar(command)
+0035     command={command};
+0036 <span class="keyword">end</span>
+0037 assert(iscell(command),<span class="string">'ERROR: invalid command input'</span>);
+0038 
+0039 <span class="keyword">if</span> (nargin&lt;2) || isempty(mode)
+0040     mode=<span class="string">'verbose'</span>;
+0041 <span class="keyword">else</span>
+0042     assert(ischar(mode),<span class="string">'ERROR: invalid mode'</span>);
+0043 <span class="keyword">end</span>
+0044 <span class="keyword">if</span> mode(1)==<span class="string">'-'</span>
+0045     mode=mode(2:end);
+0046 <span class="keyword">end</span>
+0047 <span class="keyword">switch</span> lower(mode)
+0048     <span class="keyword">case</span> {<span class="string">'echo'</span>,<span class="string">'verbose'</span>}
+0049         mode=<span class="string">'verbose'</span>;
+0050     <span class="keyword">case</span> {<span class="string">'silent'</span>,<span class="string">'quiet'</span>}
+0051         mode=<span class="string">'silent'</span>;
+0052     <span class="keyword">otherwise</span>
+0053         error(<span class="string">'ERROR: invalid mode'</span>);
+0054 <span class="keyword">end</span>
+0055 
+0056 <span class="comment">% convert commands into an extended string</span>
+0057 <span class="keyword">if</span> ispc
+0058     separator=<span class="string">'&amp;'</span>;
+0059 <span class="keyword">else</span>
+0060     separator=<span class="string">';'</span>;
+0061 <span class="keyword">end</span>
+0062 
+0063 <span class="keyword">for</span> k=1:numel(command)
+0064     <span class="keyword">if</span> k==1
+0065         temp=sprintf(<span class="string">'%s'</span>,command{k});
+0066     <span class="keyword">else</span>
+0067         temp=sprintf(<span class="string">'%s%s %s'</span>,temp,separator,command{k});
+0068     <span class="keyword">end</span>
+0069 <span class="keyword">end</span>
+0070 
+0071 <span class="comment">% execute command(s)</span>
+0072 <span class="keyword">if</span> strcmp(mode,<span class="string">'verbose'</span>)
+0073     commandwindow;
+0074     [status,output]=system(temp,<span class="string">'-echo'</span>);
+0075 <span class="keyword">else</span>
+0076     [status,output]=system(temp);
+0077 <span class="keyword">end</span>
+0078 
+0079 <span class="comment">% handle output</span>
+0080 <span class="keyword">if</span> nargout&gt;0
+0081     varargout{1}=output;
+0082     varargout{2}=status;
+0083 <span class="keyword">end</span>
+0084 
+0085 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

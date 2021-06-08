@@ -1,0 +1,1177 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of MinimalFigure</title>
+  <meta name="keywords" content="MinimalFigure">
+  <meta name="description" content="MinimalFigure: create a minimalistic figure useful for GUIs">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">fringen</a> &gt; <a href="index.html">private</a> &gt; MinimalFigure.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/fringen/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>MinimalFigure
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>MinimalFigure: create a minimalistic figure useful for GUIs</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function varargout=MinimalFigure(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> MinimalFigure: create a minimalistic figure useful for GUIs
+
+ This function creates a MATLAB non-dockable, menu-less figure with a
+ custom toolbar.  Aside from these customizations, all standard figure
+ features can be specified as inputs:
+ MinimalFigure('Units','pixels','Position',[0 0 600 480]); % example 
+ or through handle graphics operations.  The purpose of this function is
+ to provide a clean interface for building GUI programs, omitting
+ extraneous menu items, potentially dangerous operations (such as renaming
+ or deleting an axes), and non-compilable features.
+ 
+ Icons needed for the function are stored in the file CustomIcons.mat.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="ColumnReader.html" class="code" title="function [data,header,filename]=ColumnReader(filename,delim,mincolumn)">ColumnReader</a>	ColumnReader : extract column data from a file</li><li><a href="local_graphic.html" class="code" title="function cdata=local_graphic(name)">local_graphic</a>	local_graphic : local graphics for MinimalFigure</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="fringenGUI.html" class="code" title="function fringenGUI(varargin)">fringenGUI</a>	</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function ButtonClick(src,varargin)</a></li><li><a href="#_sub2" class="code">function ToggleButton(src,varargin)</a></li><li><a href="#_sub3" class="code">function func=IsValidAxes(haxes)</a></li><li><a href="#_sub4" class="code">function func=ValidAxes(fig)</a></li><li><a href="#_sub5" class="code">function HelpDialog()</a></li><li><a href="#_sub6" class="code">function autoscale(fig,mode)</a></li><li><a href="#_sub7" class="code">function autoscaleCallback(src,varargin)</a></li><li><a href="#_sub8" class="code">function tightscale(fig,mode)</a></li><li><a href="#_sub9" class="code">function tightscaleCallback(src,varargin)</a></li><li><a href="#_sub10" class="code">function manualscale(fig,mode)</a></li><li><a href="#_sub11" class="code">function manualscaleCallback(src,varargin)</a></li><li><a href="#_sub12" class="code">function ManualScaleUpdate(src,varargin)</a></li><li><a href="#_sub13" class="code">function ManualScaleWriter(editbox,value)</a></li><li><a href="#_sub14" class="code">function func=ManualScaleReader(editbox,default)</a></li><li><a href="#_sub15" class="code">function output_txt = datacursor_text(obj,event_obj)</a></li><li><a href="#_sub16" class="code">function ROIstatistics(fig,mode)</a></li><li><a href="#_sub17" class="code">function ROIstatisticsBox(src,varargin)</a></li><li><a href="#_sub18" class="code">function overlay(fig,mode)</a></li><li><a href="#_sub19" class="code">function overlayCallback(src,varargin)</a></li><li><a href="#_sub20" class="code">function update_overlay(varargin)</a></li><li><a href="#_sub21" class="code">function clone(fig,mode)</a></li><li><a href="#_sub22" class="code">function cloneCallback(src,varargin)</a></li><li><a href="#_sub23" class="code">function func=GUIsettings(field)</a></li><li><a href="#_sub24" class="code">function DeleteMinimalFigure(varargin)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% MinimalFigure: create a minimalistic figure useful for GUIs</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This function creates a MATLAB non-dockable, menu-less figure with a</span>
+0004 <span class="comment">% custom toolbar.  Aside from these customizations, all standard figure</span>
+0005 <span class="comment">% features can be specified as inputs:</span>
+0006 <span class="comment">% MinimalFigure('Units','pixels','Position',[0 0 600 480]); % example</span>
+0007 <span class="comment">% or through handle graphics operations.  The purpose of this function is</span>
+0008 <span class="comment">% to provide a clean interface for building GUI programs, omitting</span>
+0009 <span class="comment">% extraneous menu items, potentially dangerous operations (such as renaming</span>
+0010 <span class="comment">% or deleting an axes), and non-compilable features.</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% Icons needed for the function are stored in the file CustomIcons.mat.</span>
+0013 
+0014 <span class="comment">% created 1/4/2007 by Daniel Dolan</span>
+0015 <span class="comment">% updated 2/15/2007</span>
+0016 <span class="comment">% updated 1/31/2010 by Daniel Dolan</span>
+0017 <span class="comment">%   -added overlay and clone capabilties</span>
+0018 <span class="comment">% updated 2/1/2010 by Daniel Dolan</span>
+0019 <span class="comment">%   -revised the toolbar (icon appearance)</span>
+0020 
+0021 <a name="_sub0" href="#_subfunctions" class="code">function varargout=MinimalFigure(varargin)</a>
+0022 
+0023 <span class="comment">% create figure</span>
+0024 fig=figure(varargin{:});
+0025 set(fig,<span class="string">'MenuBar'</span>,<span class="string">'none'</span>,<span class="string">'Toolbar'</span>,<span class="string">'none'</span>,<span class="string">'DockControls'</span>,<span class="string">'off'</span>);
+0026 
+0027 <span class="comment">% create the toolbar</span>
+0028 data.figset{1}=<span class="string">'Pointer'</span>;
+0029 data.figset{end+2}=<span class="string">'PointerShapeCData'</span>;
+0030 data.figset{end+2}=<span class="string">'PointerShapeHotSpot'</span>;
+0031 data.figset{end+2}=<span class="string">'WindowButtonDownFcn'</span>;
+0032 data.figset{end+2}=<span class="string">'WindowButtonMotionFcn'</span>;
+0033 data.figset{end+2}=<span class="string">'WindowButtonUpFcn'</span>;
+0034 N=numel(data.figset);
+0035 <span class="keyword">for</span> ii=1:2:N
+0036     data.figset{ii+1}=get(fig,data.figset{ii});
+0037 <span class="keyword">end</span>
+0038 
+0039 hb=uitoolbar(<span class="string">'Parent'</span>,fig,<span class="string">'Tag'</span>,<span class="string">'MinimalFigureToolbar'</span>,<span class="string">'UserData'</span>,data,<span class="keyword">...</span>
+0040     <span class="string">'DeleteFcn'</span>,@<a href="#_sub24" class="code" title="subfunction DeleteMinimalFigure(varargin)">DeleteMinimalFigure</a>);
+0041 
+0042 uipushtool(<span class="string">'Parent'</span>,hb,<span class="string">'Tag'</span>,<span class="string">'directory'</span>,<span class="keyword">...</span>
+0043     <span class="string">'ToolTipString'</span>,<span class="string">'Set working directory'</span>,<span class="keyword">...</span>
+0044     <span class="string">'CData'</span>,<a href="local_graphic.html" class="code" title="function cdata=local_graphic(name)">local_graphic</a>(<span class="string">'FolderIcon'</span>),<span class="string">'ClickedCallback'</span>,@<a href="#_sub1" class="code" title="subfunction ButtonClick(src,varargin)">ButtonClick</a>);
+0045 
+0046 uipushtool(<span class="string">'Parent'</span>,hb,<span class="string">'Tag'</span>,<span class="string">'save'</span>,<span class="string">'ToolTipString'</span>,<span class="string">'Save figure'</span>,<span class="keyword">...</span>
+0047     <span class="string">'Cdata'</span>,<a href="local_graphic.html" class="code" title="function cdata=local_graphic(name)">local_graphic</a>(<span class="string">'SaveIcon'</span>),<span class="string">'ClickedCallback'</span>,@<a href="#_sub1" class="code" title="subfunction ButtonClick(src,varargin)">ButtonClick</a>);<span class="comment">%,'Visible','off');</span>
+0048 
+0049 uitoggletool(<span class="string">'Parent'</span>,hb,<span class="string">'Tag'</span>,<span class="string">'zoom'</span>,<span class="string">'ToolTipString'</span>,<span class="string">'Zoom'</span>,<span class="keyword">...</span>
+0050     <span class="string">'Cdata'</span>,<a href="local_graphic.html" class="code" title="function cdata=local_graphic(name)">local_graphic</a>(<span class="string">'ZoomIcon'</span>),<span class="string">'Separator'</span>,<span class="string">'on'</span>,<span class="keyword">...</span>
+0051     <span class="string">'ClickedCallback'</span>,@<a href="#_sub2" class="code" title="subfunction ToggleButton(src,varargin)">ToggleButton</a>);
+0052 
+0053 uitoggletool(<span class="string">'Parent'</span>,hb,<span class="string">'Tag'</span>,<span class="string">'pan'</span>,<span class="string">'ToolTipString'</span>,<span class="string">'Pan'</span>,<span class="keyword">...</span>
+0054     <span class="string">'Cdata'</span>,<a href="local_graphic.html" class="code" title="function cdata=local_graphic(name)">local_graphic</a>(<span class="string">'PanIcon'</span>),<span class="keyword">...</span>
+0055     <span class="string">'ClickedCallback'</span>,@<a href="#_sub2" class="code" title="subfunction ToggleButton(src,varargin)">ToggleButton</a>);
+0056 
+0057 data=[];
+0058 data.pointer=<span class="string">'crosshair'</span>;
+0059 data.hotspot=[8 8];
+0060 uitoggletool(<span class="string">'Parent'</span>,hb,<span class="string">'Tag'</span>,<span class="string">'autoscale'</span>,<span class="keyword">...</span>
+0061     <span class="string">'Cdata'</span>,<a href="local_graphic.html" class="code" title="function cdata=local_graphic(name)">local_graphic</a>(<span class="string">'AutoScaleIcon'</span>),<span class="string">'Enable'</span>,<span class="string">'on'</span>,<span class="keyword">...</span>
+0062     <span class="string">'ClickedCallback'</span>,@<a href="#_sub2" class="code" title="subfunction ToggleButton(src,varargin)">ToggleButton</a>,<span class="keyword">...</span>
+0063     <span class="string">'UserData'</span>,data,<span class="string">'ToolTipString'</span>,<span class="string">'Auto scale axes'</span>);
+0064 
+0065 data=[];
+0066 data.hotspot=[8 8];
+0067 data.pointer=<span class="string">'crosshair'</span>;
+0068 uitoggletool(<span class="string">'Parent'</span>,hb,<span class="string">'Tag'</span>,<span class="string">'tightscale'</span>,<span class="keyword">...</span>
+0069     <span class="string">'Cdata'</span>,<a href="local_graphic.html" class="code" title="function cdata=local_graphic(name)">local_graphic</a>(<span class="string">'TightScaleIcon'</span>),<span class="string">'Enable'</span>,<span class="string">'on'</span>,<span class="keyword">...</span>
+0070     <span class="string">'ClickedCallback'</span>,@<a href="#_sub2" class="code" title="subfunction ToggleButton(src,varargin)">ToggleButton</a>,<span class="keyword">...</span>
+0071     <span class="string">'UserData'</span>,data,<span class="string">'ToolTipString'</span>,<span class="string">'Tight scale axes'</span>);
+0072 
+0073 data=[];
+0074 data.pointer=<span class="string">'crosshair'</span>;
+0075 data.hotspot=[8 8];
+0076 uitoggletool(<span class="string">'Parent'</span>,hb,<span class="string">'Tag'</span>,<span class="string">'manualscale'</span>,<span class="keyword">...</span>
+0077     <span class="string">'Cdata'</span>,<a href="local_graphic.html" class="code" title="function cdata=local_graphic(name)">local_graphic</a>(<span class="string">'ManualScaleIcon'</span>),<span class="string">'Enable'</span>,<span class="string">'on'</span>,<span class="keyword">...</span>
+0078     <span class="string">'ClickedCallback'</span>,@<a href="#_sub2" class="code" title="subfunction ToggleButton(src,varargin)">ToggleButton</a>,<span class="keyword">...</span>
+0079     <span class="string">'UserData'</span>,data,<span class="string">'ToolTipString'</span>,<span class="string">'Manual scale'</span>);
+0080 
+0081 uitoggletool(<span class="string">'Parent'</span>,hb,<span class="string">'Tag'</span>,<span class="string">'datacursor'</span>,<span class="string">'ToolTipString'</span>,<span class="string">'Data cursor'</span>,<span class="keyword">...</span>
+0082     <span class="string">'Cdata'</span>,<a href="local_graphic.html" class="code" title="function cdata=local_graphic(name)">local_graphic</a>(<span class="string">'DatatipIcon'</span>),<span class="string">'Separator'</span>,<span class="string">'on'</span>,<span class="string">'Enable'</span>,<span class="string">'on'</span>,<span class="keyword">...</span>
+0083     <span class="string">'ClickedCallback'</span>,@<a href="#_sub2" class="code" title="subfunction ToggleButton(src,varargin)">ToggleButton</a>);
+0084 
+0085 data=[];
+0086 data.pointer=<span class="string">'crosshair'</span>;
+0087 uitoggletool(<span class="string">'Parent'</span>,hb,<span class="string">'Tag'</span>,<span class="string">'ROIstatistics'</span>,<span class="keyword">...</span>
+0088     <span class="string">'ToolTipString'</span>,<span class="string">'Region of interest (ROI) statistics'</span>,<span class="keyword">...</span>
+0089     <span class="string">'Cdata'</span>,<a href="local_graphic.html" class="code" title="function cdata=local_graphic(name)">local_graphic</a>(<span class="string">'ROIicon'</span>),<span class="string">'Enable'</span>,<span class="string">'on'</span>,<span class="keyword">...</span>
+0090     <span class="string">'UserData'</span>,data,<span class="string">'ClickedCallback'</span>,@<a href="#_sub2" class="code" title="subfunction ToggleButton(src,varargin)">ToggleButton</a>);
+0091 
+0092 data=[];
+0093 data.pointer=<span class="string">'crosshair'</span>;
+0094 uitoggletool(<span class="string">'Parent'</span>,hb,<span class="string">'Tag'</span>,<span class="string">'overlay'</span>,<span class="keyword">...</span>
+0095     <span class="string">'ToolTipString'</span>,<span class="string">'Overlay (x,y) data'</span>,<span class="keyword">...</span>
+0096     <span class="string">'Cdata'</span>,<a href="local_graphic.html" class="code" title="function cdata=local_graphic(name)">local_graphic</a>(<span class="string">'OverlayIcon'</span>),<span class="string">'Enable'</span>,<span class="string">'on'</span>,<span class="keyword">...</span>
+0097     <span class="string">'UserData'</span>,data,<span class="string">'ClickedCallback'</span>,@<a href="#_sub2" class="code" title="subfunction ToggleButton(src,varargin)">ToggleButton</a>);
+0098 
+0099 data=[];
+0100 data.pointer=<span class="string">'crosshair'</span>;
+0101 uitoggletool(<span class="string">'Parent'</span>,hb,<span class="string">'Tag'</span>,<span class="string">'clone'</span>,<span class="keyword">...</span>
+0102     <span class="string">'ToolTipString'</span>,<span class="string">'Clone axes'</span>,<span class="keyword">...</span>
+0103     <span class="string">'Cdata'</span>,<a href="local_graphic.html" class="code" title="function cdata=local_graphic(name)">local_graphic</a>(<span class="string">'CloneIcon'</span>),<span class="string">'Enable'</span>,<span class="string">'on'</span>,<span class="keyword">...</span>
+0104     <span class="string">'UserData'</span>,data,<span class="string">'ClickedCallback'</span>,@<a href="#_sub2" class="code" title="subfunction ToggleButton(src,varargin)">ToggleButton</a>);
+0105 
+0106 uipushtool(<span class="string">'Parent'</span>,hb,<span class="string">'Tag'</span>,<span class="string">'help'</span>,<span class="string">'ToolTipString'</span>,<span class="string">'Toolbar help'</span>,<span class="keyword">...</span>
+0107     <span class="string">'Cdata'</span>,<a href="local_graphic.html" class="code" title="function cdata=local_graphic(name)">local_graphic</a>(<span class="string">'HelpIcon'</span>),<span class="string">'Separator'</span>,<span class="string">'on'</span>,<span class="string">'Enable'</span>,<span class="string">'on'</span>,<span class="keyword">...</span>
+0108     <span class="string">'ClickedCallback'</span>,@<a href="#_sub1" class="code" title="subfunction ButtonClick(src,varargin)">ButtonClick</a>);
+0109 
+0110 <span class="comment">% output control</span>
+0111 <span class="keyword">if</span> nargout&gt;0
+0112     varargout{1}=fig;
+0113 <span class="keyword">end</span>
+0114 
+0115 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0116 <span class="comment">% toolbar button callback %</span>
+0117 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0118 <a name="_sub1" href="#_subfunctions" class="code">function ButtonClick(src,varargin)</a>
+0119 
+0120 tag=get(src,<span class="string">'Tag'</span>);
+0121 <span class="keyword">switch</span> tag
+0122     <span class="keyword">case</span> <span class="string">'directory'</span>
+0123         dirname=uigetdir(pwd,<span class="string">'Select working diretory'</span>);
+0124         <span class="keyword">if</span> isnumeric(dirname) <span class="comment">% user pressed cancel</span>
+0125             <span class="keyword">return</span>
+0126         <span class="keyword">else</span>
+0127             cd(dirname);
+0128         <span class="keyword">end</span>  
+0129     <span class="keyword">case</span> <span class="string">'save'</span>
+0130         <span class="comment">% make a temporary figure</span>
+0131         mainfig=ancestor(src,<span class="string">'figure'</span>);
+0132         set(mainfig,<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+0133         tempfig=copyobj(mainfig,0);
+0134         <span class="comment">% remove all uicontrols/uimenus from temp figure</span>
+0135         h=findall(tempfig,<span class="string">'Type'</span>,<span class="string">'uicontrol'</span>);
+0136         delete(h);
+0137         h=findall(tempfig,<span class="string">'Type'</span>,<span class="string">'uimenu'</span>,<span class="string">'-or'</span>,<span class="string">'Type'</span>,<span class="string">'uicontextmenu'</span>);
+0138         delete(h);
+0139         h=findall(tempfig,<span class="string">'Type'</span>,<span class="string">'uitoolbar'</span>);
+0140         delete(h);
+0141         <span class="comment">% restore default behavior to temp figure</span>
+0142         set(tempfig,<span class="string">'ResizeFcn'</span>,<span class="string">''</span>,<span class="string">'WindowButtonDownFcn'</span>,<span class="string">''</span>,<span class="keyword">...</span>
+0143             <span class="string">'WindowButtonMotionFcn'</span>,<span class="string">''</span>,<span class="string">'WindowButtonUpFcn'</span>,<span class="string">''</span>,<span class="keyword">...</span>
+0144             <span class="string">'KeyPressFcn'</span>,<span class="string">''</span>,<span class="string">'ButtonDownFcn'</span>,<span class="string">''</span>,<span class="keyword">...</span>
+0145             <span class="string">'CloseRequestFcn'</span>,<span class="string">'closereq'</span>,<span class="string">'HandleVisibility'</span>,<span class="string">'on'</span>,<span class="keyword">...</span>
+0146             <span class="string">'MenuBar'</span>,<span class="string">'figure'</span>,<span class="string">'Toolbar'</span>,<span class="string">'figure'</span>,<span class="string">'Pointer'</span>,<span class="string">'default'</span>);
+0147         <span class="comment">% save temporary figure, then delete it</span>
+0148         <span class="comment">%name=get(tempfig,'Name');</span>
+0149         name=sprintf(<span class="string">'Saved figure (%s)'</span>,datestr(now));
+0150         set(tempfig,<span class="string">'Name'</span>,name);
+0151         set(tempfig,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0152         filemenufcn(tempfig,<span class="string">'FileSaveAs'</span>);
+0153         delete(tempfig);
+0154         set(mainfig,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0155     <span class="keyword">case</span> <span class="string">'help'</span>
+0156         <a href="#_sub5" class="code" title="subfunction HelpDialog()">HelpDialog</a>;                
+0157         <span class="comment">%msgbox(message,'Toolbar operations');</span>
+0158         <span class="comment">%ht=findobj(h,'Tag','MessageBox');</span>
+0159         <span class="comment">%set(ht,'FontName','fixed');</span>
+0160 <span class="keyword">end</span>
+0161 
+0162 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0163 <span class="comment">% toolbar toggle callbacks %</span>
+0164 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0165 <a name="_sub2" href="#_subfunctions" class="code">function ToggleButton(src,varargin)</a>
+0166 
+0167 <span class="comment">% get handles</span>
+0168 parent=get(src,<span class="string">'Parent'</span>);
+0169 fig=ancestor(src,<span class="string">'figure'</span>);
+0170 figure(fig)
+0171 
+0172 <span class="comment">% restore figure to default state</span>
+0173 zoom(fig,<span class="string">'off'</span>);
+0174 pan(fig,<span class="string">'off'</span>);
+0175 datacursormode(fig,<span class="string">'off'</span>);
+0176 <a href="#_sub6" class="code" title="subfunction autoscale(fig,mode)">autoscale</a>(fig,<span class="string">'off'</span>);
+0177 <a href="#_sub8" class="code" title="subfunction tightscale(fig,mode)">tightscale</a>(fig,<span class="string">'off'</span>);
+0178 <a href="#_sub10" class="code" title="subfunction manualscale(fig,mode)">manualscale</a>(fig,<span class="string">'off'</span>);
+0179 <a href="#_sub16" class="code" title="subfunction ROIstatistics(fig,mode)">ROIstatistics</a>(fig,<span class="string">'off'</span>);
+0180 <a href="#_sub18" class="code" title="subfunction overlay(fig,mode)">overlay</a>(fig,<span class="string">'off'</span>);
+0181 <a href="#_sub21" class="code" title="subfunction clone(fig,mode)">clone</a>(fig,<span class="string">'off'</span>);
+0182 
+0183 <span class="comment">% check toggle state</span>
+0184 state=get(src,<span class="string">'State'</span>);
+0185 <span class="keyword">if</span> strcmp(state,<span class="string">'on'</span>) 
+0186     <span class="comment">% turn off other toggle switchs</span>
+0187     toggle=findobj(parent,<span class="string">'Type'</span>,<span class="string">'uitoggletool'</span>);
+0188     ii=(toggle~=src);
+0189     set(toggle(ii),<span class="string">'State'</span>,<span class="string">'off'</span>);
+0190 <span class="keyword">else</span>
+0191     <span class="keyword">return</span> <span class="comment">% nothing left to do</span>
+0192 <span class="keyword">end</span>
+0193 
+0194 <span class="comment">% make sure at least one axes exists</span>
+0195 haxes=<a href="#_sub4" class="code" title="subfunction func=ValidAxes(fig)">ValidAxes</a>(fig);
+0196 <span class="keyword">if</span> numel(haxes)==0
+0197     set(src,<span class="string">'State'</span>,<span class="string">'off'</span>);
+0198     <span class="keyword">return</span>
+0199 <span class="keyword">end</span>
+0200 
+0201 <span class="comment">% execute specific toggle actions</span>
+0202 tag=get(src,<span class="string">'Tag'</span>);
+0203 <span class="keyword">switch</span> tag
+0204     <span class="keyword">case</span> <span class="string">'zoom'</span>
+0205         zoom(fig,<span class="string">'on'</span>);
+0206     <span class="keyword">case</span> <span class="string">'pan'</span>
+0207         pan(fig,<span class="string">'on'</span>);
+0208     <span class="keyword">case</span> <span class="string">'autoscale'</span>
+0209         <a href="#_sub6" class="code" title="subfunction autoscale(fig,mode)">autoscale</a>(fig,<span class="string">'on'</span>);
+0210     <span class="keyword">case</span> <span class="string">'tightscale'</span>
+0211         <a href="#_sub8" class="code" title="subfunction tightscale(fig,mode)">tightscale</a>(fig,<span class="string">'on'</span>);
+0212     <span class="keyword">case</span> <span class="string">'manualscale'</span>
+0213         <a href="#_sub10" class="code" title="subfunction manualscale(fig,mode)">manualscale</a>(fig,<span class="string">'on'</span>);
+0214     <span class="keyword">case</span> <span class="string">'datacursor'</span>
+0215         dcm_obj=datacursormode(fig);
+0216         set(dcm_obj,<span class="string">'Enable'</span>,<span class="string">'on'</span>,<span class="string">'UpdateFcn'</span>,@<a href="#_sub15" class="code" title="subfunction output_txt = datacursor_text(obj,event_obj)">datacursor_text</a>)
+0217     <span class="keyword">case</span> <span class="string">'ROIstatistics'</span>
+0218         <a href="#_sub16" class="code" title="subfunction ROIstatistics(fig,mode)">ROIstatistics</a>(fig,<span class="string">'on'</span>);
+0219     <span class="keyword">case</span> <span class="string">'overlay'</span>
+0220         <a href="#_sub18" class="code" title="subfunction overlay(fig,mode)">overlay</a>(fig,<span class="string">'on'</span>);
+0221     <span class="keyword">case</span> <span class="string">'clone'</span>
+0222         <a href="#_sub21" class="code" title="subfunction clone(fig,mode)">clone</a>(fig,<span class="string">'on'</span>);
+0223 <span class="keyword">end</span>
+0224 
+0225 <span class="comment">%%%%%%%%%%%%%%%%%%%%%</span>
+0226 <span class="comment">% general functions %</span>
+0227 <span class="comment">%%%%%%%%%%%%%%%%%%%%%</span>
+0228 <a name="_sub3" href="#_subfunctions" class="code">function func=IsValidAxes(haxes)</a>
+0229 
+0230 func=false;
+0231 type=get(haxes,<span class="string">'Type'</span>);
+0232 tag=get(haxes,<span class="string">'Tag'</span>);
+0233 <span class="keyword">if</span> ~strcmp(type,<span class="string">'axes'</span>)
+0234     <span class="keyword">return</span>
+0235 <span class="keyword">elseif</span> strcmp(tag,<span class="string">'legend'</span>) || strcmp(tag,<span class="string">'colorbar'</span>)
+0236     <span class="keyword">return</span>
+0237 <span class="keyword">else</span>
+0238     func=true;
+0239 <span class="keyword">end</span>
+0240 
+0241 <a name="_sub4" href="#_subfunctions" class="code">function func=ValidAxes(fig)</a>
+0242 
+0243 haxes=findobj(fig,<span class="string">'Type'</span>,<span class="string">'axes'</span>);
+0244 N=numel(haxes);
+0245 func=[];
+0246 <span class="keyword">for</span> ii=1:N
+0247     <span class="keyword">if</span> <a href="#_sub3" class="code" title="subfunction func=IsValidAxes(haxes)">IsValidAxes</a>(haxes(ii))
+0248         func(end+1)=haxes(ii);
+0249     <span class="keyword">end</span>
+0250 <span class="keyword">end</span>
+0251 
+0252 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0253 <a name="_sub5" href="#_subfunctions" class="code">function HelpDialog()</a>
+0254 <span class="comment">% create message</span>
+0255 indent=repmat(<span class="string">' '</span>,[1 5]);
+0256 indent=[indent <span class="string">'-'</span>];
+0257 message={};
+0258 message{end+1}=<span class="string">'Toolbar operations'</span>;
+0259 message{end+1}=<span class="string">' '</span>;
+0260 message{end+1}=<span class="string">'1. Set working directory'</span>;
+0261 message{end+1}=[indent <span class="keyword">...</span>
+0262     <span class="string">'Change the current directory using a dialog box.'</span>];
+0263 message{end+1}=<span class="string">' '</span>;
+0264 message{end+1}=<span class="string">'2. Save figure'</span>;
+0265 message{end+1}=[indent<span class="keyword">...</span>
+0266     <span class="string">'Save figure as a MATLAB *.fig file or a graphic file (pdf, jpg, etc.).'</span>];
+0267 message{end+1}=<span class="string">' '</span>;
+0268 message{end+1}=<span class="string">'3. Zoom'</span>;
+0269 message{end+1}=[indent <span class="string">'Zoom in with mouse click or click and drag.'</span>];
+0270 message{end+1}=[indent <span class="string">'Zoom out with shift-click; double-click to restore original view.'</span>];
+0271 message{end+1}=[indent <span class="string">'Press right mouse button (control-click) for additional options.'</span>];
+0272 message{end+1}=<span class="string">' '</span>;
+0273 message{end+1}=<span class="string">'4. Pan'</span>;
+0274 message{end+1}=[indent <span class="string">'Click and drag to pan over an axes; double-click to restore original view.'</span>];
+0275 message{end+1}=[indent <span class="string">'Press right mouse button (control-click) for additional options.'</span>];
+0276 message{end+1}=<span class="string">' '</span>;
+0277 message{end+1}=<span class="string">'5. Auto scale'</span>;
+0278 message{end+1}=[indent <span class="string">'Click on axes to set nice limits.'</span>];
+0279 message{end+1}=[indent <span class="string">'Shift-click to auto scale all figure axes.'</span>];
+0280 message{end+1}=<span class="string">' '</span>;
+0281 message{end+1}=<span class="string">'6. Tight scale'</span>;
+0282 message{end+1}=[indent <span class="string">'Click on axes to set tight limit'</span>];
+0283 message{end+1}=[indent <span class="string">'Shift-click to tight scale all figure axes.'</span>];
+0284 message{end+1}=<span class="string">' '</span>;
+0285 message{end+1}=<span class="string">'7. Manual scale '</span>;
+0286 message{end+1}=[indent <span class="string">'Click on axes to manually set limits.'</span>];
+0287 message{end+1}=<span class="string">' '</span>;
+0288 message{end+1}=<span class="string">'8. Data cursor'</span>;
+0289 message{end+1}=[indent <span class="string">'Click on data to display (x,y,z) coordinates.'</span>];
+0290 message{end+1}=[indent <span class="string">'Press right mouse button (control-click) for additional options.'</span>];
+0291 message{end+1}=<span class="string">' '</span>;
+0292 message{end+1}=<span class="string">'9. Region of interest (ROI) statistics '</span>;
+0293 message{end+1}=[indent <span class="string">'Click and drag to specify a region of interest.'</span>];
+0294 message{end+1}=[indent <span class="string">'Local statistics in this region will be displayed.'</span>];
+0295 message{end+1}=<span class="string">' '</span>;
+0296 message{end+1}=<span class="string">'10. Overlay (x,y) data '</span>;
+0297 message{end+1}=[indent <span class="string">'Click on axes to overlay (x,y) data from a file.'</span>];
+0298 message{end+1}=[indent <span class="string">'Right-click overlays to make adjustments.'</span>];
+0299 message{end+1}=<span class="string">' '</span>;
+0300 message{end+1}=<span class="string">'11. Clone axes  '</span>;
+0301 message{end+1}=[indent <span class="string">'Click on axes to clone to another figure.'</span>];
+0302 message{end+1}=<span class="string">' '</span>;
+0303 numlines=numel(message);
+0304 width=0;
+0305 <span class="keyword">for</span> ii=1:numlines
+0306     width=max([width numel(message{ii})]);
+0307 <span class="keyword">end</span>
+0308 <span class="comment">% create dialog</span>
+0309 fig=findall(0,<span class="string">'Type'</span>,<span class="string">'figure'</span>,<span class="string">'Tag'</span>,<span class="string">'MinimalFigure:Help'</span>);
+0310 <span class="keyword">if</span> ishandle(fig)
+0311    delete(fig);
+0312 <span class="keyword">end</span>
+0313 fig=figure(<span class="string">'Toolbar'</span>,<span class="string">'none'</span>,<span class="string">'Menubar'</span>,<span class="string">'none'</span>,<span class="string">'DockControls'</span>,<span class="string">'off'</span>,<span class="keyword">...</span>
+0314     <span class="string">'Tag'</span>,<span class="string">'MinimalFigure:Help'</span>,<span class="string">'Visible'</span>,<span class="string">'off'</span>,<span class="keyword">...</span>
+0315     <span class="string">'Units'</span>,<span class="string">'characters'</span>,<span class="string">'Resize'</span>,<span class="string">'off'</span>,<span class="keyword">...</span>
+0316     <span class="string">'IntegerHandle'</span>,<span class="string">'off'</span>,<span class="string">'HandleVisibility'</span>,<span class="string">'callback'</span>,<span class="keyword">...</span>
+0317     <span class="string">'NumberTitle'</span>,<span class="string">'off'</span>,<span class="string">'Name'</span>,<span class="string">'Toolbar help'</span>);
+0318 
+0319 gset=<a href="#_sub23" class="code" title="subfunction func=GUIsettings(field)">GUIsettings</a>;
+0320 htext=uicontrol(<span class="string">'Style'</span>,<span class="string">'text'</span>,<span class="keyword">...</span>
+0321     <span class="string">'Units'</span>,<span class="string">'characters'</span>,<span class="string">'Position'</span>,[0 0 80 1],<span class="keyword">...</span>
+0322     <span class="string">'HorizontalAlignment'</span>,<span class="string">'left'</span>,<span class="keyword">...</span>
+0323     <span class="string">'Max'</span>,2,<span class="string">'Min'</span>,0,<span class="string">'BackgroundColor'</span>,gset.textbgcolor);
+0324 [message,pos]=textwrap(htext,message);
+0325 figpos=[0 0 pos(3)+2*gset.hmargin pos(4)+2*gset.vmargin];
+0326 
+0327 pos(1)=pos(1)+gset.hmargin;
+0328 pos(2)=pos(2)+gset.vmargin;
+0329 set(htext,<span class="string">'String'</span>,message,<span class="string">'Position'</span>,pos);
+0330 
+0331 set(fig,<span class="string">'Position'</span>,figpos);
+0332 movegui(fig,<span class="string">'center'</span>);
+0333 set(fig,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0334 
+0335 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0336 <a name="_sub6" href="#_subfunctions" class="code">function autoscale(fig,mode)</a>
+0337 
+0338 toolbar=findobj(fig,<span class="string">'Tag'</span>,<span class="string">'MinimalFigureToolbar'</span>);
+0339 toggle=findobj(toolbar,<span class="string">'Tag'</span>,<span class="string">'autoscale'</span>);
+0340 <span class="keyword">switch</span> mode
+0341     <span class="keyword">case</span> <span class="string">'on'</span>
+0342         haxes=<a href="#_sub4" class="code" title="subfunction func=ValidAxes(fig)">ValidAxes</a>(fig);
+0343         <span class="keyword">if</span> numel(haxes)&gt;1
+0344             data=get(toggle,<span class="string">'UserData'</span>);
+0345             <span class="comment">%set(fig,'Pointer','custom','PointerShapeCData',data.pointer,...</span>
+0346             <span class="comment">%    'PointerShapeHotSpot',data.hotspot,...</span>
+0347             <span class="comment">%    'WindowButtonUpFcn',@autoscaleCallback);</span>
+0348             set(fig,<span class="string">'Pointer'</span>,data.pointer,<span class="string">'WindowButtonUpFcn'</span>,@<a href="#_sub7" class="code" title="subfunction autoscaleCallback(src,varargin)">autoscaleCallback</a>);
+0349         <span class="keyword">else</span>
+0350             <span class="keyword">if</span> numel(haxes)==1;
+0351                 axis(haxes,<span class="string">'auto'</span>);
+0352             <span class="keyword">end</span>
+0353             set(toggle,<span class="string">'State'</span>,<span class="string">'off'</span>); <span class="comment">% for user convenience</span>
+0354         <span class="keyword">end</span>
+0355     <span class="keyword">case</span> <span class="string">'off'</span>
+0356         data=get(toolbar,<span class="string">'UserData'</span>);
+0357         set(fig,data.figset{:});
+0358 <span class="keyword">end</span>
+0359 
+0360 <a name="_sub7" href="#_subfunctions" class="code">function autoscaleCallback(src,varargin)</a>
+0361 
+0362 fig=ancestor(src,<span class="string">'figure'</span>);
+0363 toolbar=findobj(fig,<span class="string">'Tag'</span>,<span class="string">'MinimalFigureToolbar'</span>);
+0364 toggle=findobj(toolbar,<span class="string">'Tag'</span>,<span class="string">'autoscale'</span>);
+0365 selection=get(fig,<span class="string">'SelectionType'</span>);
+0366 <span class="keyword">switch</span> lower(selection)
+0367     <span class="keyword">case</span> <span class="string">'normal'</span>
+0368         ha=get(fig,<span class="string">'CurrentAxes'</span>);
+0369         <span class="keyword">if</span> <a href="#_sub3" class="code" title="subfunction func=IsValidAxes(haxes)">IsValidAxes</a>(ha)
+0370             axis(ha,<span class="string">'auto'</span>);
+0371         <span class="keyword">end</span>
+0372     <span class="keyword">case</span> <span class="string">'extend'</span>
+0373         haxes=<a href="#_sub4" class="code" title="subfunction func=ValidAxes(fig)">ValidAxes</a>(fig);
+0374         N=numel(haxes);
+0375         <span class="keyword">for</span> ii=1:N
+0376             axis(haxes(ii),<span class="string">'auto'</span>);
+0377         <span class="keyword">end</span>
+0378         <a href="#_sub6" class="code" title="subfunction autoscale(fig,mode)">autoscale</a>(fig,<span class="string">'off'</span>);
+0379         set(toggle,<span class="string">'State'</span>,<span class="string">'off'</span>); <span class="comment">% for user convenience</span>
+0380 <span class="keyword">end</span>
+0381 zoom(fig,<span class="string">'reset'</span>);
+0382 
+0383 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0384 <a name="_sub8" href="#_subfunctions" class="code">function tightscale(fig,mode)</a>
+0385 
+0386 toolbar=findobj(fig,<span class="string">'Tag'</span>,<span class="string">'MinimalFigureToolbar'</span>);
+0387 toggle=findobj(toolbar,<span class="string">'Tag'</span>,<span class="string">'tightscale'</span>);
+0388 <span class="keyword">switch</span> mode
+0389     <span class="keyword">case</span> <span class="string">'on'</span>
+0390         haxes=<a href="#_sub4" class="code" title="subfunction func=ValidAxes(fig)">ValidAxes</a>(fig);
+0391         <span class="keyword">if</span> numel(haxes)&gt;1
+0392             data=get(toggle,<span class="string">'UserData'</span>);
+0393             <span class="comment">%set(fig,'Pointer','custom','PointerShapeCData',data.pointer,...</span>
+0394             <span class="comment">%    'PointerShapeHotSpot',data.hotspot,...</span>
+0395             <span class="comment">%    'WindowButtonUpFcn',@tightscaleCallback);</span>
+0396             set(fig,<span class="string">'Pointer'</span>,data.pointer,<span class="string">'WindowButtonUpFcn'</span>,@<a href="#_sub9" class="code" title="subfunction tightscaleCallback(src,varargin)">tightscaleCallback</a>);
+0397         <span class="keyword">else</span>
+0398             <span class="keyword">if</span> numel(haxes)==1;
+0399                 axis(haxes,<span class="string">'tight'</span>);
+0400             <span class="keyword">end</span>
+0401             set(toggle,<span class="string">'State'</span>,<span class="string">'off'</span>); <span class="comment">% for user convenience</span>
+0402         <span class="keyword">end</span>
+0403     <span class="keyword">case</span> <span class="string">'off'</span>
+0404         data=get(toolbar,<span class="string">'UserData'</span>);
+0405         set(fig,data.figset{:});
+0406 <span class="keyword">end</span>
+0407 
+0408 <a name="_sub9" href="#_subfunctions" class="code">function tightscaleCallback(src,varargin)</a>
+0409 
+0410 fig=ancestor(src,<span class="string">'figure'</span>);
+0411 toolbar=findobj(fig,<span class="string">'Tag'</span>,<span class="string">'MinimalFigureToolbar'</span>);
+0412 toggle=findobj(toolbar,<span class="string">'Tag'</span>,<span class="string">'tightscale'</span>);
+0413 selection=get(fig,<span class="string">'SelectionType'</span>);
+0414 <span class="keyword">switch</span> lower(selection)
+0415     <span class="keyword">case</span> <span class="string">'normal'</span>
+0416         ha=get(fig,<span class="string">'CurrentAxes'</span>);
+0417         <span class="keyword">if</span> <a href="#_sub3" class="code" title="subfunction func=IsValidAxes(haxes)">IsValidAxes</a>(ha)
+0418             axis(ha,<span class="string">'tight'</span>);
+0419         <span class="keyword">end</span>
+0420     <span class="keyword">case</span> <span class="string">'extend'</span>
+0421         haxes=<a href="#_sub4" class="code" title="subfunction func=ValidAxes(fig)">ValidAxes</a>(fig);
+0422         N=numel(haxes);
+0423         <span class="keyword">for</span> ii=1:N
+0424             axis(haxes(ii),<span class="string">'tight'</span>);
+0425         <span class="keyword">end</span>
+0426         <a href="#_sub8" class="code" title="subfunction tightscale(fig,mode)">tightscale</a>(fig,<span class="string">'off'</span>);
+0427         set(toggle,<span class="string">'State'</span>,<span class="string">'off'</span>); <span class="comment">% for user convenience</span>
+0428 <span class="keyword">end</span>
+0429 zoom(fig,<span class="string">'reset'</span>);
+0430 
+0431 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0432 <a name="_sub10" href="#_subfunctions" class="code">function manualscale(fig,mode)</a>
+0433 
+0434 toolbar=findobj(fig,<span class="string">'Tag'</span>,<span class="string">'MinimalFigureToolbar'</span>);
+0435 toggle=findobj(toolbar,<span class="string">'Tag'</span>,<span class="string">'manualscale'</span>);
+0436 <span class="keyword">switch</span> mode
+0437     <span class="keyword">case</span> <span class="string">'on'</span>
+0438         haxes=<a href="#_sub4" class="code" title="subfunction func=ValidAxes(fig)">ValidAxes</a>(fig);
+0439         <span class="keyword">if</span> numel(haxes)&gt;1
+0440             data=get(toggle,<span class="string">'UserData'</span>);
+0441             <span class="comment">%set(fig,'Pointer','custom','PointerShapeCData',data.pointer,...</span>
+0442             <span class="comment">%    'PointerShapeHotSpot',data.hotspot,...</span>
+0443             <span class="comment">%    'WindowButtonUpFcn',@manualscaleCallback);</span>
+0444             set(fig,<span class="string">'Pointer'</span>,data.pointer,<span class="string">'WindowButtonUpFcn'</span>,@<a href="#_sub11" class="code" title="subfunction manualscaleCallback(src,varargin)">manualscaleCallback</a>);
+0445         <span class="keyword">else</span>
+0446             <a href="#_sub11" class="code" title="subfunction manualscaleCallback(src,varargin)">manualscaleCallback</a>(fig);
+0447             set(toggle,<span class="string">'State'</span>,<span class="string">'off'</span>); <span class="comment">% for user convenience</span>
+0448             set(haxes,<span class="string">'Selected'</span>,<span class="string">'off'</span>);
+0449         <span class="keyword">end</span>
+0450     <span class="keyword">case</span> <span class="string">'off'</span>
+0451         dlg=findall(0,<span class="string">'Type'</span>,<span class="string">'figure'</span>,<span class="string">'Tag'</span>,<span class="string">'MinimalFigure:ManualScale'</span>);
+0452         delete(dlg);
+0453         data=get(toolbar,<span class="string">'UserData'</span>);
+0454         set(fig,data.figset{:});
+0455         haxes=findall(fig,<span class="string">'Type'</span>,<span class="string">'axes'</span>);
+0456         set(haxes,<span class="string">'Selected'</span>,<span class="string">'off'</span>);
+0457 <span class="keyword">end</span>
+0458 
+0459 <a name="_sub11" href="#_subfunctions" class="code">function manualscaleCallback(src,varargin)</a>
+0460 
+0461 mainfig=ancestor(src,<span class="string">'figure'</span>);
+0462 
+0463 <span class="comment">% probe axes's current state</span>
+0464 haxes=get(mainfig,<span class="string">'CurrentAxes'</span>);
+0465 temp=axis(haxes);
+0466 Naxis=numel(temp)/2;
+0467 oldlim=cell(1,Naxis);
+0468 <span class="keyword">for</span> ii=1:Naxis
+0469     oldlim{ii}=temp(1:2);
+0470     temp=temp(3:end);
+0471 <span class="keyword">end</span>
+0472 hc=findall(mainfig,<span class="string">'Type'</span>,<span class="string">'axes'</span>);
+0473 set(hc,<span class="string">'Selected'</span>,<span class="string">'off'</span>);
+0474 set(haxes,<span class="string">'Selected'</span>,<span class="string">'on'</span>)
+0475 
+0476 <span class="comment">% see if dialog box already exists</span>
+0477 fig=findall(0,<span class="string">'Type'</span>,<span class="string">'figure'</span>,<span class="string">'Tag'</span>,<span class="string">'MinimalFigure:ManualScale'</span>);
+0478 <span class="keyword">if</span> ishandle(fig) 
+0479     set(fig,<span class="string">'Units'</span>,<span class="string">'characters'</span>);
+0480     pos=get(fig,<span class="string">'Position'</span>); <span class="comment">% store previous location</span>
+0481     delete(fig);
+0482 <span class="keyword">else</span>
+0483     oldunits=get(mainfig,<span class="string">'Units'</span>);
+0484     set(mainfig,<span class="string">'Units'</span>,<span class="string">'characters'</span>);
+0485     pos=get(mainfig,<span class="string">'Position'</span>);
+0486     set(mainfig,<span class="string">'Units'</span>,oldunits);
+0487 <span class="keyword">end</span>
+0488 
+0489 <span class="comment">% create new dialog box</span>
+0490 gset=<a href="#_sub23" class="code" title="subfunction func=GUIsettings(field)">GUIsettings</a>;
+0491 Ly=Naxis*gset.textheight+gset.buttonheight+(Naxis+2)*gset.vmargin;
+0492 Lx=2*(gset.editwidth+gset.labelwidth)+gset.checkwidth+2*gset.hmargin;
+0493 pos(3)=Lx;
+0494 pos(4)=Ly;
+0495 fig=figure(<span class="string">'IntegerHandle'</span>,<span class="string">'off'</span>,<span class="keyword">...</span>
+0496     <span class="string">'Tag'</span>,<span class="string">'MinimalFigure:ManualScale'</span>,<span class="keyword">...</span>
+0497     <span class="string">'units'</span>,<span class="string">'characters'</span>,<span class="string">'Position'</span>,pos,<span class="keyword">...</span>
+0498     <span class="string">'NumberTitle'</span>,<span class="string">'off'</span>,<span class="string">'Name'</span>,<span class="string">'Manual scale axes'</span>,<span class="keyword">...</span>
+0499     <span class="string">'Menubar'</span>,<span class="string">'none'</span>,<span class="string">'DockControls'</span>,<span class="string">'off'</span>,<span class="keyword">...</span>
+0500     <span class="string">'Resize'</span>,<span class="string">'off'</span>);
+0501 <span class="comment">% create limit controls for each axis</span>
+0502 label={<span class="string">'x='</span>,<span class="string">'y='</span>,<span class="string">'z='</span>};
+0503 checktag={<span class="string">'autox'</span>,<span class="string">'autoy'</span>,<span class="string">'autoz'</span>};
+0504 <span class="keyword">for</span> ii=1:Naxis
+0505     pos(1)=gset.hmargin;
+0506     pos(2)=Ly-ii*(gset.vmargin+gset.textheight);
+0507     pos(3)=gset.labelwidth;
+0508     pos(4)=gset.textheight;
+0509     <span class="comment">%pos=[dx Ly-ii*(dx+ControlHeight) LabelWidth ControlHeight];</span>
+0510     uicontrol(<span class="string">'Style'</span>,<span class="string">'text'</span>,<span class="string">'String'</span>,label{ii},<span class="keyword">...</span>
+0511         <span class="string">'Units'</span>,<span class="string">'characters'</span>,<span class="string">'Position'</span>,pos);
+0512     pos(1)=pos(1)+pos(3);
+0513     pos(3)=gset.editwidth;
+0514     edit1=uicontrol(<span class="string">'Style'</span>,<span class="string">'edit'</span>,<span class="keyword">...</span>
+0515         <span class="string">'Units'</span>,<span class="string">'characters'</span>,<span class="string">'Position'</span>,pos,<span class="keyword">...</span>
+0516         <span class="string">'Tag'</span>,<span class="string">'edit'</span>,<span class="string">'Callback'</span>,@<a href="#_sub12" class="code" title="subfunction ManualScaleUpdate(src,varargin)">ManualScaleUpdate</a>);
+0517     <a href="#_sub13" class="code" title="subfunction ManualScaleWriter(editbox,value)">ManualScaleWriter</a>(edit1,oldlim{ii}(1));
+0518     pos(1)=pos(1)+pos(3);
+0519     pos(3)=gset.labelwidth;
+0520     uicontrol(<span class="string">'Style'</span>,<span class="string">'text'</span>,<span class="string">'String'</span>,<span class="string">'to'</span>,<span class="keyword">...</span>
+0521         <span class="string">'Units'</span>,<span class="string">'characters'</span>,<span class="string">'Position'</span>,pos);
+0522     pos(1)=pos(1)+pos(3);
+0523     pos(3)=gset.editwidth;
+0524     edit2=uicontrol(<span class="string">'Style'</span>,<span class="string">'edit'</span>,<span class="keyword">...</span>
+0525         <span class="string">'Units'</span>,<span class="string">'characters'</span>,<span class="string">'Position'</span>,pos,<span class="keyword">...</span>
+0526         <span class="string">'Tag'</span>,<span class="string">'edit'</span>,<span class="string">'Callback'</span>,@<a href="#_sub12" class="code" title="subfunction ManualScaleUpdate(src,varargin)">ManualScaleUpdate</a>);
+0527     <a href="#_sub13" class="code" title="subfunction ManualScaleWriter(editbox,value)">ManualScaleWriter</a>(edit2,oldlim{ii}(2));
+0528     pos(1)=pos(1)+pos(3);
+0529     pos(3)=gset.checkwidth;
+0530     autobox=uicontrol(<span class="string">'Style'</span>,<span class="string">'checkbox'</span>,<span class="string">'String'</span>,<span class="string">'Auto'</span>,<span class="keyword">...</span>
+0531         <span class="string">'units'</span>,<span class="string">'characters'</span>,<span class="string">'Position'</span>,pos,<span class="keyword">...</span>
+0532         <span class="string">'Tag'</span>,checktag{ii},<span class="string">'Callback'</span>,@<a href="#_sub12" class="code" title="subfunction ManualScaleUpdate(src,varargin)">ManualScaleUpdate</a>);
+0533     edit{ii}=[edit1 edit2];
+0534     set(edit{ii},<span class="string">'UserData'</span>,autobox);
+0535     set(autobox,<span class="string">'UserData'</span>,edit{ii});
+0536 <span class="keyword">end</span>
+0537 <span class="comment">% OK push button</span>
+0538 <span class="comment">%pos(1)=Lx-3*ButtonWidth-3*dx;</span>
+0539 pos(1)=Lx-3*gset.buttonwidth-3*gset.hmargin;
+0540 pos(2)=gset.vmargin;
+0541 pos(3)=gset.buttonwidth;
+0542 pos(4)=gset.buttonheight;
+0543 uicontrol(<span class="string">'Style'</span>,<span class="string">'pushbutton'</span>,<span class="string">'Tag'</span>,<span class="string">'ok'</span>,<span class="keyword">...</span>
+0544     <span class="string">'Units'</span>,<span class="string">'characters'</span>,<span class="string">'Position'</span>,pos,<span class="keyword">...</span>
+0545     <span class="string">'String'</span>,<span class="string">'OK'</span>,<span class="string">'Callback'</span>,@<a href="#_sub12" class="code" title="subfunction ManualScaleUpdate(src,varargin)">ManualScaleUpdate</a>);
+0546 <span class="comment">% apply push button</span>
+0547 pos(1)=pos(1)+gset.buttonwidth+gset.hmargin;
+0548 apply=uicontrol(<span class="string">'Style'</span>,<span class="string">'pushbutton'</span>,<span class="string">'Tag'</span>,<span class="string">'apply'</span>,<span class="keyword">...</span>
+0549     <span class="string">'Units'</span>,<span class="string">'characters'</span>,<span class="string">'Position'</span>,pos,<span class="keyword">...</span>
+0550     <span class="string">'String'</span>,<span class="string">'Apply'</span>,<span class="string">'Callback'</span>,@<a href="#_sub12" class="code" title="subfunction ManualScaleUpdate(src,varargin)">ManualScaleUpdate</a>);
+0551 set(apply,<span class="string">'UserData'</span>,edit);
+0552 <span class="comment">% cancel push button</span>
+0553 pos(1)=pos(1)+gset.buttonwidth+gset.hmargin;
+0554 uicontrol(<span class="string">'Style'</span>,<span class="string">'pushbutton'</span>,<span class="string">'Tag'</span>,<span class="string">'cancel'</span>,<span class="keyword">...</span>
+0555     <span class="string">'Units'</span>,<span class="string">'characters'</span>,<span class="string">'Position'</span>,pos,<span class="keyword">...</span>
+0556     <span class="string">'String'</span>,<span class="string">'Cancel'</span>,<span class="string">'Callback'</span>,@<a href="#_sub12" class="code" title="subfunction ManualScaleUpdate(src,varargin)">ManualScaleUpdate</a>);
+0557 <span class="comment">% appearance formatting</span>
+0558 h=findobj(fig,<span class="string">'Type'</span>,<span class="string">'uicontrol'</span>);
+0559 set(h,<span class="string">'FontName'</span>,gset.fontname);
+0560 h=findobj(fig,<span class="string">'Style'</span>,<span class="string">'text'</span>);
+0561 set(h,<span class="string">'BackgroundColor'</span>,gset.textbgcolor);
+0562 h=findobj(fig,<span class="string">'Style'</span>,<span class="string">'checkbox'</span>);
+0563 set(h,<span class="string">'BackgroundColor'</span>,gset.textbgcolor);
+0564 h=findobj(<span class="string">'Style'</span>,<span class="string">'edit'</span>);
+0565 set(h,<span class="string">'BackgroundColor'</span>,gset.editcolor);
+0566 <span class="comment">% store data in dialog for later use</span>
+0567 data.haxes=haxes;
+0568 data.Naxis=numel(oldlim);
+0569 data.oldlim=oldlim;
+0570 data.newlim=oldlim;
+0571 set(fig,<span class="string">'UserData'</span>,data);
+0572 <span class="comment">% protect figure from console</span>
+0573 set(fig,<span class="string">'HandleVisibility'</span>,<span class="string">'callback'</span>);
+0574 
+0575 <a name="_sub12" href="#_subfunctions" class="code">function ManualScaleUpdate(src,varargin)</a>
+0576 
+0577 fig=findall(0,<span class="string">'Type'</span>,<span class="string">'figure'</span>,<span class="string">'Tag'</span>,<span class="string">'MinimalFigure:ManualScale'</span>);
+0578 data=get(fig,<span class="string">'UserData'</span>);
+0579 limfield={<span class="string">'XLim'</span>,<span class="string">'YLim'</span>,<span class="string">'ZLim'</span>};
+0580 
+0581 <span class="keyword">if</span> ishandle(src)
+0582     tag=get(src,<span class="string">'Tag'</span>);
+0583 <span class="keyword">else</span>
+0584     tag=src;
+0585     src=findobj(fig,<span class="string">'Tag'</span>,tag);
+0586 <span class="keyword">end</span>
+0587 
+0588 <span class="keyword">switch</span> tag
+0589     <span class="keyword">case</span> <span class="string">'edit'</span>
+0590         autobox=get(src,<span class="string">'UserData'</span>);        
+0591         value=get(autobox,<span class="string">'Min'</span>);
+0592         set(autobox,<span class="string">'Value'</span>,value);
+0593     <span class="keyword">case</span> <span class="string">'autox'</span>
+0594         edit=get(src,<span class="string">'UserData'</span>);
+0595         set(data.haxes,<span class="string">'XLimMode'</span>,<span class="string">'auto'</span>);
+0596         newlim=get(data.haxes,<span class="string">'XLim'</span>);
+0597         <a href="#_sub13" class="code" title="subfunction ManualScaleWriter(editbox,value)">ManualScaleWriter</a>(edit,newlim);
+0598         data.newlim{1}=newlim;
+0599         set(fig,<span class="string">'UserData'</span>,data);       
+0600     <span class="keyword">case</span> <span class="string">'autoy'</span>
+0601         edit=get(src,<span class="string">'UserData'</span>);
+0602         set(data.haxes,<span class="string">'YLimMode'</span>,<span class="string">'auto'</span>);
+0603         newlim=get(data.haxes,<span class="string">'YLim'</span>);
+0604         <a href="#_sub13" class="code" title="subfunction ManualScaleWriter(editbox,value)">ManualScaleWriter</a>(edit,newlim);
+0605         data.newlim{2}=newlim;
+0606         set(fig,<span class="string">'UserData'</span>,data);  
+0607     <span class="keyword">case</span> <span class="string">'autox'</span>
+0608         edit=get(src,<span class="string">'UserData'</span>);
+0609         set(data.haxes,<span class="string">'ZLimMode'</span>,<span class="string">'auto'</span>);
+0610         newlim=get(data.haxes,<span class="string">'ZLim'</span>);
+0611         <a href="#_sub13" class="code" title="subfunction ManualScaleWriter(editbox,value)">ManualScaleWriter</a>(edit,newlim);
+0612         data.newlim{3}=newlim;
+0613         set(fig,<span class="string">'UserData'</span>,data);  
+0614     <span class="keyword">case</span> <span class="string">'ok'</span>
+0615         <a href="#_sub12" class="code" title="subfunction ManualScaleUpdate(src,varargin)">ManualScaleUpdate</a>(<span class="string">'apply'</span>);
+0616         <a href="#_sub12" class="code" title="subfunction ManualScaleUpdate(src,varargin)">ManualScaleUpdate</a>(<span class="string">'done'</span>);
+0617         targetfig=ancestor(data.haxes,<span class="string">'figure'</span>);
+0618         zoom(targetfig,<span class="string">'reset'</span>);
+0619     <span class="keyword">case</span> <span class="string">'apply'</span>
+0620         <span class="keyword">for</span> ii=1:data.Naxis
+0621             edit=get(src,<span class="string">'UserData'</span>);
+0622             newlim=data.newlim{ii};
+0623             newlim=<a href="#_sub14" class="code" title="subfunction func=ManualScaleReader(editbox,default)">ManualScaleReader</a>(edit{ii},newlim);
+0624             set(data.haxes,limfield{ii},newlim);
+0625             data.newlim{ii}=newlim;
+0626             set(fig,<span class="string">'UserData'</span>,data);            
+0627         <span class="keyword">end</span>        
+0628     <span class="keyword">case</span> <span class="string">'cancel'</span>
+0629         <span class="keyword">for</span> ii=1:data.Naxis
+0630             set(data.haxes,limfield{ii},data.oldlim{ii});
+0631         <span class="keyword">end</span>
+0632         <a href="#_sub12" class="code" title="subfunction ManualScaleUpdate(src,varargin)">ManualScaleUpdate</a>(<span class="string">'done'</span>);
+0633     <span class="keyword">case</span> <span class="string">'done'</span>
+0634         delete(fig);
+0635         <span class="keyword">return</span>;
+0636 <span class="keyword">end</span>
+0637 
+0638 <a name="_sub13" href="#_subfunctions" class="code">function ManualScaleWriter(editbox,value)</a>
+0639 N=numel(editbox);
+0640 <span class="keyword">for</span> kk=1:N
+0641     set(editbox(kk),<span class="string">'String'</span>,sprintf(<span class="string">'%.6g'</span>,value(kk)));
+0642 <span class="keyword">end</span>
+0643 
+0644 <a name="_sub14" href="#_subfunctions" class="code">function func=ManualScaleReader(editbox,default)</a>
+0645 func=default;
+0646 [data1,count1]=sscanf(get(editbox(1),<span class="string">'String'</span>),<span class="string">'%g'</span>);
+0647 [data2,count2]=sscanf(get(editbox(2),<span class="string">'String'</span>),<span class="string">'%g'</span>);
+0648 <span class="keyword">if</span> count1&gt;0
+0649     func(1)=data1(1);
+0650 <span class="keyword">end</span>
+0651 <span class="keyword">if</span> count2&gt;0
+0652     func(2)=data2(1);
+0653 <span class="keyword">end</span>
+0654 none=(count1==0)|(count2==0);
+0655 many=(count1&gt;1)|(count2&gt;1);
+0656 <span class="keyword">if</span> none || many
+0657     message{1}=<span class="string">'Warning: invalid axis limits specified!'</span>;
+0658     message{2}=<span class="string">'Some axis limits empty and/or multi-valued.'</span>;
+0659     message{3}=<span class="string">'Previous or first value(s) used as appropriate'</span>;
+0660     warndlg(message,<span class="string">'Invalid axis limits'</span>);
+0661     set(editbox(1),<span class="string">'String'</span>,sprintf(<span class="string">'%.6g'</span>,func(1)));
+0662     set(editbox(2),<span class="string">'String'</span>,sprintf(<span class="string">'%.6g'</span>,func(2)));
+0663 <span class="keyword">elseif</span> func(2)&lt;=func(1)
+0664     message{1}=<span class="string">'Warning: invalid axis limits specified!'</span>;
+0665     message{2}=<span class="string">'Left limit(s) must be greater than right limit(s)'</span>;
+0666     message{3}=<span class="string">'Previous values used'</span>;
+0667     warndlg(message,<span class="string">'Invalid axis limits'</span>);
+0668     func=default;
+0669     set(editbox(1),<span class="string">'String'</span>,sprintf(<span class="string">'%.6g'</span>,func(1)));
+0670     set(editbox(2),<span class="string">'String'</span>,sprintf(<span class="string">'%.6g'</span>,func(2)));    
+0671 <span class="keyword">end</span>
+0672 
+0673 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0674 <a name="_sub15" href="#_subfunctions" class="code">function output_txt = datacursor_text(obj,event_obj)</a>
+0675 <span class="comment">% Display the position of the data cursor</span>
+0676 <span class="comment">% obj          Currently not used (empty)</span>
+0677 <span class="comment">% event_obj    Handle to event object</span>
+0678 <span class="comment">% output_txt   Data cursor text string (string or cell array of strings).</span>
+0679 
+0680 
+0681 pos = get(event_obj,<span class="string">'Position'</span>);
+0682 x=pos(1);
+0683 output_txt{1}=sprintf(<span class="string">'X: %+.6g'</span>,x);
+0684 y=pos(2);
+0685 output_txt{2}=sprintf(<span class="string">'Y: %+.6g'</span>,y);
+0686 
+0687 target=get(event_obj,<span class="string">'Target'</span>);
+0688 <span class="keyword">switch</span> get(target,<span class="string">'Type'</span>)
+0689     <span class="keyword">case</span> <span class="string">'image'</span>
+0690         zdata=get(target,<span class="string">'CData'</span>);
+0691         [M,N]=size(zdata);        
+0692         xdata=get(target,<span class="string">'XData'</span>);
+0693         xdata=linspace(xdata(1),xdata(end),N);
+0694         ydata=get(target,<span class="string">'YData'</span>);
+0695         ydata=linspace(ydata(1),ydata(end),M);
+0696         z=interp2(xdata,ydata,zdata,x,y,<span class="string">'nearest'</span>);
+0697     output_txt{3}=sprintf(<span class="string">'Z: %+.6g'</span>,z);
+0698 <span class="keyword">end</span>
+0699 
+0700 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0701 <a name="_sub16" href="#_subfunctions" class="code">function ROIstatistics(fig,mode)</a>
+0702 
+0703 toolbar=findobj(fig,<span class="string">'Tag'</span>,<span class="string">'MinimalFigureToolbar'</span>);
+0704 toggle=findobj(toolbar,<span class="string">'Tag'</span>,<span class="string">'ROIstatistics'</span>);
+0705 <span class="keyword">switch</span> mode
+0706     <span class="keyword">case</span> <span class="string">'on'</span>
+0707         data=get(toggle,<span class="string">'UserData'</span>);
+0708         set(fig,<span class="string">'WindowButtonDownFcn'</span>,@<a href="#_sub17" class="code" title="subfunction ROIstatisticsBox(src,varargin)">ROIstatisticsBox</a>,<span class="keyword">...</span>
+0709             <span class="string">'Pointer'</span>,data.pointer);        
+0710     <span class="keyword">case</span> <span class="string">'off'</span>
+0711         dlg=findall(0,<span class="string">'Type'</span>,<span class="string">'figure'</span>,<span class="string">'Tag'</span>,<span class="string">'MinimalFigure:ROIstatistics'</span>);
+0712         delete(dlg);
+0713         hbox=findobj(fig,<span class="string">'Tag'</span>,<span class="string">'ROIstatisticsBox'</span>);
+0714         delete(hbox);
+0715         data=get(toolbar,<span class="string">'UserData'</span>);
+0716         set(fig,data.figset{:});        
+0717 <span class="keyword">end</span>
+0718 
+0719 <a name="_sub17" href="#_subfunctions" class="code">function ROIstatisticsBox(src,varargin)</a>
+0720 
+0721 <span class="comment">% handles</span>
+0722 mainfig=ancestor(src,<span class="string">'figure'</span>);
+0723 haxes=get(mainfig,<span class="string">'CurrentAxes'</span>);
+0724 <span class="comment">% user highlights ROI</span>
+0725 hbox=findobj(mainfig,<span class="string">'Tag'</span>,<span class="string">'ROIstatisticsBox'</span>);
+0726 delete(hbox);
+0727 
+0728 old=get(mainfig,<span class="string">'HandleVisibility'</span>);
+0729 set(mainfig,<span class="string">'HandleVisibility'</span>,<span class="string">'on'</span>);
+0730 point1=get(haxes,<span class="string">'CurrentPoint'</span>);
+0731 rbbox;
+0732 point2=get(haxes,<span class="string">'CurrentPoint'</span>);
+0733 set(mainfig,<span class="string">'HandleVisibility'</span>,old);
+0734 x=[point1(1,1) point2(1,1)];
+0735 y=[point1(1,2) point2(1,2)];
+0736 <span class="keyword">if</span> (diff(x)==0) || (diff(y)==0) <span class="comment">% user made a zero area rectangle</span>
+0737     <span class="keyword">return</span>
+0738 <span class="keyword">end</span>
+0739 xmin=min(x);
+0740 xmax=max(x);
+0741 ymin=min(y);
+0742 ymax=max(y);
+0743 rectangle(<span class="string">'Position'</span>,[xmin ymin xmax-xmin ymax-ymin],<span class="keyword">...</span>
+0744     <span class="string">'LineStyle'</span>,<span class="string">'--'</span>,<span class="string">'Tag'</span>,<span class="string">'ROIstatisticsBox'</span>);
+0745 
+0746 <span class="comment">% extract data</span>
+0747 hc=findobj(haxes,<span class="string">'Type'</span>,<span class="string">'line'</span>,<span class="string">'-or'</span>,<span class="string">'Type'</span>,<span class="string">'image'</span>);
+0748 N=numel(hc);
+0749 <span class="keyword">for</span> ii=N:-1:1 
+0750     <span class="keyword">if</span> strcmp(get(hc(ii),<span class="string">'Visible'</span>),<span class="string">'off'</span>)
+0751         <span class="keyword">continue</span>
+0752     <span class="keyword">end</span>    
+0753     x=get(hc(ii),<span class="string">'XData'</span>);
+0754     y=get(hc(ii),<span class="string">'YData'</span>);
+0755     label={};
+0756     label{end+1}=sprintf(<span class="string">' Horizontal range: %+g to %+g '</span>,xmin,xmax);
+0757     label{end+1}=sprintf(<span class="string">' Vertical range: %+g to %+g '</span>,ymin,ymax);
+0758     <span class="keyword">switch</span> get(hc(ii),<span class="string">'Type'</span>)
+0759         <span class="keyword">case</span> <span class="string">'line'</span>
+0760             <span class="comment">% check for data inside ROI</span>
+0761             k=(x&gt;=xmin)&amp;(x&lt;=xmax)&amp;(y&gt;=ymin)&amp;(y&lt;=ymax);
+0762             <span class="keyword">if</span> ~any(k)
+0763                 <span class="keyword">continue</span>
+0764             <span class="keyword">end</span>
+0765             x=x(k);
+0766             y=y(k);
+0767             <span class="comment">% create ROI report</span>
+0768             fig=figure(<span class="string">'NumberTitle'</span>,<span class="string">'off'</span>,<span class="string">'Name'</span>,<span class="string">'ROI line statistics'</span>,<span class="keyword">...</span>
+0769                 <span class="string">'IntegerHandle'</span>,<span class="string">'off'</span>,<span class="string">'HandleVisibility'</span>,<span class="string">'callback'</span>,<span class="keyword">...</span>
+0770                 <span class="string">'Tag'</span>,<span class="string">'MinimalFigure:ROIstatistics'</span>,<span class="keyword">...</span>
+0771                 <span class="string">'Toolbar'</span>,<span class="string">'none'</span>,<span class="string">'Menubar'</span>,<span class="string">'none'</span>,<span class="string">'DockControls'</span>,<span class="string">'off'</span>,<span class="keyword">...</span>
+0772                 <span class="string">'Units'</span>,<span class="string">'pixels'</span>,<span class="string">'Resize'</span>,<span class="string">'off'</span>);
+0773             ha=axes(<span class="string">'Parent'</span>,fig,<span class="string">'Box'</span>,<span class="string">'on'</span>,<span class="string">'Units'</span>,<span class="string">'pixels'</span>,<span class="keyword">...</span>
+0774                 <span class="string">'XTick'</span>,[],<span class="string">'YTick'</span>,[]);
+0775             hl=line(<span class="string">'Parent'</span>,ha,<span class="string">'XData'</span>,x,<span class="string">'YData'</span>,y);
+0776             linkprop([hc(ii) hl],{<span class="string">'Color'</span>,<span class="string">'LineWidth'</span>,<span class="string">'LineStyle'</span>,<span class="string">'Marker'</span>});            
+0777             label{end+1}=<span class="string">''</span>;
+0778             label{end+1}=sprintf(<span class="string">' Horizontal mean: %+g '</span>,mean(x));
+0779             label{end+1}=sprintf(<span class="string">' Horizontal deviation: %+g '</span>,std(x));
+0780             label{end+1}=<span class="string">''</span>;
+0781             label{end+1}=sprintf(<span class="string">' Vertical mean: %+g '</span>,mean(y));
+0782             label{end+1}=sprintf(<span class="string">' Vertical deviation: %+g '</span>,std(y));
+0783             <span class="comment">%a=polyfit(x(k),y(k),1);</span>
+0784             <span class="comment">%label{end+1}=sprintf('Slope: %+g',a(1));</span>
+0785         <span class="keyword">case</span> <span class="string">'image'</span>
+0786             <span class="comment">% check for data inside ROI</span>
+0787             z=get(hc(ii),<span class="string">'CData'</span>);
+0788             [M,N]=size(z);
+0789             x=linspace(x(1),x(end),N);
+0790             y=linspace(y(1),y(end),M);
+0791             kx=(x&gt;=xmin)&amp;(x&lt;=xmax);
+0792             <span class="keyword">if</span> ~any(kx)
+0793                 <span class="keyword">continue</span>
+0794             <span class="keyword">end</span>
+0795             ky=(y&gt;=ymin)&amp;(y&lt;=ymax);
+0796             <span class="keyword">if</span> ~any(ky)
+0797                 <span class="keyword">continue</span>
+0798             <span class="keyword">end</span>
+0799             x=x(kx);
+0800             y=y(ky);
+0801             z=z(ky,kx);
+0802             <span class="keyword">if</span> any(size(z)&lt;1)
+0803                 <span class="keyword">continue</span>
+0804             <span class="keyword">end</span>
+0805             <span class="comment">% create ROI report</span>
+0806             fig=figure(<span class="string">'NumberTitle'</span>,<span class="string">'off'</span>,<span class="string">'Name'</span>,<span class="string">'ROI image statistics'</span>,<span class="keyword">...</span>
+0807                 <span class="string">'IntegerHandle'</span>,<span class="string">'off'</span>,<span class="string">'HandleVisibility'</span>,<span class="string">'callback'</span>,<span class="keyword">...</span>
+0808                 <span class="string">'Tag'</span>,<span class="string">'MinimalFigure:ROIstatistics'</span>,<span class="keyword">...</span>
+0809                 <span class="string">'Toolbar'</span>,<span class="string">'none'</span>,<span class="string">'Menubar'</span>,<span class="string">'none'</span>,<span class="string">'DockControls'</span>,<span class="string">'off'</span>,<span class="keyword">...</span>
+0810                 <span class="string">'Units'</span>,<span class="string">'pixels'</span>,<span class="string">'Resize'</span>,<span class="string">'off'</span>);
+0811             src_fig=ancestor(hc(ii),<span class="string">'figure'</span>);
+0812             linkprop([src_fig fig],<span class="string">'ColorMap'</span>);
+0813             ha=axes(<span class="string">'Parent'</span>,fig,<span class="string">'Box'</span>,<span class="string">'on'</span>,<span class="string">'Units'</span>,<span class="string">'pixels'</span>);
+0814             hi=imagesc(<span class="string">'Parent'</span>,ha,<span class="string">'Xdata'</span>,x,<span class="string">'YData'</span>,y,<span class="string">'CData'</span>,z);
+0815             set(ha,<span class="string">'XTick'</span>,[],<span class="string">'YTick'</span>,[]);
+0816             src_axes=ancestor(hc(ii),<span class="string">'axes'</span>);
+0817             linkprop([src_axes ha],{<span class="string">'CLim'</span>,<span class="string">'YDir'</span>});
+0818             label{end+1}=<span class="string">''</span>;
+0819             label{end+1}=sprintf(<span class="string">' Image level mean: %+g '</span>,mean(z(:)));
+0820             label{end+1}=sprintf(<span class="string">' Image level deviation: %+g '</span>,std(z(:)));
+0821             <span class="keyword">try</span>
+0822                 weight=mean(z,1);
+0823                 weight=weight/trapz(x,weight);
+0824                 CM=trapz(x(:),x(:).*weight(:));
+0825             <span class="keyword">catch</span>
+0826                 CM=nan;
+0827             <span class="keyword">end</span>
+0828             label{end+1}=<span class="string">''</span>;
+0829             label{end+1}=sprintf(<span class="string">'Horizontal center: %+g'</span>,CM);
+0830             <span class="keyword">try</span>
+0831             weight=mean(z,2);
+0832             weight=weight/trapz(y,weight);
+0833             CM=trapz(y(:),y(:).*weight(:));
+0834             <span class="keyword">catch</span>
+0835                 CM=nan;
+0836             <span class="keyword">end</span>
+0837             label{end+1}=sprintf(<span class="string">'Vertical center: %+g'</span>,CM);            
+0838     <span class="keyword">end</span>
+0839     <span class="comment">% format report figure</span>
+0840     axis(ha,<span class="string">'tight'</span>);
+0841     xlim(ha,[xmin xmax]);
+0842     ylim(ha,[ymin ymax]);
+0843     
+0844     ht=uicontrol(<span class="string">'Parent'</span>,fig,<span class="string">'Style'</span>,<span class="string">'text'</span>,<span class="string">'Units'</span>,<span class="string">'pixels'</span>,<span class="keyword">...</span>
+0845         <span class="string">'HorizontalAlignment'</span>,<span class="string">'left'</span>,<span class="string">'String'</span>,label,<span class="keyword">...</span>
+0846         <span class="string">'BackgroundColor'</span>,get(fig,<span class="string">'Color'</span>));
+0847     extent=get(ht,<span class="string">'Extent'</span>);
+0848     Lx=extent(3);
+0849     Ly=extent(4);
+0850     set(ht,<span class="string">'Position'</span>,[Ly 0 Lx Ly]);
+0851     gap=5; <span class="comment">% pixels</span>
+0852     set(ha,<span class="string">'Position'</span>,[gap gap Ly-2*gap Ly-2*gap]);<span class="comment">%,...</span>
+0853         <span class="comment">%'PlotBoxAspectRatio',[(xmax-xmin) (ymax-ymin) 1]);</span>
+0854     pos=get(fig,<span class="string">'Position'</span>);
+0855     pos(3)=Ly+Lx;
+0856     pos(4)=Ly;
+0857     set(fig,<span class="string">'Position'</span>,pos);    
+0858 <span class="keyword">end</span>       
+0859 
+0860 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0861 <a name="_sub18" href="#_subfunctions" class="code">function overlay(fig,mode)</a>
+0862 
+0863 toolbar=findobj(fig,<span class="string">'Tag'</span>,<span class="string">'MinimalFigureToolbar'</span>);
+0864 toggle=findobj(toolbar,<span class="string">'Tag'</span>,<span class="string">'overlay'</span>);
+0865 <span class="keyword">switch</span> mode
+0866     <span class="keyword">case</span> <span class="string">'on'</span>
+0867         haxes=<a href="#_sub4" class="code" title="subfunction func=ValidAxes(fig)">ValidAxes</a>(fig);
+0868         <span class="keyword">if</span> numel(haxes)&gt;1
+0869             data=get(toggle,<span class="string">'UserData'</span>);
+0870             set(fig,<span class="string">'WindowButtonUpFcn'</span>,@<a href="#_sub19" class="code" title="subfunction overlayCallback(src,varargin)">overlayCallback</a>,<span class="keyword">...</span>
+0871                 <span class="string">'Pointer'</span>,data.pointer);            
+0872         <span class="keyword">else</span>
+0873             <span class="keyword">if</span> numel(haxes)==1;
+0874                 set(fig,<span class="string">'CurrentObject'</span>,haxes);
+0875                 <a href="#_sub19" class="code" title="subfunction overlayCallback(src,varargin)">overlayCallback</a>(haxes);
+0876             <span class="keyword">end</span>
+0877             set(toggle,<span class="string">'State'</span>,<span class="string">'off'</span>); <span class="comment">% for user convenience</span>
+0878         <span class="keyword">end</span>
+0879     <span class="keyword">case</span> <span class="string">'off'</span>
+0880         data=get(toolbar,<span class="string">'UserData'</span>);
+0881         set(fig,data.figset{:});
+0882 <span class="keyword">end</span>
+0883 
+0884 <a name="_sub19" href="#_subfunctions" class="code">function overlayCallback(src,varargin)</a>
+0885 
+0886 <span class="comment">% verify normal axes click</span>
+0887 fig=ancestor(src,<span class="string">'figure'</span>);
+0888 selection=get(fig,<span class="string">'SelectionType'</span>);
+0889 <span class="keyword">if</span> ~strcmpi(selection,<span class="string">'normal'</span>)
+0890     <span class="keyword">return</span>
+0891 <span class="keyword">end</span>
+0892 
+0893 target=get(fig,<span class="string">'CurrentObject'</span>);
+0894 target=ancestor(target,<span class="string">'axes'</span>);
+0895 <span class="keyword">if</span> ~ishandle(target)
+0896     <span class="keyword">return</span>
+0897 <span class="keyword">end</span>
+0898 
+0899 <span class="comment">% load data</span>
+0900 [filename,pathname]=uigetfile(<span class="string">'*.*'</span>,<span class="string">'Select (x,y) data file'</span>);
+0901 <span class="keyword">if</span> isnumeric(filename)
+0902     <span class="keyword">return</span>
+0903 <span class="keyword">else</span>
+0904     filename=fullfile(pathname,filename);
+0905 <span class="keyword">end</span>
+0906 
+0907 <span class="keyword">try</span>
+0908     temp=<a href="ColumnReader.html" class="code" title="function [data,header,filename]=ColumnReader(filename,delim,mincolumn)">ColumnReader</a>(filename,[],2);
+0909     data.x=temp(:,1);
+0910     data.y=temp(:,2);
+0911 
+0912 <span class="keyword">catch</span>
+0913     errordlg(<span class="string">'ERROR: unable to read data file'</span>,<span class="string">'File error'</span>);
+0914     <span class="keyword">return</span>
+0915 <span class="keyword">end</span>
+0916 
+0917 <span class="comment">% create overlay line (with context menu)</span>
+0918 data.scale=[1 1];
+0919 data.shift=[0 0];
+0920 data.color=<span class="string">'k'</span>;
+0921 data.linewidth=0.5;
+0922 [pname,name,ext]=fileparts(filename);
+0923 data.name=[name ext];
+0924 hl=line(<span class="string">'Parent'</span>,target,<span class="string">'UserData'</span>,data,<span class="string">'Tag'</span>,<span class="string">'overlay_line'</span>);
+0925 
+0926 hm=uicontextmenu(<span class="string">'Tag'</span>,<span class="string">'overlay'</span>);
+0927 set(hl,<span class="string">'UIContextMenu'</span>,hm);
+0928 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Overlay file:'</span>,<span class="string">'Enable'</span>,<span class="string">'off'</span>);
+0929 <span class="comment">%label=sprintf('%s overlay',name);</span>
+0930 uimenu(hm,<span class="string">'Label'</span>,data.name,<span class="string">'Enable'</span>,<span class="string">'off'</span>);
+0931 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Scale overlay'</span>,<span class="string">'Tag'</span>,<span class="string">'scale'</span>,<span class="keyword">...</span>
+0932     <span class="string">'Callback'</span>,{@<a href="#_sub20" class="code" title="subfunction update_overlay(varargin)">update_overlay</a>,hl},<span class="string">'Separator'</span>,<span class="string">'on'</span>);
+0933 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Shift overlay'</span>,<span class="string">'Tag'</span>,<span class="string">'shift'</span>,<span class="keyword">...</span>
+0934     <span class="string">'Callback'</span>,{@<a href="#_sub20" class="code" title="subfunction update_overlay(varargin)">update_overlay</a>,hl});
+0935 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Remove overlay'</span>,<span class="string">'Tag'</span>,<span class="string">'delete'</span>,<span class="keyword">...</span>
+0936     <span class="string">'Callback'</span>,{@<a href="#_sub20" class="code" title="subfunction update_overlay(varargin)">update_overlay</a>,hl});
+0937 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Set overlay color'</span>,<span class="string">'Tag'</span>,<span class="string">'color'</span>,<span class="keyword">...</span>
+0938     <span class="string">'Callback'</span>,{@<a href="#_sub20" class="code" title="subfunction update_overlay(varargin)">update_overlay</a>,hl},<span class="string">'Separator'</span>,<span class="string">'on'</span>);
+0939 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Set overlay width'</span>,<span class="string">'Tag'</span>,<span class="string">'width'</span>,<span class="keyword">...</span>
+0940     <span class="string">'Callback'</span>,{@<a href="#_sub20" class="code" title="subfunction update_overlay(varargin)">update_overlay</a>,hl});
+0941 <a href="#_sub20" class="code" title="subfunction update_overlay(varargin)">update_overlay</a>([],[],hl);
+0942  
+0943 <a name="_sub20" href="#_subfunctions" class="code">function update_overlay(varargin)</a>
+0944 
+0945 hl=varargin{3};
+0946 data=get(hl,<span class="string">'UserData'</span>);
+0947 
+0948 src=varargin{1};
+0949 <span class="keyword">if</span> ishandle(src)
+0950     tag=get(src,<span class="string">'Tag'</span>);
+0951     <span class="keyword">switch</span> lower(tag)
+0952         <span class="keyword">case</span> <span class="string">'scale'</span>
+0953             default{1}=sprintf(<span class="string">'%g'</span>,data.scale(1));
+0954             default{2}=sprintf(<span class="string">'%g'</span>,data.scale(2));
+0955             label{1}=<span class="string">'Horizontal scaling factor'</span>;
+0956             label{2}=<span class="string">'Vertical scaling factor'</span>;                        
+0957             answer=inputdlg(label,<span class="string">'Scale overlay'</span>,1,default);
+0958             <span class="keyword">if</span> isempty(answer)
+0959                 <span class="keyword">return</span>
+0960             <span class="keyword">end</span>
+0961             [value,count]=sscanf(answer{1},<span class="string">'%g'</span>,1);
+0962             <span class="keyword">if</span> count==1
+0963                 data.scale(1)=value;                            
+0964             <span class="keyword">end</span>
+0965             [value,count]=sscanf(answer{2},<span class="string">'%g'</span>,1);
+0966             <span class="keyword">if</span> count==1
+0967                 data.scale(2)=value;
+0968             <span class="keyword">end</span>                                            
+0969         <span class="keyword">case</span> <span class="string">'shift'</span>
+0970             default{1}=sprintf(<span class="string">'%g'</span>,data.shift(1));
+0971             default{2}=sprintf(<span class="string">'%g'</span>,data.shift(2));
+0972             label{1}=<span class="string">'Horizontal shift'</span>;
+0973             label{2}=<span class="string">'Vertical shift'</span>;
+0974             answer=inputdlg(label,<span class="string">'Shift overlay'</span>,1,default);
+0975             <span class="keyword">if</span> isempty(answer)
+0976                 <span class="keyword">return</span>
+0977             <span class="keyword">end</span>
+0978             [value,count]=sscanf(answer{1},<span class="string">'%g'</span>,1);
+0979             <span class="keyword">if</span> count==1
+0980                 data.shift(1)=value;
+0981             <span class="keyword">end</span>
+0982             [value,count]=sscanf(answer{2},<span class="string">'%g'</span>,1);
+0983             <span class="keyword">if</span> count==1
+0984                 data.shift(2)=value;
+0985             <span class="keyword">end</span>
+0986         <span class="keyword">case</span> <span class="string">'delete'</span>
+0987             button=questdlg(<span class="string">'Remove overlay?'</span>,<span class="string">'Remove overay'</span>);
+0988             <span class="keyword">if</span> strcmpi(button,<span class="string">'yes'</span>)
+0989                 delete(hl);
+0990             <span class="keyword">end</span>
+0991             <span class="keyword">return</span>;
+0992         <span class="keyword">case</span> <span class="string">'color'</span>
+0993             color=uisetcolor;
+0994             <span class="keyword">if</span> color==0
+0995                 <span class="keyword">return</span>;
+0996             <span class="keyword">else</span>
+0997                 data.color=color;
+0998             <span class="keyword">end</span>
+0999         <span class="keyword">case</span> <span class="string">'width'</span>
+1000             default{1}=sprintf(<span class="string">'%g'</span>,data.linewidth);
+1001             label{1}=sprintf(<span class="string">'%-40s'</span>,<span class="string">'Line width (points)'</span>);
+1002             answer=inputdlg(label,<span class="string">'Line width'</span>,1,default);
+1003             <span class="keyword">if</span> isempty(answer)
+1004                 <span class="keyword">return</span>
+1005             <span class="keyword">end</span>
+1006             [value,count]=sscanf(answer{1},<span class="string">'%g'</span>,1);
+1007             <span class="keyword">if</span> count==1
+1008                 value=max([value 0.1]); <span class="comment">% enforce minimum line width</span>
+1009                 data.linewidth=max(value); 
+1010             <span class="keyword">end</span>
+1011     <span class="keyword">end</span>
+1012 <span class="keyword">end</span>
+1013 
+1014 x=data.scale(1)*data.x+data.shift(1);
+1015 y=data.scale(2)*data.y+data.shift(2);
+1016 set(hl,<span class="string">'XData'</span>,x,<span class="string">'YData'</span>,y,<span class="string">'UserData'</span>,data,<span class="keyword">...</span>
+1017     <span class="string">'Color'</span>,data.color,<span class="string">'LineWidth'</span>,data.linewidth);
+1018 
+1019 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+1020 <a name="_sub21" href="#_subfunctions" class="code">function clone(fig,mode)</a>
+1021 toolbar=findobj(fig,<span class="string">'Tag'</span>,<span class="string">'MinimalFigureToolbar'</span>);
+1022 toggle=findobj(toolbar,<span class="string">'Tag'</span>,<span class="string">'clone'</span>);
+1023 <span class="keyword">switch</span> mode
+1024     <span class="keyword">case</span> <span class="string">'on'</span>
+1025         haxes=<a href="#_sub4" class="code" title="subfunction func=ValidAxes(fig)">ValidAxes</a>(fig);
+1026         <span class="keyword">if</span> numel(haxes)&gt;1
+1027             data=get(toggle,<span class="string">'UserData'</span>);
+1028             set(fig,<span class="string">'WindowButtonUpFcn'</span>,@<a href="#_sub22" class="code" title="subfunction cloneCallback(src,varargin)">cloneCallback</a>,<span class="keyword">...</span>
+1029                 <span class="string">'Pointer'</span>,data.pointer);            
+1030         <span class="keyword">else</span>
+1031             <span class="keyword">if</span> numel(haxes)==1;
+1032                 set(fig,<span class="string">'CurrentObject'</span>,haxes);
+1033                 <a href="#_sub22" class="code" title="subfunction cloneCallback(src,varargin)">cloneCallback</a>(haxes);
+1034             <span class="keyword">end</span>
+1035             set(toggle,<span class="string">'State'</span>,<span class="string">'off'</span>); <span class="comment">% for user convenience</span>
+1036         <span class="keyword">end</span>
+1037     <span class="keyword">case</span> <span class="string">'off'</span>
+1038         data=get(toolbar,<span class="string">'UserData'</span>);
+1039         set(fig,data.figset{:});
+1040 <span class="keyword">end</span>
+1041 
+1042 <a name="_sub22" href="#_subfunctions" class="code">function cloneCallback(src,varargin)</a>
+1043 
+1044 <span class="comment">% verify normal axes click</span>
+1045 fig=ancestor(src,<span class="string">'figure'</span>);
+1046 selection=get(fig,<span class="string">'SelectionType'</span>);
+1047 <span class="keyword">if</span> ~strcmpi(selection,<span class="string">'normal'</span>)
+1048     <span class="keyword">return</span>
+1049 <span class="keyword">end</span>
+1050 
+1051 target=get(fig,<span class="string">'CurrentObject'</span>);
+1052 target=ancestor(target,<span class="string">'axes'</span>);
+1053 <span class="keyword">if</span> ~ishandle(target)
+1054     <span class="keyword">return</span>
+1055 <span class="keyword">end</span>
+1056 
+1057 newfig=figure;
+1058 newaxes=copyobj(target,newfig);
+1059 set(newaxes,<span class="string">'OuterPosition'</span>,[0 0 1 1]);
+1060 name=sprintf(<span class="string">'Cloned plot created %s'</span>,datestr(now));
+1061 set(newfig,<span class="string">'Name'</span>,name);
+1062 
+1063 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+1064 <a name="_sub23" href="#_subfunctions" class="code">function func=GUIsettings(field)</a>
+1065 
+1066 <span class="comment">% input handling</span>
+1067 <span class="keyword">if</span> nargin&lt;1
+1068     field=<span class="string">''</span>;
+1069 <span class="keyword">end</span>
+1070 <span class="keyword">if</span> isempty(field)
+1071     field=<span class="string">'all'</span>;
+1072 <span class="keyword">end</span>
+1073 <span class="comment">% GUI parameters</span>
+1074 <span class="keyword">persistent</span> param
+1075 <span class="keyword">if</span> isempty(param) <span class="comment">% character units</span>
+1076     param.hmargin=1;
+1077     param.vmargin=1;
+1078     param.textheight=1.5;
+1079     param.buttonheight=2;
+1080     <span class="comment">%param.controlheight=1.5;</span>
+1081     param.buttonwidth=8; <span class="comment">% small button (OK, etc.)</span>
+1082     param.editwidth=15;
+1083     param.labelwidth=4; <span class="comment">% small label</span>
+1084     param.checkwidth=10;
+1085     param.fontname=<span class="string">'fixed'</span>;
+1086     param.textbgcolor=get(0,<span class="string">'DefaultFigureColor'</span>);
+1087     param.editcolor=[1 1 1];
+1088 <span class="keyword">end</span>
+1089 <span class="comment">% output control</span>
+1090 field=lower(field);
+1091 <span class="keyword">if</span> strcmp(field,<span class="string">'all'</span>)
+1092     func=param;
+1093 <span class="keyword">elseif</span> isfield(param,field)
+1094     func=param.(field);
+1095 <span class="keyword">else</span>
+1096     error(<span class="string">'Invalid GUIsettings field'</span>);
+1097 <span class="keyword">end</span>
+1098 
+1099 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+1100 <a name="_sub24" href="#_subfunctions" class="code">function DeleteMinimalFigure(varargin)</a>
+1101 
+1102 basetag=<span class="string">'MinimalFigure'</span>;
+1103 Nbase=numel(basetag);
+1104 
+1105 mainfig=findall(0,<span class="string">'Type'</span>,<span class="string">'figure'</span>,<span class="string">'Tag'</span>,basetag);
+1106 fig=findall(0,<span class="string">'Type'</span>,<span class="string">'figure'</span>);
+1107 <span class="keyword">for</span> ii=1:numel(fig)
+1108     <span class="keyword">if</span> fig(ii)==mainfig
+1109         <span class="comment">% hold off delete until end</span>
+1110     <span class="keyword">else</span>
+1111         tag=get(fig(ii),<span class="string">'Tag'</span>);
+1112         <span class="keyword">if</span> strncmp(tag,basetag,Nbase)
+1113             delete(fig(ii));
+1114         <span class="keyword">end</span>
+1115     <span class="keyword">end</span>
+1116 <span class="keyword">end</span>
+1117 delete(mainfig);</pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

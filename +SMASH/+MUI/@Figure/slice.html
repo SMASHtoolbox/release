@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of slice</title>
+  <meta name="keywords" content="slice">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="../../index.html">+SMASH</a> &gt; <a href="../index.html">+MUI</a> &gt; <a href="index.html">@Figure</a> &gt; slice.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+MUI/@Figure&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>slice
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function slice(object,mode) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="detoggle.html" class="code" title="function detoggle(object)">detoggle</a>	determine number of active toggles</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="Figure.html" class="code" title="">Figure</a>	Figure class</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function callback(src,varargin)</a></li><li><a href="#_sub2" class="code">function ButtonUp(varargin)</a></li><li><a href="#_sub3" class="code">function SliceImage(target)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function slice(object,mode)</a>
+0002 
+0003 <span class="keyword">switch</span> mode
+0004     <span class="keyword">case</span> <span class="string">'create'</span>
+0005         h=uitoggletool(<span class="string">'Parent'</span>,object.ToolBar,<span class="keyword">...</span>
+0006             <span class="string">'Tag'</span>,<span class="string">'Slice'</span>,<span class="string">'ToolTipString'</span>,<span class="string">'Slice image'</span>,<span class="keyword">...</span>
+0007             <span class="string">'Cdata'</span>,local_graphic(<span class="string">'SliceIcon'</span>),<span class="string">'Separator'</span>,<span class="string">'off'</span>,<span class="keyword">...</span>
+0008             <span class="string">'ClickedCallback'</span>,@<a href="#_sub1" class="code" title="subfunction callback(src,varargin)">callback</a>);
+0009         object.ToolButton.Slice=h;
+0010     <span class="keyword">case</span> <span class="string">'hide'</span>
+0011         set(object.Button.Slice,<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+0012     <span class="keyword">case</span> <span class="string">'show'</span>
+0013         set(object.Button.Slice,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0014 <span class="keyword">end</span>
+0015 
+0016 <span class="comment">%%</span>
+0017     <a name="_sub1" href="#_subfunctions" class="code">function callback(src,varargin)</a>
+0018         state=get(src,<span class="string">'State'</span>);
+0019         <a href="detoggle.html" class="code" title="function detoggle(object)">detoggle</a>(object);
+0020         <span class="comment">%fig=object.Handle;</span>
+0021         <span class="keyword">if</span> strcmpi(state,<span class="string">'on'</span>)
+0022             set(src,<span class="string">'State'</span>,<span class="string">'on'</span>);
+0023             set(object.Handle,<span class="string">'Pointer'</span>,<span class="string">'crosshair'</span>,<span class="keyword">...</span>
+0024                 <span class="string">'WindowButtonUpFcn'</span>,@<a href="#_sub2" class="code" title="subfunction ButtonUp(varargin)">ButtonUp</a>);
+0025         <span class="keyword">end</span>
+0026     <span class="keyword">end</span>
+0027 
+0028     <a name="_sub2" href="#_subfunctions" class="code">function ButtonUp(varargin)        </a>
+0029         selection=get(gcbf,<span class="string">'SelectionType'</span>);
+0030         <span class="keyword">if</span> ~strcmpi(selection,<span class="string">'normal'</span>)
+0031             <span class="keyword">return</span>;
+0032         <span class="keyword">end</span>
+0033         haxes=get(gcbf,<span class="string">'CurrentAxes'</span>);
+0034         tag=get(haxes,<span class="string">'Tag'</span>);
+0035         <span class="keyword">if</span>  strcmp(tag,<span class="string">'legend'</span>) || strcmp(tag,<span class="string">'colorbar'</span>)
+0036             <span class="keyword">return</span>
+0037         <span class="keyword">end</span>
+0038         himage=get(gcbf,<span class="string">'CurrentObject'</span>);
+0039         type=get(himage,<span class="string">'type'</span>);
+0040         <span class="keyword">if</span> ~strcmpi(type,<span class="string">'image'</span>)
+0041             <span class="keyword">return</span>
+0042         <span class="keyword">end</span>
+0043         <a href="#_sub3" class="code" title="subfunction SliceImage(target)">SliceImage</a>(himage);
+0044     <span class="keyword">end</span>
+0045 
+0046 <span class="keyword">end</span>
+0047 
+0048 <a name="_sub3" href="#_subfunctions" class="code">function SliceImage(target)</a>
+0049 
+0050 ha=ancestor(target,<span class="string">'axes'</span>);
+0051 bound=caxis(ha);
+0052 current=get(ha,<span class="string">'CurrentPoint'</span>);
+0053 x0=current(1,1);
+0054 y0=current(1,2);
+0055 
+0056 hlabel=get(ha,<span class="string">'XLabel'</span>);
+0057 xlab=get(hlabel,<span class="string">'String'</span>);
+0058 <span class="keyword">if</span> isempty(xlab)
+0059     xlab=<span class="string">'x'</span>;
+0060 <span class="keyword">end</span>
+0061 hlabel=get(ha,<span class="string">'YLabel'</span>);
+0062 ylab=get(hlabel,<span class="string">'String'</span>);
+0063 <span class="keyword">if</span> isempty(ylab)
+0064     ylab=<span class="string">'y'</span>;
+0065 <span class="keyword">end</span>
+0066 
+0067 <span class="comment">% extract target data and plot in new figure</span>
+0068 z=get(target,<span class="string">'CData'</span>);
+0069 [N,M]=size(z);
+0070 x=get(target,<span class="string">'XData'</span>);
+0071 <span class="keyword">if</span> numel(x)~=M
+0072     x=linspace(x(1),x(end),M);
+0073 <span class="keyword">end</span>
+0074 y=get(target,<span class="string">'YData'</span>);
+0075 <span class="keyword">if</span> numel(y)~=N
+0076     y=linspace(y(1),y(end),N);
+0077 <span class="keyword">end</span>
+0078 
+0079 newfig=figure;
+0080 subplot(2,1,1);
+0081 plot(x,interp2(x,y,z,x,y0,<span class="string">'linear'</span>));
+0082 label=sprintf(<span class="string">'Horizontal slice @ %s = %g'</span>,ylab,y0);
+0083 title(label);
+0084 xlabel(xlab);
+0085 ylim(bound);
+0086 
+0087 subplot(2,1,2);
+0088 plot(y,interp2(x,y,z,x0,y,<span class="string">'linear'</span>));
+0089 label=sprintf(<span class="string">'Vertical slice @ %s = %g'</span>,xlab,x0);
+0090 title(label);
+0091 xlabel(ylab);
+0092 ylim(bound);
+0093 
+0094 name=sprintf(<span class="string">'Image slice created %s'</span>,datestr(now));
+0095 set(newfig,<span class="string">'Name'</span>,name);
+0096 
+0097 setappdata(newfig,<span class="string">'SourceFigure'</span>,gcbf);
+0098 
+0099 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

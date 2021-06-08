@@ -1,0 +1,127 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of SIRHEN</title>
+  <meta name="keywords" content="SIRHEN">
+  <meta name="description" content="SIRHEN: Sandia InfraRed HEterodyNe analysis program">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="index.html">SIRHEN</a> &gt; SIRHEN.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../index.html"><img alt="<" border="0" src="../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/SIRHEN&nbsp;<img alt=">" border="0" src="../../../../right.png"></a></td></tr></table>-->
+
+<h1>SIRHEN
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>SIRHEN: Sandia InfraRed HEterodyNe analysis program</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function varargout=SIRHEN(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> SIRHEN: Sandia InfraRed HEterodyNe analysis program</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="SIRHEN.html" class="code" title="function varargout=SIRHEN(varargin)">SIRHEN</a>	SIRHEN: Sandia InfraRed HEterodyNe analysis program</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="SIRHEN.html" class="code" title="function varargout=SIRHEN(varargin)">SIRHEN</a>	SIRHEN: Sandia InfraRed HEterodyNe analysis program</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function exitSIRHEN(varargin)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% SIRHEN: Sandia InfraRed HEterodyNe analysis program</span>
+0002 <a name="_sub0" href="#_subfunctions" class="code">function varargout=SIRHEN(varargin)</a>
+0003 
+0004 <span class="keyword">if</span> isdeployed
+0005     varargout{1}=true;
+0006 <span class="keyword">end</span>
+0007 
+0008 <span class="comment">% see if program is already running</span>
+0009 basetag=<span class="string">'SIRHEN'</span>;
+0010 Nbase=numel(basetag);
+0011 openfig=allchild(0);
+0012 <span class="keyword">for</span> ii=1:numel(openfig)
+0013     tag=get(openfig(ii),<span class="string">'Tag'</span>);
+0014     visible=get(openfig(ii),<span class="string">'Visible'</span>);
+0015     <span class="keyword">if</span> strncmp(tag,basetag,Nbase) &amp;&amp; strcmp(visible,<span class="string">'on'</span>);
+0016         fprintf(<span class="string">'Program is already running!\n'</span>);
+0017         figure(openfig(ii));
+0018         <span class="keyword">return</span>
+0019     <span class="keyword">end</span>
+0020 <span class="keyword">end</span>
+0021 
+0022 <span class="comment">% create figures</span>
+0023 hwait=waitbar(0,<span class="string">'Launching SIRHEN...please wait'</span>,<span class="keyword">...</span>
+0024     <span class="string">'Name'</span>,<span class="string">'Launching SIRHEN'</span>);
+0025 fig=[];
+0026 fig(end+1)=SelectionScreen;
+0027 waitbar(1/2,hwait);
+0028 fig(end+1)=AnalysisScreen;
+0029 waitbar(2/2,hwait);
+0030 set(fig,<span class="string">'HandleVisibility'</span>,<span class="string">'callback'</span>,<span class="string">'CloseRequestFcn'</span>,@<a href="#_sub1" class="code" title="subfunction exitSIRHEN(varargin)">exitSIRHEN</a>);
+0031 set(fig,<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+0032 figure(fig(1));
+0033 
+0034 <span class="comment">% store admin data</span>
+0035 data=get(fig(1),<span class="string">'UserData'</span>);
+0036 N=numel(fig);
+0037 data.handle=cell(1,N);
+0038 <span class="keyword">for</span> n=1:N
+0039     data.handle{n}=guihandles(fig(n));
+0040 <span class="keyword">end</span>
+0041 data.update.signal=false;
+0042 data.update.fullSTFT=false;
+0043 data.update.ref_frequency=false;
+0044 data.update.experimentSTFT=false;
+0045 data.update.history=false;
+0046 set(fig,<span class="string">'UserData'</span>,data);
+0047 
+0048 <span class="comment">% store function handle</span>
+0049 old=pwd;
+0050 pathname=mfilename(<span class="string">'fullpath'</span>);
+0051 [pathname,filename]=fileparts(pathname);
+0052 cd(pathname);
+0053 data.fhandle=@<a href="SIRHEN.html" class="code" title="function varargout=SIRHEN(varargin)">SIRHEN</a>;
+0054 cd(old);
+0055 hmenu=findall(fig,<span class="string">'Type'</span>,<span class="string">'uimenu'</span>,<span class="string">'Tag'</span>,<span class="string">'StartOver'</span>);
+0056 set(hmenu,<span class="string">'UserData'</span>,data);
+0057 
+0058 delete(hwait);
+0059 figure(fig(1));
+0060 
+0061 <span class="comment">%%%%%%%%%%%%%%%%%</span>
+0062 <span class="comment">% exit strategy %</span>
+0063 <span class="comment">%%%%%%%%%%%%%%%%%</span>
+0064 <a name="_sub1" href="#_subfunctions" class="code">function exitSIRHEN(varargin)</a>
+0065 
+0066 button=questdlg(<span class="string">'Are you sure you want to exit?'</span>,<span class="string">'Exit SIRHEN?'</span>,<span class="string">'No'</span>);
+0067 <span class="keyword">if</span> strcmpi(button,<span class="string">'yes'</span>)
+0068     <span class="comment">%setting={};</span>
+0069     basetag=<span class="string">'SIRHEN_'</span>;
+0070     Nbase=numel(basetag);
+0071     fig=allchild(0);
+0072     <span class="keyword">for</span> ii=1:numel(fig)
+0073         tag=get(fig(ii),<span class="string">'Tag'</span>);
+0074         <span class="keyword">if</span> strncmp(tag,basetag,Nbase)
+0075             delete(fig(ii));
+0076         <span class="keyword">end</span>
+0077     <span class="keyword">end</span>
+0078 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

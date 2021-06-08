@@ -1,0 +1,83 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of SoundLibrary</title>
+  <meta name="keywords" content="SoundLibrary">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="../../index.html">+SMASH</a> &gt; <a href="../index.html">+System</a> &gt; <a href="index.html">@SoundLibrary</a> &gt; SoundLibrary.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+System/@SoundLibrary&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>SoundLibrary
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="SoundLibrary.html" class="code" title="">SoundLibrary</a>	</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="SoundLibrary.html" class="code" title="">SoundLibrary</a>	</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function object=SoundLibrary(varargin)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">%</span>
+0002 classdef <a href="SoundLibrary.html" class="code" title="">SoundLibrary</a> &lt; handle
+0003     properties (SetAccess=protected)
+0004         Name = {}
+0005         Data
+0006     <span class="keyword">end</span>
+0007     methods
+0008         <a name="_sub0" href="#_subfunctions" class="code">function object=SoundLibrary(varargin)</a>
+0009             <span class="comment">% load default sounds</span>
+0010             location=fullfile(matlabroot,<span class="string">'toolbox'</span>,<span class="string">'matlab'</span>,<span class="string">'audiovideo'</span>);
+0011             file=dir(fullfile(location,<span class="string">'*.mat'</span>));
+0012             N=numel(file);            
+0013             object.Name=cell(N,1);
+0014             <span class="keyword">for</span> n=1:N
+0015                 name=file(n).name;
+0016                 previous=load(fullfile(location,name));
+0017                 Fs=previous.Fs;
+0018                 previous=rmfield(previous,<span class="string">'Fs'</span>);
+0019                 VarName=fieldnames(previous);
+0020                 <span class="keyword">if</span> ~isscalar(VarName)
+0021                     <span class="keyword">continue</span>
+0022                 <span class="keyword">end</span>
+0023                 y=previous.(VarName{1});
+0024                 [~,object.Name{n},~]=fileparts(name);                
+0025                 temp=audioplayer(y,Fs);                 <span class="comment">%#ok&lt;TNMLP&gt;</span>
+0026                 <span class="keyword">if</span> n == 1
+0027                     object.Data=repmat(temp,size(object.Name));
+0028                 <span class="keyword">else</span>
+0029                     object.Data(n)=temp;
+0030                 <span class="keyword">end</span>
+0031             <span class="keyword">end</span>       
+0032         <span class="keyword">end</span>
+0033     <span class="keyword">end</span>
+0034 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of read</title>
+  <meta name="keywords" content="read">
+  <meta name="description" content="READ Read file associated with a DigitizerFile object">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="../../index.html">+SMASH</a> &gt; <a href="../index.html">+FileAccess</a> &gt; <a href="index.html">@DigitizerFile</a> &gt; read.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+FileAccess/@DigitizerFile&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>read
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>READ Read file associated with a DigitizerFile object</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function output=read(object,record) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> READ Read file associated with a DigitizerFile object
+
+ Syntax:
+    &gt;&gt; output=read(object,[option]);
+ The option input is only used for 'agilent' format files containing more
+ than one signal.  The output is a structure with the following fields.
+    -FileName
+    -FileType
+    -FileOption
+    -Header
+    -Time
+    -Signal
+
+ This method reads the file specified in a Digitizer object:
+    &gt;&gt; output=read(object);
+ and returns the results in a structure.  A second input can be passed to
+ select a specific signal in multi-signal formats (such as 'agilent').
+    &gt;&gt; output=read(object,record);
+ If the output is omitted ...
+
+ See also <a href="DigitizerFile.html" class="code" title="">DigitizerFile</a>, <a href="probe.html" class="code" title="function varargout=probe(object)">probe</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="probe.html" class="code" title="function varargout=probe(object)">probe</a>	PROBE Probe the file associated with a DigitizerFile object</li><li><a href="read.html" class="code" title="function output=read(object,record)">read</a>	READ Read file associated with a DigitizerFile object</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="read.html" class="code" title="function output=read(object,record)">read</a>	READ Read file associated with a DigitizerFile object</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% READ Read file associated with a DigitizerFile object</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% Syntax:</span>
+0004 <span class="comment">%    &gt;&gt; output=read(object,[option]);</span>
+0005 <span class="comment">% The option input is only used for 'agilent' format files containing more</span>
+0006 <span class="comment">% than one signal.  The output is a structure with the following fields.</span>
+0007 <span class="comment">%    -FileName</span>
+0008 <span class="comment">%    -FileType</span>
+0009 <span class="comment">%    -FileOption</span>
+0010 <span class="comment">%    -Header</span>
+0011 <span class="comment">%    -Time</span>
+0012 <span class="comment">%    -Signal</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% This method reads the file specified in a Digitizer object:</span>
+0015 <span class="comment">%    &gt;&gt; output=read(object);</span>
+0016 <span class="comment">% and returns the results in a structure.  A second input can be passed to</span>
+0017 <span class="comment">% select a specific signal in multi-signal formats (such as 'agilent').</span>
+0018 <span class="comment">%    &gt;&gt; output=read(object,record);</span>
+0019 <span class="comment">% If the output is omitted ...</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">% See also DigitizerFile, probe</span>
+0022 <span class="comment">%</span>
+0023 
+0024 <span class="comment">%</span>
+0025 <a name="_sub0" href="#_subfunctions" class="code">function output=read(object,record)</a>
+0026 
+0027 <span class="comment">% handle input</span>
+0028 <span class="keyword">if</span> nargin&lt;2
+0029     record=[];
+0030 <span class="keyword">elseif</span> strcmp(record,<span class="string">'all'</span>)
+0031     <span class="keyword">switch</span> object.Format
+0032         <span class="keyword">case</span> {<span class="string">'agilent'</span>,<span class="string">'keysight'</span>}
+0033             <span class="comment">% do nothing</span>
+0034         <span class="keyword">otherwise</span>
+0035             error(<span class="string">'ERROR: ''all'' option not supported by this format'</span>);
+0036     <span class="keyword">end</span>
+0037     report=<a href="probe.html" class="code" title="function varargout=probe(object)">probe</a>(object);
+0038     <span class="keyword">for</span> k=1:numel(report.Name)
+0039         temp=<a href="read.html" class="code" title="function output=read(object,record)">read</a>(object,k);
+0040         output(k)=temp; <span class="comment">%#ok&lt;AGROW&gt;</span>
+0041     <span class="keyword">end</span>
+0042     <span class="keyword">return</span>
+0043 <span class="keyword">end</span>
+0044 
+0045 <span class="comment">% error checking</span>
+0046 assert(exist(object.FullName,<span class="string">'file'</span>)==2,<span class="keyword">...</span>
+0047     <span class="string">'ERROR: cannot read file because it does not exist'</span>);
+0048 
+0049 <span class="comment">% call the appropriate reader</span>
+0050 output.FileName=object.FullName;
+0051 output.Format=object.Format;
+0052 output.FileOption=record;
+0053 <span class="keyword">switch</span> object.Format
+0054     <span class="keyword">case</span> <span class="string">'acqiris'</span>
+0055         <span class="keyword">if</span> isempty(record)
+0056             record=1;
+0057         <span class="keyword">end</span>
+0058         acquisition=1;
+0059         segment=1;
+0060         [signal,time]=read_acqiris(object.FullName,record,acquisition,segment);        
+0061     <span class="keyword">case</span> {<span class="string">'agilent'</span>,<span class="string">'keysight'</span>}
+0062         report=<a href="probe.html" class="code" title="function varargout=probe(object)">probe</a>(object);
+0063         <span class="keyword">if</span> isempty(record)
+0064             <span class="keyword">if</span> report.NumberSignals==1
+0065                 record=1;
+0066             <span class="keyword">else</span>
+0067                 [record,ok]=listdlg(<span class="keyword">...</span>
+0068                     <span class="string">'PromptString'</span>,<span class="string">'Select signal'</span>,<span class="keyword">...</span>
+0069                     <span class="string">'Name'</span>,<span class="string">'Select signal'</span>,<span class="keyword">...</span>
+0070                     <span class="string">'ListString'</span>,report.Name,<span class="keyword">...</span>
+0071                     <span class="string">'SelectionMode'</span>,<span class="string">'single'</span>);
+0072                 <span class="keyword">if</span> ~ok <span class="comment">% user pressed cancel or closed the dialog</span>
+0073                     error(<span class="string">'ERROR: no signal selected'</span>);
+0074                 <span class="keyword">end</span>
+0075             <span class="keyword">end</span>        
+0076         <span class="keyword">end</span>      
+0077         index=1:report.NumberSignals;
+0078         assert(any(record==index),<span class="string">'ERROR: invalid record request'</span>);
+0079         output.FileOption=record;    
+0080         [signal,time]=read_agilent(object.FullName,record);                
+0081     <span class="keyword">case</span> <span class="string">'lecroy'</span>
+0082         [signal,time]=read_lecroy(object.FullName);
+0083     <span class="keyword">case</span> <span class="string">'tektronix'</span>
+0084         [~,~,ext]=fileparts(object.FullName);
+0085         <span class="keyword">switch</span> lower(ext)
+0086             <span class="keyword">case</span> <span class="string">'.wfm'</span>
+0087                 [signal,time]=read_tektronixWFM(object.FullName);
+0088             <span class="keyword">case</span> <span class="string">'.isf'</span>
+0089                 [signal,time]=read_tektronixISF(object.FullName);
+0090         <span class="keyword">end</span>
+0091     <span class="keyword">case</span> <span class="string">'yokogawa'</span>
+0092         [signal,time]=read_yokogawa(object.FullName);
+0093     <span class="keyword">case</span> <span class="string">'zdas'</span>
+0094         [signal,time]=read_zdas(object.FullName,record);
+0095     <span class="keyword">case</span> <span class="string">'saturn'</span>
+0096         [signal,time]=read_saturn(object.FullName);
+0097     <span class="keyword">otherwise</span>
+0098         error(<span class="string">'ERROR: requested format is not supported'</span>);
+0099 <span class="keyword">end</span>
+0100 output.Time=time(:);
+0101 output.Signal=signal(:);
+0102 
+0103 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

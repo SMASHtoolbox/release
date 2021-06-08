@@ -1,0 +1,121 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of spawn</title>
+  <meta name="keywords" content="spawn">
+  <meta name="description" content="spawn Create new figure in a specific place">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="../../index.html">+SMASH</a> &gt; <a href="../index.html">+Graphics</a> &gt; <a href="index.html">+FigureTools</a> &gt; spawn.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+Graphics/+FigureTools&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>spawn
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>spawn Create new figure in a specific place</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function varargout=spawn(monitor,location) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> spawn Create new figure in a specific place
+
+ This method creates a new figure in a specific place.  New figures can be
+ spawned on a particular monitor
+    spawn(monitor);
+ specified by number, 'largest', or 'smallest'; the default choice is
+ 'largest'.  Figure location on that monitor can also be controlled.
+    spawn(monitor,location);
+ Valid locations include 'east', 'west', 'north', 'south', 'northeast',
+ 'southweast', 'northwest', 'southwest', and 'center' (default).
+
+ The figure handle is returned as an output, if requested.
+    h=spawn(...); 
+
+ &lt;a href=&quot;matlab:SMASH.System.showExample('Spawn','+SMASH/+Graphics/+FigureTools')&quot;&gt;Examples&lt;/a&gt;
+
+ See also SMASH.Graphics.FigureTools, <a href="place.html" class="code" title="function varargout=place(monitor,fig)">place</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="place.html" class="code" title="function varargout=place(monitor,fig)">place</a>	place Place figures on specific monitor</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="place.html" class="code" title="function varargout=place(monitor,fig)">place</a>	place Place figures on specific monitor</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% spawn Create new figure in a specific place</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This method creates a new figure in a specific place.  New figures can be</span>
+0004 <span class="comment">% spawned on a particular monitor</span>
+0005 <span class="comment">%    spawn(monitor);</span>
+0006 <span class="comment">% specified by number, 'largest', or 'smallest'; the default choice is</span>
+0007 <span class="comment">% 'largest'.  Figure location on that monitor can also be controlled.</span>
+0008 <span class="comment">%    spawn(monitor,location);</span>
+0009 <span class="comment">% Valid locations include 'east', 'west', 'north', 'south', 'northeast',</span>
+0010 <span class="comment">% 'southweast', 'northwest', 'southwest', and 'center' (default).</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% The figure handle is returned as an output, if requested.</span>
+0013 <span class="comment">%    h=spawn(...);</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% &lt;a href=&quot;matlab:SMASH.System.showExample('Spawn','+SMASH/+Graphics/+FigureTools')&quot;&gt;Examples&lt;/a&gt;</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">% See also SMASH.Graphics.FigureTools, place</span>
+0018 <span class="comment">%</span>
+0019 
+0020 <span class="comment">%</span>
+0021 <span class="comment">% created December 14, 2017 by Daniel Dolan (Sandia National Laboratories)</span>
+0022 <span class="comment">%</span>
+0023 <a name="_sub0" href="#_subfunctions" class="code">function varargout=spawn(monitor,location)</a>
+0024 
+0025 import SMASH.Graphics.FigureTools.*
+0026 
+0027 <span class="comment">% manage input</span>
+0028 <span class="keyword">if</span> (nargin &lt; 1)
+0029     monitor=[];
+0030 <span class="keyword">end</span>
+0031 
+0032 <span class="keyword">if</span> (nargin &lt; 2) || isempty(location)
+0033     location=<span class="string">'center'</span>;
+0034 <span class="keyword">end</span>
+0035 
+0036 
+0037 <span class="comment">% generate new figure</span>
+0038 fig=figure();
+0039 <span class="keyword">try</span>
+0040     <a href="place.html" class="code" title="function varargout=place(monitor,fig)">place</a>(monitor,fig);
+0041 <span class="keyword">catch</span>
+0042     delete(fig);
+0043     error(<span class="string">'ERROR: invalid monitor'</span>);
+0044 <span class="keyword">end</span>
+0045 
+0046 <span class="keyword">try</span>
+0047     movegui(fig,location);
+0048 <span class="keyword">catch</span>
+0049     delete(fig);
+0050     error(<span class="string">'ERROR: invalid location'</span>);
+0051 <span class="keyword">end</span>
+0052 
+0053 <span class="comment">% manage output</span>
+0054 <span class="keyword">if</span> nargout &gt; 0
+0055     varargout{1}=fig;
+0056 <span class="keyword">end</span>
+0057    
+0058 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

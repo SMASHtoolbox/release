@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of newFileRecord</title>
+  <meta name="keywords" content="newFileRecord">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">SDAbrowser</a> &gt; <a href="index.html">private</a> &gt; newFileRecord.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/SDAbrowser/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>newFileRecord
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function new=newFileRecord(archive) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="createDialog.html" class="code" title="function createDialog(filename)">createDialog</a>	UNDER CONSTRUCTION</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function setFile(varargin)</a></li><li><a href="#_sub2" class="code">function selectFile(varargin)</a></li><li><a href="#_sub3" class="code">function ok(varargin)</a></li><li><a href="#_sub4" class="code">function cancel(varargin)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function new=newFileRecord(archive)</a>
+0002 
+0003 new=<span class="string">''</span>;
+0004 <span class="comment">% create dialog box</span>
+0005 dlg=SMASH.MUI.Dialog();
+0006 dlg.Hidden=true;
+0007 dlg.Name=<span class="string">'New variable record'</span>;
+0008 
+0009 File=addblock(dlg,<span class="string">'edit_button'</span>,{<span class="string">'File name:'</span> <span class="string">' Select '</span>},40);
+0010 set(File(2),<span class="string">'UserData'</span>,<span class="string">''</span>,<span class="string">'Callback'</span>,@<a href="#_sub1" class="code" title="subfunction setFile(varargin)">setFile</a>);
+0011 set(File(3),<span class="string">'Callback'</span>,@<a href="#_sub2" class="code" title="subfunction selectFile(varargin)">selectFile</a>);
+0012 
+0013 Label=addblock(dlg,<span class="string">'edit'</span>,<span class="string">'Label:'</span>,40);
+0014 set(Label(2),<span class="string">'Enable'</span>,<span class="string">'off'</span>);
+0015 
+0016 Description=addblock(dlg,<span class="string">'medit'</span>,<span class="string">'Description:'</span>,40,5);
+0017 
+0018 deflate=cell(10,1);
+0019 <span class="keyword">for</span> k=1:10
+0020     <span class="keyword">switch</span> k-1
+0021         <span class="keyword">case</span> 0
+0022             deflate{k}=sprintf(<span class="string">'%d (none)'</span>,k-1);
+0023         <span class="keyword">case</span> 9
+0024             deflate{k}=sprintf(<span class="string">'%d (max)'</span>,k-1);
+0025         <span class="keyword">otherwise</span>
+0026             deflate{k}=sprintf(<span class="string">'%d'</span>,k-1);
+0027     <span class="keyword">end</span>
+0028 <span class="keyword">end</span>
+0029 Deflate=addblock(dlg,<span class="string">'popup'</span>,<span class="string">'Deflate setting:'</span>,deflate);
+0030 
+0031 Action=addblock(dlg,<span class="string">'button'</span>,{<span class="string">'Done'</span>,<span class="string">'Cancel'</span>});
+0032 set(Action(1),<span class="string">'Callback'</span>,@<a href="#_sub3" class="code" title="subfunction ok(varargin)">ok</a>);
+0033 set(Action(2),<span class="string">'Callback'</span>,@<a href="#_sub4" class="code" title="subfunction cancel(varargin)">cancel</a>);
+0034 
+0035 <span class="comment">% set up callbacks</span>
+0036     <a name="_sub1" href="#_subfunctions" class="code">function setFile(varargin)</a>
+0037         filename=get(File(2),<span class="string">'String'</span>);
+0038         <span class="keyword">if</span> exist(filename,<span class="string">'file'</span>)~=2
+0039             errordlg(<span class="string">'Requested file does not exist'</span>,<span class="string">'Invalid file'</span>,<span class="string">'modal'</span>);            
+0040             set(File(2),<span class="string">'String'</span>,get(File(2),<span class="string">'UserData'</span>));
+0041             <span class="keyword">return</span>
+0042         <span class="keyword">end</span>
+0043         [pathname,~,~]=fileparts(filename);
+0044         start=pwd;
+0045         cd(pathname);
+0046         pathname=pwd;
+0047         cd(start);
+0048         filename=fullfile(pathname,filename);
+0049         set(File(2),<span class="string">'UserData'</span>,filename);
+0050         [~,short,ext]=fileparts(filename);
+0051         set(Label(2),<span class="string">'String'</span>,[short ext]);        
+0052     <span class="keyword">end</span>
+0053     <a name="_sub2" href="#_subfunctions" class="code">function selectFile(varargin)</a>
+0054         [filename,pathname]=uigetfile(<span class="string">'*.*'</span>,<span class="string">'Select file'</span>);
+0055         <span class="keyword">if</span> isnumeric(filename)
+0056             <span class="keyword">return</span>
+0057         <span class="keyword">end</span>
+0058         filename=fullfile(pathname,filename);
+0059         set(File(2),<span class="string">'String'</span>,filename,<span class="string">'UserData'</span>,filename);
+0060         [~,short,ext]=fileparts(filename);
+0061         set(Label(2),<span class="string">'String'</span>,[short ext]);
+0062     <span class="keyword">end</span>   
+0063 
+0064     <a name="_sub3" href="#_subfunctions" class="code">function ok(varargin)</a>
+0065         filename=get(File(2),<span class="string">'String'</span>);        
+0066         new=get(Label(2),<span class="string">'String'</span>);
+0067         description=get(Description(2),<span class="string">'String'</span>);
+0068         deflate=get(Deflate(2),<span class="string">'Value'</span>)-1;
+0069         import(archive,filename,description,deflate);
+0070         delete(dlg);
+0071     <span class="keyword">end</span>
+0072     <a name="_sub4" href="#_subfunctions" class="code">function cancel(varargin)</a>
+0073         delete(dlg);
+0074     <span class="keyword">end</span>
+0075 
+0076 <span class="comment">% finish and show dialog box</span>
+0077 locate(dlg,<span class="string">'center'</span>);
+0078 dlg.Modal=true;
+0079 dlg.Hidden=false;
+0080 
+0081 uiwait(dlg.Handle);
+0082 
+0083 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of mangle_signals</title>
+  <meta name="keywords" content="mangle_signals">
+  <meta name="description" content="apply default parameters where necessary">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">fringen</a> &gt; <a href="index.html">private</a> &gt; mangle_signals.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/fringen/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>mangle_signals
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>apply default parameters where necessary</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function data=mangle_signals(data) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> apply default parameters where necessary</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="ColumnReader.html" class="code" title="function [data,header,filename]=ColumnReader(filename,delim,mincolumn)">ColumnReader</a>	ColumnReader : extract column data from a file</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="PDVparamsGUI.html" class="code" title="function PDVparamsGUI(rootfig)">PDVparamsGUI</a>	</li><li><a href="VISARparamsGUI.html" class="code" title="function VISARparamsGUI(rootfig)">VISARparamsGUI</a>	</li><li><a href="fringenGUI.html" class="code" title="function fringenGUI(varargin)">fringenGUI</a>	</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function data=mangle_signals(data)</a>
+0002 
+0003 <span class="comment">% apply default parameters where necessary</span>
+0004 params=data.params;
+0005 <span class="keyword">if</span> ~isfield(params,<span class="string">'coupling'</span>) || isempty(params.coupling)
+0006     params.coupling=<span class="string">'DC'</span>;
+0007 <span class="keyword">end</span>
+0008 <span class="keyword">if</span> ~isfield(params,<span class="string">'impulse_response'</span>)
+0009     params.impulse_response=<span class="string">''</span>;
+0010 <span class="keyword">end</span>
+0011 
+0012 <span class="keyword">if</span> isfield(params,<span class="string">'noise_fraction'</span>)
+0013     params.noise_frac=params.noise_fraction;
+0014 <span class="keyword">end</span>
+0015 <span class="keyword">if</span> ~isfield(params,<span class="string">'noise_frac'</span>) || isempty(params.noise_frac)
+0016     params.noise_frac=0;
+0017 <span class="keyword">end</span>
+0018 
+0019 <span class="keyword">if</span> ~isfield(params,<span class="string">'noise_seed'</span>)
+0020     params.noise_seed=[];
+0021 <span class="keyword">end</span>
+0022 <span class="keyword">if</span> ~isfield(params,<span class="string">'bit_range'</span>) || isempty(params.bit_range)
+0023     params.bit_range=8;
+0024 <span class="keyword">end</span>
+0025 
+0026 <span class="comment">% store parameters and extract local copies</span>
+0027 data.params=params;
+0028 coupling=params.coupling;
+0029 impulse_response=params.impulse_response;
+0030 noise_frac=params.noise_frac(1);
+0031 noise_seed=params.noise_seed;
+0032 bit_range=params.bit_range(1);
+0033 
+0034 <span class="comment">% reset random number generator if there is a noise seed</span>
+0035 <span class="keyword">if</span> isempty(noise_seed)
+0036     <span class="comment">% do nothing</span>
+0037 <span class="keyword">else</span>
+0038     noise_seed=uint32(noise_seed);
+0039     s=RandStream(<span class="string">'mt19937ar'</span>);
+0040     <span class="comment">%RandStream.setDefaultStream(s);</span>
+0041     reset(s,noise_seed);
+0042 <span class="keyword">end</span>
+0043 
+0044 <span class="comment">% mangle each signal</span>
+0045 Nlevel=floor(pow2(bit_range));
+0046 Nsignal=numel(data.signal);
+0047 <span class="keyword">for</span> k=1:Nsignal
+0048     <span class="comment">% AC coupling</span>
+0049     <span class="keyword">if</span> strcmp(coupling,<span class="string">'AC'</span>)
+0050         before=(data.time&lt;0);
+0051         <span class="keyword">if</span> sum(before)&gt;0
+0052             baseline=mean(data.signal{k}(before));
+0053         <span class="keyword">else</span>
+0054             baseline=data.signal{k}(1);
+0055         <span class="keyword">end</span>
+0056         data.signal{k}=data.signal{k}-baseline;
+0057     <span class="keyword">end</span>
+0058     <span class="comment">% transfer function</span>
+0059     <span class="keyword">if</span> ~isempty(impulse_response)
+0060         Nsignal=numel(data.signal{k});
+0061         N2=pow2(nextpow2(Nsignal));
+0062         <span class="keyword">if</span> k==1 <span class="comment">% access inpulse function file</span>
+0063             temp=<a href="ColumnReader.html" class="code" title="function [data,header,filename]=ColumnReader(filename,delim,mincolumn)">ColumnReader</a>(impulse_response);
+0064             keep=(temp(:,1)&gt;=0); <span class="comment">% drop negative times</span>
+0065             impulse.time=temp(keep,1);
+0066             impulse.signal=temp(keep,2);
+0067             Nimpulse=numel(impulse.signal);
+0068             <span class="comment">% calculate normalized transfer function</span>
+0069             transfer=fft(impulse.signal,N2);
+0070             junk=fft(ones(size(data.signal{k})),N2);
+0071             junk=real(ifft(junk.*transfer));
+0072             junk=junk(Nimpulse:Nsignal); <span class="comment">% remove impulse and padded sections</span>
+0073             scale=mean(junk);
+0074             transfer=transfer/scale;
+0075         <span class="keyword">end</span>        
+0076         <span class="comment">% perform convolution in frequency domain</span>
+0077         transform=fft(data.signal{k},N2);          
+0078         temp=ifft(transform.*transfer);       
+0079         data.signal{k}=real(temp(1:Nsignal));                               
+0080     <span class="keyword">end</span>
+0081     
+0082     <span class="comment">% random noise</span>
+0083     amplitude=noise_frac*(max(data.signal{k})-min(data.signal{k}))/2;
+0084     noise=amplitude*randn(size(data.signal{k}));
+0085     data.signal{k}=data.signal{k}+noise;
+0086     <span class="comment">% map data to digitizer levels</span>
+0087     Dmax=max(data.signal{k});
+0088     Dmin=min(data.signal{k});
+0089     range=Dmax-Dmin;
+0090     data.signal{k}=(data.signal{k}-Dmin)/range;
+0091     data.signal{k}=round((Nlevel-1)*data.signal{k})/(Nlevel-1);
+0092     data.signal{k}=Dmin+range*data.signal{k};           
+0093 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>
