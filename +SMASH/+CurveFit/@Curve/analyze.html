@@ -1,0 +1,163 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of analyze</title>
+  <meta name="keywords" content="analyze">
+  <meta name="description" content="analyze Analyze parameter uncertainty">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="../../index.html">+SMASH</a> &gt; <a href="../index.html">+CurveFit</a> &gt; <a href="index.html">@Curve</a> &gt; analyze.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+CurveFit/@Curve&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>analyze
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>analyze Analyze parameter uncertainty</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function [report,reject]=analyze(object,iterations) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> analyze Analyze parameter uncertainty
+
+ This method analyzes parameter uncertainty for a Curve object.
+    report=analyze(object,iterations);
+ The input &quot;interations&quot; is optional (default value is 1000) and can be
+ any positive integer.  Larger iteration numbers take more time but
+ produce more reliable results.
+
+ The output &quot;report&quot; is a Cloud object describing the variation in all
+ basis parameters and scale factors.  NOTE: this method cannot be used
+ until the fit method has been called.  Adding, removing, and editing the
+ basis functions in a Curve object require the fit method to be called
+ before uncertainty analysis.
+
+ See also CurveFit, <a href="fit.html" class="code" title="function object=fit(object,options)">fit</a>, SMASH.MonteCarlo.Cloud</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="analyze.html" class="code" title="function [report,reject]=analyze(object,iterations)">analyze</a>	analyze Analyze parameter uncertainty</li><li><a href="edit.html" class="code" title="function object=edit(object,index,varargin)">edit</a>	edit Edit basis</li><li><a href="evaluate.html" class="code" title="function [y,basis,ScaledBasis]=evaluate(object,x)">evaluate</a>	evaluate Evaluate curve</li><li><a href="fit.html" class="code" title="function object=fit(object,options)">fit</a>	fit Optimize parameters to match data</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="analyze.html" class="code" title="function [report,reject]=analyze(object,iterations)">analyze</a>	analyze Analyze parameter uncertainty</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function L=likelihood(state)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% analyze Analyze parameter uncertainty</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This method analyzes parameter uncertainty for a Curve object.</span>
+0004 <span class="comment">%    report=analyze(object,iterations);</span>
+0005 <span class="comment">% The input &quot;interations&quot; is optional (default value is 1000) and can be</span>
+0006 <span class="comment">% any positive integer.  Larger iteration numbers take more time but</span>
+0007 <span class="comment">% produce more reliable results.</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% The output &quot;report&quot; is a Cloud object describing the variation in all</span>
+0010 <span class="comment">% basis parameters and scale factors.  NOTE: this method cannot be used</span>
+0011 <span class="comment">% until the fit method has been called.  Adding, removing, and editing the</span>
+0012 <span class="comment">% basis functions in a Curve object require the fit method to be called</span>
+0013 <span class="comment">% before uncertainty analysis.</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% See also CurveFit, fit, SMASH.MonteCarlo.Cloud</span>
+0016 <span class="comment">%</span>
+0017 
+0018 <span class="comment">%</span>
+0019 <span class="comment">% created January 17, 2016 by Daniel Dolan (Sandia National Laboratories)</span>
+0020 <span class="comment">%</span>
+0021 <a name="_sub0" href="#_subfunctions" class="code">function [report,reject]=analyze(object,iterations)</a>
+0022 
+0023 assert(object.FitComplete,<span class="keyword">...</span>
+0024     <span class="string">'ERROR: fit must be performed before uncertainty analysis'</span>);
+0025 
+0026 <span class="comment">% manage input</span>
+0027 <span class="keyword">if</span> (nargin &lt; 2) || isempty(iterations)
+0028     iterations=1000;
+0029 <span class="keyword">end</span> 
+0030 assert(<span class="keyword">...</span>
+0031     SMASH.General.testNumber(iterations,<span class="string">'positive'</span>,<span class="string">'integer'</span>,<span class="string">'notzero'</span>),<span class="keyword">...</span>
+0032     <span class="string">'ERROR: invalid interations value'</span>);
+0033 
+0034 
+0035 <span class="comment">% extract data</span>
+0036 data=object.DataTable;
+0037 x=data(:,1);
+0038 y=data(:,2);
+0039 weight=object.Weight;
+0040 <span class="keyword">if</span> isempty(weight)
+0041     weight=mean((y-<a href="evaluate.html" class="code" title="function [y,basis,ScaledBasis]=evaluate(object,x)">evaluate</a>(object,x)).^2);
+0042     weight=repmat(1/weight,size(x));
+0043 <span class="keyword">end</span>
+0044 
+0045 state0=[];
+0046 state_min=[];
+0047 state_max=[];
+0048 Nbasis=numel(object.Basis);
+0049 Nadjustable=zeros(1,Nbasis);
+0050 <span class="keyword">for</span> k=1:Nbasis
+0051     Nadjustable(k)=numel(object.Parameter{k});
+0052     state0=[state0 object.Parameter{k}]; <span class="comment">%#ok&lt;AGROW&gt;</span>
+0053     state_min=[state_min object.Bound{k}(1,:)]; <span class="comment">%#ok&lt;AGROW&gt;</span>
+0054     state_max=[state_max object.Bound{k}(2,:)]; <span class="comment">%#ok&lt;AGROW&gt;</span>
+0055     <span class="keyword">if</span> ~object.FixScale{k}
+0056         Nadjustable(k)=Nadjustable(k)+1;
+0057         state0(end+1)=object.Scale{k}; <span class="comment">%#ok&lt;AGROW&gt;</span>
+0058         state_min(end+1)=-inf; <span class="comment">%#ok&lt;AGROW&gt;</span>
+0059         state_max(end+1)=+inf; <span class="comment">%#ok&lt;AGROW&gt;</span>
+0060     <span class="keyword">end</span>
+0061 <span class="keyword">end</span>
+0062 
+0063     <a name="_sub1" href="#_subfunctions" class="code">function L=likelihood(state)</a>
+0064         <span class="comment">% update *adjustable* parameters</span>
+0065         new=object;
+0066         <span class="keyword">for</span> kk=1:Nbasis
+0067             temp=state(1:Nadjustable(kk));
+0068             <span class="keyword">if</span> ~object.FixScale{kk}
+0069                 new=<a href="edit.html" class="code" title="function object=edit(object,index,varargin)">edit</a>(new,kk,<span class="string">'Scale'</span>,temp(end));
+0070                 temp=temp(1:end-1);
+0071             <span class="keyword">end</span>
+0072             new=<a href="edit.html" class="code" title="function object=edit(object,index,varargin)">edit</a>(new,kk,<span class="string">'Parameter'</span>,temp);
+0073             state=state(Nadjustable(kk)+1:end);
+0074         <span class="keyword">end</span>
+0075         <a href="fit.html" class="code" title="function object=fit(object,options)">fit</a>=<a href="evaluate.html" class="code" title="function [y,basis,ScaledBasis]=evaluate(object,x)">evaluate</a>(new,x);
+0076         L=weight/2.*(<a href="fit.html" class="code" title="function object=fit(object,options)">fit</a>-y).^2;
+0077         L=exp(-sum(L));
+0078     <span class="keyword">end</span>
+0079 
+0080 <span class="comment">%%</span>
+0081 MC=SMASH.MonteCarlo.MetropolisHastings(state0);
+0082 MC=define(MC,<span class="string">'ProbabilityFunction'</span>,@<a href="#_sub1" class="code" title="subfunction L=likelihood(state)">likelihood</a>);
+0083 [~,MC]=survey(MC);
+0084 [report,reject]=<a href="analyze.html" class="code" title="function [report,reject]=analyze(object,iterations)">analyze</a>(MC);
+0085 
+0086 <span class="comment">% manage output</span>
+0087 label=report.VariableName;
+0088 k=0;
+0089 <span class="keyword">for</span> m=1:Nbasis
+0090     <span class="keyword">for</span> n=1:numel(object.Parameter{m})
+0091         k=k+1;
+0092         label{k}=sprintf(<span class="string">'Basis %d Parameter %d'</span>,m,n);
+0093     <span class="keyword">end</span>
+0094     <span class="keyword">if</span> ~object.FixScale{m}
+0095         label{end-Nbasis+m}=sprintf(<span class="string">'Basis %d Scale factor'</span>,m);
+0096     <span class="keyword">end</span>
+0097 <span class="keyword">end</span>
+0098 report=configure(report,<span class="string">'VariableName'</span>,label);
+0099 
+0100 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

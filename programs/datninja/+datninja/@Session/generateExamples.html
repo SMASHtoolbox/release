@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of generateExamples</title>
+  <meta name="keywords" content="generateExamples">
+  <meta name="description" content="generateExamples();">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../../index.html">datninja</a> &gt; <a href="#">+datninja</a> &gt; <a href="index.html">@Session</a> &gt; generateExamples.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../../index.html"><img alt="<" border="0" src="../../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/datninja/+datninja/@Session&nbsp;<img alt=">" border="0" src="../../../../../../right.png"></a></td></tr></table>-->
+
+<h1>generateExamples
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>generateExamples();</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>function generateExamples(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">    generateExamples();</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="Session.html" class="code" title="">Session</a>	</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function generate(fig,theta,name)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">%    generateExamples();</span>
+0002 <a name="_sub0" href="#_subfunctions" class="code">function generateExamples(varargin)</a>
+0003 
+0004 <span class="keyword">if</span> regexp(pwd,smashroot)
+0005     error(<span class="string">'ERROR: cannot generate examples in the SMASH toolbox directory'</span>);
+0006 <span class="keyword">end</span>
+0007 
+0008 
+0009 <span class="comment">% linear</span>
+0010 fig=figure();
+0011 x=1:9;
+0012 y=1:9;
+0013 plot(x,y,<span class="string">'ko'</span>);
+0014 xlim([0 10]);
+0015 ylim([0 10]);
+0016 xlabel(<span class="string">'X axis'</span>);
+0017 ylabel(<span class="string">'Y axis'</span>);
+0018 <a href="#_sub1" class="code" title="subfunction generate(fig,theta,name)">generate</a>(fig,10,<span class="string">'LinearExample.png'</span>);
+0019 close(fig);
+0020 
+0021 <span class="comment">% log x</span>
+0022 fig=figure();
+0023 x=10.^(-4:4);
+0024 y=1:9;
+0025 plot(x,y,<span class="string">'ko'</span>);
+0026 set(gca,<span class="string">'XScale'</span>,<span class="string">'log'</span>);
+0027 xlabel(<span class="string">'X axis'</span>);
+0028 ylabel(<span class="string">'Y axis'</span>);
+0029 <a href="#_sub1" class="code" title="subfunction generate(fig,theta,name)">generate</a>(fig,2,<span class="string">'LogxExample.png'</span>);
+0030 close(fig);
+0031 
+0032 <span class="comment">% log y</span>
+0033 fig=figure();
+0034 x=1:9;
+0035 y=10.^(-4:4);
+0036 plot(x,y,<span class="string">'ko'</span>);
+0037 set(gca,<span class="string">'YScale'</span>,<span class="string">'log'</span>);
+0038 xlabel(<span class="string">'X axis'</span>);
+0039 ylabel(<span class="string">'Y axis'</span>);
+0040 <a href="#_sub1" class="code" title="subfunction generate(fig,theta,name)">generate</a>(fig,2,<span class="string">'LogyExample.png'</span>);
+0041 close(fig);
+0042 
+0043 <span class="comment">% log xy</span>
+0044 fig=figure();
+0045 x=10.^(-4:4);
+0046 y=10.^(-4:4);
+0047 plot(x,y,<span class="string">'ko'</span>);
+0048 set(gca,<span class="string">'XScale'</span>,<span class="string">'log'</span>,<span class="string">'YScale'</span>,<span class="string">'log'</span>);
+0049 xlabel(<span class="string">'X axis'</span>);
+0050 ylabel(<span class="string">'Y axis'</span>);
+0051 <a href="#_sub1" class="code" title="subfunction generate(fig,theta,name)">generate</a>(fig,-2,<span class="string">'LogxyExample.png'</span>);
+0052 close(fig);
+0053 
+0054 <span class="keyword">end</span>
+0055 
+0056 <a name="_sub1" href="#_subfunctions" class="code">function generate(fig,theta,name)</a>
+0057 
+0058 local=[tempname() <span class="string">'.png'</span>];
+0059 print(fig,<span class="string">'-dpng'</span>,local);
+0060 
+0061 obj=SMASH.ImageAnalysis.Image(local,<span class="string">'graphics'</span>);
+0062 obj=rotate(obj,theta);
+0063 temp=obj.Data;
+0064 temp(isnan(temp))=max(temp(:));
+0065 
+0066 new=figure();
+0067 imagesc(temp);
+0068 colormap gray
+0069 axis image
+0070 axis off
+0071 set(gca,<span class="string">'Position'</span>,[0 0 1 1]);
+0072 pos=getpixelposition(new);
+0073 pos(3)=numel(obj.Grid1);
+0074 pos(4)=numel(obj.Grid2);
+0075 setpixelposition(new,pos);
+0076 
+0077 print(new,<span class="string">'-dpng'</span>,name);
+0078 close(new);
+0079 
+0080 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

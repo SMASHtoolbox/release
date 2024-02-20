@@ -1,0 +1,131 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of PDVparamsGUI</title>
+  <meta name="keywords" content="PDVparamsGUI">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">fringen</a> &gt; <a href="index.html">private</a> &gt; PDVparamsGUI.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/fringen/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>PDVparamsGUI
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function PDVparamsGUI(rootfig) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="make_signals.html" class="code" title="function data=make_signals(data)">make_signals</a>	</li><li><a href="mangle_signals.html" class="code" title="function data=mangle_signals(data)">mangle_signals</a>	apply default parameters where necessary</li><li><a href="updateGUI.html" class="code" title="function updateGUI(fig)">updateGUI</a>	</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="fringenGUI.html" class="code" title="function fringenGUI(varargin)">fringenGUI</a>	</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function params=createGUI(params)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function PDVparamsGUI(rootfig)</a>
+0002 
+0003 data=get(rootfig,<span class="string">'UserData'</span>);
+0004 data.params=<a href="#_sub1" class="code" title="subfunction params=createGUI(params)">createGUI</a>(data.params);
+0005 data=<a href="make_signals.html" class="code" title="function data=make_signals(data)">make_signals</a>(data);
+0006 data=<a href="mangle_signals.html" class="code" title="function data=mangle_signals(data)">mangle_signals</a>(data);
+0007 set(rootfig,<span class="string">'UserData'</span>,data);
+0008 <a href="updateGUI.html" class="code" title="function updateGUI(fig)">updateGUI</a>(rootfig);
+0009 
+0010 <a name="_sub1" href="#_subfunctions" class="code">function params=createGUI(params)</a>
+0011 
+0012 <span class="comment">% create labels and default entries</span>
+0013 label={};
+0014 default={};
+0015 format=<span class="string">'%.6g '</span>;
+0016 
+0017 label{end+1}=<span class="string">'Operating wavelength:'</span>;
+0018 <span class="keyword">if</span> isfield(params,<span class="string">'wavelength'</span>)
+0019     value=params.wavelength;
+0020 <span class="keyword">else</span>
+0021     value=1550e-9; <span class="comment">% m</span>
+0022 <span class="keyword">end</span>
+0023 default{end+1}=sprintf(format,value);
+0024 
+0025 label{end+1}=<span class="string">'Frequency shift:'</span>;
+0026 <span class="keyword">if</span> isfield(params,<span class="string">'fshift'</span>)
+0027     value=params.fshift;
+0028 <span class="keyword">else</span>
+0029     value=0; <span class="comment">% Hz</span>
+0030 <span class="keyword">end</span>
+0031 default{end+1}=sprintf(format,value);
+0032 
+0033 label{end+1}=<span class="string">'Reference phase (degrees):'</span>;
+0034 <span class="keyword">if</span> isfield(params,<span class="string">'ref_phase'</span>)
+0035     value=params.ref_phase;
+0036 <span class="keyword">else</span>
+0037     value=0; 
+0038 <span class="keyword">end</span>
+0039 default{end+1}=sprintf(format,value);
+0040 
+0041 label{end+1}=<span class="string">'Phase shifts (degrees):'</span>;
+0042 <span class="keyword">if</span> isfield(params,<span class="string">'phase_shift'</span>)
+0043     value=params.phase_shift;
+0044 <span class="keyword">else</span>
+0045     value=[0 +120 -120]; 
+0046 <span class="keyword">end</span>
+0047 default{end+1}=sprintf(format,value);
+0048 
+0049 label{end+1}=<span class="string">'Reference path scaling:'</span>;
+0050 <span class="keyword">if</span> isfield(params,<span class="string">'ref_scale'</span>)
+0051     value=params.ref_scale;
+0052 <span class="keyword">else</span>
+0053     value=1; 
+0054 <span class="keyword">end</span>
+0055 default{end+1}=sprintf(format,value);
+0056 
+0057 label{end+1}=<span class="string">'Target path scaling:'</span>;
+0058 <span class="keyword">if</span> isfield(params,<span class="string">'target_scale'</span>)
+0059     value=params.target_scale;
+0060 <span class="keyword">else</span>
+0061     value=1; 
+0062 <span class="keyword">end</span>
+0063 default{end+1}=sprintf(format,value);
+0064 
+0065 <span class="comment">% prompt user for input</span>
+0066 answer=inputdlg(label,<span class="string">'VISAR parameters'</span>,[1 40],default);
+0067 <span class="keyword">if</span> isempty(answer)
+0068     <span class="keyword">return</span>
+0069 <span class="keyword">end</span>
+0070 
+0071 <span class="comment">% try to make sense of the input</span>
+0072 <span class="keyword">try</span>
+0073     params.wavelength=sscanf(answer{1},<span class="string">'%g'</span>,1);
+0074     params.fshift=sscanf(answer{2},<span class="string">'%g'</span>,1);
+0075     params.ref_phase=sscanf(answer{3},<span class="string">'%g'</span>,1);
+0076     params.phase_shift=sscanf(answer{4},<span class="string">'%g'</span>);
+0077     params.ref_scale=sscanf(answer{5},<span class="string">'%g'</span>);
+0078     params.target_scale=sscanf(answer{6},<span class="string">'%g'</span>);
+0079 <span class="keyword">catch</span>
+0080     <span class="comment">% have user try again</span>
+0081     params=<a href="#_sub1" class="code" title="subfunction params=createGUI(params)">createGUI</a>(params);
+0082 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

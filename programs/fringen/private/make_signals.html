@@ -1,0 +1,65 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of make_signals</title>
+  <meta name="keywords" content="make_signals">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">fringen</a> &gt; <a href="index.html">private</a> &gt; make_signals.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/fringen/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>make_signals
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function data=make_signals(data) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="PDVfringen.html" class="code" title="function data=PDVfringen(data)">PDVfringen</a>	apply default parameters where necessary</li><li><a href="VISARfringen.html" class="code" title="function data=VISARfringen(data)">VISARfringen</a>	apply default parameters where necessary</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="PDVparamsGUI.html" class="code" title="function PDVparamsGUI(rootfig)">PDVparamsGUI</a>	</li><li><a href="VISARparamsGUI.html" class="code" title="function VISARparamsGUI(rootfig)">VISARparamsGUI</a>	</li><li><a href="fringenGUI.html" class="code" title="function fringenGUI(varargin)">fringenGUI</a>	</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function data=make_signals(data)</a>
+0002 
+0003 <span class="keyword">if</span> ~isfield(data,<span class="string">'mode'</span>)
+0004     data.mode=<span class="string">'VISAR'</span>;
+0005 <span class="keyword">end</span>
+0006 
+0007 <span class="keyword">if</span> ~isfield(data,<span class="string">'params'</span>)
+0008     data.params=struct();
+0009 <span class="keyword">end</span>
+0010 
+0011 <span class="keyword">switch</span> upper(data.mode)
+0012     <span class="keyword">case</span> <span class="string">'PDV'</span>
+0013         data=<a href="PDVfringen.html" class="code" title="function data=PDVfringen(data)">PDVfringen</a>(data);
+0014     <span class="keyword">case</span> <span class="string">'VISAR'</span>
+0015         data=<a href="VISARfringen.html" class="code" title="function data=VISARfringen(data)">VISARfringen</a>(data);
+0016     <span class="keyword">otherwise</span>
+0017         fprintf(<span class="string">'%s is not a valid mode'</span>,data.mode);
+0018 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

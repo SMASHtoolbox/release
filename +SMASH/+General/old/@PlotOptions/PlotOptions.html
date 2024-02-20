@@ -1,0 +1,199 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of PlotOptions</title>
+  <meta name="keywords" content="PlotOptions">
+  <meta name="description" content="This class manages options for graphical display.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../../index.html">SMASHtoolbox</a> &gt; <a href="../../../index.html">+SMASH</a> &gt; <a href="../../index.html">+General</a> &gt; <a href="#">old</a> &gt; <a href="index.html">@PlotOptions</a> &gt; PlotOptions.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../../index.html"><img alt="<" border="0" src="../../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+General/old/@PlotOptions&nbsp;<img alt=">" border="0" src="../../../../../../right.png"></a></td></tr></table>-->
+
+<h1>PlotOptions
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>This class manages options for graphical display.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> This class manages options for graphical display.
+
+ See also General, Options</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="PlotOptions.html" class="code" title="">PlotOptions</a>	This class manages options for graphical display.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="PlotOptions.html" class="code" title="">PlotOptions</a>	This class manages options for graphical display.</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function object=PlotOptions(varargin)</a></li><li><a href="#_sub2" class="code">function result=verifyColor(value)</a></li><li><a href="#_sub3" class="code">function result=verifyWidth(value)</a></li><li><a href="#_sub4" class="code">function result=verifyColorMap(value)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% This class manages options for graphical display.</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% See also General, Options</span>
+0004 <span class="comment">%</span>
+0005 
+0006 <span class="comment">%</span>
+0007 <span class="comment">% created November 17, 2014 by Daniel Dolan (Sandia National Laboratory)</span>
+0008 <span class="comment">%</span>
+0009 classdef <a href="PlotOptions.html" class="code" title="">PlotOptions</a> &lt; SMASH.General.Options
+0010     <span class="comment">%%</span>
+0011     methods (Hidden=true)
+0012         <a name="_sub0" href="#_subfunctions" class="code">function object=PlotOptions(varargin)</a>
+0013             <span class="comment">% line properites</span>
+0014             object=add(object,<span class="string">'LineStyle'</span>,<span class="string">'-'</span>,{<span class="string">'-'</span>,<span class="string">'--'</span>,<span class="string">'-.'</span>,<span class="string">':'</span>,<span class="string">'none'</span>});
+0015             object=describe(object,<span class="string">'LineStyle'</span>,<span class="keyword">...</span>
+0016                 <span class="string">'LineStyle: (any MATLAB line style)'</span>,<span class="keyword">...</span>
+0017                 <span class="string">'locked'</span>);
+0018 
+0019             object=add(object,<span class="string">'LineColor'</span>,<span class="string">'k'</span>,@<a href="#_sub2" class="code" title="subfunction result=verifyColor(value)">verifyColor</a>);
+0020             object=describe(object,<span class="string">'LineColor'</span>,<span class="keyword">...</span>
+0021                 <span class="string">'LineColor: RGB value or short/long name '</span>,<span class="keyword">...</span>
+0022                 <span class="string">'locked'</span>);
+0023    
+0024             object=add(object,<span class="string">'LineWidth'</span>,1,@<a href="#_sub3" class="code" title="subfunction result=verifyWidth(value)">verifyWidth</a>);
+0025             object=describe(object,<span class="string">'LineWidth'</span>,<span class="keyword">...</span>
+0026                 <span class="string">'LineWidth: width in points'</span>,<span class="keyword">...</span>
+0027                 <span class="string">'locked'</span>);
+0028   
+0029             object=add(object,<span class="string">'Marker'</span>,<span class="string">'o'</span>,<span class="keyword">...</span>
+0030                 {<span class="string">'+'</span>,<span class="string">'o'</span>,<span class="string">'*'</span>,<span class="string">'.'</span>,<span class="string">'x'</span>,<span class="string">'s'</span>,<span class="string">'square'</span>,<span class="string">'d'</span>,<span class="string">'diamond'</span>,<span class="string">'^'</span>,<span class="string">'v'</span>,<span class="string">'&gt;'</span>,<span class="string">'&lt;'</span>,<span class="string">'p'</span>,<span class="string">'pentagram'</span>,<span class="string">'h'</span>,<span class="string">'hexagram'</span>,<span class="string">'none'</span>});
+0031             object=describe(object,<span class="string">'Marker'</span>,<span class="keyword">...</span>
+0032                 <span class="string">'LineMarker: (all MATLAB marker symbol)'</span>,<span class="string">'lock'</span>);
+0033      
+0034             object=add(object,<span class="string">'MarkerStyle'</span>,<span class="string">'open'</span>,{<span class="string">'open'</span>,<span class="string">'closed'</span>});
+0035             object=describe(object,<span class="string">'MarkerStyle'</span>,<span class="keyword">...</span>
+0036                 <span class="string">'MarkerStyle: ''open'' or ''closed'''</span>,<span class="keyword">...</span>
+0037                 <span class="string">'locked'</span>);
+0038        
+0039             object=add(object,<span class="string">'MarkerSize'</span>,5,@<a href="#_sub3" class="code" title="subfunction result=verifyWidth(value)">verifyWidth</a>);
+0040             object=describe(object,<span class="string">'MarkerSize'</span>,<span class="keyword">...</span>
+0041                 <span class="string">'MarkerSize: size in points'</span>,<span class="keyword">...</span>
+0042                 <span class="string">'locked'</span>);
+0043             
+0044             <span class="comment">% axes properties</span>
+0045             object=add(object,<span class="string">'Box'</span>,<span class="string">'on'</span>,{<span class="string">'on'</span>,<span class="string">'off'</span>});
+0046             object=describe(object,<span class="string">'Box'</span>,<span class="keyword">...</span>
+0047                 <span class="string">'Box: ''on'' or ''off'''</span>);
+0048             
+0049             object=add(object,<span class="string">'AspectRatio'</span>,<span class="string">'auto'</span>,{<span class="string">'auto'</span>,<span class="string">'equal'</span>});
+0050             object=describe(object,<span class="string">'AspectRatio'</span>,<span class="keyword">...</span>
+0051                 <span class="string">'AspectRatio: ''auto'' or ''equal'''</span>);           
+0052             
+0053             object=add(object,<span class="string">'AxesColor'</span>,<span class="string">'w'</span>,@<a href="#_sub2" class="code" title="subfunction result=verifyColor(value)">verifyColor</a>);
+0054             object=describe(object,<span class="string">'AxesColor'</span>,<span class="keyword">...</span>
+0055                 <span class="string">'AxesColor: RGB value or short/long name'</span>);
+0056             
+0057            object=add(object,<span class="string">'XDir'</span>,<span class="string">'normal'</span>,{<span class="string">'normal'</span>, <span class="string">'reverse'</span>});
+0058            object=describe(object,<span class="string">'XDir'</span>,<span class="keyword">...</span>
+0059                <span class="string">'XDir: ''normal'' or ''reverse'''</span>,<span class="string">'locked'</span>);
+0060            
+0061            object=add(object,<span class="string">'YDir'</span>,<span class="string">'normal'</span>,{<span class="string">'normal'</span>, <span class="string">'reverse'</span>});
+0062            object=describe(object,<span class="string">'YDir'</span>,<span class="keyword">...</span>
+0063                <span class="string">'YDir: ''normal'' or ''reverse'''</span>,<span class="string">'locked'</span>);
+0064             
+0065             <span class="comment">% uipanel properties</span>
+0066             object=add(object,<span class="string">'PanelColor'</span>,<span class="keyword">...</span>
+0067                 get(0,<span class="string">'DefaultUIPanelBackgroundColor'</span>),@<a href="#_sub2" class="code" title="subfunction result=verifyColor(value)">verifyColor</a>);
+0068             object=describe(object,<span class="string">'PanelColor'</span>,<span class="keyword">...</span>
+0069                 <span class="string">'PanelColor: RGB value or short/long name'</span>);
+0070             
+0071             <span class="comment">% figure properties</span>
+0072             object=add(object,<span class="string">'ColorMap'</span>,jet(64),@<a href="#_sub4" class="code" title="subfunction result=verifyColorMap(value)">verifyColorMap</a>);
+0073             object=describe(object,<span class="string">'ColorMap'</span>,<span class="keyword">...</span>
+0074                 <span class="string">'ColorMap: Three-column table or name (e.g., ''jet'')'</span>,<span class="keyword">...</span>
+0075                 <span class="string">'locked'</span>);
+0076             
+0077             object=add(object,<span class="string">'FigureColor'</span>,<span class="keyword">...</span>
+0078                 get(0,<span class="string">'DefaultFigureColor'</span>),@<a href="#_sub2" class="code" title="subfunction result=verifyColor(value)">verifyColor</a>);
+0079             
+0080             object=describe(object,<span class="string">'FigureColor'</span>,<span class="keyword">...</span>
+0081                 <span class="string">'AxesColor: RGB value or short/long name'</span>);
+0082         <span class="keyword">end</span>        
+0083     <span class="keyword">end</span>
+0084     
+0085 <span class="keyword">end</span>
+0086 
+0087 <span class="comment">%%</span>
+0088 <a name="_sub1" href="#_subfunctions" class="code">function result=verifyColor(value)</a>
+0089 
+0090 result=false;
+0091 <span class="keyword">if</span> isnumeric(value)
+0092     <span class="keyword">if</span> (numel(value)==3) &amp;&amp; all(value&gt;=0) &amp;&amp; all(value&lt;=1)
+0093         result=true;
+0094     <span class="keyword">end</span>
+0095     <span class="keyword">return</span>
+0096 <span class="keyword">end</span>
+0097 
+0098 <span class="keyword">if</span> ischar(value)
+0099     <span class="keyword">switch</span> lower(value)
+0100         <span class="keyword">case</span> {<span class="string">'y'</span>,<span class="string">'yellow'</span>}
+0101             result=true;
+0102         <span class="keyword">case</span> {<span class="string">'m'</span>,<span class="string">'magenta'</span>}
+0103             result=true;
+0104         <span class="keyword">case</span> {<span class="string">'c'</span>,<span class="string">'cyan'</span>}
+0105             result=true;
+0106         <span class="keyword">case</span> {<span class="string">'r'</span>,<span class="string">'red'</span>}
+0107             result=true;
+0108         <span class="keyword">case</span> {<span class="string">'g'</span>,<span class="string">'green'</span>}
+0109             result=true;
+0110         <span class="keyword">case</span> {<span class="string">'b'</span>,<span class="string">'blue'</span>}
+0111             result=true;
+0112         <span class="keyword">case</span> {<span class="string">'w'</span>,<span class="string">'white'</span>}
+0113             result=true;
+0114         <span class="keyword">case</span> {<span class="string">'k'</span>,<span class="string">'black'</span>}
+0115             result=true;
+0116     <span class="keyword">end</span>
+0117     <span class="keyword">return</span>
+0118 <span class="keyword">end</span>
+0119 
+0120 <span class="keyword">end</span>
+0121 
+0122 <a name="_sub2" href="#_subfunctions" class="code">function result=verifyWidth(value)</a>
+0123 
+0124 result=false;
+0125 <span class="keyword">if</span> isnumeric(value)
+0126     <span class="keyword">if</span> value&gt;0
+0127         result=true;
+0128     <span class="keyword">end</span>
+0129     <span class="keyword">return</span>
+0130 <span class="keyword">end</span>
+0131 <span class="keyword">end</span>
+0132 
+0133 <a name="_sub3" href="#_subfunctions" class="code">function result=verifyColorMap(value)</a>
+0134 
+0135 result=false;
+0136 <span class="keyword">if</span> isnumeric(value)
+0137     valid=(value&gt;=0) &amp; (value&lt;=1);
+0138     <span class="keyword">if</span> (size(value,2)==3) &amp;&amp; all(valid(:))
+0139         result=true;
+0140     <span class="keyword">end</span>
+0141 <span class="keyword">elseif</span> ischar(value)
+0142     <span class="keyword">if</span> exist(value,<span class="string">'file'</span>)
+0143         result=true;
+0144     <span class="keyword">end</span>
+0145 <span class="keyword">end</span>
+0146 
+0147 
+0148 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of StartOver</title>
+  <meta name="keywords" content="StartOver">
+  <meta name="description" content="prompt user">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">THRIVE</a> &gt; <a href="index.html">private</a> &gt; StartOver.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/THRIVE/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>StartOver
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>prompt user</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function StartOver(src,varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> prompt user</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="EllipseScreen.html" class="code" title="function fig=EllipseScreen(oldfig)">EllipseScreen</a>	allocate mising input</li><li><a href="LoadScreen.html" class="code" title="function fig=LoadScreen(oldfig)">LoadScreen</a>	LoadScreen:</li><li><a href="QuadratureScreen.html" class="code" title="function fig=QuadratureScreen(oldfig)">QuadratureScreen</a>	this function needs to be significantly revised. Entry into the figure</li><li><a href="ResultsScreen.html" class="code" title="function fig=ResultsScreen(oldfig)">ResultsScreen</a>	ResultsScreen:</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function StartOver(src,varargin)</a>
+0002 
+0003 <span class="comment">% prompt user</span>
+0004 message{1}=<span class="string">'Are you sure you want to restart?'</span>;
+0005 message{2}=<span class="string">'All unsaved data will be lost'</span>;
+0006 button=questdlg(message,<span class="string">'Restart THRIVE?'</span>,<span class="string">'No'</span>);
+0007 
+0008 <span class="keyword">if</span> strcmpi(button,<span class="string">'yes'</span>) 
+0009     data=get(src,<span class="string">'UserData'</span>);
+0010     <span class="comment">% close all figures</span>
+0011     basetag=<span class="string">'THRIVE_'</span>;
+0012     Nbase=numel(basetag);
+0013     fig=allchild(0);
+0014     <span class="keyword">for</span> ii=1:numel(fig)
+0015         tag=get(fig(ii),<span class="string">'Tag'</span>);
+0016         <span class="keyword">if</span> strncmp(tag,basetag,Nbase)
+0017             delete(fig(ii));
+0018         <span class="keyword">end</span>
+0019     <span class="keyword">end</span>
+0020     feval(data.fhandle); <span class="comment">% relaunch program</span>
+0021 <span class="keyword">else</span>
+0022     figure(gcbf); <span class="comment">% return to callback figure</span>
+0023 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

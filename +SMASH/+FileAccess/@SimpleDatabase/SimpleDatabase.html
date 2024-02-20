@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of SimpleDatabase</title>
+  <meta name="keywords" content="SimpleDatabase">
+  <meta name="description" content="This class provides simple database capabilities.  The database is">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="../../index.html">+SMASH</a> &gt; <a href="../index.html">+FileAccess</a> &gt; <a href="index.html">@SimpleDatabase</a> &gt; SimpleDatabase.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+FileAccess/@SimpleDatabase&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>SimpleDatabase
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>This class provides simple database capabilities.  The database is</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> This class provides simple database capabilities.  The database is
+ conceptually equivalent to a structure array, with each element
+ representing a distinct record.  Records share a common set of field
+ names but may have distinct values (consistent data types required). Flat
+ (non-recursive) databases are required, so data values are restricted to
+ one-dimensional character arrays, logical arrays, and numeric arrays;
+ higher-dimensional arrays are automatically convereted to 1D.
+
+ To create a database object, type:
+    &gt;&gt; object=SimpleDatabase(filename);
+ where &quot;filename&quot; is the name of a text file.  Read/write access to the
+ file is provided by methods.
+    &gt;&gt; write(object,data);
+    &gt;&gt; data=read(object);</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="SimpleDatabase.html" class="code" title="">SimpleDatabase</a>	This class provides simple database capabilities.  The database is</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="SimpleDatabase.html" class="code" title="">SimpleDatabase</a>	This class provides simple database capabilities.  The database is</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function object=SimpleDatabase(filename)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% This class provides simple database capabilities.  The database is</span>
+0002 <span class="comment">% conceptually equivalent to a structure array, with each element</span>
+0003 <span class="comment">% representing a distinct record.  Records share a common set of field</span>
+0004 <span class="comment">% names but may have distinct values (consistent data types required). Flat</span>
+0005 <span class="comment">% (non-recursive) databases are required, so data values are restricted to</span>
+0006 <span class="comment">% one-dimensional character arrays, logical arrays, and numeric arrays;</span>
+0007 <span class="comment">% higher-dimensional arrays are automatically convereted to 1D.</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% To create a database object, type:</span>
+0010 <span class="comment">%    &gt;&gt; object=SimpleDatabase(filename);</span>
+0011 <span class="comment">% where &quot;filename&quot; is the name of a text file.  Read/write access to the</span>
+0012 <span class="comment">% file is provided by methods.</span>
+0013 <span class="comment">%    &gt;&gt; write(object,data);</span>
+0014 <span class="comment">%    &gt;&gt; data=read(object);</span>
+0015 <span class="comment">%</span>
+0016 
+0017 <span class="comment">%</span>
+0018 <span class="comment">% created May 30, 2014 by Daniel Dolan (Sandia National Laboratories)</span>
+0019 <span class="comment">%</span>
+0020 classdef <a href="SimpleDatabase.html" class="code" title="">SimpleDatabase</a>
+0021     <span class="comment">%%</span>
+0022     properties 
+0023         Filename <span class="comment">% Database file name</span>
+0024         NumericFormat <span class="comment">% Print format for numerical values</span>
+0025     <span class="keyword">end</span>
+0026     methods (Hidden=true)
+0027         <a name="_sub0" href="#_subfunctions" class="code">function object=SimpleDatabase(filename)</a>
+0028             <span class="keyword">if</span> (nargin&lt;1) || isempty(filename)
+0029                 [filename,pathname]=uiputfile(<span class="string">'*.*'</span>,<span class="string">'Select database file'</span>);
+0030                 assert(ischar(filename),<span class="string">'ERROR: no database file specified'</span>);
+0031                 filename=fullfile(pathname,filename);
+0032             <span class="keyword">end</span>
+0033             object.Filename=filename;
+0034             object.NumericFormat=<span class="string">'%g '</span>;
+0035         <span class="keyword">end</span>
+0036     <span class="keyword">end</span>
+0037 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

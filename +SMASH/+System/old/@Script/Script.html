@@ -1,0 +1,64 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of Script</title>
+  <meta name="keywords" content="Script">
+  <meta name="description" content="This class manages the format of MATLAB scripts and their inclusion into">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../../index.html">SMASHtoolbox</a> &gt; <a href="../../../index.html">+SMASH</a> &gt; <a href="../../index.html">+System</a> &gt; <a href="#">old</a> &gt; <a href="index.html">@Script</a> &gt; Script.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../../index.html"><img alt="<" border="0" src="../../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+System/old/@Script&nbsp;<img alt=">" border="0" src="../../../../../../right.png"></a></td></tr></table>-->
+
+<h1>Script
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>This class manages the format of MATLAB scripts and their inclusion into</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> This class manages the format of MATLAB scripts and their inclusion into
+ the SMASH toolbox.  Refer to the static methods below.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="Script.html" class="code" title="">Script</a>	This class manages the format of MATLAB scripts and their inclusion into</li><li><a href="convert.html" class="code" title="function convert(source,target,overwrite)">convert</a>	convert Convert between standard and live scripts</li><li><a href="extractExample.html" class="code" title="function varargout=extractExample(name)">extractExample</a>	extractExample Extract examples from toolbox</li><li><a href="insertExample.html" class="code" title="function insertExample(name,location)">insertExample</a>	insertExample Insert example into toolbox</li><li><a href="isScript.html" class="code" title="function value=isScript(filename)">isScript</a>	isScript Determine if file is a MATLAB script</li><li><a href="showExample.html" class="code" title="function showExample(name)">showExample</a>	manage input</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="Script.html" class="code" title="">Script</a>	This class manages the format of MATLAB scripts and their inclusion into</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% This class manages the format of MATLAB scripts and their inclusion into</span>
+0002 <span class="comment">% the SMASH toolbox.  Refer to the static methods below.</span>
+0003 
+0004 <span class="comment">%</span>
+0005 <span class="comment">% created January 8, 2018 by Daniel Dolan (Sandia National Laboratories)</span>
+0006 <span class="comment">%</span>
+0007 classdef (Abstract) <a href="Script.html" class="code" title="">Script</a>
+0008     methods (Static=true)
+0009         varargout=<a href="isScript.html" class="code" title="function value=isScript(filename)">isScript</a>(varargin)
+0010         varargout=<a href="convert.html" class="code" title="function convert(source,target,overwrite)">convert</a>(varargin)
+0011         varargout=<a href="insertExample.html" class="code" title="function insertExample(name,location)">insertExample</a>(varargin)
+0012         varargout=<a href="extractExample.html" class="code" title="function varargout=extractExample(name)">extractExample</a>(varargin)      
+0013         varargout=<a href="showExample.html" class="code" title="function showExample(name)">showExample</a>(varargin);
+0014     <span class="keyword">end</span>
+0015     
+0016 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

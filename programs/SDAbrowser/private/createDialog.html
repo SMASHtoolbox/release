@@ -1,0 +1,317 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of createDialog</title>
+  <meta name="keywords" content="createDialog">
+  <meta name="description" content="UNDER CONSTRUCTION">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">SDAbrowser</a> &gt; <a href="index.html">private</a> &gt; createDialog.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/SDAbrowser/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>createDialog
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>UNDER CONSTRUCTION</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function createDialog(filename) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> UNDER CONSTRUCTION</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="FileBrowser.html" class="code" title="function ArchiveFile=FileBrowser()">FileBrowser</a>	create dialog box</li><li><a href="newFileRecord.html" class="code" title="function new=newFileRecord(archive)">newFileRecord</a>	</li><li><a href="newVariableRecord.html" class="code" title="function new=newVariableRecord(archive)">newVariableRecord</a>	</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function loadArchive(varargin)</a></li><li><a href="#_sub2" class="code">function done(varargin)</a></li><li><a href="#_sub3" class="code">function insertRecord(varargin)</a></li><li><a href="#_sub4" class="code">function importRecord(varargin)</a></li><li><a href="#_sub5" class="code">function removeRecord(varargin)</a></li><li><a href="#_sub6" class="code">function aboutSDA(varargin)</a></li><li><a href="#_sub7" class="code">function setWritable(varargin)</a></li><li><a href="#_sub8" class="code">function updateTitle()</a></li><li><a href="#_sub9" class="code">function updateDescription(varargin)</a></li><li><a href="#_sub10" class="code">function selectRecord(varargin)</a></li><li><a href="#_sub11" class="code">function viewRecord(varargin)</a></li><li><a href="#_sub12" class="code">function extractRecord(varargin)</a></li><li><a href="#_sub13" class="code">function exportRecord(varargin)</a></li><li><a href="#_sub14" class="code">function restoreFile(varargin)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% UNDER CONSTRUCTION</span>
+0002 <a name="_sub0" href="#_subfunctions" class="code">function createDialog(filename)</a>
+0003 
+0004 <span class="comment">%% create dialog and archive objects</span>
+0005 object=SMASH.MUI.Dialog(<span class="string">'FontSize'</span>,12);
+0006 object.Hidden=true;
+0007 
+0008 archive=SMASH.FileAccess.SDAfile(filename);
+0009 object.Name=<span class="string">'SDA browser'</span>;
+0010 
+0011 <span class="comment">%% menu items</span>
+0012 hmenu=uimenu(<span class="string">'Label'</span>,<span class="string">'File'</span>);
+0013 uimenu(hmenu,<span class="string">'Label'</span>,<span class="string">'Select archive'</span>,<span class="string">'Callback'</span>,@<a href="#_sub1" class="code" title="subfunction loadArchive(varargin)">loadArchive</a>);
+0014      <a name="_sub1" href="#_subfunctions" class="code">function loadArchive(varargin)</a>
+0015          filename=<a href="FileBrowser.html" class="code" title="function ArchiveFile=FileBrowser()">FileBrowser</a>;
+0016          <span class="keyword">if</span> isempty(filename)
+0017              <span class="keyword">return</span>
+0018          <span class="keyword">end</span>
+0019          archive=SMASH.FileAccess.SDAfile(filename);
+0020          <a href="#_sub8" class="code" title="subfunction updateTitle()">updateTitle</a>();
+0021          <a href="#_sub10" class="code" title="subfunction selectRecord(varargin)">selectRecord</a>();
+0022      <span class="keyword">end</span>
+0023 <span class="comment">%uimenu(hmenu,'Label','Split archive','Separator','on','Enable','off');</span>
+0024 uimenu(hmenu,<span class="string">'Label'</span>,<span class="string">'Exit'</span>,<span class="string">'Separator'</span>,<span class="string">'on'</span>,<span class="string">'Callback'</span>,@<a href="#_sub2" class="code" title="subfunction done(varargin)">done</a>);
+0025     <a name="_sub2" href="#_subfunctions" class="code">function done(varargin)</a>
+0026         delete(object);
+0027     <span class="keyword">end</span>
+0028 
+0029 hmenu=uimenu(<span class="string">'Label'</span>,<span class="string">'Record'</span>);
+0030 InsertNew=uimenu(hmenu,<span class="string">'Label'</span>,<span class="string">'Insert variable'</span>,<span class="string">'Callback'</span>,@<a href="#_sub3" class="code" title="subfunction insertRecord(varargin)">insertRecord</a>);
+0031     <a name="_sub3" href="#_subfunctions" class="code">function insertRecord(varargin)</a>
+0032         <span class="keyword">if</span> ~get(Writable,<span class="string">'Value'</span>)
+0033             errordlg(<span class="string">'This archive is not writable'</span>,<span class="string">'Cannot write'</span>,<span class="string">'modal'</span>);            
+0034             <span class="keyword">return</span>
+0035         <span class="keyword">end</span>
+0036         new=<a href="newVariableRecord.html" class="code" title="function new=newVariableRecord(archive)">newVariableRecord</a>(archive);                
+0037         <a href="#_sub8" class="code" title="subfunction updateTitle()">updateTitle</a>();
+0038         label=probe(archive);
+0039         <span class="keyword">for</span> value=1:numel(label)
+0040             <span class="keyword">if</span> strcmp(new,label{value})
+0041                 <span class="keyword">break</span>
+0042             <span class="keyword">end</span>
+0043         <span class="keyword">end</span>
+0044         set(Record(2),<span class="string">'Value'</span>,value);
+0045         <a href="#_sub10" class="code" title="subfunction selectRecord(varargin)">selectRecord</a>();
+0046     <span class="keyword">end</span>
+0047 
+0048 ImportNew=uimenu(hmenu,<span class="string">'Label'</span>,<span class="string">'Import file'</span>,<span class="string">'Callback'</span>,@<a href="#_sub4" class="code" title="subfunction importRecord(varargin)">importRecord</a>);
+0049     <a name="_sub4" href="#_subfunctions" class="code">function importRecord(varargin)</a>
+0050         <span class="keyword">if</span> ~get(Writable,<span class="string">'Value'</span>)
+0051             errordlg(<span class="string">'This archive is not writable'</span>,<span class="string">'Cannot write'</span>,<span class="string">'modal'</span>);
+0052             <span class="keyword">return</span>
+0053         <span class="keyword">end</span>
+0054         new=<a href="newFileRecord.html" class="code" title="function new=newFileRecord(archive)">newFileRecord</a>(archive);                
+0055         <a href="#_sub8" class="code" title="subfunction updateTitle()">updateTitle</a>();
+0056         label=probe(archive);
+0057         <span class="keyword">for</span> value=1:numel(label)
+0058             <span class="keyword">if</span> strcmp(new,label{value})
+0059                 <span class="keyword">break</span>
+0060             <span class="keyword">end</span>
+0061         <span class="keyword">end</span>
+0062         set(Record(2),<span class="string">'Value'</span>,value);
+0063         <a href="#_sub10" class="code" title="subfunction selectRecord(varargin)">selectRecord</a>();
+0064     <span class="keyword">end</span>
+0065 
+0066 Delete=uimenu(hmenu,<span class="string">'Label'</span>,<span class="string">'Remove record'</span>,<span class="string">'Separator'</span>,<span class="string">'on'</span>);
+0067 set(Delete,<span class="string">'Callback'</span>,@<a href="#_sub5" class="code" title="subfunction removeRecord(varargin)">removeRecord</a>);
+0068     <a name="_sub5" href="#_subfunctions" class="code">function removeRecord(varargin)</a>
+0069         label=probe(archive);
+0070         <span class="keyword">if</span> numel(label) &lt; 1
+0071             <span class="keyword">return</span>;
+0072         <span class="keyword">end</span>
+0073         value=get(Record(2),<span class="string">'Value'</span>);
+0074         label=label{value};
+0075         message{1}=sprintf(<span class="string">'Remove record &quot;%s&quot;?'</span>,label);
+0076         message{2}=<span class="string">'WARNING: this process may be slow and is irreversible'</span>;
+0077         answer=questdlg(message,<span class="string">'Remove record?'</span>,<span class="string">' Yes '</span>,<span class="string">' No '</span>,<span class="string">' No '</span>);
+0078         <span class="keyword">if</span> strcmpi(strtrim(answer),<span class="string">'yes'</span>)            
+0079             remove(archive,label);
+0080             <a href="#_sub8" class="code" title="subfunction updateTitle()">updateTitle</a>();
+0081             <a href="#_sub10" class="code" title="subfunction selectRecord(varargin)">selectRecord</a>();
+0082         <span class="keyword">end</span>
+0083     <span class="keyword">end</span>
+0084 
+0085 hmenu=uimenu(<span class="string">'Label'</span>,<span class="string">'Help'</span>);
+0086 uimenu(hmenu,<span class="string">'Label'</span>,<span class="string">'About archive files'</span>,<span class="string">'Callback'</span>,@<a href="#_sub6" class="code" title="subfunction aboutSDA(varargin)">aboutSDA</a>);
+0087     <a name="_sub6" href="#_subfunctions" class="code">function aboutSDA(varargin)</a>
+0088         fig=getappdata(object.Handle,<span class="string">'HelpWindow'</span>);
+0089         <span class="keyword">if</span> ishandle(fig)
+0090             figure(fig)
+0091             <span class="keyword">return</span>
+0092         <span class="keyword">end</span>              
+0093         message=[<span class="keyword">...</span>
+0094             <span class="string">'Sandia Data Archive (SDA) files store data as binary records with a unique text label. '</span> <span class="keyword">...</span>
+0095             <span class="string">'Based on the HDF5 format, each data record holds one MATLAB variable (array, structure, object, etc.), with nesting permitted. '</span> <span class="keyword">...</span>
+0096             <span class="string">'Data records are inserted from MATLAB into the archive and extracted from the archive back into MATLAB. '</span> <span class="keyword">...</span>
+0097             <span class="string">'An optional description may be associated with each record to document its contents. '</span> <span class="keyword">...</span>
+0098             <span class="string">'Lossless compression (deflation) is also supported. '</span><span class="keyword">...</span>
+0099             <span class="comment">%'\' ...</span>
+0100             <span class="comment">%'Text and binary files of any type may also be imported into a data archive.  These files can exported to their original content/format.' ...</span>
+0101             ];
+0102         fig=helpdlg(message,<span class="string">'About SDA'</span>);
+0103         setappdata(object.Handle,<span class="string">'HelpWindow'</span>,fig);   
+0104     <span class="keyword">end</span>
+0105 
+0106 <span class="comment">%% archive blocks</span>
+0107 Title=addblock(object,<span class="string">'text'</span>,cell(3,1),50);
+0108 
+0109 Writable=addblock(object,<span class="string">'checkbox'</span>,<span class="string">'Writable'</span>);
+0110 set(Writable,<span class="string">'Callback'</span>,@<a href="#_sub7" class="code" title="subfunction setWritable(varargin)">setWritable</a>);
+0111     <a name="_sub7" href="#_subfunctions" class="code">function setWritable(varargin)</a>
+0112         <span class="keyword">if</span> get(Writable,<span class="string">'Value'</span>)
+0113             archive.Writable=<span class="string">'yes'</span>;
+0114         <span class="keyword">else</span>
+0115             archive.Writable=<span class="string">'no'</span>;
+0116         <span class="keyword">end</span>
+0117     <span class="keyword">end</span>
+0118 
+0119 box(object,[Title Writable]);
+0120 
+0121     <a name="_sub8" href="#_subfunctions" class="code">function updateTitle()</a>
+0122         [~,name,ext]=fileparts(archive.ArchiveFile);
+0123         ArchiveTitle{1}=sprintf(<span class="string">'Archive file &quot;%s&quot;:'</span>,[name ext]);
+0124         [label,type,~,status]=probe(archive);
+0125         ArchiveTitle{2}=sprintf(<span class="string">'   -contains %d record(s) and uses SDA version %s'</span>,<span class="keyword">...</span>
+0126             numel(label),status.FormatVersion);
+0127         ArchiveTitle{3}=sprintf(<span class="string">'   -was created %s and updated %s'</span>,<span class="keyword">...</span>
+0128             status.Created,status.Updated);
+0129         set(Title,<span class="string">'String'</span>,ArchiveTitle);
+0130         <span class="keyword">if</span> strcmpi(status.Writable,<span class="string">'yes'</span>)
+0131             set(Writable,<span class="string">'Value'</span>,1,<span class="string">'Enable'</span>,<span class="string">'on'</span>);
+0132         <span class="keyword">else</span>
+0133             set(Writable,<span class="string">'Value'</span>,0,<span class="string">'Enable'</span>,<span class="string">'on'</span>);
+0134         <span class="keyword">end</span>
+0135         <span class="keyword">try</span>
+0136             <span class="keyword">if</span> strcmpi(type{1},<span class="string">'split'</span>);
+0137                 set(Writable,<span class="string">'Enable'</span>,<span class="string">'off'</span>);
+0138             <span class="keyword">else</span>
+0139                 set(Writable,<span class="string">'Enable'</span>,<span class="string">'on'</span>);
+0140             <span class="keyword">end</span>
+0141         <span class="keyword">catch</span>
+0142         <span class="keyword">end</span>
+0143     <span class="keyword">end</span>
+0144 <a href="#_sub8" class="code" title="subfunction updateTitle()">updateTitle</a>();
+0145 
+0146 <span class="comment">%% existing record blocks</span>
+0147 gap=addblock(object,<span class="string">'text'</span>,<span class="string">' '</span>);
+0148 delete(gap);
+0149 Record=addblock(object,<span class="string">'popup'</span>,<span class="string">'Archive record(s):'</span>,{<span class="string">' '</span>},50);
+0150 set(Record(2),<span class="string">'Callback'</span>,@<a href="#_sub10" class="code" title="subfunction selectRecord(varargin)">selectRecord</a>)
+0151 gap=addblock(object,<span class="string">'text'</span>,<span class="string">' '</span>);
+0152 delete(gap);
+0153 
+0154 addblock(object,<span class="string">'text'</span>,<span class="string">'Record type: '</span>,50);
+0155 Type=addblock(object,<span class="string">'text'</span>,<span class="string">'Record type: '</span>,50);
+0156 
+0157 Description=addblock(object,<span class="string">'medit'</span>,<span class="string">'Record description:'</span>,50,2);
+0158 set(Description(2),<span class="string">'Callback'</span>,@<a href="#_sub9" class="code" title="subfunction updateDescription(varargin)">updateDescription</a>);
+0159     <a name="_sub9" href="#_subfunctions" class="code">function updateDescription(varargin)</a>
+0160         value=get(Record(2),<span class="string">'Value'</span>);
+0161         label=get(Record(2),<span class="string">'String'</span>);
+0162         description=get(Description(2),<span class="string">'String'</span>);
+0163         describe(archive,label{value},description);        
+0164         <span class="comment">%label=sprintf('/%s',label{value});</span>
+0165         <span class="comment">%h5writeatt(archive.ArchiveFile,label,'Description',description);</span>
+0166     <span class="keyword">end</span>
+0167 
+0168 RecordButton=addblock(object,<span class="string">'button'</span>,<span class="keyword">...</span>
+0169     {<span class="string">' '</span> <span class="string">' '</span>},15);
+0170 
+0171     <a name="_sub10" href="#_subfunctions" class="code">function selectRecord(varargin)       </a>
+0172         <span class="comment">%</span>
+0173         [label,type,description]=probe(archive);
+0174         <span class="keyword">if</span> numel(label) &gt; 0
+0175             <span class="comment">%</span>
+0176             value=get(Record(2),<span class="string">'Value'</span>);
+0177             <span class="keyword">if</span> value &gt; numel(label)
+0178                 value=numel(label);
+0179                 set(Record(2),<span class="string">'Value'</span>,value)
+0180             <span class="keyword">end</span>                        
+0181             set(Record(2),<span class="string">'String'</span>,label,<span class="string">'Enable'</span>,<span class="string">'on'</span>);
+0182             type=type{value};            
+0183             set([InsertNew ImportNew Delete],<span class="string">'Enable'</span>,<span class="string">'on'</span>);
+0184             set(Description(2),<span class="string">'Enable'</span>,<span class="string">'on'</span>);
+0185             set(RecordButton(1),<span class="string">'Visible'</span>,<span class="string">'on'</span>,<span class="keyword">...</span>
+0186                 <span class="string">'String'</span>,<span class="string">'Extract'</span>,<span class="string">'Callback'</span>,@<a href="#_sub12" class="code" title="subfunction extractRecord(varargin)">extractRecord</a>);
+0187             set(RecordButton(2),<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+0188             set(Description(2),<span class="string">'String'</span>,description{value},<span class="string">'Enable'</span>,<span class="string">'on'</span>);
+0189             <span class="keyword">switch</span> lower(type)
+0190                 <span class="keyword">case</span> <span class="string">'object'</span>
+0191                     <span class="keyword">try</span>
+0192                         source=h5readatt(archive.ArchiveFile,<span class="keyword">...</span>
+0193                             [<span class="string">'/'</span> label{value}],<span class="string">'Class'</span>);
+0194                     <span class="keyword">catch</span>
+0195                         source=h5readatt(archive.ArchiveFile,<span class="keyword">...</span>
+0196                             [<span class="string">'/'</span> label{value}],<span class="string">'ClassName'</span>);
+0197                     <span class="keyword">end</span>
+0198                     type=sprintf(<span class="string">'%s (%s)'</span>,type,source);
+0199                     set(Type,<span class="string">'String'</span>,type);
+0200                     <span class="keyword">if</span> ismethod(source,<span class="string">'view'</span>) &amp;&amp; logical(exist(source,<span class="string">'class'</span>))                        
+0201                         set(RecordButton(2),<span class="string">'String'</span>,<span class="string">'View'</span>,<span class="string">'Visible'</span>,<span class="string">'on'</span>,<span class="keyword">...</span>
+0202                             <span class="string">'Callback'</span>,@<a href="#_sub11" class="code" title="subfunction viewRecord(varargin)">viewRecord</a>);
+0203                     <span class="keyword">end</span>
+0204                 <span class="keyword">case</span> <span class="string">'file'</span>
+0205                     set(RecordButton(1),<span class="string">'String'</span>,<span class="string">'Export'</span>,<span class="keyword">...</span>
+0206                         <span class="string">'Callback'</span>,@<a href="#_sub13" class="code" title="subfunction exportRecord(varargin)">exportRecord</a>);  
+0207                     set(RecordButton(2),<span class="string">'Visible'</span>,<span class="string">'off'</span>);  
+0208                 <span class="keyword">case</span> <span class="string">'split'</span>
+0209                     set([InsertNew ImportNew Delete],<span class="string">'Enable'</span>,<span class="string">'off'</span>);
+0210                     set(RecordButton(1),<span class="string">'String'</span>,<span class="string">'Restore'</span>,<span class="keyword">...</span>
+0211                         <span class="string">'Callback'</span>,@<a href="#_sub14" class="code" title="subfunction restoreFile(varargin)">restoreFile</a>);  
+0212                     set(Description(2),<span class="string">'Enable'</span>,<span class="string">'off'</span>);                
+0213 
+0214             <span class="keyword">end</span>            
+0215             set(Type,<span class="string">'String'</span>,sprintf(<span class="string">'   %s'</span>,type));                   
+0216         <span class="keyword">else</span>
+0217             set(Record(2),<span class="string">'String'</span>,<span class="string">' '</span>,<span class="string">'Enable'</span>,<span class="string">'off'</span>);
+0218             set(Type,<span class="string">'String'</span>,<span class="string">' '</span>);
+0219             set(Description(2),<span class="string">'String'</span>,<span class="string">''</span>,<span class="string">'Enable'</span>,<span class="string">'off'</span>);
+0220             set(RecordButton,<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+0221         <span class="keyword">end</span>
+0222     <span class="keyword">end</span>
+0223 <a href="#_sub10" class="code" title="subfunction selectRecord(varargin)">selectRecord</a>;
+0224 
+0225     <a name="_sub11" href="#_subfunctions" class="code">function viewRecord(varargin)</a>
+0226         value=get(Record(2),<span class="string">'Value'</span>);
+0227         label=get(Record(2),<span class="string">'String'</span>);
+0228         previous=extract(archive,label{value});
+0229         view(previous);
+0230     <span class="keyword">end</span>
+0231 
+0232     <a name="_sub12" href="#_subfunctions" class="code">function extractRecord(varargin)</a>
+0233         answer=inputdlg({<span class="string">'Variable name for extracted record'</span>},<span class="keyword">...</span>
+0234             <span class="string">'Choose variable'</span>,[1 40],{<span class="string">'previous'</span>});       
+0235         <span class="keyword">if</span> isempty(answer)
+0236             <span class="keyword">return</span>
+0237         <span class="keyword">elseif</span> ~isvarname(answer{1})
+0238             errordlg(<span class="string">'Invalid variable name'</span>,<span class="string">'Invalid name'</span>,<span class="string">'modal'</span>)
+0239             <a href="#_sub12" class="code" title="subfunction extractRecord(varargin)">extractRecord</a>();
+0240         <span class="keyword">end</span>        
+0241         value=get(Record(2),<span class="string">'Value'</span>);
+0242         label=get(Record(2),<span class="string">'String'</span>);
+0243         previous=extract(archive,label{value});
+0244         assignin(<span class="string">'base'</span>,answer{1},previous);
+0245     <span class="keyword">end</span>
+0246 
+0247     <a name="_sub13" href="#_subfunctions" class="code">function exportRecord(varargin)</a>
+0248         value=get(Record(2),<span class="string">'Value'</span>);
+0249         label=get(Record(2),<span class="string">'String'</span>);
+0250         target=fullfile(pwd,label{value});
+0251         [~,~,ext]=fileparts(target);
+0252         [filename,pathname]=uiputfile(ext,<span class="string">'Select export file'</span>,target);
+0253         <span class="keyword">if</span> isnumeric(filename)
+0254             <span class="keyword">return</span>
+0255         <span class="keyword">end</span>
+0256         export(archive,label{value},fullfile(pathname,filename));
+0257     <span class="keyword">end</span>
+0258 
+0259     <a name="_sub14" href="#_subfunctions" class="code">function restoreFile(varargin)</a>
+0260         SMASH.FileAccess.mergeSplits(archive.ArchiveFile);
+0261     <span class="keyword">end</span>
+0262 
+0263 <span class="comment">%% display dialog</span>
+0264 set(object.Handle,<span class="string">'HandleVisibility'</span>,<span class="string">'callback'</span>);
+0265 locate(object,<span class="string">'center'</span>);
+0266 object.Hidden=false;
+0267 
+0268 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

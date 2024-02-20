@@ -1,0 +1,495 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of analyzeSinusoid</title>
+  <meta name="keywords" content="analyzeSinusoid">
+  <meta name="description" content="analyzeSinusoid Analyze sinusoidal signal(s)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="index.html">analyzeSinusoid</a> &gt; analyzeSinusoid.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../index.html"><img alt="<" border="0" src="../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/analyzeSinusoid&nbsp;<img alt=">" border="0" src="../../../../right.png"></a></td></tr></table>-->
+
+<h1>analyzeSinusoid
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>analyzeSinusoid Analyze sinusoidal signal(s)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function varargout=analyzeSinusoid(filename) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> analyzeSinusoid Analyze sinusoidal signal(s)
+
+ This program analyzed sinusoidal measurements acquired on
+ Agilent/Keysight, LeCroy, and Tektronix digitizers.  Running the program:
+   analyzeSinusoid;
+ initiates a graphical user interface for loading digitizer files (*.bin,
+ *.h5, *.trc, and *.wfm).  All measurement channels stored in the file are
+ loaded simultaneously; function records (Fourier transforms, etc.) are
+ ignored . Sinusoid analysis on each channel generates the following
+ results.
+   -Sinusoid frequency
+   -Sinusoid amplitude
+   -RMS noise amplitude
+   -Noise fraction
+ Signal and spectrum visualization are also provided.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function createGUI(filename)</a></li><li><a href="#_sub2" class="code">function loadFile(varargin)</a></li><li><a href="#_sub3" class="code">function selectFile(varargin)</a></li><li><a href="#_sub4" class="code">function updateTable()</a></li><li><a href="#_sub5" class="code">function setBounds(varargin)</a></li><li><a href="#_sub6" class="code">function setCommon(varargin)</a></li><li><a href="#_sub7" class="code">function editBounds(src,eventdata)</a></li><li><a href="#_sub8" class="code">function processBounds(varargin)</a></li><li><a href="#_sub9" class="code">function cancelBounds(varargin)</a></li><li><a href="#_sub10" class="code">function setActive(varargin)</a></li><li><a href="#_sub11" class="code">function resetActive(varargin)</a></li><li><a href="#_sub12" class="code">function viewSignals(varargin)</a></li><li><a href="#_sub13" class="code">function viewSpectra(varargin)</a></li><li><a href="#_sub14" class="code">function changeDirectory(varargin)</a></li><li><a href="#_sub15" class="code">function done(varargin)</a></li><li><a href="#_sub16" class="code">function AboutProgram(varargin)</a></li><li><a href="#_sub17" class="code">function ProgramHelp(varargin)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% analyzeSinusoid Analyze sinusoidal signal(s)</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This program analyzed sinusoidal measurements acquired on</span>
+0004 <span class="comment">% Agilent/Keysight, LeCroy, and Tektronix digitizers.  Running the program:</span>
+0005 <span class="comment">%   analyzeSinusoid;</span>
+0006 <span class="comment">% initiates a graphical user interface for loading digitizer files (*.bin,</span>
+0007 <span class="comment">% *.h5, *.trc, and *.wfm).  All measurement channels stored in the file are</span>
+0008 <span class="comment">% loaded simultaneously; function records (Fourier transforms, etc.) are</span>
+0009 <span class="comment">% ignored . Sinusoid analysis on each channel generates the following</span>
+0010 <span class="comment">% results.</span>
+0011 <span class="comment">%   -Sinusoid frequency</span>
+0012 <span class="comment">%   -Sinusoid amplitude</span>
+0013 <span class="comment">%   -RMS noise amplitude</span>
+0014 <span class="comment">%   -Noise fraction</span>
+0015 <span class="comment">% Signal and spectrum visualization are also provided.</span>
+0016 <span class="comment">%</span>
+0017 
+0018 <span class="comment">%</span>
+0019 <span class="comment">% created December 9, 2015 by Daniel Dolan (Sandia National Laboratories)</span>
+0020 <span class="comment">%</span>
+0021 <a name="_sub0" href="#_subfunctions" class="code">function varargout=analyzeSinusoid(filename)</a>
+0022 
+0023 <span class="comment">% manage input</span>
+0024 <span class="keyword">if</span> (nargin&lt;1) || isempty(filename)
+0025     filename=<span class="string">''</span>;    
+0026 <span class="keyword">end</span>
+0027 assert(ischar(filename),<span class="string">'ERROR: invalid file name'</span>);
+0028 
+0029 <span class="comment">% launch GUI</span>
+0030 <a href="#_sub1" class="code" title="subfunction createGUI(filename)">createGUI</a>(filename);
+0031 
+0032 <span class="comment">% manage output</span>
+0033 <span class="keyword">if</span> isdeployed
+0034     varargout{1}=0;
+0035 <span class="keyword">end</span>
+0036 
+0037 <span class="keyword">end</span>
+0038 
+0039 <span class="comment">%% GUI</span>
+0040 <a name="_sub1" href="#_subfunctions" class="code">function createGUI(filename)</a>
+0041 
+0042 <span class="comment">%</span>
+0043 dlg=SMASH.MUI.Dialog(<span class="string">'FontSize'</span>,12);
+0044 dlg.Hidden=true;
+0045 dlg.Name=<span class="string">'Sinusoid analysis'</span>;
+0046 <span class="comment">%set(dlg.Handle,'Tag','SMASH.Z.analyzeSinusoid',...</span>
+0047 <span class="comment">%    'DefaultUIControlFontSize',12);</span>
+0048 
+0049 setappdata(dlg.Handle,<span class="string">'SignalData'</span>,[]);
+0050 setappdata(dlg.Handle,<span class="string">'SignalIndex'</span>,[]);
+0051 setappdata(dlg.Handle,<span class="string">'FrequencyBounds'</span>,[0 inf]);
+0052 setappdata(dlg.Handle,<span class="string">'CommonFrequencyBounds'</span>,true);
+0053 
+0054 <span class="comment">% file select and load</span>
+0055 shortname=<span class="string">''</span>;
+0056 ext=<span class="string">''</span>;
+0057 hFile=addblock(dlg,<span class="string">'edit'</span>,<span class="string">'Digitizer file:'</span>,60);
+0058 set(hFile(2),<span class="string">'String'</span>,filename,<span class="string">'Callback'</span>,@<a href="#_sub2" class="code" title="subfunction loadFile(varargin)">loadFile</a>);
+0059     <a name="_sub2" href="#_subfunctions" class="code">function loadFile(varargin)</a>
+0060         <span class="comment">% read and verify file name</span>
+0061         filename=get(hFile(2),<span class="string">'String'</span>);
+0062         <span class="keyword">if</span> isempty(filename)
+0063             <span class="keyword">return</span>
+0064         <span class="keyword">elseif</span> exist(filename,<span class="string">'file'</span>) ~= 2
+0065             errordlg(<span class="string">'Requested file does not exist'</span>,<span class="string">'File error'</span>);
+0066             <span class="keyword">return</span>
+0067         <span class="keyword">end</span>       
+0068         [~,shortname,ext]=fileparts(filename);
+0069         <span class="keyword">switch</span> lower(ext)
+0070             <span class="keyword">case</span> {<span class="string">'.h5'</span> <span class="string">'.bin'</span>}
+0071                 format=<span class="string">'keysight'</span>;
+0072                 report=SMASH.FileAccess.probeFile(filename,format);
+0073                 N=report.NumberSignals;
+0074                 keep=false(N,1);
+0075                 <span class="keyword">for</span> n=1:N
+0076                     <span class="keyword">if</span> strfind(report.GroupName{n},<span class="string">'/Waveforms/Channel'</span>)
+0077                         keep(n)=true;
+0078                     <span class="keyword">end</span>
+0079                 <span class="keyword">end</span>       
+0080                 index=find(keep);
+0081             <span class="keyword">case</span> <span class="string">'.trc'</span>
+0082                 format=<span class="string">'lecroy'</span>;
+0083                 index=1;
+0084             <span class="keyword">case</span> {<span class="string">'.wfm'</span> <span class="string">'.isf'</span>}
+0085                 format=<span class="string">'tektronix'</span>;
+0086                 index=1;
+0087             <span class="keyword">otherwise</span>
+0088                 format=<span class="string">'column'</span>;
+0089                 index=1;
+0090         <span class="keyword">end</span>
+0091         <span class="comment">% read signal(s)</span>
+0092         N=numel(index);
+0093         data=cell(N,1);
+0094         hm=msgbox(<span class="string">'Reading digitizer file...please wait'</span>,<span class="string">'Reading file'</span>);        
+0095         <span class="keyword">for</span> n=1:N
+0096             data{n}=SMASH.SignalAnalysis.Signal(filename,format,index(n));
+0097         <span class="keyword">end</span>
+0098         <span class="keyword">if</span> ishandle(hm)
+0099             delete(hm);        
+0100         <span class="keyword">end</span>
+0101         setappdata(dlg.Handle,<span class="string">'SignalData'</span>,data);             
+0102         setappdata(dlg.Handle,<span class="string">'SignalIndex'</span>,index)       
+0103         set(hActive(2),<span class="string">'String'</span>,sprintf(<span class="string">'%d '</span>,index));
+0104         <span class="comment">% fupdate requency bounding as needed</span>
+0105         <span class="keyword">if</span> ~getappdata(dlg.Handle,<span class="string">'CommonFrequencyBounds'</span>);
+0106             bound=getappdata(dlg.Handle,<span class="string">'FrequencyBounds'</span>);
+0107             <span class="keyword">if</span> size(bound,1) ~= N
+0108                 setappdata(dlg.Handle,<span class="string">'CommonFrequencyBounds'</span>,true);
+0109                 setappdata(dlg.Handle,<span class="string">'FrequencyBounds'</span>,[0 inf]);
+0110             <span class="keyword">end</span>
+0111         <span class="keyword">end</span>
+0112         <span class="comment">% update table</span>
+0113         <a href="#_sub4" class="code" title="subfunction updateTable()">updateTable</a>();        
+0114     <span class="keyword">end</span>
+0115 
+0116 hLoad=addblock(dlg,<span class="string">'button'</span>,{<span class="string">' Select file '</span> <span class="string">'Load file '</span>});
+0117 set(hLoad(1),<span class="string">'Callback'</span>,@<a href="#_sub3" class="code" title="subfunction selectFile(varargin)">selectFile</a>)
+0118     <a name="_sub3" href="#_subfunctions" class="code">function selectFile(varargin)       </a>
+0119         [filename,pathname]=uigetfile(<span class="string">'*.*'</span>,<span class="string">'Select signal file'</span>);
+0120         <span class="keyword">if</span> isnumeric(filename)
+0121             <span class="keyword">return</span>
+0122         <span class="keyword">end</span>
+0123         filename=fullfile(pathname,filename);
+0124         set(hFile(2),<span class="string">'String'</span>,filename);
+0125         <a href="#_sub2" class="code" title="subfunction loadFile(varargin)">loadFile</a>;
+0126     <span class="keyword">end</span>
+0127 
+0128 set(hLoad(2),<span class="string">'Callback'</span>,@<a href="#_sub2" class="code" title="subfunction loadFile(varargin)">loadFile</a>)
+0129 
+0130 <span class="comment">% summary table</span>
+0131 rows=8;
+0132 hTable=addblock(dlg,<span class="string">'table'</span>,<span class="keyword">...</span>
+0133     {<span class="string">'Channel'</span> <span class="string">'Frequency (Hz)'</span> <span class="string">'Amplitude (V)'</span> <span class="string">'Noise (V)'</span> <span class="string">'Fraction (%)'</span>},<span class="keyword">...</span>
+0134     [],rows);
+0135 ColumnFormat={<span class="string">'char'</span> <span class="string">'char'</span> <span class="string">'char'</span> <span class="string">'char'</span> <span class="string">'char'</span>}; 
+0136 set(hTable(end),<span class="string">'ColumnEditable'</span>,false,<span class="string">'ColumnFormat'</span>,ColumnFormat);
+0137 
+0138     <a name="_sub4" href="#_subfunctions" class="code">function updateTable()</a>
+0139         data=getappdata(dlg.Handle,<span class="string">'SignalData'</span>);
+0140         index=getappdata(dlg.Handle,<span class="string">'SignalIndex'</span>);
+0141         bound=getappdata(dlg.Handle,<span class="string">'FrequencyBounds'</span>);
+0142         <span class="keyword">if</span> getappdata(dlg.Handle,<span class="string">'CommonFrequencyBounds'</span>)            
+0143             bound=repmat(bound,[numel(index) 1]);
+0144         <span class="keyword">end</span>
+0145         data=data(index);
+0146         bound=bound(index,:);
+0147         N=numel(index);
+0148         value=cell(N,5);
+0149         hm=msgbox(<span class="string">'Analyzing channel(s)...please wait'</span>,<span class="string">'Analyzing'</span>);
+0150         <span class="keyword">for</span> n=1:N
+0151             report=summarize(data{n},<span class="string">'sinusoid'</span>,<span class="keyword">...</span>
+0152                 <span class="string">'FrequencyBound'</span>,bound(n,:));
+0153             value{n,1}=sprintf(<span class="string">'%d'</span>,index(n));
+0154             temp=SMASH.General.enprint(report.Sinusoid.Frequency,6);
+0155             value{n,2}=temp(2:end);
+0156             value{n,3}=sprintf(<span class="string">'%.5f'</span>,report.Sinusoid.Amplitude);
+0157             value{n,4}=sprintf(<span class="string">'%.5f'</span>,report.Sinusoid.Noise);
+0158             value{n,5}=sprintf(<span class="string">'%#.3g'</span>,report.Sinusoid.Fraction*100);
+0159         <span class="keyword">end</span>
+0160        <span class="keyword">if</span> ishandle(hm)
+0161             delete(hm);
+0162        <span class="keyword">end</span>
+0163         set(hTable(end),<span class="string">'Data'</span>,value);
+0164     <span class="keyword">end</span>
+0165 
+0166 <span class="comment">% frequency bounding</span>
+0167 hBound=addblock(dlg,<span class="string">'button'</span>,<span class="string">'Set frequency bounds'</span>);
+0168 set(hBound(1),<span class="string">'Callback'</span>,@<a href="#_sub5" class="code" title="subfunction setBounds(varargin)">setBounds</a>)
+0169     <a name="_sub5" href="#_subfunctions" class="code">function setBounds(varargin)</a>
+0170         index=getappdata(dlg.Handle,<span class="string">'SignalIndex'</span>);
+0171         N=numel(index);
+0172         subdlg=SMASH.MUI.Dialog;
+0173         subdlg.Hidden=true;
+0174         subdlg.Name=<span class="string">'Frequency bounds'</span>;
+0175         <span class="comment">%</span>
+0176         h=addblock(subdlg,<span class="string">'text'</span>,<span class="string">'Frequency bounds'</span>);
+0177         set(h,<span class="string">'FontWeight'</span>,<span class="string">'bold'</span>);
+0178         hCommon=addblock(subdlg,<span class="string">'check'</span>,<span class="string">'Common bounds'</span>);
+0179         set(hCommon,<span class="keyword">...</span>
+0180             <span class="string">'Value'</span>,getappdata(dlg.Handle,<span class="string">'CommonFrequencyBounds'</span>),<span class="keyword">...</span>
+0181             <span class="string">'Callback'</span>,@<a href="#_sub6" class="code" title="subfunction setCommon(varargin)">setCommon</a>);
+0182         <a name="_sub6" href="#_subfunctions" class="code">function setCommon(varargin)</a>
+0183             value=logical(get(hCommon,<span class="string">'Value'</span>));
+0184             <span class="keyword">if</span> value
+0185                 data=cell(1,3);
+0186                 data{1}=<span class="string">'(all)'</span>;
+0187                 new=SMASH.General.enprint(0);
+0188                 data{2}=new(2:end);
+0189                 new=SMASH.General.enprint(inf);
+0190                 data{3}=new(2:end);
+0191             <span class="keyword">else</span>
+0192                 index=getappdata(dlg.Handle,<span class="string">'SignalIndex'</span>);
+0193                 N=numel(index);
+0194                 data=cell(N,3);
+0195                 <span class="keyword">for</span> nbc=1:N
+0196                     data{nbc,1}=sprintf(<span class="string">'%d'</span>,index(nbc));
+0197                     new=SMASH.General.enprint(0);
+0198                     data{nbc,2}=new(2:end);
+0199                     new=SMASH.General.enprint(inf);
+0200                     data{nbc,3}=new(2:end);
+0201                 <span class="keyword">end</span>
+0202             <span class="keyword">end</span>
+0203             setappdata(dlg.Handle,<span class="string">'CommonFrequencyBounds'</span>,value);
+0204             set(ht(end),<span class="string">'Data'</span>,data);
+0205         <span class="keyword">end</span>
+0206         ht=addblock(subdlg,<span class="string">'table'</span>,{<span class="string">'Channel'</span> <span class="string">'Minimum'</span> <span class="string">'Maximum'</span>},<span class="keyword">...</span>
+0207             [1 15 15],10);
+0208         bound=getappdata(dlg.Handle,<span class="string">'FrequencyBounds'</span>);
+0209         <span class="keyword">if</span> getappdata(dlg.Handle,<span class="string">'CommonFrequencyBounds'</span>)
+0210             data=cell(1,3);
+0211             data{1}=<span class="string">'(all)'</span>;
+0212             new=SMASH.General.enprint(bound(1));
+0213             data{2}=new(2:end);
+0214             new=SMASH.General.enprint(bound(2));
+0215             data{3}=new(2:end);
+0216         <span class="keyword">else</span>
+0217             index=getappdata(dlg.Handle,<span class="string">'SignalIndex'</span>);
+0218             N=numel(index);
+0219             data=cell(N,3);
+0220             <span class="keyword">for</span> nb=1:N
+0221                 data{nb,1}=sprintf(<span class="string">'%d'</span>,index(nb));
+0222                 new=SMASH.General.enprint(bound(nb,1));
+0223                 data{nb,2}=new(2:end);
+0224                 new=SMASH.General.enprint(bound(nb,2));
+0225                 data{nb,3}=new(2:end);
+0226             <span class="keyword">end</span>
+0227         <span class="keyword">end</span>
+0228         set(ht(end),<span class="string">'Data'</span>,data,<span class="keyword">...</span>
+0229             <span class="string">'ColumnEditable'</span>,[false true true],<span class="keyword">...</span>
+0230             <span class="string">'CellEditCallback'</span>,@<a href="#_sub7" class="code" title="subfunction editBounds(src,eventdata)">editBounds</a>);
+0231         <a name="_sub7" href="#_subfunctions" class="code">function editBounds(src,eventdata)</a>
+0232             data=get(src,<span class="string">'Data'</span>);
+0233             index=eventdata.Indices;
+0234             <span class="comment">% verify numeric input</span>
+0235             new=sscanf(eventdata.NewData,<span class="string">'%g'</span>);
+0236             <span class="keyword">if</span> isempty(new)
+0237                 new=eventdata.PreviousData;
+0238             <span class="keyword">else</span>               
+0239                 new=SMASH.General.enprint(new,6);
+0240                 new=new(2:end);
+0241             <span class="keyword">end</span>           
+0242             data{index(1),index(2)}=new;
+0243             <span class="comment">% verify bounds</span>
+0244             minimum=sscanf(data{index(1),2},<span class="string">'%g'</span>);
+0245             maximum=sscanf(data{index(1),3},<span class="string">'%g'</span>);
+0246             <span class="keyword">if</span> maximum&gt;minimum
+0247                 <span class="comment">% do nothing</span>
+0248             <span class="keyword">else</span>
+0249                 data{index(1),index(2)}=eventdata.PreviousData;
+0250             <span class="keyword">end</span>
+0251             <span class="comment">% save results</span>
+0252             set(src,<span class="string">'Data'</span>,data);
+0253         <span class="keyword">end</span>
+0254         <span class="comment">%</span>
+0255         doneBounds=addblock(subdlg,<span class="string">'button'</span>,{<span class="string">'Done'</span> <span class="string">'Cancel'</span>});
+0256         set(doneBounds(1),<span class="string">'Callback'</span>,@<a href="#_sub8" class="code" title="subfunction processBounds(varargin)">processBounds</a>);
+0257         <a name="_sub8" href="#_subfunctions" class="code">function processBounds(varargin)</a>
+0258             data=get(ht(end),<span class="string">'Data'</span>);
+0259             N=size(data,1);
+0260             bound=nan(N,1);
+0261             <span class="keyword">for</span> n=1:N
+0262                 bound(n,1)=sscanf(data{n,2},<span class="string">'%g'</span>);
+0263                 bound(n,2)=sscanf(data{n,3},<span class="string">'%g'</span>);
+0264             <span class="keyword">end</span>
+0265             setappdata(dlg.Handle,<span class="string">'FrequencyBounds'</span>,bound);
+0266             setappdata(dlg.Handle,<span class="string">'CommonFrequencyBounds'</span>,<span class="keyword">...</span>
+0267                 logical(get(hCommon,<span class="string">'Value'</span>)));
+0268             <a href="#_sub4" class="code" title="subfunction updateTable()">updateTable</a>();
+0269             delete(subdlg);
+0270         <span class="keyword">end</span>
+0271         set(doneBounds(2),<span class="string">'Callback'</span>,@<a href="#_sub9" class="code" title="subfunction cancelBounds(varargin)">cancelBounds</a>)
+0272         <a name="_sub9" href="#_subfunctions" class="code">function cancelBounds(varargin)</a>
+0273             delete(subdlg);
+0274         <span class="keyword">end</span>
+0275         <span class="comment">%</span>
+0276         locate(subdlg,<span class="string">'center'</span>,dlg.Handle);
+0277         subdlg.Hidden=false;       
+0278         subdlg.Modal=true;
+0279     <span class="keyword">end</span>
+0280 
+0281 <span class="comment">% view channel selection</span>
+0282 hActive=addblock(dlg,<span class="string">'edit_button'</span>,{<span class="string">'View channels: '</span> <span class="string">' Reset '</span>},20);
+0283 set(hActive(2),<span class="string">'Callback'</span>,@<a href="#_sub10" class="code" title="subfunction setActive(varargin)">setActive</a>)
+0284     <a name="_sub10" href="#_subfunctions" class="code">function setActive(varargin)</a>
+0285         choice=get(hActive(2),<span class="string">'String'</span>);
+0286         choice=sscanf(choice,<span class="string">'%g'</span>);
+0287         N=numel(choice);
+0288         keep=false(1,N);
+0289         valid=getappdata(dlg.Handle,<span class="string">'SignalIndex'</span>);        
+0290         <span class="keyword">for</span> n=1:numel(choice)
+0291             <span class="keyword">if</span> any(choice(n)==valid)
+0292                 keep(n)=true;
+0293             <span class="keyword">end</span>            
+0294         <span class="keyword">end</span>
+0295         choice=choice(keep);
+0296         set(hActive(2),<span class="string">'String'</span>,sprintf(<span class="string">'%d '</span>,choice));
+0297         <span class="comment">%updateTable()</span>
+0298     <span class="keyword">end</span>
+0299 set(hActive(3),<span class="string">'Callback'</span>,@<a href="#_sub11" class="code" title="subfunction resetActive(varargin)">resetActive</a>)
+0300     <a name="_sub11" href="#_subfunctions" class="code">function resetActive(varargin)</a>
+0301         choice=getappdata(dlg.Handle,<span class="string">'SignalIndex'</span>);
+0302         set(hActive(2),<span class="string">'String'</span>,sprintf(<span class="string">'%d '</span>,choice));       
+0303     <span class="keyword">end</span>
+0304 
+0305 <span class="comment">% visualization</span>
+0306 hPlot=addblock(dlg,<span class="string">'button'</span>,{<span class="string">' View signals '</span> <span class="string">' View spectra '</span>});
+0307 set(hPlot(1),<span class="string">'Callback'</span>,@<a href="#_sub12" class="code" title="subfunction viewSignals(varargin)">viewSignals</a>);
+0308     <a name="_sub12" href="#_subfunctions" class="code">function viewSignals(varargin)</a>
+0309         index=sscanf(get(hActive(2),<span class="string">'String'</span>),<span class="string">'%g'</span>);
+0310         N=numel(index);
+0311         <span class="keyword">if</span> N==0
+0312             <span class="keyword">return</span>
+0313         <span class="keyword">end</span>
+0314         SMASH.MUI.Figure(<span class="string">'Name'</span>,<span class="string">'Digitizer signals'</span>,<span class="string">'NumberTitle'</span>,<span class="string">'off'</span>);
+0315         data=getappdata(dlg.Handle,<span class="string">'SignalData'</span>);        
+0316         color=lines(N);               
+0317         <span class="keyword">for</span> n=1:N
+0318             subplot(N,1,n);
+0319             h=view(data{index(n)},gca);
+0320             set(h,<span class="string">'Color'</span>,color(n,:));       
+0321             temp=sprintf(<span class="string">'&quot;%s&quot; (channel %d)'</span>,[shortname ext],index(n));
+0322             title(temp,<span class="string">'Interpreter'</span>,<span class="string">'none'</span>,<span class="string">'FontWeight'</span>,<span class="string">'normal'</span>)
+0323             ylabel(<span class="string">'Signal (V)'</span>);
+0324             <span class="keyword">if</span> n==N
+0325                 xlabel(<span class="string">'Time (s)'</span>);
+0326             <span class="keyword">end</span>
+0327         <span class="keyword">end</span>
+0328     <span class="keyword">end</span>
+0329 
+0330 set(hPlot(2),<span class="string">'Callback'</span>,@<a href="#_sub13" class="code" title="subfunction viewSpectra(varargin)">viewSpectra</a>)
+0331     <a name="_sub13" href="#_subfunctions" class="code">function viewSpectra(varargin)</a>
+0332         index=sscanf(get(hActive(2),<span class="string">'String'</span>),<span class="string">'%g'</span>);
+0333         N=numel(index);
+0334         <span class="keyword">if</span> N==0
+0335             <span class="keyword">return</span>
+0336         <span class="keyword">end</span>
+0337         SMASH.MUI.Figure(<span class="string">'Name'</span>,<span class="string">'Power spectra'</span>,<span class="string">'NumberTitle'</span>,<span class="string">'off'</span>);
+0338         data=getappdata(dlg.Handle,<span class="string">'SignalData'</span>);
+0339         color=lines(N);
+0340         table=get(hTable(end),<span class="string">'Data'</span>);
+0341         <span class="keyword">for</span> n=1:N
+0342             subplot(N,1,n);      
+0343             [f,P]=fft(data{index(n)},<span class="keyword">...</span>
+0344                 <span class="string">'RemoveDC'</span>,true,<span class="string">'NumberFrequencies'</span>,1e6);            
+0345             h=plot(f,P);
+0346             set(h,<span class="string">'Color'</span>,color(n,:));            
+0347             temp=sprintf(<span class="string">'&quot;%s&quot; (channel %d)'</span>,[shortname ext],index(n));
+0348             title(temp,<span class="string">'Interpreter'</span>,<span class="string">'none'</span>,<span class="string">'FontWeight'</span>,<span class="string">'normal'</span>);
+0349             ylabel(<span class="string">'Spectral power (arb)'</span>);
+0350             set(gca,<span class="string">'YScale'</span>,<span class="string">'log'</span>);
+0351             <span class="keyword">if</span> n==N
+0352                 xlabel(<span class="string">'Frequency (Hz)'</span>);
+0353             <span class="keyword">end</span>
+0354             yb(1)=min(P(2:end));
+0355             yb(2)=max(P);
+0356             ylim(yb);
+0357             <span class="comment">%</span>
+0358             label={<span class="string">'frequency'</span> <span class="string">'amplitude'</span> <span class="string">'noise'</span> <span class="string">'fraction'</span>};
+0359             unit={<span class="string">' Hz'</span> <span class="string">' V'</span> <span class="string">' V'</span> <span class="string">'%'</span>};
+0360             width=[0 0 0];
+0361             <span class="keyword">for</span> m=1:4
+0362                 width(1)=max(width(1),numel(label{m}));
+0363                 width(2)=max(width(2),numel(table{n,m+1}));
+0364                 width(3)=max(width(3),numel(unit{m}));
+0365             <span class="keyword">end</span>
+0366             format=sprintf(<span class="string">'%%%ds = %%%ds%%-%ds'</span>,width);
+0367             <span class="keyword">for</span> m=1:4
+0368                 label{m}=sprintf(format,label{m},table{n,m+1},unit{m});
+0369             <span class="keyword">end</span>            
+0370             text(<span class="string">'String'</span>,label,<span class="keyword">...</span>
+0371                 <span class="string">'Units'</span>,<span class="string">'normalized'</span>,<span class="string">'Position'</span>,[0.95 0.95],<span class="keyword">...</span>
+0372                 <span class="string">'FontName'</span>,<span class="string">'fixedwidth'</span>,<span class="keyword">...</span>
+0373                 <span class="string">'HorizontalAlignment'</span>,<span class="string">'right'</span>,<span class="keyword">...</span>
+0374                 <span class="string">'VerticalAlignment'</span>,<span class="string">'top'</span>)
+0375         <span class="keyword">end</span>
+0376     <span class="keyword">end</span>
+0377 
+0378 <span class="comment">% control exit</span>
+0379 <span class="comment">%hDone=addblock(dlg,'button',' Done ');</span>
+0380 <span class="comment">%set(hDone,'Callback',@done);</span>
+0381 hm=uimenu(<span class="string">'Label'</span>,<span class="string">'Program'</span>);
+0382 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Change directory'</span>,<span class="string">'Callback'</span>,@<a href="#_sub14" class="code" title="subfunction changeDirectory(varargin)">changeDirectory</a>);
+0383     <a name="_sub14" href="#_subfunctions" class="code">function changeDirectory(varargin)</a>
+0384         directory=uigetdir(pwd,<span class="string">'Choose directory'</span>);
+0385         <span class="keyword">if</span> isempty(directory)
+0386             <span class="keyword">return</span>
+0387         <span class="keyword">end</span>
+0388         cd(directory);
+0389     <span class="keyword">end</span>
+0390 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Exit'</span>,<span class="string">'Callback'</span>,@<a href="#_sub15" class="code" title="subfunction done(varargin)">done</a>)
+0391     <a name="_sub15" href="#_subfunctions" class="code">function done(varargin)        </a>
+0392         choice=questdlg(<span class="string">'Are you finished?'</span>,<span class="string">'Exit'</span>,<span class="string">' Yes '</span>,<span class="string">' No '</span>, <span class="string">' No '</span>);
+0393         <span class="keyword">if</span> ischar(choice)
+0394             choice=strtrim(lower(choice));
+0395         <span class="keyword">end</span>
+0396         <span class="keyword">switch</span> choice
+0397             <span class="keyword">case</span> <span class="string">'yes'</span>
+0398                 delete(dlg);
+0399         <span class="keyword">end</span>
+0400     <span class="keyword">end</span>
+0401 set(dlg.Handle,<span class="string">'CloseRequestFcn'</span>,@<a href="#_sub15" class="code" title="subfunction done(varargin)">done</a>);
+0402 
+0403 <span class="comment">% online documentation</span>
+0404 hm=uimenu(<span class="string">'Label'</span>,<span class="string">'Help'</span>);
+0405 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'About this program'</span>,<span class="string">'Callback'</span>,@<a href="#_sub16" class="code" title="subfunction AboutProgram(varargin)">AboutProgram</a>);
+0406 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Using this program'</span>,<span class="string">'Callback'</span>,@<a href="#_sub17" class="code" title="subfunction ProgramHelp(varargin)">ProgramHelp</a>,<span class="keyword">...</span>
+0407     <span class="string">'Enable'</span>,<span class="string">'off'</span>);
+0408 
+0409 <span class="comment">% finish dialog</span>
+0410 set(dlg.Handle,<span class="string">'HandleVisibility'</span>,<span class="string">'callback'</span>);
+0411 locate(dlg,<span class="string">'center'</span>);
+0412 dlg.Hidden=false;
+0413 
+0414 <span class="keyword">end</span>
+0415 
+0416 <span class="comment">%%</span>
+0417 <a name="_sub16" href="#_subfunctions" class="code">function AboutProgram(varargin)</a>
+0418 
+0419 message={};
+0420 message{end+1}=<span class="string">'Sinusoid analysis program'</span>;
+0421 message{end+1}=<span class="string">'Version 1.0'</span>;
+0422 message{end+1}=<span class="string">'December 2015'</span>;
+0423 
+0424 h=msgbox(message,<span class="string">''</span>,<span class="string">'modal'</span>);
+0425 uiwait(h);
+0426 
+0427 <span class="keyword">end</span>
+0428 
+0429 <span class="comment">%%</span>
+0430 <a name="_sub17" href="#_subfunctions" class="code">function ProgramHelp(varargin)</a>
+0431 
+0432 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

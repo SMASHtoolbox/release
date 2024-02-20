@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of export_signals</title>
+  <meta name="keywords" content="export_signals">
+  <meta name="description" content="determine output file">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">fringen</a> &gt; <a href="index.html">private</a> &gt; export_signals.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/fringen/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>export_signals
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>determine output file</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function data=export_signals(data) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> determine output file</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="fringenGUI.html" class="code" title="function fringenGUI(varargin)">fringenGUI</a>	</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function data=export_signals(data)</a>
+0002 
+0003 <span class="comment">% determine output file</span>
+0004 <span class="keyword">if</span> ~isfield(data,<span class="string">'outputfile'</span>) || isempty(data.outputfile)
+0005     filespec={<span class="string">'*.*'</span>,<span class="string">'All files'</span>};
+0006     [filename,pathname]=uiputfile(filespec,<span class="string">'Select output file'</span>);
+0007     data.outputfile=fullfile(pathname,filename);
+0008 <span class="keyword">end</span>
+0009 fid=fopen(data.outputfile,<span class="string">'wt'</span>);
+0010 
+0011 <span class="comment">% write header</span>
+0012 params=data.params;
+0013 fprintf(fid,<span class="string">'%s data generated %s using input file:\n'</span>,upper(data.mode),datestr(now));
+0014 [pname,filename,ext]=fileparts(data.inputfile);
+0015 filename=[filename ext];
+0016 fprintf(fid,<span class="string">'\t%s\n'</span>,filename);
+0017 fprintf(fid,<span class="string">'and the following parameters.\n'</span>);
+0018 name=fieldnames(params);
+0019 value=struct2cell(params);
+0020 width=max(cellfun(@length,name));
+0021 name_format=sprintf(<span class="string">'%%%ds: '</span>,width+5);
+0022 <span class="keyword">for</span> n=1:numel(name)
+0023     <span class="comment">% omit unused fields</span>
+0024     <span class="keyword">if</span> strcmp(data.mode,<span class="string">'VISAR'</span>)
+0025         <span class="keyword">if</span> strcmp(name{n},<span class="string">'ref_scale'</span>)
+0026             <span class="keyword">continue</span>
+0027         <span class="keyword">end</span>
+0028     <span class="keyword">elseif</span> strcmp(data.mode,<span class="string">'PDV'</span>)
+0029         <span class="keyword">if</span> strcmp(name{n},<span class="string">'delay'</span>) || strcmp(name{n},<span class="string">'dispersion'</span>)
+0030             <span class="keyword">continue</span>
+0031         <span class="keyword">end</span>
+0032         <span class="keyword">if</span> strcmp(name{n},<span class="string">'delay_scale'</span>)
+0033             <span class="keyword">continue</span>
+0034         <span class="keyword">end</span>
+0035     <span class="keyword">end</span>
+0036     <span class="comment">% print valid fields</span>
+0037     fprintf(fid,name_format,name{n});
+0038     <span class="keyword">if</span> strcmp(name{n},<span class="string">'impulse_response'</span>)
+0039         [pname,fname,ext]=fileparts(value{n});
+0040         filename=[fname ext];
+0041         fprintf(fid,<span class="string">'%s '</span>,filename);
+0042     <span class="keyword">elseif</span> strcmp(name{n},<span class="string">'coupling'</span>)
+0043         fprintf(fid,<span class="string">'%15s'</span>,value{n});        
+0044     <span class="keyword">else</span>
+0045         fprintf(fid,<span class="string">'%15.5g'</span>,value{n});
+0046     <span class="keyword">end</span>
+0047     <span class="comment">%switch name{n}</span>
+0048     <span class="comment">%    case 'coupling'</span>
+0049     <span class="comment">%        value_format='%15s';</span>
+0050     <span class="comment">%    case 'impulse_response'</span>
+0051     <span class="comment">%    otherwise</span>
+0052     <span class="comment">%        value_format='%15.5g ';</span>
+0053     <span class="comment">%end</span>
+0054     <span class="comment">%fprintf(fid,value_format,value{n});</span>
+0055     fprintf(fid,<span class="string">'\n'</span>);
+0056 <span class="keyword">end</span>
+0057 
+0058 <span class="comment">% write signal data</span>
+0059 Nsignal=numel(data.signal);
+0060 temp=zeros(numel(data.time),Nsignal+1);
+0061 temp(:,1)=data.time;
+0062 fprintf(fid,<span class="string">'%15s'</span>,<span class="string">'Time'</span>);
+0063 <span class="keyword">for</span> k=1:Nsignal
+0064     temp(:,k+1)=data.signal{k};    
+0065     label=sprintf(<span class="string">'Signal %d'</span>,k);
+0066     fprintf(fid,<span class="string">'%15s'</span>,label);
+0067 <span class="keyword">end</span>
+0068 fprintf(fid,<span class="string">'\n'</span>);
+0069 format=repmat(<span class="string">'%+15.5e'</span>,[1 Nsignal+1]);
+0070 format=[format <span class="string">'\n'</span>];
+0071 fprintf(fid,format,transpose(temp));
+0072 
+0073 fclose(fid);</pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

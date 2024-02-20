@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of gaussianfit</title>
+  <meta name="keywords" content="gaussianfit">
+  <meta name="description" content="gaussianfit : fit data to Gaussian curve">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">SIRHEN</a> &gt; <a href="index.html">private</a> &gt; gaussianfit.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/SIRHEN/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>gaussianfit
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>gaussianfit : fit data to Gaussian curve</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function [params,yfit]=gaussianfit(x,y,guess,options) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> gaussianfit : fit data to Gaussian curve
+
+ Usage:
+   &gt;&gt; [params,yfit]=gaussianfit(x,y,guess,options);</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="findpeak.html" class="code" title="function result=findpeak(x,y,options)">findpeak</a>	findpeak : determine the position, width, and strength of a peak</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function [chi2,params,yfit]=residual(NLparams,x,y)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% gaussianfit : fit data to Gaussian curve</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% Usage:</span>
+0004 <span class="comment">%   &gt;&gt; [params,yfit]=gaussianfit(x,y,guess,options);</span>
+0005 <a name="_sub0" href="#_subfunctions" class="code">function [params,yfit]=gaussianfit(x,y,guess,options)</a>
+0006 
+0007 <span class="comment">% handle mandatory input</span>
+0008 <span class="keyword">if</span> nargin&lt;2
+0009     error(<span class="string">'Insufficient number of inputs'</span>);
+0010 <span class="keyword">end</span>
+0011 Ndata=numel(x);
+0012 <span class="keyword">if</span> numel(x) ~= Ndata
+0013     error(<span class="string">'Inconsistent sized data arrays'</span>);
+0014 <span class="keyword">end</span>
+0015 
+0016 <span class="comment">% scale x- and y-axis</span>
+0017 x0=min(x);
+0018 Lx=max(x)-x0;
+0019 x=(x-x0)/Lx;
+0020 
+0021 y0=min(y);
+0022 Ly=max(y)-y0;
+0023 y=(y-y0)/Ly;
+0024 
+0025 <span class="comment">% handle optional inputs</span>
+0026 <span class="keyword">if</span> (nargin&lt;4) || isempty(guess)
+0027     [junk,index]=max(y);
+0028     xp=x(index);
+0029     xtemp=reshape(x-xp,size(y));
+0030     sigma=sqrt(sum(y.*xtemp.^2)/sum(y));
+0031     guess=[xp sigma];
+0032 <span class="keyword">else</span>
+0033     guess(1)=guess(1)-x0;
+0034     guess=guess/Lx;
+0035 <span class="keyword">end</span>
+0036 
+0037 <span class="keyword">if</span> (nargin&lt;5) || isempty(options)
+0038     options=optimset(<span class="string">'TolX'</span>,1e-6,<span class="string">'TolFun'</span>,1e-6);
+0039 <span class="keyword">end</span>
+0040 
+0041 <span class="comment">% perform nonlinear optimization</span>
+0042 fitness=@(NLparams) <a href="#_sub1" class="code" title="subfunction [chi2,params,yfit]=residual(NLparams,x,y)">residual</a>(NLparams,x,y);
+0043 [NLparams,fval]=fminsearch(fitness,guess,options);
+0044 [chi2,params,yfit]=<a href="#_sub1" class="code" title="subfunction [chi2,params,yfit]=residual(NLparams,x,y)">residual</a>(NLparams,x,y);
+0045 
+0046 <span class="comment">% convert results to original scale</span>
+0047 params(1)=y0+Ly*params(1);
+0048 params(2)=Ly*params(2);
+0049 params(3)=x0+Lx*params(3);
+0050 params(4)=Lx*params(4);
+0051 yfit=y0+Ly*yfit;
+0052 
+0053 
+0054 
+0055 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0056 <span class="comment">% nonlinear least squares residual function %</span>
+0057 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0058 <a name="_sub1" href="#_subfunctions" class="code">function [chi2,params,yfit]=residual(NLparams,x,y)</a>
+0059 
+0060 <span class="comment">% extract nonlinear least square parameters</span>
+0061 <span class="keyword">if</span> any(isnan(NLparams))
+0062     chi2=inf;
+0063     <span class="keyword">return</span>;
+0064 <span class="keyword">end</span>
+0065 xp=NLparams(1);
+0066 sigma=NLparams(2);
+0067 <span class="keyword">if</span> (xp&lt;x(1)) || (xp&gt;x(end))
+0068     chi2=inf;
+0069     <span class="keyword">return</span>
+0070 <span class="keyword">end</span>
+0071 
+0072 <span class="comment">% determine linear least square parameters</span>
+0073 Ndata=numel(x);
+0074 M=ones(Ndata,2);
+0075 M(:,2)=exp(-(x-xp).^2/(2*sigma^2));
+0076 
+0077 Lparams=M\y(:);
+0078 y0=Lparams(1);
+0079 A=Lparams(2);
+0080 
+0081 <span class="comment">% combine parameters</span>
+0082 params=[y0 A xp sigma];
+0083 
+0084 <span class="comment">% calculate residual error</span>
+0085 yfit=y0+A*M(:,2);
+0086 chi2=sum((y(:)-yfit).^2);</pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

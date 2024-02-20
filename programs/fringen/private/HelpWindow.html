@@ -1,0 +1,123 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of HelpWindow</title>
+  <meta name="keywords" content="HelpWindow">
+  <meta name="description" content="get handles">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">fringen</a> &gt; <a href="index.html">private</a> &gt; HelpWindow.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/fringen/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>HelpWindow
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>get handles</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function HelpWindow(src,varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> get handles</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="fringenGUI.html" class="code" title="function fringenGUI(varargin)">fringenGUI</a>	</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function HelpWindow(src,varargin)</a>
+0002 
+0003 <span class="comment">% get handles</span>
+0004 srcfig=ancestor(src,<span class="string">'figure'</span>);
+0005 srcunits=get(srcfig,<span class="string">'Units'</span>);
+0006 set(srcfig,<span class="string">'Units'</span>,<span class="string">'pixels'</span>);
+0007 srcpos=get(srcfig,<span class="string">'Position'</span>);
+0008 set(srcfig,<span class="string">'Units'</span>,srcunits);
+0009 
+0010 <span class="comment">% help message</span>
+0011 message={};
+0012 message{end+1}=<span class="string">''</span>;
+0013 message{end+1}=<span class="string">'Follow these steps to use the program:'</span>;
+0014 message{end+1}=<span class="string">''</span>;
+0015 message{end+1}=<span class="string">'1. Load velocity history from a file (&quot;Program&quot; menu)'</span>;
+0016 message{end+1}=<span class="string">'  -Select &quot;Load Data&quot; to choose a velocity history.'</span>;
+0017 message{end+1}=<span class="string">'  -The data file must contain at least two columns [time velocity].'</span>;
+0018 message{end+1}=<span class="string">'  -Additional columns (optional) specify the coherent, emitted, and reference intensity.'</span>;
+0019 message{end+1}=<span class="string">'     [time velocity Icoherent Iemitted Ireference]'</span>;
+0020 message{end+1}=<span class="string">'     Icoherent defaults to unity, Iemitted defaults to zero'</span>;
+0021 message{end+1}=<span class="string">'     Ireference defaults to unity (used PDV mode only)'</span>;
+0022 
+0023 message{end+1}=<span class="string">''</span>;
+0024 message{end+1}=<span class="string">'2. Specify the interferometer mode and parameters (&quot;Interferometer&quot; menu)'</span>;
+0025 message{end+1}=<span class="string">'   -Interferometer mode may be VISAR (default) or PDV.'</span>;
+0026 message{end+1}=<span class="string">'   -Select &quot;Parameters&quot; to specify general and mode specific parameters.'</span>;
+0027 message{end+1}=<span class="string">'   -The &quot;Phase shift(s) entry determines the number of calculated signals.'</span>;
+0028 message{end+1}=<span class="string">'   -Scaling parameters are replicated as needed. '</span>;
+0029 
+0030 message{end+1}=<span class="string">''</span>;
+0031 message{end+1}=<span class="string">'3. Add signal imperfections (&quot;Signal&quot; menu)'</span>;
+0032 message{end+1}=<span class="string">'   -Signal coupling may be DC (default) or AC'</span>;
+0033 message{end+1}=<span class="string">'      AC coupling forces signal average(s) to zero for t&lt;0.'</span>;
+0034 message{end+1}=<span class="string">'      If no t&lt;0 data exists, the first point is subtracted from the entire signal.'</span>;
+0035 message{end+1}=<span class="string">'   -Specify impulse response function to include frequency-dependence'</span>;
+0036 message{end+1}=<span class="string">'      Information should be stored in a two-column text file.'</span>;
+0037 message{end+1}=<span class="string">'   -Use &quot;Noise parameters&quot; to add Gaussian noise.'</span>;
+0038 message{end+1}=<span class="string">'      Noise fraction sets rms amplitude relative to signal.'</span>;
+0039 message{end+1}=<span class="string">'      Noise seed creates a reproducible noise pattern.'</span>;
+0040 message{end+1}=<span class="string">'   -Use &quot;Digitizer parameters&quot; to specify bit range.'</span>;
+0041 
+0042 message{end+1}=<span class="string">''</span>;
+0043 message{end+1}=<span class="string">'4. Moving on (&quot;Program&quot; menu)'</span>;
+0044 message{end+1}=<span class="string">'   -Select &quot;Export results&quot; to save caculated signals to a file.'</span>;
+0045 message{end+1}=<span class="string">'   -Select &quot;Start over&quot; to clear all settings and restore default state.'</span>;
+0046 message{end+1}=<span class="string">''</span>;
+0047 
+0048 <span class="comment">% create help window</span>
+0049 tag=<span class="string">'fringen_HelpWindow'</span>;
+0050 fig=findall(0,<span class="string">'Type'</span>,<span class="string">'figure'</span>,<span class="string">'Tag'</span>,tag);
+0051 <span class="keyword">if</span> ~isempty(fig) <span class="comment">% figure already exists</span>
+0052     delete(fig);
+0053 <span class="keyword">end</span>
+0054 fig=figure(<span class="string">'Visible'</span>,<span class="string">'off'</span>,<span class="string">'Menubar'</span>,<span class="string">'none'</span>,<span class="string">'Toolbar'</span>,<span class="string">'none'</span>,<span class="keyword">...</span>
+0055     <span class="string">'Tag'</span>,tag,<span class="string">'NumberTitle'</span>,<span class="string">'off'</span>,<span class="string">'Name'</span>,<span class="string">'Using fringen'</span>,<span class="keyword">...</span>
+0056     <span class="string">'IntegerHandle'</span>,<span class="string">'off'</span>,<span class="string">'HandleVisibility'</span>,<span class="string">'Callback'</span>,<span class="keyword">...</span>
+0057     <span class="string">'Units'</span>,<span class="string">'pixels'</span>);
+0058 
+0059 htext=uicontrol(fig,<span class="string">'Style'</span>,<span class="string">'text'</span>,<span class="string">'String'</span>,message,<span class="string">'Units'</span>,<span class="string">'pixels'</span>,<span class="keyword">...</span>
+0060     <span class="string">'HorizontalAlignment'</span>,<span class="string">'left'</span>);
+0061 <span class="comment">%[message,position]=textwrap(htext,message);</span>
+0062 extent=get(htext,<span class="string">'Extent'</span>);
+0063 <span class="comment">%set(htext,'String',message,'Position',position);</span>
+0064 <span class="comment">%set(htext,'Units','pixels');</span>
+0065 <span class="comment">%position=get(htext,'Position');</span>
+0066 <span class="comment">%position(1:2)=5;</span>
+0067 margin=5;
+0068 position=[margin margin extent(3)+margin extent(4)+margin];
+0069 set(htext,<span class="string">'Position'</span>,position,<span class="string">'BackgroundColor'</span>,get(fig,<span class="string">'Color'</span>));
+0070 
+0071 figpos=get(fig,<span class="string">'Position'</span>);
+0072 figpos(3)=position(3)+2*position(1);
+0073 figpos(4)=position(4)+2*position(2);
+0074 figpos(1)=srcpos(1)+(srcpos(3)-figpos(3))/2;
+0075 figpos(2)=srcpos(2)+(srcpos(4)-figpos(4))/2;
+0076 set(fig,<span class="string">'Position'</span>,figpos,<span class="string">'Visible'</span>,<span class="string">'on'</span>);</pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of yokowfmread</title>
+  <meta name="keywords" content="yokowfmread">
+  <meta name="description" content="yokowfmread : read binary data from a Yokogawa WFM file">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">THRIVE</a> &gt; <a href="index.html">private</a> &gt; yokowfmread.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/THRIVE/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>yokowfmread
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>yokowfmread : read binary data from a Yokogawa WFM file</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function [signal,time,info,header]=yokowfmread(filename) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> yokowfmread : read binary data from a Yokogawa WFM file
+ 
+ Usage:
+ [signal,time,info,header]=yokowfmread(filename);
+
+ Most users will only care about the first two output arguments: the
+ signal waveform and time base.  The third ouput contains an information
+ structure about the file, and the fourth output is the complete text
+ header from the file.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="LoadScreen.html" class="code" title="function fig=LoadScreen(oldfig)">LoadScreen</a>	LoadScreen:</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% yokowfmread : read binary data from a Yokogawa WFM file</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% Usage:</span>
+0004 <span class="comment">% [signal,time,info,header]=yokowfmread(filename);</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Most users will only care about the first two output arguments: the</span>
+0007 <span class="comment">% signal waveform and time base.  The third ouput contains an information</span>
+0008 <span class="comment">% structure about the file, and the fourth output is the complete text</span>
+0009 <span class="comment">% header from the file.</span>
+0010 
+0011 <span class="comment">% created October 14, 2008 by Daniel Dolan</span>
+0012 <a name="_sub0" href="#_subfunctions" class="code">function [signal,time,info,header]=yokowfmread(filename)</a>
+0013 
+0014 <span class="comment">% handle input</span>
+0015 <span class="keyword">if</span> (nargin&lt;1) || isempty(filename)
+0016     [fname,pname]=uigetfile(<span class="string">'*.wfm;*.WFM'</span>,<span class="string">'Choose Yokogawa WFM file'</span>);
+0017     filename=fullfile(pname,fname);
+0018 <span class="keyword">end</span>
+0019 
+0020 <span class="comment">% verify file</span>
+0021 <span class="keyword">if</span> exist(filename,<span class="string">'file'</span>)~=2
+0022     id=<span class="string">'wfmread:FileNotFound'</span>;
+0023     message=<span class="string">'File error: \n \t %s \n \t does not exist!\n'</span>;
+0024     error(id,message,filename);
+0025 <span class="keyword">end</span>
+0026 
+0027 <span class="comment">% make sure file can be opened</span>
+0028 fid=fopen(filename,<span class="string">'rb'</span>);
+0029 <span class="keyword">if</span> fid==-1
+0030     id=<span class="string">'wfmread:FileNotOpened'</span>;
+0031     message=<span class="string">'File error: \n \t %s \n \t cannot be opened!\n'</span>;
+0032     error(id,message,filename);
+0033 <span class="keyword">end</span>
+0034 
+0035 <span class="comment">% scan header for neccessary data</span>
+0036 <span class="keyword">for</span> n=1:2
+0037     header=fgetl(fid);
+0038 <span class="keyword">end</span>
+0039 [junk,count,err,next]=sscanf(header,<span class="string">'%s'</span>,1);
+0040 header=header(next:end);
+0041 
+0042 colon=find(header==<span class="string">':'</span>);
+0043 comma=find(header==<span class="string">','</span>);
+0044 <span class="keyword">if</span> numel(colon)~=numel(colon)
+0045     error(<span class="string">'ERROR: invalid header'</span>);
+0046 <span class="keyword">else</span>
+0047     Nfield=numel(colon);
+0048 <span class="keyword">end</span>
+0049 start=1;
+0050 <span class="keyword">for</span> n=1:Nfield
+0051     stop=colon(n)-1;
+0052     field=sscanf(header(start:stop),<span class="string">'%s'</span>,1);
+0053     field(field==<span class="string">'.'</span>)=<span class="string">'_'</span>;
+0054     start=colon(n)+1;
+0055     stop=comma(n)-1;
+0056     value=sscanf(header(start:stop),<span class="string">'%s'</span>,1);
+0057     info.(field)=value;
+0058     start=comma(n)+1;
+0059 <span class="keyword">end</span>
+0060 
+0061 <span class="comment">% verify and interpret header data</span>
+0062 list={<span class="string">'NR_PT'</span>,<span class="string">'PT_O'</span>,<span class="string">'XIN'</span>,<span class="string">'YMU'</span>,<span class="string">'YOF'</span>,<span class="string">'BIT'</span>,<span class="string">'BYT'</span>};
+0063 <span class="keyword">for</span> n=1:numel(list)
+0064     <span class="keyword">if</span> isfield(info,list{n})
+0065         info.(list{n})=sscanf(info.(list{n}),<span class="string">'%g'</span>);
+0066     <span class="keyword">else</span>
+0067         error(<span class="string">'ERROR: %s missing in header'</span>,list{n});
+0068     <span class="keyword">end</span>
+0069 <span class="keyword">end</span>
+0070 
+0071 
+0072 <span class="comment">% read full header and binary data</span>
+0073 fileinfo=dir(filename);
+0074 TotalBytes=fileinfo.bytes;
+0075 DataBytes=info.NR_PT*info.BYT;
+0076 HeaderBytes=TotalBytes-DataBytes;
+0077 frewind(fid);
+0078 header=fscanf(fid,<span class="string">'%c'</span>,HeaderBytes);
+0079 signal=fread(fid,DataBytes,<span class="string">'real*4'</span>);
+0080 fclose(fid);
+0081 
+0082 <span class="comment">% apply digitizer settings</span>
+0083 signal=info.YOF+info.YMU*signal;
+0084 time=transpose(0:(info.NR_PT-1));
+0085 time=info.XIN*(time-info.PT_O);</pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

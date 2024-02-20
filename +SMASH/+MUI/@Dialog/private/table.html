@@ -1,0 +1,145 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of table</title>
+  <meta name="keywords" content="table">
+  <meta name="description" content="handle input">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../../index.html">SMASHtoolbox</a> &gt; <a href="../../../index.html">+SMASH</a> &gt; <a href="../../index.html">+MUI</a> &gt; <a href="../index.html">@Dialog</a> &gt; <a href="index.html">private</a> &gt; table.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../../index.html"><img alt="<" border="0" src="../../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+MUI/@Dialog/private&nbsp;<img alt=">" border="0" src="../../../../../../right.png"></a></td></tr></table>-->
+
+<h1>table
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>handle input</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>function varargout=table(object,label,minwidth,rows) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> handle input</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="local_uicontrol.html" class="code" title="function varargout=local_uicontrol(object,varargin)">local_uicontrol</a>	% local uicontrol (could be pushed out to separate classes</li><li><a href="verify.html" class="code" title="function verify(object)">verify</a>	</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="custom.html" class="code" title="function varargout=custom(object,Control,varargin)">custom</a>	dialog.custom : add a line of custom uicontrols</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function selectCell(~,EventData)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function varargout=table(object,label,minwidth,rows)</a>
+0002 
+0003 <span class="comment">% handle input</span>
+0004 <span class="keyword">if</span> (nargin&lt;2) || isempty(label)
+0005     label={<span class="string">' Column 1 '</span> <span class="string">' Column 2 '</span>};
+0006 <span class="keyword">end</span>
+0007 assert(iscell(label),<span class="string">'ERROR: label input must be a cell array'</span>);
+0008 columns=numel(label);
+0009 
+0010 <span class="keyword">if</span> (nargin&lt;3) || isempty(minwidth)
+0011     minwidth=0;
+0012 <span class="keyword">end</span>
+0013 assert(isnumeric(minwidth),<span class="string">'ERROR: invalid minwidth'</span>);
+0014 <span class="keyword">if</span> numel(minwidth)==1
+0015     minwidth=repmat(minwidth,[1 columns]);
+0016 <span class="keyword">end</span>
+0017 assert(numel(minwidth)==columns,<span class="string">'ERROR: inconsistent input sizes'</span>);
+0018 
+0019 <span class="keyword">if</span> (nargin&lt;4) || isempty(rows)
+0020     rows=10;
+0021 <span class="keyword">end</span>
+0022 
+0023 <span class="comment">% error checking</span>
+0024 <a href="verify.html" class="code" title="function verify(object)">verify</a>(object);
+0025 
+0026 <span class="comment">% create block</span>
+0027 h=nan(1,columns+1);
+0028 columnwidth=cell(1,columns);
+0029 totalwidth=0;
+0030 <span class="keyword">for</span> n=1:columns
+0031     Ndummy=max(numel(label{n}),minwidth(n));
+0032     dummy=max(numel(label{n}),Ndummy);
+0033     dummy=repmat(<span class="string">'M'</span>,[1 dummy]);
+0034     h(n)=<a href="local_uicontrol.html" class="code" title="function varargout=local_uicontrol(object,varargin)">local_uicontrol</a>(object,<span class="string">'Style'</span>,<span class="string">'text'</span>,<span class="string">'String'</span>,dummy,<span class="keyword">...</span>
+0035         <span class="string">'HorizontalAlignment'</span>,<span class="string">'left'</span>);
+0036     position=get(h(n),<span class="string">'Position'</span>);
+0037     <span class="keyword">if</span> n==1
+0038         x0=position(1);
+0039         Ly=position(4);
+0040     <span class="keyword">end</span>
+0041     position(1)=x0;
+0042     set(h(n),<span class="string">'Position'</span>,position);
+0043     columnwidth{n}=position(3);
+0044     x0=x0+columnwidth{n};
+0045     set(h(n),<span class="string">'String'</span>,label{n});   
+0046     object.Controls(end+1)=h(n);
+0047     totalwidth=totalwidth+columnwidth{n};
+0048 <span class="keyword">end</span>
+0049 pushup(object,columns,object.VerticalGap+Ly);
+0050 position=get(h(1),<span class="string">'Position'</span>);
+0051 x0=position(1);
+0052 
+0053 h(end)=uitable(<span class="string">'Parent'</span>,object.Handle,<span class="string">'RowName'</span>,<span class="string">''</span>,<span class="string">'ColumnName'</span>,<span class="string">''</span>,<span class="keyword">...</span>
+0054     <span class="string">'ColumnWidth'</span>,columnwidth,<span class="string">'Data'</span>,cell(rows,columns),<span class="keyword">...</span>
+0055     <span class="string">'ColumnEditable'</span>,true);
+0056 position(1)=x0;
+0057 position(3)=totalwidth+columns; <span class="comment">% add an extra pixel for each row</span>
+0058 extent=get(h(end),<span class="string">'Extent'</span>);
+0059 position(4)=extent(4);
+0060 set(h(end),<span class="string">'Position'</span>,position);
+0061 object.pushup;
+0062 object.Controls(end+1)=h(end);
+0063 
+0064 <span class="comment">% leave room for vertical slider</span>
+0065 ht=uicontrol(<span class="string">'Parent'</span>,object.Handle,<span class="string">'Style'</span>,<span class="string">'slider'</span>);
+0066 position=get(ht,<span class="string">'Position'</span>);
+0067 SliderThickness=position(4);
+0068 position=get(h(end),<span class="string">'Position'</span>);
+0069 position(3)=position(3)+SliderThickness*1.5;
+0070 set(h(end),<span class="string">'Position'</span>,position);
+0071 delete(ht);
+0072 
+0073 <span class="comment">% create empty cells</span>
+0074 <span class="comment">%data=cell(rows,columns);</span>
+0075 <span class="comment">%set(h(end),'Data',data);</span>
+0076 
+0077 <span class="comment">% automatically store current indices</span>
+0078 setappdata(h(end),<span class="string">'CurrentCell'</span>,[1 1]);
+0079 set(h(end),<span class="string">'CellSelectionCallback'</span>,@<a href="#_sub1" class="code" title="subfunction selectCell(~,EventData)">selectCell</a>);
+0080     <a name="_sub1" href="#_subfunctions" class="code">function selectCell(~,EventData)</a>
+0081         setappdata(h(end),<span class="string">'CurrentCell'</span>,EventData.Indices);
+0082     <span class="keyword">end</span>
+0083 
+0084 <span class="comment">% update dialog size</span>
+0085 object.make_room;
+0086 
+0087 <span class="comment">% handle output</span>
+0088 <span class="keyword">if</span> nargout&gt;=1
+0089     varargout{1}=h;
+0090 <span class="keyword">end</span>
+0091 
+0092 <span class="keyword">if</span> nargout&gt;=2
+0093     varargout{2}=minwidth;
+0094 <span class="keyword">end</span>
+0095 
+0096 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

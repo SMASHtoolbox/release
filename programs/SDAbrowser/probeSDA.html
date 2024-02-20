@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of probeSDA</title>
+  <meta name="keywords" content="probeSDA">
+  <meta name="description" content="probeSDA Reveal archive contents">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="index.html">SDAbrowser</a> &gt; probeSDA.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../index.html"><img alt="<" border="0" src="../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/SDAbrowser&nbsp;<img alt=">" border="0" src="../../../../right.png"></a></td></tr></table>-->
+
+<h1>probeSDA
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>probeSDA Reveal archive contents</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function varargout=probeSDA(filename) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> probeSDA Reveal archive contents
+
+ This function reveals the contents of a Sandia Data Archive (SDA) file.
+ When called with no output:
+    probeSDA(filename); 
+ the archive's contents are printed in the command window.  Specific
+ information from the archive is returned by requesting output.
+    [label,type,description,status]=probeSDA(filename);
+ 
+ See also <a href="readSDA.html" class="code" title="function varargout=readSDA(filename,record)">readSDA</a>, <a href="writeSDA.html" class="code" title="function writeSDA(filename,label,varargin)">writeSDA</a>, <a href="SDAbrowser.html" class="code" title="function varargout=SDAbrowser(filename)">SDAbrowser</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% probeSDA Reveal archive contents</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This function reveals the contents of a Sandia Data Archive (SDA) file.</span>
+0004 <span class="comment">% When called with no output:</span>
+0005 <span class="comment">%    probeSDA(filename);</span>
+0006 <span class="comment">% the archive's contents are printed in the command window.  Specific</span>
+0007 <span class="comment">% information from the archive is returned by requesting output.</span>
+0008 <span class="comment">%    [label,type,description,status]=probeSDA(filename);</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% See also readSDA, writeSDA, SDAbrowser</span>
+0011 <span class="comment">%</span>
+0012 
+0013 <span class="comment">%</span>
+0014 <span class="comment">% created February 3, 2017 by Daniel Dolan (Sandia National Laboratories)</span>
+0015 <span class="comment">%</span>
+0016 <a name="_sub0" href="#_subfunctions" class="code">function varargout=probeSDA(filename)</a>
+0017 
+0018 <span class="comment">% manage input</span>
+0019 assert(nargin &gt;= 1,<span class="string">'ERROR: no archive file specified'</span>);
+0020 <span class="keyword">try</span>
+0021     assert(exist(filename,<span class="string">'file'</span>) == 2,<span class="string">''</span>);
+0022     archive=SMASH.FileAccess.SDAfile(filename);
+0023 <span class="keyword">catch</span> 
+0024     error(<span class="string">'ERROR: invalid archive file'</span>);
+0025 <span class="keyword">end</span>
+0026 
+0027 <span class="comment">% probe file as requested</span>
+0028 <span class="keyword">if</span> nargout==0
+0029     probe(archive);
+0030 <span class="keyword">else</span>
+0031     varargout=cell(1,nargout);
+0032     [varargout{:}]=probe(archive);
+0033 <span class="keyword">end</span>
+0034 
+0035 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,139 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of calculate</title>
+  <meta name="keywords" content="calculate">
+  <meta name="description" content="calculate Calculate source signal">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="../../index.html">+SMASH</a> &gt; <a href="../index.html">+SignalAnalysis</a> &gt; <a href="index.html">@RedundantSignal</a> &gt; calculate.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+SignalAnalysis/@RedundantSignal&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>calculate
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>calculate Calculate source signal</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function object=calculate(object) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> calculate Calculate source signal
+
+ This method calculates the source signal from a set of redundant signals.
+    object=calculate(object);
+ The process begins with a reverse transformation, mapping measured data
+ to a set of equivalent signals.  These signals are combined by weighted
+ average using the following rules.
+    -Measurements at their min/max values (as specified by the Range
+    property) are assigned zero weight.
+    -Non-zero weights are scaled by the inverse square of the noise ratio
+    assocated with each measurement.
+    -Regions where all measurements have zero weight are assigned
+    the value NaN.
+ Calling this method updates the Source, Weight, and Status properties.
+
+ See also <a href="RedundantSignal.html" class="code" title="">RedundantSignal</a>, SMASH.SignalAnalysis.Signal,
+ SMASH.SignalAnalysis.SignalGroup</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="reset.html" class="code" title="function object=reset(object,source)">reset</a>	reset Reset measurement</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% calculate Calculate source signal</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This method calculates the source signal from a set of redundant signals.</span>
+0004 <span class="comment">%    object=calculate(object);</span>
+0005 <span class="comment">% The process begins with a reverse transformation, mapping measured data</span>
+0006 <span class="comment">% to a set of equivalent signals.  These signals are combined by weighted</span>
+0007 <span class="comment">% average using the following rules.</span>
+0008 <span class="comment">%    -Measurements at their min/max values (as specified by the Range</span>
+0009 <span class="comment">%    property) are assigned zero weight.</span>
+0010 <span class="comment">%    -Non-zero weights are scaled by the inverse square of the noise ratio</span>
+0011 <span class="comment">%    assocated with each measurement.</span>
+0012 <span class="comment">%    -Regions where all measurements have zero weight are assigned</span>
+0013 <span class="comment">%    the value NaN.</span>
+0014 <span class="comment">% Calling this method updates the Source, Weight, and Status properties.</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% See also RedundantSignal, SMASH.SignalAnalysis.Signal,</span>
+0017 <span class="comment">% SMASH.SignalAnalysis.SignalGroup</span>
+0018 <span class="comment">%</span>
+0019 
+0020 <span class="comment">%</span>
+0021 <span class="comment">% created February 1, 2019 by Daniel Dolan (Sandia National Laboratories)</span>
+0022 <span class="comment">%</span>
+0023 <a name="_sub0" href="#_subfunctions" class="code">function object=calculate(object)</a>
+0024 
+0025 noise=object.NoiseRatio;
+0026 
+0027 <span class="comment">% transform and weight measurements</span>
+0028 data=cell(object.NumberSignals,1);
+0029 [data{:}]=split(object.Measurement);
+0030 weight=data;
+0031 <span class="keyword">for</span> m=1:object.NumberSignals     
+0032     s=data{m}.Data;
+0033     w=repmat(1/noise(m).^2,size(s));
+0034     <span class="comment">% weighting based on *raw* measurements</span>
+0035     k=(s &lt;= object.Range(m,1)) | (s &gt;= object.Range(m,2));
+0036     w(k)=0;
+0037     <span class="comment">% manage inf and/or nan</span>
+0038     k=~isfinite(s);
+0039     w(k)=0;
+0040     s(k)=0;
+0041     <span class="comment">% transform measurements</span>
+0042     s=(s-object.Parameter(m,3))/object.Parameter(m,2);
+0043     <span class="comment">% time shifting</span>
+0044     data{m}=<a href="reset.html" class="code" title="function object=reset(object,source)">reset</a>(data{m},[],s);
+0045     data{m}=shift(data{m},-object.Parameter(m,1));
+0046     weight{m}=<a href="reset.html" class="code" title="function object=reset(object,source)">reset</a>(weight{m},[],w);
+0047     weight{m}=shift(weight{m},-object.Parameter(m,1));
+0048 <span class="keyword">end</span>
+0049 data=SMASH.SignalAnalysis.SignalGroup(data{:});
+0050 data.Legend=object.Measurement.Legend;
+0051 weight=SMASH.SignalAnalysis.SignalGroup(weight{:});
+0052 weight.Legend=object.Measurement.Legend;
+0053 
+0054 s=data.Data;
+0055 w=weight.Data;
+0056 w (w &lt; 1) = 0; <span class="comment">% eliminate clip artifacts from time shifting</span>
+0057 drop=isnan(w);
+0058 s(drop)=0;
+0059 w(drop)=0;
+0060 factor=sum(w,2);
+0061 factor(factor == 0)=1;
+0062 w=w./factor;
+0063 
+0064 s=sum(s.*w,2);
+0065 drop=(sum(w,2) == 0);
+0066 s(drop)=nan;
+0067 object.Source=SMASH.SignalAnalysis.Signal(data.Grid,s);
+0068 object.Status=<span class="string">'complete'</span>;
+0069 object.Weight=<a href="reset.html" class="code" title="function object=reset(object,source)">reset</a>(weight,[],w);
+0070 
+0071 object.Weight.DataLabel=<span class="string">'Weight'</span>;
+0072 object.Source.DataLabel=<span class="string">'Source'</span>;
+0073 
+0074 
+0075 
+0076 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,237 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of Panel</title>
+  <meta name="keywords" content="Panel">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../../../index.html">SMASHtoolbox</a> &gt; <a href="../../../../index.html">+SMASH</a> &gt; <a href="../../../index.html">+MUI</a> &gt; <a href="#">+GUILayout</a> &gt; <a href="../index.html">+uix</a> &gt; <a href="index.html">+mixin</a> &gt; Panel.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../../../index.html"><img alt="<" border="0" src="../../../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+MUI/+GUILayout/+uix/+mixin&nbsp;<img alt=">" border="0" src="../../../../../../../right.png"></a></td></tr></table>-->
+
+<h1>Panel
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../../../matlabicon.gif)">
+<li><a href="Panel.html" class="code" title="">Panel</a>	</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../../../matlabicon.gif)">
+<li><a href="Panel.html" class="code" title="">Panel</a>	</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function value = get.Selection( obj )</a></li><li><a href="#_sub2" class="code">function set.Selection( obj, value )</a></li><li><a href="#_sub3" class="code">function addChild( obj, child )</a></li><li><a href="#_sub4" class="code">function removeChild( obj, child )</a></li><li><a href="#_sub5" class="code">function reorder( obj, indices )</a></li><li><a href="#_sub6" class="code">function showSelection( obj )</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 classdef <a href="Panel.html" class="code" title="">Panel</a> &lt; uix.mixin.Container
+0002     <span class="comment">%uix.mixin.Panel  Panel mixin</span>
+0003     <span class="comment">%</span>
+0004     <span class="comment">%  uix.mixin.Panel is a mixin class used by panels to provide various</span>
+0005     <span class="comment">%  properties and template methods.</span>
+0006     
+0007     <span class="comment">%  Copyright 2009-2015 The MathWorks, Inc.</span>
+0008     <span class="comment">%  $Revision: 1435 $ $Date: 2016-11-17 17:50:34 +0000 (Thu, 17 Nov 2016) $</span>
+0009     
+0010     properties( Access = public, Dependent, AbortSet )
+0011         Selection <span class="comment">% selected contents</span>
+0012     <span class="keyword">end</span>
+0013     
+0014     properties( Access = protected )
+0015         Selection_ = 0 <span class="comment">% backing for Selection</span>
+0016     <span class="keyword">end</span>
+0017     
+0018     properties( Access = protected )
+0019         G1218142 = false <span class="comment">% bug flag</span>
+0020     <span class="keyword">end</span>
+0021     
+0022     events( NotifyAccess = protected )
+0023         SelectionChanged <span class="comment">% selection changed</span>
+0024     <span class="keyword">end</span>
+0025     
+0026     methods
+0027         
+0028         <a name="_sub0" href="#_subfunctions" class="code">function value = get.Selection( obj )</a>
+0029             
+0030             value = obj.Selection_;
+0031             
+0032         <span class="keyword">end</span> <span class="comment">% get.Selection</span>
+0033         
+0034         <a name="_sub1" href="#_subfunctions" class="code">function set.Selection( obj, value )</a>
+0035             
+0036             <span class="comment">% Check</span>
+0037             assert( isa( value, <span class="string">'double'</span> ), <span class="string">'uix:InvalidPropertyValue'</span>, <span class="keyword">...</span>
+0038                 <span class="string">'Property ''Selection'' must be of type double.'</span> )
+0039             assert( isequal( size( value ), [1 1] ), <span class="keyword">...</span>
+0040                 <span class="string">'uix:InvalidPropertyValue'</span>, <span class="keyword">...</span>
+0041                 <span class="string">'Property ''Selection'' must be scalar.'</span> )
+0042             assert( isreal( value ) &amp;&amp; rem( value, 1 ) == 0, <span class="keyword">...</span>
+0043                 <span class="string">'uix:InvalidPropertyValue'</span>, <span class="keyword">...</span>
+0044                 <span class="string">'Property ''Selection'' must be an integer.'</span> )
+0045             n = numel( obj.Contents_ );
+0046             <span class="keyword">if</span> n == 0
+0047                 assert( value == 0, <span class="string">'uix:InvalidPropertyValue'</span>, <span class="keyword">...</span>
+0048                     <span class="string">'Property ''Selection'' must be 0 for a container with no children.'</span> )
+0049             <span class="keyword">else</span>
+0050                 assert( value &gt;= 1 &amp;&amp; value &lt;= n, <span class="string">'uix:InvalidPropertyValue'</span>, <span class="keyword">...</span>
+0051                     <span class="string">'Property ''Selection'' must be between 1 and the number of children.'</span> )
+0052             <span class="keyword">end</span>
+0053             
+0054             <span class="comment">% Set</span>
+0055             oldSelection = obj.Selection_;
+0056             newSelection = value;
+0057             obj.Selection_ = newSelection;
+0058             
+0059             <span class="comment">% Show selected child</span>
+0060             obj.showSelection()
+0061             
+0062             <span class="comment">% Mark as dirty</span>
+0063             obj.Dirty = true;
+0064             
+0065             <span class="comment">% Raise event</span>
+0066             notify( obj, <span class="string">'SelectionChanged'</span>, <span class="keyword">...</span>
+0067                 uix.SelectionData( oldSelection, newSelection ) )
+0068             
+0069         <span class="keyword">end</span> <span class="comment">% set.Selection</span>
+0070         
+0071     <span class="keyword">end</span> <span class="comment">% accessors</span>
+0072     
+0073     methods( Access = protected )
+0074         
+0075         <a name="_sub2" href="#_subfunctions" class="code">function addChild( obj, child )</a>
+0076             
+0077             <span class="comment">% Check for bug</span>
+0078             <span class="keyword">if</span> verLessThan( <span class="string">'MATLAB'</span>, <span class="string">'8.5'</span> ) &amp;&amp; strcmp( child.Visible, <span class="string">'off'</span> )
+0079                 obj.G1218142 = true;
+0080             <span class="keyword">end</span>
+0081             
+0082             <span class="comment">% Select new content</span>
+0083             oldSelection = obj.Selection_;
+0084             newSelection = numel( obj.Contents_ ) + 1;
+0085             obj.Selection_ = newSelection;
+0086             
+0087             <span class="comment">% Call superclass method</span>
+0088             <a href="#_sub3" class="code" title="subfunction addChild( obj, child )">addChild</a>@uix.mixin.Container( obj, child )
+0089             
+0090             <span class="comment">% Show selected child</span>
+0091             obj.showSelection()
+0092             
+0093             <span class="comment">% Notify selection change</span>
+0094             obj.notify( <span class="string">'SelectionChanged'</span>, <span class="keyword">...</span>
+0095                 uix.SelectionData( oldSelection, newSelection ) )
+0096             
+0097         <span class="keyword">end</span> <span class="comment">% addChild</span>
+0098         
+0099         <a name="_sub3" href="#_subfunctions" class="code">function removeChild( obj, child )</a>
+0100             
+0101             <span class="comment">% Adjust selection if required</span>
+0102             contents = obj.Contents_;
+0103             index = find( contents == child );
+0104             oldSelection = obj.Selection_;
+0105             <span class="keyword">if</span> index &lt; oldSelection
+0106                 newSelection = oldSelection - 1;
+0107             <span class="keyword">elseif</span> index == oldSelection
+0108                 newSelection = min( oldSelection, numel( contents ) - 1 );
+0109             <span class="keyword">else</span> <span class="comment">% index &gt; oldSelection</span>
+0110                 newSelection = oldSelection;
+0111             <span class="keyword">end</span>
+0112             obj.Selection_ = newSelection;
+0113             
+0114             <span class="comment">% Call superclass method</span>
+0115             <a href="#_sub4" class="code" title="subfunction removeChild( obj, child )">removeChild</a>@uix.mixin.Container( obj, child )
+0116             
+0117             <span class="comment">% Show selected child</span>
+0118             obj.showSelection()
+0119             
+0120             <span class="comment">% Notify selection change</span>
+0121             <span class="keyword">if</span> oldSelection ~= newSelection
+0122                 obj.notify( <span class="string">'SelectionChanged'</span>, <span class="keyword">...</span>
+0123                     uix.SelectionData( oldSelection, newSelection ) )
+0124             <span class="keyword">end</span>
+0125             
+0126         <span class="keyword">end</span> <span class="comment">% removeChild</span>
+0127         
+0128         <a name="_sub4" href="#_subfunctions" class="code">function reorder( obj, indices )</a>
+0129             <span class="comment">%reorder  Reorder contents</span>
+0130             <span class="comment">%</span>
+0131             <span class="comment">%  c.reorder(i) reorders the container contents using indices</span>
+0132             <span class="comment">%  i, c.Contents = c.Contents(i).</span>
+0133             
+0134             <span class="comment">% Reorder</span>
+0135             selection = obj.Selection_;
+0136             <span class="keyword">if</span> selection ~= 0
+0137                 obj.Selection_ = find( indices == selection );
+0138             <span class="keyword">end</span>
+0139             
+0140             <span class="comment">% Call superclass method</span>
+0141             <a href="#_sub5" class="code" title="subfunction reorder( obj, indices )">reorder</a>@uix.mixin.Container( obj, indices )
+0142             
+0143         <span class="keyword">end</span> <span class="comment">% reorder</span>
+0144         
+0145         <a name="_sub5" href="#_subfunctions" class="code">function showSelection( obj )</a>
+0146             <span class="comment">%showSelection  Show selected child, hide the others</span>
+0147             <span class="comment">%</span>
+0148             <span class="comment">%  c.showSelection() shows the selected child of the container</span>
+0149             <span class="comment">%  c, and hides the others.</span>
+0150             
+0151             <span class="comment">% Set positions and visibility</span>
+0152             selection = obj.Selection_;
+0153             children = obj.Contents_;
+0154             <span class="keyword">for</span> ii = 1:numel( children )
+0155                 child = children(ii);
+0156                 <span class="keyword">if</span> ii == selection
+0157                     <span class="keyword">if</span> obj.G1218142
+0158                         warning( <span class="string">'uix:G1218142'</span>, <span class="keyword">...</span>
+0159                             <span class="string">'Selected child of %s is not visible due to bug G1218142.  The child will become visible at the next redraw.'</span>, <span class="keyword">...</span>
+0160                             class( obj ) )
+0161                         obj.G1218142 = false;
+0162                     <span class="keyword">else</span>
+0163                         child.Visible = <span class="string">'on'</span>;
+0164                     <span class="keyword">end</span>
+0165                     <span class="keyword">if</span> isa( child, <span class="string">'matlab.graphics.axis.Axes'</span> )
+0166                         child.ContentsVisible = <span class="string">'on'</span>;
+0167                     <span class="keyword">end</span>
+0168                 <span class="keyword">else</span>
+0169                     child.Visible = <span class="string">'off'</span>;
+0170                     <span class="keyword">if</span> isa( child, <span class="string">'matlab.graphics.axis.Axes'</span> )
+0171                         child.ContentsVisible = <span class="string">'off'</span>;
+0172                     <span class="keyword">end</span>
+0173                     <span class="comment">% As a remedy for g1100294, move off-screen too</span>
+0174                     margin = 1000;
+0175                     <span class="keyword">if</span> isa( child, <span class="string">'matlab.graphics.axis.Axes'</span> ) <span class="keyword">...</span>
+0176                             &amp;&amp; strcmp(child.ActivePositionProperty, <span class="string">'outerposition'</span> )
+0177                         child.OuterPosition(1) = -child.OuterPosition(3)-margin;
+0178                     <span class="keyword">else</span>
+0179                         child.Position(1) = -child.Position(3)-margin;
+0180                     <span class="keyword">end</span>
+0181                 <span class="keyword">end</span>
+0182             <span class="keyword">end</span>
+0183             
+0184         <span class="keyword">end</span> <span class="comment">% showSelection</span>
+0185         
+0186     <span class="keyword">end</span> <span class="comment">% template methods</span>
+0187     
+0188 <span class="keyword">end</span> <span class="comment">% classdef</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

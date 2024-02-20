@@ -1,0 +1,127 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of about_fringen</title>
+  <meta name="keywords" content="about_fringen">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">fringen</a> &gt; <a href="index.html">private</a> &gt; about_fringen.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/fringen/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>about_fringen
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function varargout=about_fringen(src,varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="fringenGUI.html" class="code" title="function fringenGUI(varargin)">fringenGUI</a>	</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function varargout=about_fringen(src,varargin)</a>
+0002 
+0003 mode=<span class="string">'window'</span>;
+0004 rootfig=ancestor(src,<span class="string">'figure'</span>);             
+0005 
+0006 name=<span class="string">'fringen (Fringe generator)'</span>;
+0007 codever=<span class="string">'0.3'</span>;
+0008 releasedate=<span class="string">'October 2010'</span>;
+0009 <span class="keyword">switch</span> mode
+0010     <span class="keyword">case</span> <span class="string">'name'</span>
+0011         varargout{1}=name;
+0012         varargout{2}=codever;
+0013         varargout{3}=releasedate;
+0014     <span class="keyword">otherwise</span>
+0015         <span class="comment">% generate window</span>
+0016         tag=<span class="string">'fringen_AboutScreen'</span>;
+0017         fig=findall(0,<span class="string">'Type'</span>,<span class="string">'figure'</span>,<span class="string">'Tag'</span>,tag);
+0018         <span class="keyword">if</span> isempty(fig);
+0019             fig=figure(<span class="string">'Name'</span>,name,<span class="string">'NumberTitle'</span>,<span class="string">'off'</span>,<span class="string">'Resize'</span>,<span class="string">'off'</span>,<span class="keyword">...</span>
+0020                 <span class="string">'Units'</span>,<span class="string">'pixels'</span>,<span class="string">'Menubar'</span>,<span class="string">'none'</span>,<span class="string">'Toolbar'</span>,<span class="string">'none'</span>,<span class="keyword">...</span>
+0021                 <span class="string">'Tag'</span>,tag,<span class="string">'Color'</span>,[1 1 1],<span class="keyword">...</span>
+0022                 <span class="string">'IntegerHandle'</span>,<span class="string">'off'</span>,<span class="string">'HandleVisibility'</span>,<span class="string">'Callback'</span>);
+0023         <span class="keyword">else</span>
+0024             figure(fig);
+0025             <span class="keyword">return</span>
+0026         <span class="keyword">end</span>        
+0027         <span class="comment">% render logo</span>
+0028         <span class="comment">%load SandiaLogo.mat</span>
+0029         [pathname,filename]=fileparts(mfilename(<span class="string">'fullpath'</span>));
+0030         filename=fullfile(pathname,<span class="string">'SandiaLogo.tiff'</span>);
+0031         SandiaLogo=imread(filename);
+0032         Ly=size(SandiaLogo,1);
+0033         Lx=size(SandiaLogo,2);
+0034         ha=axes(<span class="string">'Parent'</span>,fig);
+0035         imagesc(SandiaLogo,<span class="string">'Parent'</span>,ha);
+0036         axis(ha,<span class="string">'image'</span>);
+0037         axis(ha,<span class="string">'off'</span>);       
+0038         imsize=[Lx Ly];
+0039         set(ha,<span class="string">'Units'</span>,<span class="string">'pixels'</span>,<span class="string">'Position'</span>,[0 0 imsize]);
+0040         pos=get(ha,<span class="string">'Position'</span>);
+0041         
+0042         <span class="comment">% text description</span>
+0043         pos(1)=pos(1)+pos(3);
+0044         pos(3)=2*pos(3);
+0045         <span class="comment">%hc=custom_uicontrol(fig,'Style','text');</span>
+0046         hc=uicontrol(fig,<span class="string">'Style'</span>,<span class="string">'text'</span>);
+0047         set(hc,<span class="string">'Units'</span>,<span class="string">'pixels'</span>,<span class="string">'Position'</span>,pos);
+0048         message={};
+0049         message{end+1}=<span class="string">'This program calculates VISAR and PDV signals for a specified velocity history.'</span>;
+0050       
+0051         message{end+1}=<span class="string">''</span>;
+0052         message{end+1}=sprintf(<span class="string">'version %s (%s)'</span>,codever,releasedate);
+0053         message{end+1}=<span class="string">'created by Daniel Dolan'</span>;
+0054         message{end+2}=<span class="string">''</span>;
+0055         message=textwrap(hc,message);
+0056         set(hc,<span class="string">'String'</span>,message);
+0057         extent=get(hc,<span class="string">'Extent'</span>);
+0058         pos(4)=extent(4);
+0059         set(hc,<span class="string">'Position'</span>,pos);
+0060         set(hc,<span class="string">'BackgroundColor'</span>,get(fig,<span class="string">'Color'</span>));
+0061         
+0062         <span class="comment">% size the window</span>
+0063         figpos=get(fig,<span class="string">'Position'</span>);
+0064         figpos(3)=pos(1)+pos(3);
+0065         figpos(4)=pos(4);        
+0066         set(fig,<span class="string">'Position'</span>,figpos);        
+0067         <span class="keyword">if</span> ishandle(rootfig)
+0068             units=get(rootfig,<span class="string">'Units'</span>);
+0069             set(rootfig,<span class="string">'Units'</span>,<span class="string">'pixels'</span>);
+0070             rootpos=get(rootfig,<span class="string">'Position'</span>);
+0071             figpos(1)=rootpos(1)+(rootpos(3)-figpos(3))/2;
+0072             figpos(2)=rootpos(2)+(rootpos(4)-figpos(4))/2;
+0073             set(fig,<span class="string">'Position'</span>,figpos,<span class="string">'Units'</span>,units);
+0074         <span class="keyword">end</span>
+0075         
+0076         <span class="comment">% reposition the logo</span>
+0077         pos=get(ha,<span class="string">'Position'</span>);
+0078         pos(2)=figpos(4)-pos(4);
+0079         set(ha,<span class="string">'Position'</span>,pos);
+0080 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

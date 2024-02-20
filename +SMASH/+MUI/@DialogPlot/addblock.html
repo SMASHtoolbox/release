@@ -1,0 +1,280 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of addblock</title>
+  <meta name="keywords" content="addblock">
+  <meta name="description" content="addblock Add control block">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="../../index.html">+SMASH</a> &gt; <a href="../index.html">+MUI</a> &gt; <a href="index.html">@DialogPlot</a> &gt; addblock.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+MUI/@DialogPlot&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>addblock
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>addblock Add control block</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function varargout=addblock(object,varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> addblock Add control block
+
+ This method adds control blocks to a dialog plot.  Each block is a
+ set of controls (uicontrols) that are added to the dialog box
+ sequentially, with the first block at the top and the last block at the
+ bottom.  The dialog box is automatically resized to accomodate all
+ control blocks as they are added.
+ 
+ The general syntax for this method is:
+    &gt;&gt; addblock(object,style,label,...);
+ where the first two inputs (object and style) are mandatory).  Valid
+ styles include 'text', 'edit', 'medit','button', 'toggle', 'check', 'radio',
+ 'popup', 'listbox', 'edit_button', and 'edit_check'.  The third input,
+ 'label', is generally recommended but optional.  Labels placement depends
+ on the block style.
+   -Labels are placed inside 'text', 'button', and 'toggle' controls.
+   -Labels are placed above 'edit', 'medit', 'popup', and 'listbox' controls.
+   -Labels are placed next to 'check' and 'radio' controls (system dependent)
+ Multiple labels may be specified for 'edit_button' and 'edit_check'
+ blocks, each adhering to the above policy.
+ 
+ The simplest control block is 'text':
+    &gt;&gt; h=addblock(object,'text','Here is some text',[minwidth]);
+ which adds a single line of text to the dialog box.  By default, the
+ minimum width of the text box is determined from the label, but a minimum
+ width (in characters) can be specified as an optional input.  The output
+ variable &quot;h&quot; is graphic handle to the actual uicontrol.
+
+ A similar syntax is used for 'edit' blocks.
+    &gt;&gt; h=addblock(object,'edit','Parameter: ',[minwidth]);
+ The label 'Parameter: ' is placed *above* an empty edit box, the width of
+ which is determined from the text label and &quot;minwidth&quot;.  The output now
+ contains two handles, one for the text label and the other for the edit
+ box.  To create multi-line edit blocks, use 'medit'.
+    &gt;&gt; h=addblock(object,'medit','Parameter: ',minwidth,height);
+
+ Push buttons, toggle buttons, check boxes, and radio buttons can be
+ created individually:
+    &gt;&gt; addblock(object,'toggle',' Auto scale ');
+    &gt;&gt; addblock(object,'check',' Auto scale ',[minwidth]);
+    &gt;&gt; addblock(object,'radio',' Auto scale ',[minwidth]);
+ or as part of a group.
+    &gt;&gt; h=addblock(object,'button',{' Apply ',' Close '}); % cell array label
+ A single button/box per row is created in the first three examples, while
+ the fourth example creates two buttons on the same row.  The width of
+ each item is controlled by the label and a single minimum width
+ specification (if present).  Additional white space in the label, as
+ shown above, typically makes the label more visually pleasing across
+ different computer systems.
+
+ Popup and listbox blocks accept an additional parameter for &quot;choices&quot;
+ that are to be displayed.
+    &gt;&gt; addblock(object,'popup',label,choices,[minwidth]);
+    &gt;&gt; addblock(object,'listbox',label,choices,[mindwidth]);
+ Choices should be specified as a cell array of text entries, such as 
+ {'A' 'B' 'C'}.  Like all other blocks, a minimum width can be specified
+ as the final input.
+
+ Composite blocks provide an edit box next to a control.
+    &gt;&gt; addblock(object,'edit_button',label,[minwidth]);
+    &gt;&gt; h=addblock(object,'edit_check',label,[minwidth]);
+ These blocks contain a text label, an empty edit box below the label, and
+ a button or check box to the right of the edit box.  The &quot;label&quot; input
+ should be a cell array with two text entries: the first appears above the
+ edit box and the second appears to the right of the edit box.
+
+ A composite block is also provided for a popup next to a push button
+ control.
+     &gt;&gt; h=addblock(object,'popup_button',label,choices,[minwidth]);
+ In this case, the label should be a two-element cell array; the first
+ element is the text label and the second element is the button label.
+
+ Table blocks allow for flexible display and interaction.
+     &gt;&gt; h=addblock(object,'table',label,[minwidth],[rows]);
+ The input &quot;label&quot; (cell array) defines the number of table columns and
+ their text labels.  For example, {'A' 'B' 'C'} generates a three-column
+ table with the labels 'A', 'B', and 'C'.  The optional input &quot;minwidth&quot;
+ defines the minimum character width for each column.
+     -A scalar indicates a common mimimum width for all columns.  Passing
+     a vector specifies a particular minimum width for each column.
+     -Columns are always sized to fit their label.  Any minimum width
+     smaller than the label width is ignored.
+ The optional input &quot;rows&quot; indicates the number of displayed table rows.
+
+ NOTE: single-line edit blocks support a fourth input that omits the text
+ label above the edit box.
+    &gt;&gt; addblock(object,'edit','',minwidth,'skiplabel');
+    &gt;&gt; h=addblock(object,'edit','',minwidth,'skiplabel');
+ In the second example, the first element of the output &quot;h&quot; is NaN,
+ indicating that no text box was created.  Labels can also be suppressed
+ in composite text boxes (button/check).
+
+ See also <a href="DialogPlot.html" class="code" title="">DialogPlot</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="addblock.html" class="code" title="function varargout=addblock(object,varargin)">addblock</a>	addblock Add control block</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="addblock.html" class="code" title="function varargout=addblock(object,varargin)">addblock</a>	addblock Add control block</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% addblock Add control block</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This method adds control blocks to a dialog plot.  Each block is a</span>
+0004 <span class="comment">% set of controls (uicontrols) that are added to the dialog box</span>
+0005 <span class="comment">% sequentially, with the first block at the top and the last block at the</span>
+0006 <span class="comment">% bottom.  The dialog box is automatically resized to accomodate all</span>
+0007 <span class="comment">% control blocks as they are added.</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% The general syntax for this method is:</span>
+0010 <span class="comment">%    &gt;&gt; addblock(object,style,label,...);</span>
+0011 <span class="comment">% where the first two inputs (object and style) are mandatory).  Valid</span>
+0012 <span class="comment">% styles include 'text', 'edit', 'medit','button', 'toggle', 'check', 'radio',</span>
+0013 <span class="comment">% 'popup', 'listbox', 'edit_button', and 'edit_check'.  The third input,</span>
+0014 <span class="comment">% 'label', is generally recommended but optional.  Labels placement depends</span>
+0015 <span class="comment">% on the block style.</span>
+0016 <span class="comment">%   -Labels are placed inside 'text', 'button', and 'toggle' controls.</span>
+0017 <span class="comment">%   -Labels are placed above 'edit', 'medit', 'popup', and 'listbox' controls.</span>
+0018 <span class="comment">%   -Labels are placed next to 'check' and 'radio' controls (system dependent)</span>
+0019 <span class="comment">% Multiple labels may be specified for 'edit_button' and 'edit_check'</span>
+0020 <span class="comment">% blocks, each adhering to the above policy.</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">% The simplest control block is 'text':</span>
+0023 <span class="comment">%    &gt;&gt; h=addblock(object,'text','Here is some text',[minwidth]);</span>
+0024 <span class="comment">% which adds a single line of text to the dialog box.  By default, the</span>
+0025 <span class="comment">% minimum width of the text box is determined from the label, but a minimum</span>
+0026 <span class="comment">% width (in characters) can be specified as an optional input.  The output</span>
+0027 <span class="comment">% variable &quot;h&quot; is graphic handle to the actual uicontrol.</span>
+0028 <span class="comment">%</span>
+0029 <span class="comment">% A similar syntax is used for 'edit' blocks.</span>
+0030 <span class="comment">%    &gt;&gt; h=addblock(object,'edit','Parameter: ',[minwidth]);</span>
+0031 <span class="comment">% The label 'Parameter: ' is placed *above* an empty edit box, the width of</span>
+0032 <span class="comment">% which is determined from the text label and &quot;minwidth&quot;.  The output now</span>
+0033 <span class="comment">% contains two handles, one for the text label and the other for the edit</span>
+0034 <span class="comment">% box.  To create multi-line edit blocks, use 'medit'.</span>
+0035 <span class="comment">%    &gt;&gt; h=addblock(object,'medit','Parameter: ',minwidth,height);</span>
+0036 <span class="comment">%</span>
+0037 <span class="comment">% Push buttons, toggle buttons, check boxes, and radio buttons can be</span>
+0038 <span class="comment">% created individually:</span>
+0039 <span class="comment">%    &gt;&gt; addblock(object,'toggle',' Auto scale ');</span>
+0040 <span class="comment">%    &gt;&gt; addblock(object,'check',' Auto scale ',[minwidth]);</span>
+0041 <span class="comment">%    &gt;&gt; addblock(object,'radio',' Auto scale ',[minwidth]);</span>
+0042 <span class="comment">% or as part of a group.</span>
+0043 <span class="comment">%    &gt;&gt; h=addblock(object,'button',{' Apply ',' Close '}); % cell array label</span>
+0044 <span class="comment">% A single button/box per row is created in the first three examples, while</span>
+0045 <span class="comment">% the fourth example creates two buttons on the same row.  The width of</span>
+0046 <span class="comment">% each item is controlled by the label and a single minimum width</span>
+0047 <span class="comment">% specification (if present).  Additional white space in the label, as</span>
+0048 <span class="comment">% shown above, typically makes the label more visually pleasing across</span>
+0049 <span class="comment">% different computer systems.</span>
+0050 <span class="comment">%</span>
+0051 <span class="comment">% Popup and listbox blocks accept an additional parameter for &quot;choices&quot;</span>
+0052 <span class="comment">% that are to be displayed.</span>
+0053 <span class="comment">%    &gt;&gt; addblock(object,'popup',label,choices,[minwidth]);</span>
+0054 <span class="comment">%    &gt;&gt; addblock(object,'listbox',label,choices,[mindwidth]);</span>
+0055 <span class="comment">% Choices should be specified as a cell array of text entries, such as</span>
+0056 <span class="comment">% {'A' 'B' 'C'}.  Like all other blocks, a minimum width can be specified</span>
+0057 <span class="comment">% as the final input.</span>
+0058 <span class="comment">%</span>
+0059 <span class="comment">% Composite blocks provide an edit box next to a control.</span>
+0060 <span class="comment">%    &gt;&gt; addblock(object,'edit_button',label,[minwidth]);</span>
+0061 <span class="comment">%    &gt;&gt; h=addblock(object,'edit_check',label,[minwidth]);</span>
+0062 <span class="comment">% These blocks contain a text label, an empty edit box below the label, and</span>
+0063 <span class="comment">% a button or check box to the right of the edit box.  The &quot;label&quot; input</span>
+0064 <span class="comment">% should be a cell array with two text entries: the first appears above the</span>
+0065 <span class="comment">% edit box and the second appears to the right of the edit box.</span>
+0066 <span class="comment">%</span>
+0067 <span class="comment">% A composite block is also provided for a popup next to a push button</span>
+0068 <span class="comment">% control.</span>
+0069 <span class="comment">%     &gt;&gt; h=addblock(object,'popup_button',label,choices,[minwidth]);</span>
+0070 <span class="comment">% In this case, the label should be a two-element cell array; the first</span>
+0071 <span class="comment">% element is the text label and the second element is the button label.</span>
+0072 <span class="comment">%</span>
+0073 <span class="comment">% Table blocks allow for flexible display and interaction.</span>
+0074 <span class="comment">%     &gt;&gt; h=addblock(object,'table',label,[minwidth],[rows]);</span>
+0075 <span class="comment">% The input &quot;label&quot; (cell array) defines the number of table columns and</span>
+0076 <span class="comment">% their text labels.  For example, {'A' 'B' 'C'} generates a three-column</span>
+0077 <span class="comment">% table with the labels 'A', 'B', and 'C'.  The optional input &quot;minwidth&quot;</span>
+0078 <span class="comment">% defines the minimum character width for each column.</span>
+0079 <span class="comment">%     -A scalar indicates a common mimimum width for all columns.  Passing</span>
+0080 <span class="comment">%     a vector specifies a particular minimum width for each column.</span>
+0081 <span class="comment">%     -Columns are always sized to fit their label.  Any minimum width</span>
+0082 <span class="comment">%     smaller than the label width is ignored.</span>
+0083 <span class="comment">% The optional input &quot;rows&quot; indicates the number of displayed table rows.</span>
+0084 <span class="comment">%</span>
+0085 <span class="comment">% NOTE: single-line edit blocks support a fourth input that omits the text</span>
+0086 <span class="comment">% label above the edit box.</span>
+0087 <span class="comment">%    &gt;&gt; addblock(object,'edit','',minwidth,'skiplabel');</span>
+0088 <span class="comment">%    &gt;&gt; h=addblock(object,'edit','',minwidth,'skiplabel');</span>
+0089 <span class="comment">% In the second example, the first element of the output &quot;h&quot; is NaN,</span>
+0090 <span class="comment">% indicating that no text box was created.  Labels can also be suppressed</span>
+0091 <span class="comment">% in composite text boxes (button/check).</span>
+0092 <span class="comment">%</span>
+0093 <span class="comment">% See also DialogPlot</span>
+0094 <span class="comment">%</span>
+0095 
+0096 <span class="comment">%</span>
+0097 <span class="comment">% created April 2, 2017 by Daniel Dolan (Sandia National Laboratories)</span>
+0098 <span class="comment">%</span>
+0099 <a name="_sub0" href="#_subfunctions" class="code">function varargout=addblock(object,varargin)</a>
+0100 
+0101 assert(~object.Locked,<span class="string">'ERROR: block cannot be added to a finished dialog'</span>);
+0102 
+0103 h=<a href="addblock.html" class="code" title="function varargout=addblock(object,varargin)">addblock</a>(object.DialogBox,varargin{:});
+0104 N=numel(h);
+0105 new=nan(N,1);
+0106 <span class="keyword">for</span> n=1:N
+0107     new(n)=copyobj(h(n),object.ControlPanel);
+0108 <span class="keyword">end</span>
+0109 
+0110 set(object.ControlPanel,<span class="string">'Units'</span>,<span class="string">'pixels'</span>);
+0111 PanelPosition=get(object.ControlPanel,<span class="string">'Position'</span>);
+0112 DialogPosition=get(object.DialogBox.Handle,<span class="string">'Position'</span>);
+0113 PanelPosition(3:4)=DialogPosition(3:4);
+0114 set(object.ControlPanel,<span class="string">'Position'</span>,PanelPosition);
+0115 
+0116 <span class="keyword">try</span>
+0117     feval(get(object.Figure,<span class="string">'SizeChangedFcn'</span>));
+0118 <span class="keyword">catch</span>
+0119     feval(get(object.Figure,<span class="string">'ResizeFcn'</span>));
+0120 <span class="keyword">end</span>
+0121 
+0122 <span class="keyword">for</span> n=1:numel(h)
+0123     setappdata(h(n),<span class="string">'Copy'</span>,new(n));
+0124     setappdata(new(n),<span class="string">'Source'</span>,h(n));
+0125 <span class="keyword">end</span>
+0126 
+0127 copy=get(object.ControlPanel,<span class="string">'Children'</span>);
+0128 <span class="keyword">for</span> n=1:numel(copy)
+0129     source=getappdata(copy(n),<span class="string">'Source'</span>);    
+0130     set(copy(n),<span class="keyword">...</span>
+0131         <span class="string">'Position'</span>,get(source,<span class="string">'Position'</span>),<span class="keyword">...</span>
+0132         <span class="string">'FontSize'</span>,get(source,<span class="string">'FontSize'</span>));
+0133 <span class="keyword">end</span>
+0134 
+0135 
+0136 
+0137 <span class="keyword">if</span> nargin &gt; 0
+0138    varargout{1}=new;
+0139 <span class="keyword">end</span>
+0140 
+0141 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

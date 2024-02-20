@@ -1,0 +1,287 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of ROIstatistics</title>
+  <meta name="keywords" content="ROIstatistics">
+  <meta name="description" content="ROIstatistics : activate region of interest statistics for a figure">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../../index.html">SMASHtoolbox</a> &gt; <a href="../../../index.html">+SMASH</a> &gt; <a href="../../index.html">+MUI</a> &gt; <a href="../index.html">@Figure</a> &gt; <a href="index.html">old</a> &gt; ROIstatistics.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../../index.html"><img alt="<" border="0" src="../../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+MUI/@Figure/old&nbsp;<img alt=">" border="0" src="../../../../../../right.png"></a></td></tr></table>-->
+
+<h1>ROIstatistics
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>ROIstatistics : activate region of interest statistics for a figure</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>function ROIstatistics(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> ROIstatistics : activate region of interest statistics for a figure
+
+ This function permits auto scaling of select axes objects within a
+ figure.  When active, clicking on an axes causes that axes to be auto
+ scaled; if the figure contains a single axes, it is auto scaled
+ immediately.  The figure pointer is changed to a crosshair while
+ auto scaling is active.
+
+ Usage:
+  &gt;&gt; autoscale on; % activate auto scaling on current figure
+  &gt;&gt; autoscale off; % deactivate auto scaling on current figure
+  &gt;&gt; autoscale(fig,state); % set auto scale state for a specified figure</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="autoscale.html" class="code" title="function autoscale(fig,state)">autoscale</a>	handle input</li><li><a href="clone.html" class="code" title="function clone(varargin)">clone</a>	clone : selectively clone axes to its own figure</li><li><a href="manualscale.html" class="code" title="function manualscale(varargin)">manualscale</a>	manualscale : selective manual scaling for a figure</li><li><a href="tightscale.html" class="code" title="function tightscale(varargin)">tightscale</a>	tightscale : selective tight scaling for a figure</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="MinimalFigure.html" class="code" title="function varargout=MinimalFigure(varargin)">MinimalFigure</a>	MinimalFigure: create a minimalistic figure useful for GUIs</li><li><a href="WindowButton.html" class="code" title="function WindowButton(fig,operation)">WindowButton</a>	WindowButton : store/reset window button state and pointers</li><li><a href="clone.html" class="code" title="function clone(varargin)">clone</a>	clone : selectively clone axes to its own figure</li><li><a href="figure_old.html" class="code" title="function varargout=figure(varargin)">figure_old</a>	mui.figure : create a MUI figure</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function callback(varargin)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% ROIstatistics : activate region of interest statistics for a figure</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This function permits auto scaling of select axes objects within a</span>
+0004 <span class="comment">% figure.  When active, clicking on an axes causes that axes to be auto</span>
+0005 <span class="comment">% scaled; if the figure contains a single axes, it is auto scaled</span>
+0006 <span class="comment">% immediately.  The figure pointer is changed to a crosshair while</span>
+0007 <span class="comment">% auto scaling is active.</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% Usage:</span>
+0010 <span class="comment">%  &gt;&gt; autoscale on; % activate auto scaling on current figure</span>
+0011 <span class="comment">%  &gt;&gt; autoscale off; % deactivate auto scaling on current figure</span>
+0012 <span class="comment">%  &gt;&gt; autoscale(fig,state); % set auto scale state for a specified figure</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">%</span>
+0015 
+0016 <span class="comment">% created May 16, 2012 by Daniel Dolan (Sandia National Laboratories)</span>
+0017 <a name="_sub0" href="#_subfunctions" class="code">function ROIstatistics(varargin)</a>
+0018 
+0019 <span class="comment">% handle input</span>
+0020 <span class="keyword">switch</span> nargin
+0021     <span class="keyword">case</span> 0
+0022         error(<span class="string">'ERROR: no state specified'</span>);
+0023     <span class="keyword">case</span> 1
+0024         fig=gcf;
+0025         state=varargin{1};
+0026     <span class="keyword">case</span> 2
+0027         fig=varargin{1};
+0028         state=varargin{2};
+0029 <span class="keyword">end</span>
+0030 
+0031 <span class="comment">% determine if more than one axes is present</span>
+0032 haxes=findobj(fig,<span class="string">'Type'</span>,<span class="string">'axes'</span>);
+0033 <span class="keyword">if</span> numel(haxes)==1
+0034     axis(haxes,<span class="string">'auto'</span>);
+0035     <span class="keyword">return</span>
+0036 <span class="keyword">end</span>
+0037 
+0038 field={<span class="keyword">...</span>
+0039     <span class="string">'Pointer'</span> <span class="string">'PointerShapeCData'</span> <span class="string">'PointerShapeHotSpot'</span> <span class="keyword">...</span>
+0040     <span class="string">'WindowButtonDownFcn'</span> <span class="string">'WindowButtonUpFcn'</span> <span class="string">'WindowButtonMotionFcn'</span>
+0041     };
+0042 <span class="keyword">switch</span> lower(state)
+0043     <span class="keyword">case</span> <span class="string">'on'</span>
+0044         zoom(fig,<span class="string">'off'</span>);
+0045         pan(fig,<span class="string">'off'</span>);
+0046         datacursormode(fig,<span class="string">'off'</span>);
+0047         rotate3d(fig,<span class="string">'off'</span>);
+0048         brush(fig,<span class="string">'off'</span>);  
+0049         <a href="autoscale.html" class="code" title="function autoscale(fig,state)">autoscale</a>(fig,<span class="string">'off'</span>);
+0050         <a href="tightscale.html" class="code" title="function tightscale(varargin)">tightscale</a>(fig,<span class="string">'off'</span>);
+0051         <a href="manualscale.html" class="code" title="function manualscale(varargin)">manualscale</a>(fig,<span class="string">'off'</span>);
+0052         <a href="clone.html" class="code" title="function clone(varargin)">clone</a>(fig,<span class="string">'off'</span>);
+0053         <span class="keyword">for</span> n=1:numel(field)
+0054             setappdata(fig,field{n},get(fig,field{n}));
+0055         <span class="keyword">end</span>
+0056         set(fig,<span class="string">'Pointer'</span>,<span class="string">'crosshair'</span>,<span class="keyword">...</span>
+0057             <span class="string">'WindowButtonDownFcn'</span>,@<a href="#_sub1" class="code" title="subfunction callback(varargin)">callback</a>,<span class="keyword">...</span>
+0058             <span class="string">'WindowButtonUpFcn'</span>,<span class="string">''</span>,<span class="keyword">...</span>
+0059             <span class="string">'WindowButtonMotionFcn'</span>,<span class="string">''</span>);
+0060     <span class="keyword">case</span> <span class="string">'off'</span>
+0061         <span class="keyword">if</span> ~isappdata(fig,<span class="string">'Pointer'</span>)
+0062             <span class="keyword">return</span>
+0063         <span class="keyword">end</span>
+0064         <span class="keyword">for</span> n=1:numel(field)
+0065             set(fig,field{n},getappdata(fig,field{n}));
+0066         <span class="keyword">end</span>
+0067         hr=findobj(fig,<span class="string">'Tag'</span>,<span class="string">'ROIstatisticsBox'</span>);
+0068         delete(hr);
+0069     <span class="keyword">otherwise</span>
+0070         error(<span class="string">'ERROR: %s is an invalid auto scale state'</span>,mode);
+0071 <span class="keyword">end</span>    
+0072 
+0073 <span class="keyword">end</span>
+0074 
+0075 <a name="_sub1" href="#_subfunctions" class="code">function callback(varargin)</a>
+0076 
+0077 <span class="comment">% verify click occured on an axes object</span>
+0078 fig=gcbf;
+0079 ha=get(fig,<span class="string">'CurrentAxes'</span>);
+0080 hc=get(fig,<span class="string">'CurrentObject'</span>);
+0081 hc=ancestor(hc,<span class="string">'axes'</span>);
+0082 <span class="keyword">if</span> ha~=hc
+0083     <span class="keyword">return</span>
+0084 <span class="keyword">end</span>
+0085 
+0086 <span class="comment">% create ROI</span>
+0087 selection=get(fig,<span class="string">'SelectionType'</span>);
+0088 <span class="keyword">if</span> ~strcmpi(selection,<span class="string">'normal'</span>)
+0089     <span class="keyword">return</span>
+0090 <span class="keyword">end</span>
+0091 
+0092 hr=findobj(ha,<span class="string">'Tag'</span>,<span class="string">'ROIstatisticsBox'</span>);
+0093 <span class="keyword">if</span> ishandle(hr)
+0094     delete(hr);
+0095 <span class="keyword">end</span>
+0096 
+0097 point1=get(ha,<span class="string">'CurrentPoint'</span>);
+0098 rbbox;
+0099 point2=get(ha,<span class="string">'CurrentPoint'</span>);
+0100 x=[point1(1,1) point2(1,1)];
+0101 y=[point1(1,2) point2(1,2)];
+0102 <span class="keyword">if</span> (diff(x)==0) || (diff(y)==0) <span class="comment">% user made a zero area rectangle</span>
+0103     <span class="keyword">return</span>
+0104 <span class="keyword">end</span>
+0105 xmin=min(x);
+0106 xmax=max(x);
+0107 ymin=min(y);
+0108 ymax=max(y);
+0109 rectangle(<span class="string">'Parent'</span>,ha,<span class="string">'Position'</span>,[xmin ymin xmax-xmin ymax-ymin],<span class="keyword">...</span>
+0110     <span class="string">'LineStyle'</span>,<span class="string">'--'</span>,<span class="string">'Tag'</span>,<span class="string">'ROIstatisticsBox'</span>);
+0111 
+0112 <span class="comment">% extract data</span>
+0113 hc=findobj(ha,<span class="string">'Type'</span>,<span class="string">'line'</span>,<span class="string">'-or'</span>,<span class="string">'Type'</span>,<span class="string">'image'</span>);
+0114 N=numel(hc);
+0115 <span class="keyword">for</span> ii=N:-1:1 
+0116     <span class="keyword">if</span> strcmp(get(hc(ii),<span class="string">'Visible'</span>),<span class="string">'off'</span>)
+0117         <span class="keyword">continue</span>
+0118     <span class="keyword">end</span>    
+0119     x=get(hc(ii),<span class="string">'XData'</span>);
+0120     y=get(hc(ii),<span class="string">'YData'</span>);
+0121     label={};
+0122     label{end+1}=sprintf(<span class="string">' Horizontal range: %+g to %+g '</span>,xmin,xmax);
+0123     label{end+1}=sprintf(<span class="string">' Vertical range: %+g to %+g '</span>,ymin,ymax);
+0124     <span class="keyword">switch</span> get(hc(ii),<span class="string">'Type'</span>)
+0125         <span class="keyword">case</span> <span class="string">'line'</span>
+0126             <span class="comment">% check for data inside ROI</span>
+0127             k=(x&gt;=xmin)&amp;(x&lt;=xmax)&amp;(y&gt;=ymin)&amp;(y&lt;=ymax);
+0128             <span class="keyword">if</span> ~any(k)
+0129                 <span class="keyword">continue</span>
+0130             <span class="keyword">end</span>
+0131             x=x(k);
+0132             y=y(k);
+0133             <span class="comment">% create ROI report</span>
+0134             fig=figure(<span class="string">'NumberTitle'</span>,<span class="string">'off'</span>,<span class="string">'Name'</span>,<span class="string">'ROI line statistics'</span>,<span class="keyword">...</span>
+0135                 <span class="string">'IntegerHandle'</span>,<span class="string">'off'</span>,<span class="string">'HandleVisibility'</span>,<span class="string">'callback'</span>,<span class="keyword">...</span>
+0136                 <span class="string">'Tag'</span>,<span class="string">'MinimalFigure:ROIstatistics'</span>,<span class="keyword">...</span>
+0137                 <span class="string">'Toolbar'</span>,<span class="string">'none'</span>,<span class="string">'Menubar'</span>,<span class="string">'none'</span>,<span class="string">'DockControls'</span>,<span class="string">'off'</span>,<span class="keyword">...</span>
+0138                 <span class="string">'Units'</span>,<span class="string">'pixels'</span>,<span class="string">'Resize'</span>,<span class="string">'off'</span>);
+0139             ha=axes(<span class="string">'Parent'</span>,fig,<span class="string">'Box'</span>,<span class="string">'on'</span>,<span class="string">'Units'</span>,<span class="string">'pixels'</span>,<span class="keyword">...</span>
+0140                 <span class="string">'XTick'</span>,[],<span class="string">'YTick'</span>,[]);
+0141             hl=line(<span class="string">'Parent'</span>,ha,<span class="string">'XData'</span>,x,<span class="string">'YData'</span>,y);
+0142             linkprop([hc(ii) hl],{<span class="string">'Color'</span>,<span class="string">'LineWidth'</span>,<span class="string">'LineStyle'</span>,<span class="string">'Marker'</span>});            
+0143             label{end+1}=<span class="string">''</span>;
+0144             label{end+1}=sprintf(<span class="string">' Horizontal mean: %+g '</span>,mean(x));
+0145             label{end+1}=sprintf(<span class="string">' Horizontal deviation: %+g '</span>,std(x));
+0146             label{end+1}=<span class="string">''</span>;
+0147             label{end+1}=sprintf(<span class="string">' Vertical mean: %+g '</span>,mean(y));
+0148             label{end+1}=sprintf(<span class="string">' Vertical deviation: %+g '</span>,std(y));
+0149             <span class="comment">%a=polyfit(x(k),y(k),1);</span>
+0150             <span class="comment">%label{end+1}=sprintf('Slope: %+g',a(1));</span>
+0151         <span class="keyword">case</span> <span class="string">'image'</span>
+0152             <span class="comment">% check for data inside ROI</span>
+0153             z=get(hc(ii),<span class="string">'CData'</span>);
+0154             [M,N]=size(z);
+0155             x=linspace(x(1),x(end),N);
+0156             y=linspace(y(1),y(end),M);
+0157             kx=(x&gt;=xmin)&amp;(x&lt;=xmax);
+0158             <span class="keyword">if</span> ~any(kx)
+0159                 <span class="keyword">continue</span>
+0160             <span class="keyword">end</span>
+0161             ky=(y&gt;=ymin)&amp;(y&lt;=ymax);
+0162             <span class="keyword">if</span> ~any(ky)
+0163                 <span class="keyword">continue</span>
+0164             <span class="keyword">end</span>
+0165             x=x(kx);
+0166             y=y(ky);
+0167             z=z(ky,kx);
+0168             <span class="keyword">if</span> any(size(z)&lt;1)
+0169                 <span class="keyword">continue</span>
+0170             <span class="keyword">end</span>
+0171             <span class="comment">% create ROI report</span>
+0172             fig=figure(<span class="string">'NumberTitle'</span>,<span class="string">'off'</span>,<span class="string">'Name'</span>,<span class="string">'ROI image statistics'</span>,<span class="keyword">...</span>
+0173                 <span class="string">'IntegerHandle'</span>,<span class="string">'off'</span>,<span class="string">'HandleVisibility'</span>,<span class="string">'callback'</span>,<span class="keyword">...</span>
+0174                 <span class="string">'Tag'</span>,<span class="string">'MinimalFigure:ROIstatistics'</span>,<span class="keyword">...</span>
+0175                 <span class="string">'Toolbar'</span>,<span class="string">'none'</span>,<span class="string">'Menubar'</span>,<span class="string">'none'</span>,<span class="string">'DockControls'</span>,<span class="string">'off'</span>,<span class="keyword">...</span>
+0176                 <span class="string">'Units'</span>,<span class="string">'pixels'</span>,<span class="string">'Resize'</span>,<span class="string">'off'</span>);
+0177             src_fig=ancestor(hc(ii),<span class="string">'figure'</span>);
+0178             linkprop([src_fig fig],<span class="string">'ColorMap'</span>);
+0179             ha=axes(<span class="string">'Parent'</span>,fig,<span class="string">'Box'</span>,<span class="string">'on'</span>,<span class="string">'Units'</span>,<span class="string">'pixels'</span>);
+0180             hi=imagesc(<span class="string">'Parent'</span>,ha,<span class="string">'Xdata'</span>,x,<span class="string">'YData'</span>,y,<span class="string">'CData'</span>,z);
+0181             set(ha,<span class="string">'XTick'</span>,[],<span class="string">'YTick'</span>,[]);
+0182             src_axes=ancestor(hc(ii),<span class="string">'axes'</span>);
+0183             linkprop([src_axes ha],{<span class="string">'CLim'</span>,<span class="string">'YDir'</span>});
+0184             label{end+1}=<span class="string">''</span>;
+0185             label{end+1}=sprintf(<span class="string">' Image level mean: %+g '</span>,mean(z(:)));
+0186             label{end+1}=sprintf(<span class="string">' Image level deviation: %+g '</span>,std(z(:)));
+0187             <span class="keyword">try</span>
+0188                 weight=mean(z,1);
+0189                 weight=weight/trapz(x,weight);
+0190                 CM=trapz(x(:),x(:).*weight(:));
+0191             <span class="keyword">catch</span>
+0192                 CM=nan;
+0193             <span class="keyword">end</span>
+0194             label{end+1}=<span class="string">''</span>;
+0195             label{end+1}=sprintf(<span class="string">'Horizontal center: %+g'</span>,CM);
+0196             <span class="keyword">try</span>
+0197             weight=mean(z,2);
+0198             weight=weight/trapz(y,weight);
+0199             CM=trapz(y(:),y(:).*weight(:));
+0200             <span class="keyword">catch</span>
+0201                 CM=nan;
+0202             <span class="keyword">end</span>
+0203             label{end+1}=sprintf(<span class="string">'Vertical center: %+g'</span>,CM);            
+0204     <span class="keyword">end</span>
+0205     <span class="comment">% format report figure</span>
+0206     axis(ha,<span class="string">'tight'</span>);
+0207     xlim(ha,[xmin xmax]);
+0208     ylim(ha,[ymin ymax]);
+0209     
+0210     ht=uicontrol(<span class="string">'Parent'</span>,fig,<span class="string">'Style'</span>,<span class="string">'text'</span>,<span class="string">'Units'</span>,<span class="string">'pixels'</span>,<span class="keyword">...</span>
+0211         <span class="string">'HorizontalAlignment'</span>,<span class="string">'left'</span>,<span class="string">'String'</span>,label,<span class="keyword">...</span>
+0212         <span class="string">'BackgroundColor'</span>,get(fig,<span class="string">'Color'</span>));
+0213     extent=get(ht,<span class="string">'Extent'</span>);
+0214     Lx=extent(3);
+0215     Ly=extent(4);
+0216     set(ht,<span class="string">'Position'</span>,[Ly 0 Lx Ly]);
+0217     gap=5; <span class="comment">% pixels</span>
+0218     set(ha,<span class="string">'Position'</span>,[gap gap Ly-2*gap Ly-2*gap]);<span class="comment">%,...</span>
+0219         <span class="comment">%'PlotBoxAspectRatio',[(xmax-xmin) (ymax-ymin) 1]);</span>
+0220     pos=get(fig,<span class="string">'Position'</span>);
+0221     pos(3)=Ly+Lx;
+0222     pos(4)=Ly;
+0223     set(fig,<span class="string">'Position'</span>,pos);    
+0224 <span class="keyword">end</span>     
+0225 
+0226 
+0227 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

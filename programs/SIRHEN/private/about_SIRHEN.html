@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of about_SIRHEN</title>
+  <meta name="keywords" content="about_SIRHEN">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">SIRHEN</a> &gt; <a href="index.html">private</a> &gt; about_SIRHEN.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/SIRHEN/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>about_SIRHEN
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function varargout=about_SIRHEN(src,varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="AnalysisScreen.html" class="code" title="function fig=AnalysisScreen(prevfig)">AnalysisScreen</a>	allocate mising input</li><li><a href="SelectionScreen.html" class="code" title="function fig=SelectionScreen(prevfig)">SelectionScreen</a>	allocate mising input</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function varargout=about_SIRHEN(src,varargin)</a>
+0002 
+0003 mode=<span class="string">'window'</span>;
+0004 rootfig=ancestor(src,<span class="string">'figure'</span>);             
+0005 
+0006 name=<span class="string">'SIRHEN (Sandia InfraRed HEtrodyne aNalysis)'</span>;
+0007 <span class="comment">%codever='0.4';</span>
+0008 <span class="comment">%releasedate='December 2010';</span>
+0009 codever=<span class="string">'0.5 [beta]'</span>;
+0010 <span class="comment">%releasedate='July 2012';</span>
+0011 releasedate=<span class="string">'August 2013'</span>;
+0012 <span class="keyword">switch</span> mode
+0013     <span class="keyword">case</span> <span class="string">'name'</span>
+0014         varargout{1}=name;
+0015         varargout{2}=codever;
+0016         varargout{3}=releasedate;
+0017     <span class="keyword">otherwise</span>
+0018         <span class="comment">% generate window</span>
+0019         tag=<span class="string">'SIRHEN_AboutScreen'</span>;
+0020         fig=findall(0,<span class="string">'Type'</span>,<span class="string">'figure'</span>,<span class="string">'Tag'</span>,tag);
+0021         <span class="keyword">if</span> isempty(fig);
+0022             fig=figure(<span class="string">'Name'</span>,name,<span class="string">'NumberTitle'</span>,<span class="string">'off'</span>,<span class="string">'Resize'</span>,<span class="string">'off'</span>,<span class="keyword">...</span>
+0023                 <span class="string">'Units'</span>,<span class="string">'pixels'</span>,<span class="string">'Menubar'</span>,<span class="string">'none'</span>,<span class="string">'Toolbar'</span>,<span class="string">'none'</span>,<span class="keyword">...</span>
+0024                 <span class="string">'Tag'</span>,tag,<span class="string">'Color'</span>,[1 1 1],<span class="keyword">...</span>
+0025                 <span class="string">'IntegerHandle'</span>,<span class="string">'off'</span>,<span class="string">'HandleVisibility'</span>,<span class="string">'Callback'</span>);
+0026         <span class="keyword">else</span>
+0027             figure(fig);
+0028             <span class="keyword">return</span>
+0029         <span class="keyword">end</span>        
+0030         <span class="comment">% render logo</span>
+0031         <span class="comment">%load SandiaLogo.mat</span>
+0032         [pathname,filename]=fileparts(mfilename(<span class="string">'fullpath'</span>));
+0033         filename=fullfile(pathname,<span class="string">'SandiaLogo.tiff'</span>);
+0034         SandiaLogo=imread(filename);
+0035         Ly=size(SandiaLogo,1);
+0036         Lx=size(SandiaLogo,2);
+0037         ha=axes(<span class="string">'Parent'</span>,fig);
+0038         imagesc(SandiaLogo,<span class="string">'Parent'</span>,ha);
+0039         axis(ha,<span class="string">'image'</span>);
+0040         axis(ha,<span class="string">'off'</span>);       
+0041         imsize=[Lx Ly];
+0042         set(ha,<span class="string">'Units'</span>,<span class="string">'pixels'</span>,<span class="string">'Position'</span>,[0 0 imsize]);
+0043         pos=get(ha,<span class="string">'Position'</span>);
+0044         
+0045         <span class="comment">% text description</span>
+0046         pos(1)=pos(1)+pos(3);
+0047         pos(3)=2*pos(3);
+0048         <span class="comment">%hc=custom_uicontrol(fig,'Style','text');</span>
+0049         hc=uicontrol(fig,<span class="string">'Style'</span>,<span class="string">'text'</span>);
+0050         set(hc,<span class="string">'Units'</span>,<span class="string">'pixels'</span>,<span class="string">'Position'</span>,pos);
+0051         message={};
+0052         message{end+1}=<span class="string">'SIRHEN reduces PDV signal to velocity history.'</span>;
+0053         message{end+1}=<span class="string">''</span>;
+0054         message{end+1}=sprintf(<span class="string">'version %s (%s)'</span>,codever,releasedate);
+0055         message{end+1}=<span class="string">'created by Tommy Ao and Daniel Dolan'</span>;
+0056         message{end+2}=<span class="string">''</span>;
+0057         message=textwrap(hc,message);
+0058         set(hc,<span class="string">'String'</span>,message);
+0059         extent=get(hc,<span class="string">'Extent'</span>);
+0060         pos(4)=extent(4);
+0061         set(hc,<span class="string">'Position'</span>,pos);
+0062         set(hc,<span class="string">'BackgroundColor'</span>,get(fig,<span class="string">'Color'</span>));
+0063         
+0064         <span class="comment">% size the window</span>
+0065         figpos=get(fig,<span class="string">'Position'</span>);
+0066         figpos(3)=pos(1)+pos(3);
+0067         figpos(4)=pos(4)+10;        
+0068         set(fig,<span class="string">'Position'</span>,figpos);        
+0069         <span class="keyword">if</span> ishandle(rootfig)
+0070             units=get(rootfig,<span class="string">'Units'</span>);
+0071             set(rootfig,<span class="string">'Units'</span>,<span class="string">'pixels'</span>);
+0072             rootpos=get(rootfig,<span class="string">'Position'</span>);
+0073             figpos(1)=rootpos(1)+(rootpos(3)-figpos(3))/2;
+0074             figpos(2)=rootpos(2)+(rootpos(4)-figpos(4))/2;
+0075             set(fig,<span class="string">'Position'</span>,figpos,<span class="string">'Units'</span>,units);
+0076         <span class="keyword">end</span>
+0077         
+0078         <span class="comment">% reposition the logo</span>
+0079         pos=get(ha,<span class="string">'Position'</span>);
+0080         pos(2)=figpos(4)-pos(4);
+0081         set(ha,<span class="string">'Position'</span>,pos);
+0082 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

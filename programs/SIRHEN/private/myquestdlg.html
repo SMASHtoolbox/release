@@ -1,0 +1,524 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of myquestdlg</title>
+  <meta name="keywords" content="myquestdlg">
+  <meta name="description" content="QUESTDLG Question dialog box.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">SIRHEN</a> &gt; <a href="index.html">private</a> &gt; myquestdlg.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/SIRHEN/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>myquestdlg
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>QUESTDLG Question dialog box.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function ButtonName=myquestdlg(Question,Title,Btn1,Btn2,Btn3,Default) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">QUESTDLG Question dialog box.
+  ButtonName = QUESTDLG(Question) creates a modal dialog box that
+  automatically wraps the cell array or string (vector or matrix)
+  Question to fit an appropriately sized window.  The name of the
+  button that is pressed is returned in ButtonName.  The Title of
+  the figure may be specified by adding a second string argument:
+
+    ButtonName = questdlg(Question, Title)
+
+  Question will be interpreted as a normal string.
+
+  QUESTDLG uses UIWAIT to suspend execution until the user responds.
+
+  The default set of buttons names for QUESTDLG are 'Yes','No' and
+  'Cancel'.  The default answer for the above calling syntax is 'Yes'.
+  This can be changed by adding a third argument which specifies the
+  default Button:
+
+    ButtonName = questdlg(Question, Title, 'No')
+
+  Up to 3 custom button names may be specified by entering
+  the button string name(s) as additional arguments to the function
+  call.  If custom button names are entered, the default button
+  must be specified by adding an extra argument, DEFAULT, and
+  setting DEFAULT to the same string name as the button you want
+  to use as the default button:
+
+    ButtonName = questdlg(Question, Title, Btn1, Btn2, DEFAULT);
+
+  where DEFAULT is set to Btn1.  This makes Btn1 the default answer.
+  If the DEFAULT string does not match any of the button string names,
+  a warning message is displayed.
+
+  To use TeX interpretation for the Question string, a data
+  structure must be used for the last argument, i.e.
+
+    ButtonName = questdlg(Question, Title, Btn1, Btn2, OPTIONS);
+
+  The OPTIONS structure must include the fields Default and Interpreter.
+  Interpreter may be 'none' or 'tex' and Default is the default button
+  name to be used.
+
+  If the dialog is closed without a valid selection, the return value
+  is empty.
+
+  Example:
+
+  ButtonName = questdlg('What is your favorite color?', ...
+                        'Color Question', ...
+                        'Red', 'Green', 'Blue', 'Green');
+  switch ButtonName,
+    case 'Red',
+     disp('Your favorite color is Red');
+    case 'Blue',
+     disp('Your favorite color is Blue.')
+     case 'Green',
+      disp('Your favorite color is Green.');
+  end % switch
+
+  See also DIALOG, ERRORDLG, HELPDLG, INPUTDLG, LISTDLG,
+    MSGBOX, WARNDLG, FIGURE, TEXTWRAP, UIWAIT, UIRESUME.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function doFigureKeyPress(obj, evd)</a></li><li><a href="#_sub2" class="code">function doControlKeyPress(obj, evd)</a></li><li><a href="#_sub3" class="code">function doDelete(varargin)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function ButtonName=myquestdlg(Question,Title,Btn1,Btn2,Btn3,Default)</a>
+0002 <span class="comment">%QUESTDLG Question dialog box.</span>
+0003 <span class="comment">%  ButtonName = QUESTDLG(Question) creates a modal dialog box that</span>
+0004 <span class="comment">%  automatically wraps the cell array or string (vector or matrix)</span>
+0005 <span class="comment">%  Question to fit an appropriately sized window.  The name of the</span>
+0006 <span class="comment">%  button that is pressed is returned in ButtonName.  The Title of</span>
+0007 <span class="comment">%  the figure may be specified by adding a second string argument:</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">%    ButtonName = questdlg(Question, Title)</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">%  Question will be interpreted as a normal string.</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">%  QUESTDLG uses UIWAIT to suspend execution until the user responds.</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">%  The default set of buttons names for QUESTDLG are 'Yes','No' and</span>
+0016 <span class="comment">%  'Cancel'.  The default answer for the above calling syntax is 'Yes'.</span>
+0017 <span class="comment">%  This can be changed by adding a third argument which specifies the</span>
+0018 <span class="comment">%  default Button:</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">%    ButtonName = questdlg(Question, Title, 'No')</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">%  Up to 3 custom button names may be specified by entering</span>
+0023 <span class="comment">%  the button string name(s) as additional arguments to the function</span>
+0024 <span class="comment">%  call.  If custom button names are entered, the default button</span>
+0025 <span class="comment">%  must be specified by adding an extra argument, DEFAULT, and</span>
+0026 <span class="comment">%  setting DEFAULT to the same string name as the button you want</span>
+0027 <span class="comment">%  to use as the default button:</span>
+0028 <span class="comment">%</span>
+0029 <span class="comment">%    ButtonName = questdlg(Question, Title, Btn1, Btn2, DEFAULT);</span>
+0030 <span class="comment">%</span>
+0031 <span class="comment">%  where DEFAULT is set to Btn1.  This makes Btn1 the default answer.</span>
+0032 <span class="comment">%  If the DEFAULT string does not match any of the button string names,</span>
+0033 <span class="comment">%  a warning message is displayed.</span>
+0034 <span class="comment">%</span>
+0035 <span class="comment">%  To use TeX interpretation for the Question string, a data</span>
+0036 <span class="comment">%  structure must be used for the last argument, i.e.</span>
+0037 <span class="comment">%</span>
+0038 <span class="comment">%    ButtonName = questdlg(Question, Title, Btn1, Btn2, OPTIONS);</span>
+0039 <span class="comment">%</span>
+0040 <span class="comment">%  The OPTIONS structure must include the fields Default and Interpreter.</span>
+0041 <span class="comment">%  Interpreter may be 'none' or 'tex' and Default is the default button</span>
+0042 <span class="comment">%  name to be used.</span>
+0043 <span class="comment">%</span>
+0044 <span class="comment">%  If the dialog is closed without a valid selection, the return value</span>
+0045 <span class="comment">%  is empty.</span>
+0046 <span class="comment">%</span>
+0047 <span class="comment">%  Example:</span>
+0048 <span class="comment">%</span>
+0049 <span class="comment">%  ButtonName = questdlg('What is your favorite color?', ...</span>
+0050 <span class="comment">%                        'Color Question', ...</span>
+0051 <span class="comment">%                        'Red', 'Green', 'Blue', 'Green');</span>
+0052 <span class="comment">%  switch ButtonName,</span>
+0053 <span class="comment">%    case 'Red',</span>
+0054 <span class="comment">%     disp('Your favorite color is Red');</span>
+0055 <span class="comment">%    case 'Blue',</span>
+0056 <span class="comment">%     disp('Your favorite color is Blue.')</span>
+0057 <span class="comment">%     case 'Green',</span>
+0058 <span class="comment">%      disp('Your favorite color is Green.');</span>
+0059 <span class="comment">%  end % switch</span>
+0060 <span class="comment">%</span>
+0061 <span class="comment">%  See also DIALOG, ERRORDLG, HELPDLG, INPUTDLG, LISTDLG,</span>
+0062 <span class="comment">%    MSGBOX, WARNDLG, FIGURE, TEXTWRAP, UIWAIT, UIRESUME.</span>
+0063 
+0064 
+0065 <span class="comment">%  Copyright 1984-2007 The MathWorks, Inc.</span>
+0066 <span class="comment">%  $Revision: 5.55.4.14 $</span>
+0067 
+0068 
+0069 
+0070 <span class="keyword">if</span> nargin&lt;1
+0071   error(<span class="string">'MATLAB:questdlg:TooFewArguments'</span>, <span class="string">'Too few arguments for QUESTDLG'</span>);
+0072 <span class="keyword">end</span>
+0073 
+0074 Interpreter=<span class="string">'none'</span>;
+0075 <span class="keyword">if</span> ~iscell(Question),Question=cellstr(Question);<span class="keyword">end</span>
+0076 
+0077 <span class="comment">%%%%%%%%%%%%%%%%%%%%%</span>
+0078 <span class="comment">%%% General Info. %%%</span>
+0079 <span class="comment">%%%%%%%%%%%%%%%%%%%%%</span>
+0080 Black      =[0       0        0      ]/255;
+0081 <span class="comment">% LightGray  =[192     192      192    ]/255;</span>
+0082 <span class="comment">% LightGray2 =[160     160      164    ]/255;</span>
+0083 <span class="comment">% MediumGray =[128     128      128    ]/255;</span>
+0084 <span class="comment">% White      =[255     255      255    ]/255;</span>
+0085 
+0086 <span class="comment">%%%%%%%%%%%%%%%%%%%%</span>
+0087 <span class="comment">%%% Nargin Check %%%</span>
+0088 <span class="comment">%%%%%%%%%%%%%%%%%%%%</span>
+0089 <span class="keyword">if</span> nargout&gt;1
+0090   error(<span class="string">'MATLAB:questdlg:WrongNumberOutputs'</span>, <span class="string">'Wrong number of output arguments for QUESTDLG'</span>);
+0091 <span class="keyword">end</span>
+0092 <span class="keyword">if</span> nargin==1,Title=<span class="string">' '</span>;<span class="keyword">end</span>
+0093 <span class="keyword">if</span> nargin&lt;=2, Default=<span class="string">'Yes'</span>;<span class="keyword">end</span>
+0094 <span class="keyword">if</span> nargin==3, Default=Btn1 ;<span class="keyword">end</span>
+0095 <span class="keyword">if</span> nargin&lt;=3, Btn1=<span class="string">'Yes'</span>; Btn2=<span class="string">'No'</span>; Btn3=<span class="string">'Cancel'</span>;NumButtons=3;<span class="keyword">end</span>
+0096 <span class="keyword">if</span> nargin==4, Default=Btn2;Btn2=[];Btn3=[];NumButtons=1;<span class="keyword">end</span>
+0097 <span class="keyword">if</span> nargin==5, Default=Btn3;Btn3=[];NumButtons=2;<span class="keyword">end</span>
+0098 <span class="keyword">if</span> nargin==6, NumButtons=3;<span class="keyword">end</span>
+0099 <span class="keyword">if</span> nargin&gt;6
+0100   error(<span class="string">'MATLAB:questdlg:TooManyInputs'</span>, <span class="string">'Too many input arguments'</span>);NumButtons=3; <span class="comment">%#ok</span>
+0101 <span class="keyword">end</span>
+0102 
+0103 <span class="keyword">if</span> isstruct(Default),
+0104   Interpreter=Default.Interpreter;
+0105   Default=Default.Default;
+0106 <span class="keyword">end</span>
+0107 
+0108 
+0109 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%</span>
+0110 <span class="comment">%%% Create QuestFig %%%</span>
+0111 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%</span>
+0112 FigPos    = get(0,<span class="string">'DefaultFigurePosition'</span>);
+0113 FigPos(3) = 267;
+0114 FigPos(4) =  70;
+0115 FigPos    = getnicedialoglocation(FigPos, get(0,<span class="string">'DefaultFigureUnits'</span>));
+0116 
+0117 QuestFig=dialog(                                    <span class="keyword">...</span>
+0118   <span class="string">'Visible'</span>         ,<span class="string">'off'</span>                      , <span class="keyword">...</span>
+0119   <span class="string">'Name'</span>            ,Title                      , <span class="keyword">...</span>
+0120   <span class="string">'Pointer'</span>         ,<span class="string">'arrow'</span>                    , <span class="keyword">...</span>
+0121   <span class="string">'Position'</span>        ,FigPos                     , <span class="keyword">...</span>
+0122   <span class="string">'KeyPressFcn'</span>     ,@<a href="#_sub1" class="code" title="subfunction doFigureKeyPress(obj, evd)  ">doFigureKeyPress</a>          , <span class="keyword">...</span>
+0123   <span class="string">'IntegerHandle'</span>   ,<span class="string">'off'</span>                      , <span class="keyword">...</span>
+0124   <span class="string">'WindowStyle'</span>     ,<span class="string">'normal'</span>                   , <span class="keyword">...</span>
+0125   <span class="string">'HandleVisibility'</span>,<span class="string">'callback'</span>                 , <span class="keyword">...</span>
+0126   <span class="string">'CloseRequestFcn'</span> ,@<a href="#_sub3" class="code" title="subfunction doDelete(varargin)  ">doDelete</a>                  , <span class="keyword">...</span>
+0127   <span class="string">'Tag'</span>             ,Title                        <span class="keyword">...</span>
+0128   );
+0129 
+0130 <span class="comment">%%%%%%%%%%%%%%%%%%%%%</span>
+0131 <span class="comment">%%% Set Positions %%%</span>
+0132 <span class="comment">%%%%%%%%%%%%%%%%%%%%%</span>
+0133 DefOffset  =10;
+0134 
+0135 IconWidth  =54;
+0136 IconHeight =54;
+0137 IconXOffset=DefOffset;
+0138 IconYOffset=FigPos(4)-DefOffset-IconHeight;  <span class="comment">%#ok</span>
+0139 IconCMap=[Black;get(QuestFig,<span class="string">'Color'</span>)];  <span class="comment">%#ok</span>
+0140 
+0141 DefBtnWidth =56;
+0142 BtnHeight   =22;
+0143 
+0144 BtnYOffset=DefOffset;
+0145 
+0146 BtnWidth=DefBtnWidth;
+0147 
+0148 ExtControl=uicontrol(QuestFig   , <span class="keyword">...</span>
+0149   <span class="string">'Style'</span>    ,<span class="string">'pushbutton'</span>, <span class="keyword">...</span>
+0150   <span class="string">'String'</span>   ,<span class="string">' '</span>          <span class="keyword">...</span>
+0151   );
+0152 
+0153 btnMargin=1.4;
+0154 set(ExtControl,<span class="string">'String'</span>,Btn1);
+0155 BtnExtent=get(ExtControl,<span class="string">'Extent'</span>);
+0156 BtnWidth=max(BtnWidth,BtnExtent(3)+8);
+0157 <span class="keyword">if</span> NumButtons &gt; 1
+0158   set(ExtControl,<span class="string">'String'</span>,Btn2);
+0159   BtnExtent=get(ExtControl,<span class="string">'Extent'</span>);
+0160   BtnWidth=max(BtnWidth,BtnExtent(3)+8);
+0161   <span class="keyword">if</span> NumButtons &gt; 2
+0162     set(ExtControl,<span class="string">'String'</span>,Btn3);
+0163     BtnExtent=get(ExtControl,<span class="string">'Extent'</span>);
+0164     BtnWidth=max(BtnWidth,BtnExtent(3)*btnMargin);
+0165   <span class="keyword">end</span>
+0166 <span class="keyword">end</span>
+0167 BtnHeight = max(BtnHeight,BtnExtent(4)*btnMargin);
+0168 
+0169 delete(ExtControl);
+0170 
+0171 MsgTxtXOffset=IconXOffset+IconWidth;
+0172 
+0173 FigPos(3)=max(FigPos(3),MsgTxtXOffset+NumButtons*(BtnWidth+2*DefOffset));
+0174 set(QuestFig,<span class="string">'Position'</span>,FigPos);
+0175 
+0176 BtnXOffset=zeros(NumButtons,1);
+0177 
+0178 <span class="keyword">if</span> NumButtons==1,
+0179   BtnXOffset=(FigPos(3)-BtnWidth)/2;
+0180 <span class="keyword">elseif</span> NumButtons==2,
+0181   BtnXOffset=[MsgTxtXOffset
+0182     FigPos(3)-DefOffset-BtnWidth];
+0183 <span class="keyword">elseif</span> NumButtons==3,
+0184   BtnXOffset=[MsgTxtXOffset
+0185     0
+0186     FigPos(3)-DefOffset-BtnWidth];
+0187   BtnXOffset(2)=(BtnXOffset(1)+BtnXOffset(3))/2;
+0188 <span class="keyword">end</span>
+0189 
+0190 MsgTxtYOffset=DefOffset+BtnYOffset+BtnHeight;
+0191 MsgTxtWidth=FigPos(3)-DefOffset-MsgTxtXOffset-IconWidth;
+0192 MsgTxtHeight=FigPos(4)-DefOffset-MsgTxtYOffset;
+0193 MsgTxtForeClr=Black;
+0194 MsgTxtBackClr=get(QuestFig,<span class="string">'Color'</span>);
+0195 
+0196 CBString=<span class="string">'uiresume(gcbf)'</span>;
+0197 DefaultValid = false;
+0198 DefaultWasPressed = false;
+0199 BtnHandle = [];
+0200 DefaultButton = 0;
+0201 
+0202 <span class="comment">% Check to see if the Default string passed does match one of the</span>
+0203 <span class="comment">% strings on the buttons in the dialog. If not, throw a warning.</span>
+0204 <span class="keyword">for</span> i = 1:NumButtons
+0205   <span class="keyword">switch</span> i
+0206     <span class="keyword">case</span> 1
+0207       ButtonString=Btn1;
+0208       ButtonTag=<span class="string">'Btn1'</span>;
+0209       <span class="keyword">if</span> strcmp(ButtonString, Default)
+0210         DefaultValid = true;
+0211         DefaultButton = 1;
+0212       <span class="keyword">end</span>
+0213 
+0214     <span class="keyword">case</span> 2
+0215       ButtonString=Btn2;
+0216       ButtonTag=<span class="string">'Btn2'</span>;
+0217       <span class="keyword">if</span> strcmp(ButtonString, Default)
+0218         DefaultValid = true;
+0219         DefaultButton = 2;
+0220       <span class="keyword">end</span>
+0221     <span class="keyword">case</span> 3
+0222       ButtonString=Btn3;
+0223       ButtonTag=<span class="string">'Btn3'</span>;
+0224       <span class="keyword">if</span> strcmp(ButtonString, Default)
+0225         DefaultValid = true;
+0226         DefaultButton = 3;
+0227       <span class="keyword">end</span>
+0228   <span class="keyword">end</span>
+0229 
+0230   BtnHandle(end+1)=uicontrol(QuestFig            , <span class="keyword">...</span>
+0231     <span class="string">'Style'</span>              ,<span class="string">'pushbutton'</span>, <span class="keyword">...</span>
+0232     <span class="string">'Position'</span>           ,[ BtnXOffset(1) BtnYOffset BtnWidth BtnHeight ]           , <span class="keyword">...</span>
+0233     <span class="string">'KeyPressFcn'</span>        ,@<a href="#_sub2" class="code" title="subfunction doControlKeyPress(obj, evd)  ">doControlKeyPress</a> , <span class="keyword">...</span>
+0234     <span class="string">'CallBack'</span>           ,CBString    , <span class="keyword">...</span>
+0235     <span class="string">'String'</span>             ,ButtonString, <span class="keyword">...</span>
+0236     <span class="string">'HorizontalAlignment'</span>,<span class="string">'center'</span>    , <span class="keyword">...</span>
+0237     <span class="string">'Tag'</span>                ,ButtonTag     <span class="keyword">...</span>
+0238     );
+0239 <span class="keyword">end</span>
+0240 
+0241 <span class="keyword">if</span> ~DefaultValid
+0242   warnstate = warning(<span class="string">'backtrace'</span>,<span class="string">'off'</span>);
+0243   warning(<span class="string">'MATLAB:QUESTDLG:stringMismatch'</span>,<span class="string">'Default string does not match any button string name.'</span>);
+0244   warning(warnstate);
+0245 <span class="keyword">end</span>
+0246 
+0247 MsgHandle=uicontrol(QuestFig            , <span class="keyword">...</span>
+0248   <span class="string">'Style'</span>              ,<span class="string">'text'</span>         , <span class="keyword">...</span>
+0249   <span class="string">'Position'</span>           ,[MsgTxtXOffset MsgTxtYOffset 0.95*MsgTxtWidth MsgTxtHeight ]              , <span class="keyword">...</span>
+0250   <span class="string">'String'</span>             ,{<span class="string">' '</span>}          , <span class="keyword">...</span>
+0251   <span class="string">'Tag'</span>                ,<span class="string">'Question'</span>     , <span class="keyword">...</span>
+0252   <span class="string">'HorizontalAlignment'</span>,<span class="string">'left'</span>         , <span class="keyword">...</span>
+0253   <span class="string">'FontWeight'</span>         ,<span class="string">'bold'</span>         , <span class="keyword">...</span>
+0254   <span class="string">'BackgroundColor'</span>    ,MsgTxtBackClr  , <span class="keyword">...</span>
+0255   <span class="string">'ForegroundColor'</span>    ,MsgTxtForeClr    <span class="keyword">...</span>
+0256   );
+0257 
+0258 [WrapString,NewMsgTxtPos]=textwrap(MsgHandle,Question,75);
+0259 
+0260 <span class="comment">% NumLines=size(WrapString,1);</span>
+0261 
+0262 AxesHandle=axes(<span class="string">'Parent'</span>,QuestFig,<span class="string">'Position'</span>,[0 0 1 1],<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+0263 
+0264 texthandle=text( <span class="keyword">...</span><span class="comment">  </span>
+0265     <span class="string">'Parent'</span>              ,AxesHandle                      , <span class="keyword">...</span>
+0266     <span class="string">'Units'</span>               ,<span class="string">'pixels'</span>                        , <span class="keyword">...</span>
+0267     <span class="string">'Color'</span>               ,get(BtnHandle(1),<span class="string">'ForegroundColor'</span>)   , <span class="keyword">...</span>
+0268     <span class="string">'HorizontalAlignment'</span> ,<span class="string">'left'</span>                          , <span class="keyword">...</span>
+0269     <span class="string">'FontName'</span>            ,get(BtnHandle(1),<span class="string">'FontName'</span>)    , <span class="keyword">...</span>
+0270     <span class="string">'FontSize'</span>            ,get(BtnHandle(1),<span class="string">'FontSize'</span>)    , <span class="keyword">...</span>
+0271     <span class="string">'VerticalAlignment'</span>   ,<span class="string">'bottom'</span>                        , <span class="keyword">...</span>
+0272     <span class="string">'String'</span>              ,WrapString                      , <span class="keyword">...</span>
+0273     <span class="string">'Interpreter'</span>         ,Interpreter                     , <span class="keyword">...</span>
+0274     <span class="string">'Tag'</span>                 ,<span class="string">'Question'</span>                        <span class="keyword">...</span>
+0275     );  <span class="comment">%#ok</span>
+0276 
+0277 textExtent = get(texthandle, <span class="string">'extent'</span>);
+0278 
+0279 <span class="comment">% (g357851)textExtent and extent from uicontrol are not the same. For window, extent from uicontrol is larger</span>
+0280 <span class="comment">%than textExtent. But on Mac, it is reverse. Pick the max value.</span>
+0281 MsgTxtWidth=max([MsgTxtWidth NewMsgTxtPos(3)+2 textExtent(3)]);
+0282 MsgTxtHeight=max([MsgTxtHeight NewMsgTxtPos(4)+2 textExtent(4)]);
+0283 
+0284 MsgTxtXOffset=IconXOffset+IconWidth+DefOffset;
+0285 FigPos(3)=max(NumButtons*(BtnWidth+DefOffset)+DefOffset, <span class="keyword">...</span>
+0286   MsgTxtXOffset+MsgTxtWidth+DefOffset);
+0287 
+0288 
+0289 <span class="comment">% Center Vertically around icon</span>
+0290 <span class="keyword">if</span> IconHeight&gt;MsgTxtHeight,
+0291   IconYOffset=BtnYOffset+BtnHeight+DefOffset;
+0292   MsgTxtYOffset=IconYOffset+(IconHeight-MsgTxtHeight)/2;
+0293   FigPos(4)=IconYOffset+IconHeight+DefOffset;
+0294   <span class="comment">% center around text</span>
+0295 <span class="keyword">else</span>
+0296   MsgTxtYOffset=BtnYOffset+BtnHeight+DefOffset;
+0297   IconYOffset=MsgTxtYOffset+(MsgTxtHeight-IconHeight)/2;
+0298   FigPos(4)=MsgTxtYOffset+MsgTxtHeight+DefOffset;
+0299 <span class="keyword">end</span>
+0300 
+0301 <span class="keyword">if</span> NumButtons==1,
+0302   BtnXOffset=(FigPos(3)-BtnWidth)/2;
+0303 <span class="keyword">elseif</span> NumButtons==2,
+0304   BtnXOffset=[(FigPos(3)-DefOffset)/2-BtnWidth
+0305     (FigPos(3)+DefOffset)/2
+0306     ];
+0307 
+0308 <span class="keyword">elseif</span> NumButtons==3,
+0309   BtnXOffset(2)=(FigPos(3)-BtnWidth)/2;
+0310   BtnXOffset=[BtnXOffset(2)-DefOffset-BtnWidth
+0311     BtnXOffset(2)
+0312     BtnXOffset(2)+BtnWidth+DefOffset
+0313     ];
+0314 <span class="keyword">end</span>
+0315 
+0316 set(QuestFig ,<span class="string">'Position'</span>,getnicedialoglocation(FigPos, get(QuestFig,<span class="string">'Units'</span>)));
+0317 
+0318 BtnPos=get(BtnHandle,{<span class="string">'Position'</span>});
+0319 BtnPos=cat(1,BtnPos{:});
+0320 BtnPos(:,1)=BtnXOffset;
+0321 BtnPos=num2cell(BtnPos,2);
+0322 set(BtnHandle,{<span class="string">'Position'</span>},BtnPos);
+0323 
+0324 <span class="keyword">if</span> DefaultValid
+0325   setdefaultbutton(QuestFig, BtnHandle(DefaultButton));
+0326 <span class="keyword">end</span>
+0327 
+0328 delete(MsgHandle);
+0329 
+0330 
+0331 set(texthandle, <span class="string">'Position'</span>,[MsgTxtXOffset MsgTxtYOffset 0]);
+0332 
+0333 
+0334 IconAxes=axes(                                      <span class="keyword">...</span>
+0335   <span class="string">'Parent'</span>      ,QuestFig              , <span class="keyword">...</span>
+0336   <span class="string">'Units'</span>       ,<span class="string">'Pixels'</span>              , <span class="keyword">...</span>
+0337   <span class="string">'Position'</span>    ,[IconXOffset IconYOffset IconWidth IconHeight], <span class="keyword">...</span>
+0338   <span class="string">'NextPlot'</span>    ,<span class="string">'replace'</span>             , <span class="keyword">...</span>
+0339   <span class="string">'Tag'</span>         ,<span class="string">'IconAxes'</span>              <span class="keyword">...</span>
+0340   );
+0341 
+0342 set(QuestFig ,<span class="string">'NextPlot'</span>,<span class="string">'add'</span>);
+0343 
+0344 load dialogicons.mat questIconData questIconMap;
+0345 IconData=questIconData;
+0346 questIconMap(256,:)=get(QuestFig,<span class="string">'color'</span>);
+0347 IconCMap=questIconMap;
+0348 
+0349 Img=image(<span class="string">'CData'</span>,IconData,<span class="string">'Parent'</span>,IconAxes);
+0350 set(QuestFig, <span class="string">'Colormap'</span>, IconCMap);
+0351 set(IconAxes, <span class="keyword">...</span>
+0352   <span class="string">'Visible'</span>,<span class="string">'off'</span>           , <span class="keyword">...</span>
+0353   <span class="string">'YDir'</span>   ,<span class="string">'reverse'</span>       , <span class="keyword">...</span>
+0354   <span class="string">'XLim'</span>   ,get(Img,<span class="string">'XData'</span>), <span class="keyword">...</span>
+0355   <span class="string">'YLim'</span>   ,get(Img,<span class="string">'YData'</span>)  <span class="keyword">...</span>
+0356   );
+0357 
+0358 <span class="comment">% make sure we are on screen</span>
+0359 movegui(QuestFig)
+0360 
+0361 
+0362 set(QuestFig ,<span class="string">'WindowStyle'</span>,<span class="string">'modal'</span>,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0363 drawnow;
+0364 
+0365 <span class="keyword">if</span> DefaultButton ~= 0
+0366   uicontrol(BtnHandle(DefaultButton));
+0367 <span class="keyword">end</span>
+0368 
+0369 <span class="keyword">if</span> ishghandle(QuestFig)
+0370   <span class="comment">% Go into uiwait if the figure handle is still valid.</span>
+0371   <span class="comment">% This is mostly the case during regular use.</span>
+0372   uiwait(QuestFig);
+0373 <span class="keyword">end</span>
+0374 
+0375 <span class="comment">% Check handle validity again since we may be out of uiwait because the</span>
+0376 <span class="comment">% figure was deleted.</span>
+0377 <span class="keyword">if</span> ishghandle(QuestFig)
+0378   <span class="keyword">if</span> DefaultWasPressed
+0379     ButtonName=Default;
+0380   <span class="keyword">else</span>
+0381     ButtonName=get(get(QuestFig,<span class="string">'CurrentObject'</span>),<span class="string">'String'</span>);
+0382   <span class="keyword">end</span>
+0383   <a href="#_sub3" class="code" title="subfunction doDelete(varargin)  ">doDelete</a>;
+0384 <span class="keyword">else</span>
+0385   ButtonName=<span class="string">''</span>;
+0386 <span class="keyword">end</span>
+0387 
+0388   <a name="_sub1" href="#_subfunctions" class="code">function doFigureKeyPress(obj, evd)  </a><span class="comment">%#ok</span>
+0389     <span class="keyword">switch</span>(evd.Key)
+0390       <span class="keyword">case</span> {<span class="string">'return'</span>,<span class="string">'space'</span>}
+0391         <span class="keyword">if</span> DefaultValid
+0392           DefaultWasPressed = true;
+0393           uiresume(gcbf);
+0394         <span class="keyword">end</span>
+0395       <span class="keyword">case</span> <span class="string">'escape'</span>
+0396         <a href="#_sub3" class="code" title="subfunction doDelete(varargin)  ">doDelete</a>
+0397     <span class="keyword">end</span>
+0398   <span class="keyword">end</span>
+0399 
+0400   <a name="_sub2" href="#_subfunctions" class="code">function doControlKeyPress(obj, evd)  </a><span class="comment">%#ok</span>
+0401     <span class="keyword">switch</span>(evd.Key)
+0402       <span class="keyword">case</span> {<span class="string">'return'</span>}
+0403         <span class="keyword">if</span> DefaultValid
+0404           DefaultWasPressed = true;
+0405           uiresume(gcbf);
+0406         <span class="keyword">end</span>
+0407       <span class="keyword">case</span> <span class="string">'escape'</span>
+0408         <a href="#_sub3" class="code" title="subfunction doDelete(varargin)  ">doDelete</a>
+0409     <span class="keyword">end</span>
+0410   <span class="keyword">end</span>
+0411 
+0412   <a name="_sub3" href="#_subfunctions" class="code">function doDelete(varargin)  </a><span class="comment">%#ok</span>
+0413     delete(QuestFig);
+0414   <span class="keyword">end</span>
+0415 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

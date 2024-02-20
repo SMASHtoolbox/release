@@ -1,0 +1,68 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of insert_function</title>
+  <meta name="keywords" content="insert_function">
+  <meta name="description" content="generate MAT file representation of function handle">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../../index.html">SMASHtoolbox</a> &gt; <a href="../../../index.html">+SMASH</a> &gt; <a href="../../index.html">+FileAccess</a> &gt; <a href="../index.html">@SDAfile</a> &gt; <a href="index.html">private</a> &gt; insert_function.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../../index.html"><img alt="<" border="0" src="../../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+FileAccess/@SDAfile/private&nbsp;<img alt=">" border="0" src="../../../../../../right.png"></a></td></tr></table>-->
+
+<h1>insert_function
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>generate MAT file representation of function handle</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>function insert_function(archive,setname,data,~) % deflate input not used </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> generate MAT file representation of function handle</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="insert_cell.html" class="code" title="function insert_cell(archive,datasetname,data,deflate)">insert_cell</a>	</li><li><a href="insert_structure.html" class="code" title="function insert_structure(archive,setname,data,deflate)">insert_structure</a>	</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function insert_function(archive,setname,data,~) </a><span class="comment">% deflate input not used</span>
+0002 
+0003 <span class="comment">% generate MAT file representation of function handle</span>
+0004 fstring=func2str(data);
+0005 <span class="comment">%tempfile=sprintf('temporary_%.9f.mat',now);</span>
+0006 tempfile=[tempname <span class="string">'.mat'</span>];
+0007 save(tempfile,<span class="string">'data'</span>,<span class="string">'-v7.3'</span>);
+0008 
+0009 fid=fopen(tempfile,<span class="string">'r'</span>);
+0010 data=fread(fid,[1 inf],<span class="string">'uint8'</span>);
+0011 fclose(fid);
+0012 delete(tempfile);
+0013 
+0014 <span class="comment">% insert MAT representation into archive</span>
+0015 h5create(archive.ArchiveFile,setname,size(data),<span class="string">'Datatype'</span>,<span class="string">'uint8'</span>);
+0016 h5write(archive.ArchiveFile,setname,uint8(data));
+0017 h5writeatt(archive.ArchiveFile,setname,<span class="string">'RecordType'</span>,<span class="string">'function'</span>);
+0018 h5writeatt(archive.ArchiveFile,setname,<span class="string">'Command'</span>,fstring);
+0019 h5writeatt(archive.ArchiveFile,setname,<span class="string">'Empty'</span>,<span class="string">'no'</span>);
+0020 
+0021 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

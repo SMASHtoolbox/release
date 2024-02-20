@@ -1,0 +1,212 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of select</title>
+  <meta name="keywords" content="select">
+  <meta name="description" content="select Interactive bound selection">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../../index.html">SMASHtoolbox</a> &gt; <a href="../../../index.html">+SMASH</a> &gt; <a href="../../index.html">+ROI</a> &gt; <a href="#">old</a> &gt; <a href="index.html">@BoundingLines</a> &gt; select.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../../index.html"><img alt="<" border="0" src="../../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+ROI/old/@BoundingLines&nbsp;<img alt=">" border="0" src="../../../../../../right.png"></a></td></tr></table>-->
+
+<h1>select
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>select Interactive bound selection</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>function varargout=select(object,target,ApplyFunction) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> select Interactive bound selection
+
+ This method allows bounding lines to be selected interactively.  The
+ standard call is:
+     &gt;&gt; object=select(object,target);
+ where the optional input &quot;target&quot; is a handle to the axes where the
+ boundary lines will be displayed and selected.  If no target is
+ specified, the current axes is used.  The dialog box created with this
+ call blocks program executation while the boundary lines are changed with
+ with the keyboard and/or mouse. Presses the &quot;OK&quot; button returns a
+ modified version of the original object; pressing the &quot;Cancel&quot; button
+ returns the original object.
+
+ Passing a function handle as the third input:
+     &gt;&gt; select(object,target,ApplyFunction);
+ generates a similar dialog box without blocking program execution.  This
+ mode is provided for integration with a graphical user interface.
+ Pressing the &quot;Apply&quot; button passes the current BoundingLine object to the
+ ApplyFunction.  Pressing the &quot;Done&quot; button does the same thing before
+ closing the dialog box; pressing the &quot;Cancel&quot; button closes the dialog
+ box.
+
+ See also <a href="BoundingLines.html" class="code" title="">BoundingLines</a>, <a href="define.html" class="code" title="function object=define(object,data)">define</a>, <a href="view.html" class="code" title="function varargout=view(object,target)">view</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="view.html" class="code" title="function varargout=view(object,target)">view</a>	view Display bounding lines</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function updateBounds(varargin)</a></li><li><a href="#_sub2" class="code">function useMouse(varargin)</a></li><li><a href="#_sub3" class="code">function WindowButtonUpFcn(varargin)</a></li><li><a href="#_sub4" class="code">function okCallback(varargin)</a></li><li><a href="#_sub5" class="code">function applyCallback(varargin)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% select Interactive bound selection</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This method allows bounding lines to be selected interactively.  The</span>
+0004 <span class="comment">% standard call is:</span>
+0005 <span class="comment">%     &gt;&gt; object=select(object,target);</span>
+0006 <span class="comment">% where the optional input &quot;target&quot; is a handle to the axes where the</span>
+0007 <span class="comment">% boundary lines will be displayed and selected.  If no target is</span>
+0008 <span class="comment">% specified, the current axes is used.  The dialog box created with this</span>
+0009 <span class="comment">% call blocks program executation while the boundary lines are changed with</span>
+0010 <span class="comment">% with the keyboard and/or mouse. Presses the &quot;OK&quot; button returns a</span>
+0011 <span class="comment">% modified version of the original object; pressing the &quot;Cancel&quot; button</span>
+0012 <span class="comment">% returns the original object.</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% Passing a function handle as the third input:</span>
+0015 <span class="comment">%     &gt;&gt; select(object,target,ApplyFunction);</span>
+0016 <span class="comment">% generates a similar dialog box without blocking program execution.  This</span>
+0017 <span class="comment">% mode is provided for integration with a graphical user interface.</span>
+0018 <span class="comment">% Pressing the &quot;Apply&quot; button passes the current BoundingLine object to the</span>
+0019 <span class="comment">% ApplyFunction.  Pressing the &quot;Done&quot; button does the same thing before</span>
+0020 <span class="comment">% closing the dialog box; pressing the &quot;Cancel&quot; button closes the dialog</span>
+0021 <span class="comment">% box.</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">% See also BoundingLines, define, view</span>
+0024 <span class="comment">%</span>
+0025 
+0026 <span class="comment">%</span>
+0027 <span class="comment">% created November 14, 2014 by Daniel Dolan (Sandia National Laboratories)</span>
+0028 <span class="comment">%</span>
+0029 <a name="_sub0" href="#_subfunctions" class="code">function varargout=select(object,target,ApplyFunction)</a>
+0030 
+0031 <span class="comment">% handle input</span>
+0032 <span class="keyword">if</span> (nargin&lt;2) || isempty(target)
+0033     target=gca;
+0034 <span class="keyword">end</span>
+0035 assert(ishandle(target),<span class="string">'ERROR: invalid target axes handle'</span>);
+0036 
+0037 <span class="keyword">if</span> nargin&lt;3
+0038     ApplyFunction=[];
+0039 <span class="keyword">else</span>
+0040     assert(isa(ApplyFunction,<span class="string">'function_handle'</span>),<span class="string">'ERROR: invalid Apply function'</span>);
+0041 <span class="keyword">end</span>
+0042 
+0043 <span class="comment">% initial setup</span>
+0044 PreviousObject=object;
+0045 fig=ancestor(target,<span class="string">'figure'</span>);
+0046 hline=<a href="view.html" class="code" title="function varargout=view(object,target)">view</a>(object,target);
+0047 figure(fig);
+0048 
+0049 <span class="comment">% generate dialog</span>
+0050 dlg=SMASH.MUI.Dialog;
+0051 dlg.Hidden=true;
+0052 dlg.Name=<span class="string">'Boundary select'</span>;
+0053 
+0054 addblock(dlg,<span class="string">'text'</span>,<span class="string">'BoundingLines selection'</span>);
+0055 label=sprintf(<span class="string">'Direction: %s'</span>,object.Direction);
+0056 addblock(dlg,<span class="string">'text'</span>,label);
+0057 addblock(dlg,<span class="string">'text'</span>,<span class="string">' '</span>);
+0058 
+0059 hlower=addblock(dlg,<span class="string">'edit_button'</span>,{<span class="string">'Lower bound:   '</span>,<span class="string">'select'</span>});
+0060 hupper=addblock(dlg,<span class="string">'edit_button'</span>,{<span class="string">'Upper bound:   '</span>,<span class="string">'select'</span>});
+0061 set([hlower(1) hupper(1)],<span class="string">'FontWeight'</span>,<span class="string">'bold'</span>);
+0062 set([hlower(2) hupper(2)],<span class="string">'Callback'</span>,@<a href="#_sub1" class="code" title="subfunction updateBounds(varargin)">updateBounds</a>);
+0063     <a name="_sub1" href="#_subfunctions" class="code">function updateBounds(varargin)</a>
+0064         A=sscanf(get(hlower(2),<span class="string">'String'</span>),<span class="string">'%g'</span>,1);
+0065         <span class="keyword">if</span> isempty(A)
+0066             A=object.Data(1);
+0067         <span class="keyword">end</span>
+0068         B=sscanf(get(hupper(2),<span class="string">'String'</span>),<span class="string">'%g'</span>,1);
+0069         <span class="keyword">if</span> isempty(B)
+0070             B=object.Data(2);
+0071         <span class="keyword">end</span>
+0072         object.Data=sort([A B]);
+0073         set(hlower(2),<span class="string">'String'</span>,sprintf(<span class="string">'%+.6g'</span>,object.Data(1)));
+0074         set(hupper(2),<span class="string">'String'</span>,sprintf(<span class="string">'%+.6g'</span>,object.Data(2)));
+0075         delete(hline);
+0076         hline=<a href="view.html" class="code" title="function varargout=view(object,target)">view</a>(object,target);
+0077     <span class="keyword">end</span>
+0078 <a href="#_sub1" class="code" title="subfunction updateBounds(varargin)">updateBounds</a>;
+0079 setappdata(hlower(3),<span class="string">'EditBox'</span>,hlower(2));
+0080 setappdata(hupper(3),<span class="string">'EditBox'</span>,hupper(2));
+0081 set([hlower(3) hupper(3)],<span class="string">'Callback'</span>,@<a href="#_sub2" class="code" title="subfunction useMouse(varargin)">useMouse</a>);
+0082     <a name="_sub2" href="#_subfunctions" class="code">function useMouse(varargin)</a>
+0083         figure(fig);
+0084         oldFcn=get(fig,<span class="string">'WindowButtonUpFcn'</span>);
+0085         zoom(fig,<span class="string">'on'</span>);zoom(fig,<span class="string">'off'</span>); <span class="comment">% reset figure toggle state</span>
+0086         set(fig,<span class="string">'WindowButtonUpFcn'</span>,@<a href="#_sub3" class="code" title="subfunction WindowButtonUpFcn(varargin)">WindowButtonUpFcn</a>);
+0087         editbox=getappdata(gcbo,<span class="string">'EditBox'</span>);
+0088         <a name="_sub3" href="#_subfunctions" class="code">function WindowButtonUpFcn(varargin)            </a>
+0089             temp=ancestor(gco,<span class="string">'axes'</span>);
+0090             <span class="keyword">if</span> isempty(temp) || (temp~=target)
+0091                 <span class="keyword">return</span>
+0092             <span class="keyword">end</span>
+0093             set(fig,<span class="string">'WindowButtonUpFcn'</span>,oldFcn);
+0094             current=get(target,<span class="string">'CurrentPoint'</span>);
+0095             current=current(1,1:2);
+0096             <span class="keyword">switch</span> object.Direction
+0097                 <span class="keyword">case</span> <span class="string">'horizontal'</span>
+0098                     current=current(2);
+0099                 <span class="keyword">case</span> <span class="string">'vertical'</span>
+0100                     current=current(1);
+0101             <span class="keyword">end</span>
+0102             set(editbox,<span class="string">'String'</span>,sprintf(<span class="string">'%.6g'</span>,current));
+0103             <a href="#_sub1" class="code" title="subfunction updateBounds(varargin)">updateBounds</a>;
+0104             figure(dlg.Handle);
+0105         <span class="keyword">end</span>
+0106     <span class="keyword">end</span>
+0107 
+0108 button=addblock(dlg,<span class="string">'button'</span>,{<span class="string">'Cancel'</span>,<span class="string">'Cancel'</span>,<span class="string">'Cancel'</span>});
+0109 <span class="keyword">if</span> isempty(ApplyFunction)
+0110     set(button(1),<span class="string">'String'</span>,<span class="string">'OK'</span>,<span class="string">'Callback'</span>,<span class="string">'delete(gcbo);'</span>);
+0111     set(button(2),<span class="string">'String'</span>,<span class="string">'Cancel'</span>,<span class="string">'Callback'</span>,<span class="string">'delete(gcbf)'</span>);
+0112     set(button(3),<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+0113 <span class="keyword">else</span>
+0114     set(button(1),<span class="string">'String'</span>,<span class="string">'OK'</span>,<span class="string">'Callback'</span>,@<a href="#_sub4" class="code" title="subfunction okCallback(varargin)">okCallback</a>);
+0115     set(button(2),<span class="string">'String'</span>,<span class="string">'Apply'</span>,<span class="string">'Callback'</span>,@<a href="#_sub5" class="code" title="subfunction applyCallback(varargin)">applyCallback</a>);
+0116     set(button(3),<span class="string">'String'</span>,<span class="string">'Cancel'</span>,<span class="string">'Callback'</span>,<span class="string">'delete(gcbf)'</span>);
+0117 <span class="keyword">end</span>
+0118     <a name="_sub4" href="#_subfunctions" class="code">function okCallback(varargin)</a>
+0119         <a href="#_sub5" class="code" title="subfunction applyCallback(varargin)">applyCallback</a>;
+0120         delete(gcbo);
+0121     <span class="keyword">end</span>
+0122     <a name="_sub5" href="#_subfunctions" class="code">function applyCallback(varargin)</a>
+0123         feval(ApplyFunction,object);
+0124     <span class="keyword">end</span>
+0125 
+0126 locate(dlg,<span class="string">'center'</span>,fig);
+0127 dlg.Hidden=false;
+0128 set(dlg.Handle,<span class="string">'HandleVisibility'</span>,<span class="string">'callback'</span>,<span class="string">'CloseRequestFcn'</span>,<span class="string">''</span>);
+0129 
+0130 <span class="keyword">if</span> isempty(ApplyFunction)  
+0131     waitfor(button(1));    
+0132     <span class="keyword">if</span> isvalid(dlg)
+0133         varargout{1}=object;
+0134     <span class="keyword">else</span>
+0135         varargout{1}=PreviousObject;        
+0136     <span class="keyword">end</span>
+0137     delete(dlg);
+0138     delete(hline);
+0139 <span class="keyword">end</span>
+0140 
+0141 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

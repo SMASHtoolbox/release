@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of summarize</title>
+  <meta name="keywords" content="summarize">
+  <meta name="description" content="summarize Summarize basis functions">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="../../index.html">+SMASH</a> &gt; <a href="../index.html">+CurveFit</a> &gt; <a href="index.html">@Curve</a> &gt; summarize.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+CurveFit/@Curve&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>summarize
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>summarize Summarize basis functions</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function varargout=summarize(object,index) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> summarize Summarize basis functions
+
+ This method summarizes the  basis functions of a Curve object. The basic
+ call:
+     &gt;&gt; summarize(object);
+ displays all existing basis functions.  To summarize a specific function,
+ pass the basis index.
+     &gt;&gt; summarize(object,index);
+ When no ouput are specified, the summary is written in the command
+ window.  Specific results can be assigned to outputs as shown below.
+     &gt;&gt; [basis,param,bound,scale,fixed]=summarize(...);
+
+ See also <a href="Curve.html" class="code" title="">Curve</a>, <a href="add.html" class="code" title="function object=add(object,basis,parameter,varargin)">add</a>, <a href="edit.html" class="code" title="function object=edit(object,index,varargin)">edit</a>, <a href="remove.html" class="code" title="function object=remove(object,index)">remove</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% summarize Summarize basis functions</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This method summarizes the  basis functions of a Curve object. The basic</span>
+0004 <span class="comment">% call:</span>
+0005 <span class="comment">%     &gt;&gt; summarize(object);</span>
+0006 <span class="comment">% displays all existing basis functions.  To summarize a specific function,</span>
+0007 <span class="comment">% pass the basis index.</span>
+0008 <span class="comment">%     &gt;&gt; summarize(object,index);</span>
+0009 <span class="comment">% When no ouput are specified, the summary is written in the command</span>
+0010 <span class="comment">% window.  Specific results can be assigned to outputs as shown below.</span>
+0011 <span class="comment">%     &gt;&gt; [basis,param,bound,scale,fixed]=summarize(...);</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">% See also Curve, add, edit, remove</span>
+0014 <span class="comment">%</span>
+0015 
+0016 <span class="comment">%</span>
+0017 <span class="comment">% created November 30, 2014 by Daniel Dolan (Sandia National Laboratories)</span>
+0018 <span class="comment">%</span>
+0019 <a name="_sub0" href="#_subfunctions" class="code">function varargout=summarize(object,index)</a>
+0020 
+0021 <span class="comment">% handle input</span>
+0022 N=numel(object.Basis);
+0023 <span class="keyword">if</span> (nargin&lt;2) || isempty(index)
+0024     index=1:N;
+0025 <span class="keyword">end</span>
+0026 
+0027 <span class="comment">% verify index values</span>
+0028 valid=1:N;
+0029 <span class="keyword">for</span> k=1:numel(index)
+0030     assert(any(index(k)==valid),<span class="string">'ERROR: invalid index'</span>);
+0031 <span class="keyword">end</span>
+0032 
+0033 <span class="comment">% extract information</span>
+0034 basis=object.Basis;
+0035 param=object.Parameter;
+0036 bound=object.Bound;
+0037 scale=object.Scale;
+0038 fixed=object.FixScale;
+0039 
+0040 <span class="comment">% handle output</span>
+0041 <span class="keyword">if</span> nargout==0    
+0042     fprintf(<span class="string">'Object uses %d basis functions\n'</span>,N);
+0043     <span class="keyword">for</span> k=1:N        
+0044         fprintf(<span class="string">'\tBasis %d: %s\n'</span>,k,func2str(object.Basis{k}));
+0045         fprintf(<span class="string">'\tParameter(s): '</span>);fprintf(<span class="string">'%+.6g '</span>,object.Parameter{k});fprintf(<span class="string">'\n'</span>);
+0046         fprintf(<span class="string">'\tLower bound(s): '</span>);fprintf(<span class="string">'%+.6g '</span>,object.Bound{k}(1,:));fprintf(<span class="string">'\n'</span>);
+0047         fprintf(<span class="string">'\tUpper bound(s): '</span>);fprintf(<span class="string">'%+.6g '</span>,object.Bound{k}(2,:));fprintf(<span class="string">'\n'</span>);
+0048         fprintf(<span class="string">'\tScale factor: %+.6g '</span>,object.Scale{k});
+0049         <span class="keyword">if</span> fixed{k}
+0050             fprintf(<span class="string">'(fixed)\n'</span>);
+0051         <span class="keyword">else</span>
+0052             fprintf(<span class="string">'(variable)\n'</span>);
+0053         <span class="keyword">end</span>
+0054         fprintf(<span class="string">'\n'</span>);
+0055     <span class="keyword">end</span>
+0056 <span class="keyword">else</span>
+0057     report=struct();
+0058     <span class="keyword">for</span> k=1:N
+0059         report(k).Basis=basis{k};
+0060         report(k).Parameter=param{k};
+0061         report(k).Bound=bound{k};
+0062         report(k).Scale=scale{k};
+0063         report(k).ScaleFixed=fixed{k};
+0064     <span class="keyword">end</span>
+0065     varargout{1}=report;
+0066 <span class="keyword">end</span>
+0067 
+0068 
+0069 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of import_data</title>
+  <meta name="keywords" content="import_data">
+  <meta name="description" content="read data from file">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">fringen</a> &gt; <a href="index.html">private</a> &gt; import_data.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/fringen/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>import_data
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>read data from file</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function data=import_data(data) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> read data from file</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="ColumnReader.html" class="code" title="function [data,header,filename]=ColumnReader(filename,delim,mincolumn)">ColumnReader</a>	ColumnReader : extract column data from a file</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="PDVfringen.html" class="code" title="function data=PDVfringen(data)">PDVfringen</a>	apply default parameters where necessary</li><li><a href="VISARfringen.html" class="code" title="function data=VISARfringen(data)">VISARfringen</a>	apply default parameters where necessary</li><li><a href="fringenGUI.html" class="code" title="function fringenGUI(varargin)">fringenGUI</a>	</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function data=import_data(data)</a>
+0002 
+0003 <span class="comment">% read data from file</span>
+0004 filename=data.inputfile;
+0005 <span class="keyword">try</span>
+0006     [temp,header,filename]=<a href="ColumnReader.html" class="code" title="function [data,header,filename]=ColumnReader(filename,delim,mincolumn)">ColumnReader</a>(filename);
+0007     <span class="keyword">if</span> isempty(temp)
+0008         data=[];
+0009         <span class="keyword">return</span>
+0010     <span class="keyword">end</span>
+0011 <span class="keyword">catch</span>
+0012     errordlg(<span class="string">'Unable to read history file'</span>);
+0013 <span class="keyword">end</span>
+0014 
+0015 data.inputfile=filename;
+0016 
+0017 Ncol=size(temp,2);
+0018 <span class="keyword">if</span> Ncol&lt;2
+0019     error(<span class="string">'ERROR: insufficient data in file'</span>);
+0020 <span class="keyword">end</span>
+0021 
+0022 data.time=temp(:,1);
+0023 tsize=size(data.time);
+0024 data.velocity=temp(:,2);
+0025 
+0026 <span class="keyword">if</span> Ncol&gt;=3
+0027     data.IC=temp(:,3);
+0028 <span class="keyword">else</span>
+0029     data.IC=ones(tsize);
+0030 <span class="keyword">end</span>
+0031 
+0032 <span class="keyword">if</span> Ncol&gt;=4
+0033     data.IE=temp(:,4);
+0034 <span class="keyword">else</span>
+0035     data.IE=zeros(tsize);
+0036 <span class="keyword">end</span>
+0037 
+0038 <span class="keyword">if</span> Ncol&gt;=5
+0039     data.IR=temp(:,5);
+0040 <span class="keyword">else</span>
+0041     data.IR=ones(tsize);
+0042 <span class="keyword">end</span>
+0043 
+0044 <span class="comment">% integrate velocity to find position</span>
+0045 data.position=cumtrapz(data.time,data.velocity);</pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

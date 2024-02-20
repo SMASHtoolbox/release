@@ -1,0 +1,76 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of define</title>
+  <meta name="keywords" content="define">
+  <meta name="description" content="define Manually define bounding values">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../../index.html">SMASHtoolbox</a> &gt; <a href="../../../index.html">+SMASH</a> &gt; <a href="../../index.html">+ROI</a> &gt; <a href="#">old</a> &gt; <a href="index.html">@BoundingLines</a> &gt; define.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../../index.html"><img alt="<" border="0" src="../../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+ROI/old/@BoundingLines&nbsp;<img alt=">" border="0" src="../../../../../../right.png"></a></td></tr></table>-->
+
+<h1>define
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>define Manually define bounding values</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>function object=define(object,data) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> define Manually define bounding values
+
+ This method manually defines bounding line positions.
+    &gt;&gt; object=define(object,[lower upper]);
+
+ See also <a href="BoundingLines.html" class="code" title="">BoundingLines</a>, <a href="select.html" class="code" title="function varargout=select(object,target,ApplyFunction)">select</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="BoundingLines.html" class="code" title="">BoundingLines</a>	This class defines a pair of bounding lines in two-dimensional space.</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% define Manually define bounding values</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This method manually defines bounding line positions.</span>
+0004 <span class="comment">%    &gt;&gt; object=define(object,[lower upper]);</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% See also BoundingLines, select</span>
+0007 <span class="comment">%</span>
+0008 
+0009 <span class="comment">%</span>
+0010 <span class="comment">% created November 14, 2014 by Daniel Dolan (Sandia National Laboratories)</span>
+0011 <span class="comment">%</span>
+0012 <a name="_sub0" href="#_subfunctions" class="code">function object=define(object,data)</a>
+0013 
+0014 <span class="comment">% handle input</span>
+0015 assert(nargin&gt;=2,<span class="string">'ERROR: insufficient input'</span>);
+0016 <span class="keyword">if</span> isempty(data)
+0017     data=[-inf +inf];
+0018 <span class="keyword">end</span>
+0019 assert(numel(data)==2,<span class="string">'ERROR: invalid data'</span>);
+0020 
+0021 data=sort(data);
+0022 object.Data=reshape(data,[1 2]);
+0023    
+0024 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

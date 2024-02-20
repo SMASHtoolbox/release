@@ -1,0 +1,370 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of Grid</title>
+  <meta name="keywords" content="Grid">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../../index.html">SMASHtoolbox</a> &gt; <a href="../../../index.html">+SMASH</a> &gt; <a href="../../index.html">+MUI</a> &gt; <a href="#">+GUILayout</a> &gt; <a href="index.html">+uix</a> &gt; Grid.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../../index.html"><img alt="<" border="0" src="../../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+MUI/+GUILayout/+uix&nbsp;<img alt=">" border="0" src="../../../../../../right.png"></a></td></tr></table>-->
+
+<h1>Grid
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="Grid.html" class="code" title="">Grid</a>	</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="Grid.html" class="code" title="">Grid</a>	</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function obj = Grid( varargin )</a></li><li><a href="#_sub2" class="code">function value = get.Widths( obj )</a></li><li><a href="#_sub3" class="code">function set.Widths( obj, value )</a></li><li><a href="#_sub4" class="code">function value = get.MinimumWidths( obj )</a></li><li><a href="#_sub5" class="code">function set.MinimumWidths( obj, value )</a></li><li><a href="#_sub6" class="code">function value = get.Heights( obj )</a></li><li><a href="#_sub7" class="code">function set.Heights( obj, value )</a></li><li><a href="#_sub8" class="code">function value = get.MinimumHeights( obj )</a></li><li><a href="#_sub9" class="code">function set.MinimumHeights( obj, value )</a></li><li><a href="#_sub10" class="code">function redraw( obj )</a></li><li><a href="#_sub11" class="code">function addChild( obj, child )</a></li><li><a href="#_sub12" class="code">function removeChild( obj, child )</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 classdef <a href="Grid.html" class="code" title="">Grid</a> &lt; uix.Box
+0002     <span class="comment">%uix.Grid  Grid</span>
+0003     <span class="comment">%</span>
+0004     <span class="comment">%  b = uix.Grid(p1,v1,p2,v2,...) constructs a grid and sets parameter</span>
+0005     <span class="comment">%  p1 to value v1, etc.</span>
+0006     <span class="comment">%</span>
+0007     <span class="comment">%  A grid lays out contents from top to bottom and left to right.</span>
+0008     <span class="comment">%</span>
+0009     <span class="comment">%  See also: uix.HBox, uix.VBox, uix.GridFlex</span>
+0010     
+0011     <span class="comment">%  Copyright 2009-2016 The MathWorks, Inc.</span>
+0012     <span class="comment">%  $Revision: 1436 $ $Date: 2016-11-17 17:53:29 +0000 (Thu, 17 Nov 2016) $</span>
+0013     
+0014     properties( Access = public, Dependent, AbortSet )
+0015         Widths <span class="comment">% widths of contents, in pixels and/or weights</span>
+0016         MinimumWidths <span class="comment">% minimum widths of contents, in pixels</span>
+0017         Heights <span class="comment">% heights of contents, in pixels and/or weights</span>
+0018         MinimumHeights <span class="comment">% minimum heights of contents, in pixels</span>
+0019     <span class="keyword">end</span>
+0020     
+0021     properties( Access = protected )
+0022         Widths_ = zeros( [0 1] ) <span class="comment">% backing for Widths</span>
+0023         MinimumWidths_ = zeros( [0 1] ) <span class="comment">% backing for MinimumWidths</span>
+0024         Heights_ = zeros( [0 1] ) <span class="comment">% backing for Heights</span>
+0025         MinimumHeights_ = zeros( [0 1] ) <span class="comment">% backing for MinimumHeights</span>
+0026     <span class="keyword">end</span>
+0027     
+0028     methods
+0029         
+0030         <a name="_sub0" href="#_subfunctions" class="code">function obj = Grid( varargin )</a>
+0031             <span class="comment">%uix.Grid  Grid constructor</span>
+0032             <span class="comment">%</span>
+0033             <span class="comment">%  b = uix.Grid() constructs a grid.</span>
+0034             <span class="comment">%</span>
+0035             <span class="comment">%  b = uix.Grid(p1,v1,p2,v2,...) sets parameter p1 to value v1,</span>
+0036             <span class="comment">%  etc.</span>
+0037             
+0038             <span class="comment">% Set properties</span>
+0039             <span class="keyword">if</span> nargin &gt; 0
+0040                 <span class="keyword">try</span>
+0041                     assert( rem( nargin, 2 ) == 0, <span class="string">'uix:InvalidArgument'</span>, <span class="keyword">...</span>
+0042                         <span class="string">'Parameters and values must be provided in pairs.'</span> )
+0043                     set( obj, varargin{:} )
+0044                 <span class="keyword">catch</span> e
+0045                     delete( obj )
+0046                     e.throwAsCaller()
+0047                 <span class="keyword">end</span>
+0048             <span class="keyword">end</span>
+0049             
+0050         <span class="keyword">end</span> <span class="comment">% constructor</span>
+0051         
+0052     <span class="keyword">end</span> <span class="comment">% structors</span>
+0053     
+0054     methods
+0055         
+0056         <a name="_sub1" href="#_subfunctions" class="code">function value = get.Widths( obj )</a>
+0057             
+0058             value = obj.Widths_;
+0059             
+0060         <span class="keyword">end</span> <span class="comment">% get.Widths</span>
+0061         
+0062         <a name="_sub2" href="#_subfunctions" class="code">function set.Widths( obj, value )</a>
+0063             
+0064             <span class="comment">% For those who can't tell a column from a row...</span>
+0065             <span class="keyword">if</span> isrow( value )
+0066                 value = transpose( value );
+0067             <span class="keyword">end</span>
+0068             
+0069             <span class="comment">% Check</span>
+0070             assert( isa( value, <span class="string">'double'</span> ), <span class="string">'uix:InvalidPropertyValue'</span>, <span class="keyword">...</span>
+0071                 <span class="string">'Property ''Widths'' must be of type double.'</span> )
+0072             assert( all( isreal( value ) ) &amp;&amp; ~any( isinf( value ) ) &amp;&amp; <span class="keyword">...</span>
+0073                 ~any( isnan( value ) ), <span class="string">'uix:InvalidPropertyValue'</span>, <span class="keyword">...</span>
+0074                 <span class="string">'Elements of property ''Widths'' must be real and finite.'</span> )
+0075             n = numel( obj.Contents_ );
+0076             b = numel( obj.Widths_ );
+0077             q = numel( obj.Heights_ );
+0078             c = numel( value );
+0079             r = ceil( n / c );
+0080             <span class="keyword">if</span> c &lt; min( [1 n] )
+0081                 error( <span class="string">'uix:InvalidPropertyValue'</span> , <span class="keyword">...</span>
+0082                     <span class="string">'Property ''Widths'' must be non-empty for non-empty contents.'</span> )
+0083             <span class="keyword">elseif</span> ceil( n / r ) &lt; c
+0084                 error( <span class="string">'uix:InvalidPropertyValue'</span> , <span class="keyword">...</span>
+0085                     <span class="string">'Size of property ''Widths'' must not lead to empty columns.'</span> )
+0086             <span class="keyword">elseif</span> c &gt; n
+0087                 error( <span class="string">'uix:InvalidPropertyValue'</span> , <span class="keyword">...</span>
+0088                     <span class="string">'Size of property ''Widths'' must be no larger than size of contents.'</span> )
+0089             <span class="keyword">end</span>
+0090             
+0091             <span class="comment">% Set</span>
+0092             obj.Widths_ = value;
+0093             <span class="keyword">if</span> c &lt; b <span class="comment">% number of columns decreasing</span>
+0094                 obj.MinimumWidths_(c+1:<span class="keyword">end</span>,:) = [];
+0095                 <span class="keyword">if</span> r &gt; q <span class="comment">% number of rows increasing</span>
+0096                     obj.Heights_(end+1:r,:) = -1;
+0097                     obj.MinimumHeights_(end+1:r,:) = 1;
+0098                 <span class="keyword">end</span>
+0099             <span class="keyword">elseif</span> c &gt; b <span class="comment">% number of columns increasing</span>
+0100                 obj.MinimumWidths_(end+1:c,:) = -1;
+0101                 <span class="keyword">if</span> r &lt; q <span class="comment">% number of rows decreasing</span>
+0102                     obj.Heights_(r+1:<span class="keyword">end</span>,:) = [];
+0103                     obj.MinimumHeights_(r+1:<span class="keyword">end</span>,:) = [];
+0104                 <span class="keyword">end</span>
+0105             <span class="keyword">end</span>
+0106             
+0107             <span class="comment">% Mark as dirty</span>
+0108             obj.Dirty = true;
+0109             
+0110         <span class="keyword">end</span> <span class="comment">% set.Widths</span>
+0111         
+0112         <a name="_sub3" href="#_subfunctions" class="code">function value = get.MinimumWidths( obj )</a>
+0113             
+0114             value = obj.MinimumWidths_;
+0115             
+0116         <span class="keyword">end</span> <span class="comment">% get.MinimumWidths</span>
+0117         
+0118         <a name="_sub4" href="#_subfunctions" class="code">function set.MinimumWidths( obj, value )</a>
+0119             
+0120             <span class="comment">% For those who can't tell a column from a row...</span>
+0121             <span class="keyword">if</span> isrow( value )
+0122                 value = transpose( value );
+0123             <span class="keyword">end</span>
+0124             
+0125             <span class="comment">% Check</span>
+0126             assert( isa( value, <span class="string">'double'</span> ), <span class="string">'uix:InvalidPropertyValue'</span>, <span class="keyword">...</span>
+0127                 <span class="string">'Property ''MinimumWidths'' must be of type double.'</span> )
+0128             assert( all( isreal( value ) ) &amp;&amp; ~any( isinf( value ) ) &amp;&amp; <span class="keyword">...</span>
+0129                 all( value &gt;= 0 ), <span class="string">'uix:InvalidPropertyValue'</span>, <span class="keyword">...</span>
+0130                 <span class="string">'Elements of property ''MinimumWidths'' must be non-negative.'</span> )
+0131             assert( isequal( size( value ), size( obj.Widths_ ) ), <span class="keyword">...</span>
+0132                 <span class="string">'uix:InvalidPropertyValue'</span>, <span class="keyword">...</span>
+0133                 <span class="string">'Size of property ''MinimumWidths'' must match size of contents.'</span> )
+0134             
+0135             <span class="comment">% Set</span>
+0136             obj.MinimumWidths_ = value;
+0137             
+0138             <span class="comment">% Mark as dirty</span>
+0139             obj.Dirty = true;
+0140             
+0141         <span class="keyword">end</span> <span class="comment">% set.MinimumWidths</span>
+0142         
+0143         <a name="_sub5" href="#_subfunctions" class="code">function value = get.Heights( obj )</a>
+0144             
+0145             value = obj.Heights_;
+0146             
+0147         <span class="keyword">end</span> <span class="comment">% get.Heights</span>
+0148         
+0149         <a name="_sub6" href="#_subfunctions" class="code">function set.Heights( obj, value )</a>
+0150             
+0151             <span class="comment">% For those who can't tell a column from a row...</span>
+0152             <span class="keyword">if</span> isrow( value )
+0153                 value = transpose( value );
+0154             <span class="keyword">end</span>
+0155             
+0156             <span class="comment">% Check</span>
+0157             assert( isa( value, <span class="string">'double'</span> ), <span class="string">'uix:InvalidPropertyValue'</span>, <span class="keyword">...</span>
+0158                 <span class="string">'Property ''Heights'' must be of type double.'</span> )
+0159             assert( all( isreal( value ) ) &amp;&amp; ~any( isinf( value ) ) &amp;&amp; <span class="keyword">...</span>
+0160                 ~any( isnan( value ) ), <span class="string">'uix:InvalidPropertyValue'</span>, <span class="keyword">...</span>
+0161                 <span class="string">'Elements of property ''Heights'' must be real and finite.'</span> )
+0162             n = numel( obj.Contents_ );
+0163             b = numel( obj.Widths_ );
+0164             q = numel( obj.Heights_ );
+0165             r = numel( value );
+0166             c = ceil( n / r );
+0167             <span class="keyword">if</span> r &lt; min( [1 n] )
+0168                 error( <span class="string">'uix:InvalidPropertyValue'</span> , <span class="keyword">...</span>
+0169                     <span class="string">'Property ''Heights'' must be non-empty for non-empty contents.'</span> )
+0170             <span class="keyword">elseif</span> r &gt; n
+0171                 error( <span class="string">'uix:InvalidPropertyValue'</span> , <span class="keyword">...</span>
+0172                     <span class="string">'Size of property ''Heights'' must be no larger than size of contents.'</span> )
+0173             <span class="keyword">end</span>
+0174             
+0175             <span class="comment">% Set</span>
+0176             obj.Heights_ = value;
+0177             <span class="keyword">if</span> r &lt; q <span class="comment">% number of rows decreasing</span>
+0178                 obj.MinimumHeights_(r+1:<span class="keyword">end</span>,:) = [];
+0179                 <span class="keyword">if</span> c &gt; b <span class="comment">% number of columns increasing</span>
+0180                     obj.Widths_(end+1:c,:) = -1;
+0181                     obj.MinimumWidths_(end+1:c,:) = 1;
+0182                 <span class="keyword">end</span>
+0183             <span class="keyword">elseif</span> r &gt; q <span class="comment">% number of rows increasing</span>
+0184                 obj.MinimumHeights_(end+1:r,:) = 1;
+0185                 <span class="keyword">if</span> c &lt; b <span class="comment">% number of columns decreasing</span>
+0186                     obj.Widths_(c+1:<span class="keyword">end</span>,:) = [];
+0187                     obj.MinimumWidths_(c+1:<span class="keyword">end</span>,:) = [];
+0188                 <span class="keyword">end</span>
+0189             <span class="keyword">end</span>
+0190             
+0191             <span class="comment">% Mark as dirty</span>
+0192             obj.Dirty = true;
+0193             
+0194         <span class="keyword">end</span> <span class="comment">% set.Heights</span>
+0195         
+0196         <a name="_sub7" href="#_subfunctions" class="code">function value = get.MinimumHeights( obj )</a>
+0197             
+0198             value = obj.MinimumHeights_;
+0199             
+0200         <span class="keyword">end</span> <span class="comment">% get.MinimumHeights</span>
+0201         
+0202         <a name="_sub8" href="#_subfunctions" class="code">function set.MinimumHeights( obj, value )</a>
+0203             
+0204             <span class="comment">% For those who can't tell a column from a row...</span>
+0205             <span class="keyword">if</span> isrow( value )
+0206                 value = transpose( value );
+0207             <span class="keyword">end</span>
+0208             
+0209             <span class="comment">% Check</span>
+0210             assert( isa( value, <span class="string">'double'</span> ), <span class="string">'uix:InvalidPropertyValue'</span>, <span class="keyword">...</span>
+0211                 <span class="string">'Property ''MinimumHeights'' must be of type double.'</span> )
+0212             assert( all( isreal( value ) ) &amp;&amp; ~any( isinf( value ) ) &amp;&amp; <span class="keyword">...</span>
+0213                 all( value &gt;= 0 ), <span class="string">'uix:InvalidPropertyValue'</span>, <span class="keyword">...</span>
+0214                 <span class="string">'Elements of property ''MinimumHeights'' must be non-negative.'</span> )
+0215             assert( isequal( size( value ), size( obj.Heights_ ) ), <span class="keyword">...</span>
+0216                 <span class="string">'uix:InvalidPropertyValue'</span>, <span class="keyword">...</span>
+0217                 <span class="string">'Size of property ''MinimumHeights'' must match size of contents.'</span> )
+0218             
+0219             <span class="comment">% Set</span>
+0220             obj.MinimumHeights_ = value;
+0221             
+0222             <span class="comment">% Mark as dirty</span>
+0223             obj.Dirty = true;
+0224             
+0225         <span class="keyword">end</span> <span class="comment">% set.MinimumHeights</span>
+0226         
+0227     <span class="keyword">end</span> <span class="comment">% accessors</span>
+0228     
+0229     methods( Access = protected )
+0230         
+0231         <a name="_sub9" href="#_subfunctions" class="code">function redraw( obj )</a>
+0232             <span class="comment">%redraw  Redraw</span>
+0233             <span class="comment">%</span>
+0234             <span class="comment">%  c.redraw() redraws the container c.</span>
+0235             
+0236             <span class="comment">% Compute positions</span>
+0237             bounds = hgconvertunits( ancestor( obj, <span class="string">'figure'</span> ), <span class="keyword">...</span>
+0238                 [0 0 1 1], <span class="string">'normalized'</span>, <span class="string">'pixels'</span>, obj );
+0239             widths = obj.Widths_;
+0240             minimumWidths = obj.MinimumWidths_;
+0241             heights = obj.Heights_;
+0242             minimumHeights = obj.MinimumHeights_;
+0243             padding = obj.Padding_;
+0244             spacing = obj.Spacing_;
+0245             c = numel( widths );
+0246             r = numel( heights );
+0247             n = numel( obj.Contents_ );
+0248             xSizes = uix.calcPixelSizes( bounds(3), widths, <span class="keyword">...</span>
+0249                 minimumWidths, padding, spacing );
+0250             xPositions = [cumsum( [0; xSizes(1:end-1,:)] ) + padding + <span class="keyword">...</span>
+0251                 spacing * transpose( 0:c-1 ) + 1, xSizes];
+0252             ySizes = uix.calcPixelSizes( bounds(4), heights, <span class="keyword">...</span>
+0253                 minimumHeights, padding, spacing );
+0254             yPositions = [bounds(4) - cumsum( ySizes ) - padding - <span class="keyword">...</span>
+0255                 spacing * transpose( 0:r-1 ) + 1, ySizes];
+0256             [iy, ix] = ind2sub( [r c], transpose( 1:n ) );
+0257             positions = [xPositions(ix,1), yPositions(iy,1), <span class="keyword">...</span>
+0258                 xPositions(ix,2), yPositions(iy,2)];
+0259             
+0260             <span class="comment">% Set positions</span>
+0261             children = obj.Contents_;
+0262             <span class="keyword">for</span> ii = 1:numel( children )
+0263                 uix.setPosition( children(ii), positions(ii,:), <span class="string">'pixels'</span> )
+0264             <span class="keyword">end</span>
+0265             
+0266         <span class="keyword">end</span> <span class="comment">% redraw</span>
+0267         
+0268         <a name="_sub10" href="#_subfunctions" class="code">function addChild( obj, child )</a>
+0269             <span class="comment">%addChild  Add child</span>
+0270             <span class="comment">%</span>
+0271             <span class="comment">%  c.addChild(d) adds the child d to the container c.</span>
+0272             
+0273             <span class="comment">% Add column and even a row if necessary</span>
+0274             n = numel( obj.Contents_ );
+0275             c = numel( obj.Widths_ );
+0276             r = numel( obj.Heights_ );
+0277             <span class="keyword">if</span> n == 0
+0278                 obj.Widths_(end+1,:) = -1;
+0279                 obj.MinimumWidths_(end+1,:) = 1;
+0280                 obj.Heights_(end+1,:) = -1;
+0281                 obj.MinimumHeights_(end+1,:) = 1;
+0282             <span class="keyword">elseif</span> ceil( (n+1)/r ) &gt; c
+0283                 obj.Widths_(end+1,:) = -1;
+0284                 obj.MinimumWidths_(end+1,:) = 1;
+0285             <span class="keyword">end</span>
+0286             
+0287             <span class="comment">% Call superclass method</span>
+0288             <a href="#_sub11" class="code" title="subfunction addChild( obj, child )">addChild</a>@uix.Box( obj, child )
+0289             
+0290         <span class="keyword">end</span> <span class="comment">% addChild</span>
+0291         
+0292         <a name="_sub11" href="#_subfunctions" class="code">function removeChild( obj, child )</a>
+0293             <span class="comment">%removeChild  Remove child</span>
+0294             <span class="comment">%</span>
+0295             <span class="comment">%  c.removeChild(d) removes the child d from the container c.</span>
+0296             
+0297             <span class="comment">% Remove column and even row if necessary</span>
+0298             n = numel( obj.Contents_ );
+0299             c = numel( obj.Widths_ );
+0300             r = numel( obj.Heights_ );
+0301             <span class="keyword">if</span> n == 1
+0302                 obj.Widths_(<span class="keyword">end</span>,:) = [];
+0303                 obj.MinimumWidths_(<span class="keyword">end</span>,:) = [];
+0304                 obj.Heights_(<span class="keyword">end</span>,:) = [];
+0305                 obj.MinimumHeights_(<span class="keyword">end</span>,:) = [];
+0306             <span class="keyword">elseif</span> c == 1
+0307                 obj.Heights_(<span class="keyword">end</span>,:) = [];
+0308                 obj.MinimumHeights_(<span class="keyword">end</span>,:) = [];
+0309             <span class="keyword">elseif</span> ceil( (n-1)/r ) &lt; c
+0310                 obj.Widths_(<span class="keyword">end</span>,:) = [];
+0311                 obj.MinimumWidths_(<span class="keyword">end</span>,:) = [];
+0312             <span class="keyword">end</span>
+0313             
+0314             <span class="comment">% Call superclass method</span>
+0315             <a href="#_sub12" class="code" title="subfunction removeChild( obj, child )">removeChild</a>@uix.Box( obj, child )
+0316             
+0317         <span class="keyword">end</span> <span class="comment">% removeChild</span>
+0318         
+0319     <span class="keyword">end</span> <span class="comment">% template methods</span>
+0320     
+0321 <span class="keyword">end</span> <span class="comment">% classdef</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

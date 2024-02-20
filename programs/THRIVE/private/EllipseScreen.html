@@ -1,0 +1,706 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of EllipseScreen</title>
+  <meta name="keywords" content="EllipseScreen">
+  <meta name="description" content="allocate mising input">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">THRIVE</a> &gt; <a href="index.html">private</a> &gt; EllipseScreen.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/THRIVE/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>EllipseScreen
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>allocate mising input</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function fig=EllipseScreen(oldfig) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> allocate mising input</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="ClonePlot.html" class="code" title="function ClonePlot(src,varargin)">ClonePlot</a>	get handles</li><li><a href="DirectEllipseFit.html" class="code" title="function [params1,params2]=DirectEllipseFit(x,y)">DirectEllipseFit</a>	DirectEllipseFit : direct ellipse fitting</li><li><a href="HelpWindow.html" class="code" title="function HelpWindow(src,varargin)">HelpWindow</a>	get handles</li><li><a href="IterativeEllipseFit.html" class="code" title="function params=IterativeEllipseFit(D1,D2,D3,guess,fixed,options)">IterativeEllipseFit</a>	IterativeEllipseFit : iterative ellipse fit with fixed parameter options</li><li><a href="LoadScreen.html" class="code" title="function fig=LoadScreen(oldfig)">LoadScreen</a>	LoadScreen:</li><li><a href="MatchFigures.html" class="code" title="function MatchFigures(old,new)">MatchFigures</a>	match the position of two figures</li><li><a href="MinimalFigure.html" class="code" title="function varargout=MinimalFigure(varargin)">MinimalFigure</a>	MinimalFigure: create a minimalistic figure useful for GUIs</li><li><a href="NudgePopupMenus.html" class="code" title="function NudgePopupMenus(fig)">NudgePopupMenus</a>	</li><li><a href="NudgeTextBoxes.html" class="code" title="function NudgeTextBoxes(fig)">NudgeTextBoxes</a>	</li><li><a href="ParameterRatios.html" class="code" title="function R=ParameterRatios(contrast,rootsign)">ParameterRatios</a>	</li><li><a href="QuadratureScreen.html" class="code" title="function fig=QuadratureScreen(oldfig)">QuadratureScreen</a>	this function needs to be significantly revised. Entry into the figure</li><li><a href="ReadEditBox.html" class="code" title="function data=ReadEditBox(src,varargin)">ReadEditBox</a>	read edit box callback</li><li><a href="StartOver.html" class="code" title="function StartOver(src,varargin)">StartOver</a>	prompt user</li><li><a href="aboutTHRIVE.html" class="code" title="function varargout=aboutTHRIVE(varargin)">aboutTHRIVE</a>	</li><li><a href="checkbox.html" class="code" title="function [h,pos]=checkbox(parent,pos,string,varargin)">checkbox</a>	</li><li><a href="custom_uicontrol.html" class="code" title="function [h,pos]=custom_uicontrol(varargin)">custom_uicontrol</a>	customized uicontrol function</li><li><a href="custom_uipanel.html" class="code" title="function h=custom_uipanel(varargin)">custom_uipanel</a>	</li><li><a href="editbox.html" class="code" title="function [h,pos]=editbox(parent,pos,string,varargin)">editbox</a>	</li><li><a href="popupmenu.html" class="code" title="function [h,pos]=popupmenu(parent,pos,string,varargin)">popupmenu</a>	</li><li><a href="pushbutton.html" class="code" title="function [h,pos]=pushbutton(parent,pos,string,varargin)">pushbutton</a>	</li><li><a href="textlabel.html" class="code" title="function [h,pos]=textlabel(parent,pos,string,varargin)">textlabel</a>	</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="LoadScreen.html" class="code" title="function fig=LoadScreen(oldfig)">LoadScreen</a>	LoadScreen:</li><li><a href="QuadratureScreen.html" class="code" title="function fig=QuadratureScreen(oldfig)">QuadratureScreen</a>	this function needs to be significantly revised. Entry into the figure</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function fig=createGUI(varargin)</a></li><li><a href="#_sub2" class="code">function ResizeFcn(src,varargin)</a></li><li><a href="#_sub3" class="code">function FixEditBox(src,varargin)</a></li><li><a href="#_sub4" class="code">function LinkAssumptions(src,varargin)</a></li><li><a href="#_sub5" class="code">function DetectorCoupling(src,varargin)</a></li><li><a href="#_sub6" class="code">function UpdateFits(src,varargin)</a></li><li><a href="#_sub7" class="code">function GuessParameters(src,varargin)</a></li><li><a href="#_sub8" class="code">function OptimizeParameters(src,varargin)</a></li><li><a href="#_sub9" class="code">function PreviousButton(src,varargin)</a></li><li><a href="#_sub10" class="code">function NextButton(src,varargin)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function fig=EllipseScreen(oldfig)</a>
+0002 
+0003 <span class="comment">% allocate mising input</span>
+0004 <span class="keyword">if</span> nargin&lt;1
+0005     oldfig=<span class="string">''</span>;
+0006 <span class="keyword">end</span>
+0007 
+0008 <span class="comment">% create figure (if necessary)</span>
+0009 tag=<span class="string">'THRIVE_EllipseScreen'</span>;
+0010 fig=findall(0,<span class="string">'Type'</span>,<span class="string">'figure'</span>,<span class="string">'Tag'</span>,tag);
+0011 <span class="keyword">if</span> isempty(fig)
+0012     fig=<a href="#_sub1" class="code" title="subfunction fig=createGUI(varargin)">createGUI</a>(<span class="string">'Tag'</span>,tag);
+0013 <span class="keyword">end</span>
+0014 
+0015 <span class="comment">% determine how figure was called</span>
+0016 <span class="keyword">if</span> isempty(oldfig)
+0017     <span class="keyword">return</span>
+0018 <span class="keyword">end</span>
+0019 <span class="keyword">switch</span> get(oldfig,<span class="string">'Tag'</span>);
+0020     <span class="keyword">case</span> {<span class="string">'THRIVE_LoadScreen'</span>} <span class="comment">% load characterization data</span>
+0021       srcfig=findall(0,<span class="string">'Type'</span>,<span class="string">'figure'</span>,<span class="string">'Tag'</span>,<span class="string">'THRIVE_LoadScreen'</span>);
+0022       hsrc=guihandles(srcfig);
+0023       tbound(1)=get(hsrc.CharacterizationTime1,<span class="string">'UserData'</span>);
+0024       tbound(2)=get(hsrc.CharacterizationTime2,<span class="string">'UserData'</span>);
+0025       time=get(hsrc.D1,<span class="string">'XData'</span>);
+0026       k=(time&gt;=min(tbound)) &amp; (time&lt;=max(tbound));
+0027       D1=get(hsrc.D1,<span class="string">'YData'</span>);   D1=D1(k);
+0028       D2=get(hsrc.D2,<span class="string">'YData'</span>);   D2=D2(k);
+0029       D3=get(hsrc.D3,<span class="string">'YData'</span>);   D3=D3(k);
+0030       h=guihandles(fig);
+0031       set(h.D1D2data,<span class="string">'XData'</span>,D1,<span class="string">'YData'</span>,D2);
+0032       set(h.D1D3data,<span class="string">'XData'</span>,D1,<span class="string">'YData'</span>,D3);
+0033     <span class="keyword">case</span> <span class="string">'THRIVE_QuadratureScreen'</span>
+0034         <span class="comment">% do something</span>
+0035 <span class="keyword">end</span>
+0036 <a href="MatchFigures.html" class="code" title="function MatchFigures(old,new)">MatchFigures</a>(oldfig,fig);
+0037 figure(fig);
+0038 
+0039 <span class="comment">%%%%%%%%%%%%%%</span>
+0040 <span class="comment">% create GUI %</span>
+0041 <span class="comment">%%%%%%%%%%%%%%</span>
+0042 <a name="_sub1" href="#_subfunctions" class="code">function fig=createGUI(varargin)</a>
+0043 
+0044 <span class="comment">% probe primary monitor size</span>
+0045 monpos=get(0,<span class="string">'MonitorPositions'</span>);
+0046 monpos=monpos(1,:);
+0047 monLx=monpos(3)+monpos(1)-1;
+0048 monLy=monpos(4)+monpos(2)-1;
+0049 
+0050 <span class="comment">% create figure</span>
+0051 name=<a href="aboutTHRIVE.html" class="code" title="function varargout=aboutTHRIVE(varargin)">aboutTHRIVE</a>(<span class="string">'name'</span>);
+0052 fig=<a href="MinimalFigure.html" class="code" title="function varargout=MinimalFigure(varargin)">MinimalFigure</a>(<span class="string">'Visible'</span>,<span class="string">'off'</span>,<span class="string">'units'</span>,<span class="string">'pixels'</span>,<span class="keyword">...</span>
+0053     <span class="string">'NumberTitle'</span>,<span class="string">'off'</span>,<span class="string">'Name'</span>,name,<span class="string">'IntegerHandle'</span>,<span class="string">'off'</span>,<span class="keyword">...</span>
+0054     varargin{:});
+0055 [h,pos]=<a href="textlabel.html" class="code" title="function [h,pos]=textlabel(parent,pos,string,varargin)">textlabel</a>(fig,[0 0],repmat(<span class="string">'M'</span>,[1 80]));
+0056 delete(h);
+0057 data.Lx=pos(3);
+0058 data.Ly=0.80*monLy;
+0059 x0=(monLx-data.Lx)/2;
+0060 y0=(monLy-data.Ly)/2;
+0061 set(fig,<span class="string">'Position'</span>,[x0 y0 data.Lx data.Ly]);
+0062 
+0063 data.ymargin=0.5*pos(4);
+0064 data.xmargin=data.ymargin;
+0065 data.ygap=data.ymargin/4;
+0066 
+0067 <span class="comment">% create uimenus</span>
+0068 hm=uimenu(fig,<span class="string">'Label'</span>,<span class="string">'Program'</span>);
+0069 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Start over'</span>,<span class="keyword">...</span>
+0070     <span class="string">'Tag'</span>,<span class="string">'StartOver'</span>,<span class="string">'Callback'</span>,@<a href="StartOver.html" class="code" title="function StartOver(src,varargin)">StartOver</a>);
+0071 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Exit'</span>,<span class="string">'Separator'</span>,<span class="string">'on'</span>,<span class="string">'Callback'</span>,<span class="string">'close(gcbf)'</span>);
+0072 
+0073 hm=uimenu(fig,<span class="string">'Label'</span>,<span class="string">'Help'</span>);
+0074 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'About THRIVE'</span>,<span class="string">'Callback'</span>,{@<a href="aboutTHRIVE.html" class="code" title="function varargout=aboutTHRIVE(varargin)">aboutTHRIVE</a>,fig});
+0075 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Ellipse fitting'</span>,<span class="string">'Callback'</span>,@<a href="HelpWindow.html" class="code" title="function HelpWindow(src,varargin)">HelpWindow</a>);
+0076 
+0077 <span class="comment">% create control panel</span>
+0078 hpanel(1)=<a href="custom_uipanel.html" class="code" title="function h=custom_uipanel(varargin)">custom_uipanel</a>(<span class="string">'Parent'</span>,fig,<span class="string">'Tag'</span>,<span class="string">'ControlPanel'</span>);
+0079 <span class="comment">%filename0=repmat('M',[1 50]);</span>
+0080 number0=<span class="string">' +0.00000E+00 '</span>;
+0081 data.ellipse=[];
+0082 
+0083 pos(1)=data.xmargin;
+0084 pos(2)=0;
+0085 [h,pos]=<a href="pushbutton.html" class="code" title="function [h,pos]=pushbutton(parent,pos,string,varargin)">pushbutton</a>(hpanel(1),pos,<span class="string">' Guess parameters '</span>,<span class="keyword">...</span>
+0086     <span class="string">'Tag'</span>,<span class="string">'guess'</span>,<span class="string">'Callback'</span>,@<a href="#_sub7" class="code" title="subfunction GuessParameters(src,varargin)">GuessParameters</a>,<span class="keyword">...</span>
+0087     <span class="string">'ToolTipString'</span>,<span class="string">'Guess ellise parameters (resets fixed values)'</span>);
+0088 pos(1)=pos(1)+pos(3)+2*data.xmargin;
+0089 [h,pos]=<a href="pushbutton.html" class="code" title="function [h,pos]=pushbutton(parent,pos,string,varargin)">pushbutton</a>(hpanel(1),pos,<span class="string">' Optimize parameters '</span>,<span class="keyword">...</span>
+0090     <span class="string">'Tag'</span>,<span class="string">'optimize'</span>,<span class="string">'Callback'</span>,@<a href="#_sub8" class="code" title="subfunction OptimizeParameters(src,varargin)">OptimizeParameters</a>,<span class="keyword">...</span>
+0091     <span class="string">'ToolTipString'</span>,<span class="string">'Iteratively optimize parameters (fixed values remain constant)'</span>);
+0092 
+0093 labelA={<span class="string">'D1 baseline='</span>,<span class="string">'D2 amplitude='</span>};
+0094 [maxchar,kmaxA]=max(cellfun(@numel,labelA));
+0095 
+0096 pos(1)=data.xmargin;
+0097 pos(2)=pos(2)-2*data.ygap-pos(4);
+0098 [h,pos]=<a href="textlabel.html" class="code" title="function [h,pos]=textlabel(parent,pos,string,varargin)">textlabel</a>(hpanel(1),pos,labelA{kmaxA},<span class="keyword">...</span>
+0099     <span class="string">'String'</span>,<span class="string">'D1 baseline='</span>,<span class="string">'HorizontalAlignment'</span>,<span class="string">'right'</span>);
+0100 pos(1)=pos(1)+pos(3);
+0101 [hedit,pos]=<a href="editbox.html" class="code" title="function [h,pos]=editbox(parent,pos,string,varargin)">editbox</a>(hpanel(1),pos,number0,<span class="keyword">...</span>
+0102     <span class="string">'Tag'</span>,<span class="string">'D1baseline'</span>,<span class="string">'String'</span>,<span class="string">''</span>,<span class="string">'Callback'</span>,@<a href="#_sub6" class="code" title="subfunction UpdateFits(src,varargin)">UpdateFits</a>);
+0103 pos(1)=pos(1)+pos(3);
+0104 [h,pos]=<a href="checkbox.html" class="code" title="function [h,pos]=checkbox(parent,pos,string,varargin)">checkbox</a>(hpanel(1),pos,<span class="string">'fix'</span>,<span class="keyword">...</span>
+0105     <span class="string">'Tag'</span>,<span class="string">'fixD1baseline'</span>,<span class="string">'Callback'</span>,@<a href="#_sub3" class="code" title="subfunction FixEditBox(src,varargin)">FixEditBox</a>,<span class="string">'UserData'</span>,hedit);
+0106 pos(1)=pos(1)+pos(3)+data.xmargin;
+0107 [h,pos]=<a href="textlabel.html" class="code" title="function [h,pos]=textlabel(parent,pos,string,varargin)">textlabel</a>(hpanel(1),pos,labelA{kmaxA},<span class="keyword">...</span>
+0108     <span class="string">'String'</span>,<span class="string">'D1 amplitude='</span>,<span class="string">'HorizontalAlignment'</span>,<span class="string">'right'</span>);
+0109 pos(1)=pos(1)+pos(3);
+0110 [hedit,pos]=<a href="editbox.html" class="code" title="function [h,pos]=editbox(parent,pos,string,varargin)">editbox</a>(hpanel(1),pos,number0,<span class="keyword">...</span>
+0111     <span class="string">'Tag'</span>,<span class="string">'D1amplitude'</span>,<span class="string">'String'</span>,<span class="string">''</span>,<span class="string">'Callback'</span>,@<a href="#_sub6" class="code" title="subfunction UpdateFits(src,varargin)">UpdateFits</a>);
+0112 pos(1)=pos(1)+pos(3);
+0113 [h,pos]=<a href="checkbox.html" class="code" title="function [h,pos]=checkbox(parent,pos,string,varargin)">checkbox</a>(hpanel(1),pos,<span class="string">'fix'</span>,<span class="keyword">...</span>
+0114     <span class="string">'Tag'</span>,<span class="string">'fixD1amplitude'</span>,<span class="string">'Callback'</span>,@<a href="#_sub3" class="code" title="subfunction FixEditBox(src,varargin)">FixEditBox</a>,<span class="string">'UserData'</span>,hedit);
+0115 
+0116 pos(1)=data.xmargin;
+0117 pos(2)=pos(2)-data.ygap-pos(4);
+0118 [h,pos]=<a href="textlabel.html" class="code" title="function [h,pos]=textlabel(parent,pos,string,varargin)">textlabel</a>(hpanel(1),pos,labelA{kmaxA},<span class="keyword">...</span>
+0119     <span class="string">'String'</span>,<span class="string">'D2 baseline='</span>,<span class="string">'HorizontalAlignment'</span>,<span class="string">'right'</span>);
+0120 pos(1)=pos(1)+pos(3);
+0121 [hedit,pos]=<a href="editbox.html" class="code" title="function [h,pos]=editbox(parent,pos,string,varargin)">editbox</a>(hpanel(1),pos,number0,<span class="keyword">...</span>
+0122     <span class="string">'Tag'</span>,<span class="string">'D2baseline'</span>,<span class="string">'String'</span>,<span class="string">''</span>,<span class="string">'Callback'</span>,@<a href="#_sub6" class="code" title="subfunction UpdateFits(src,varargin)">UpdateFits</a>);
+0123 pos(1)=pos(1)+pos(3);
+0124 [h,pos]=<a href="checkbox.html" class="code" title="function [h,pos]=checkbox(parent,pos,string,varargin)">checkbox</a>(hpanel(1),pos,<span class="string">'fix'</span>,<span class="keyword">...</span>
+0125     <span class="string">'Tag'</span>,<span class="string">'fixD2baseline'</span>,<span class="string">'Callback'</span>,@<a href="#_sub3" class="code" title="subfunction FixEditBox(src,varargin)">FixEditBox</a>,<span class="string">'UserData'</span>,hedit);
+0126 pos(1)=pos(1)+pos(3)+data.xmargin;
+0127 [h,pos]=<a href="textlabel.html" class="code" title="function [h,pos]=textlabel(parent,pos,string,varargin)">textlabel</a>(hpanel(1),pos,labelA{kmaxA},<span class="keyword">...</span>
+0128     <span class="string">'String'</span>,<span class="string">'D2 amplitude='</span>,<span class="string">'HorizontalAlignment'</span>,<span class="string">'right'</span>);
+0129 pos(1)=pos(1)+pos(3);
+0130 [hedit,pos]=<a href="editbox.html" class="code" title="function [h,pos]=editbox(parent,pos,string,varargin)">editbox</a>(hpanel(1),pos,number0,<span class="keyword">...</span>
+0131     <span class="string">'Tag'</span>,<span class="string">'D2amplitude'</span>,<span class="string">'String'</span>,<span class="string">''</span>,<span class="string">'Callback'</span>,@<a href="#_sub6" class="code" title="subfunction UpdateFits(src,varargin)">UpdateFits</a>);
+0132 pos(1)=pos(1)+pos(3);
+0133 [h,pos]=<a href="checkbox.html" class="code" title="function [h,pos]=checkbox(parent,pos,string,varargin)">checkbox</a>(hpanel(1),pos,<span class="string">'fix'</span>,<span class="keyword">...</span>
+0134     <span class="string">'Tag'</span>,<span class="string">'fixD2amplitude'</span>,<span class="string">'Callback'</span>,@<a href="#_sub3" class="code" title="subfunction FixEditBox(src,varargin)">FixEditBox</a>,<span class="string">'UserData'</span>,hedit);
+0135 
+0136 pos(1)=data.xmargin;
+0137 pos(2)=pos(2)-data.ygap-pos(4);
+0138 [h,pos]=<a href="textlabel.html" class="code" title="function [h,pos]=textlabel(parent,pos,string,varargin)">textlabel</a>(hpanel(1),pos,labelA{kmaxA},<span class="keyword">...</span>
+0139     <span class="string">'String'</span>,<span class="string">'D3 baseline='</span>,<span class="string">'HorizontalAlignment'</span>,<span class="string">'right'</span>);
+0140 pos(1)=pos(1)+pos(3);
+0141 [hedit,pos]=<a href="editbox.html" class="code" title="function [h,pos]=editbox(parent,pos,string,varargin)">editbox</a>(hpanel(1),pos,number0,<span class="keyword">...</span>
+0142     <span class="string">'Tag'</span>,<span class="string">'D3baseline'</span>,<span class="string">'String'</span>,<span class="string">''</span>,<span class="string">'Callback'</span>,@<a href="#_sub6" class="code" title="subfunction UpdateFits(src,varargin)">UpdateFits</a>);
+0143 pos(1)=pos(1)+pos(3);
+0144 [h,pos]=<a href="checkbox.html" class="code" title="function [h,pos]=checkbox(parent,pos,string,varargin)">checkbox</a>(hpanel(1),pos,<span class="string">'fix'</span>,<span class="keyword">...</span>
+0145     <span class="string">'Tag'</span>,<span class="string">'fixD3baseline'</span>,<span class="string">'Callback'</span>,@<a href="#_sub3" class="code" title="subfunction FixEditBox(src,varargin)">FixEditBox</a>,<span class="string">'UserData'</span>,hedit);
+0146 pos(1)=pos(1)+pos(3)+data.xmargin;
+0147 [h,pos]=<a href="textlabel.html" class="code" title="function [h,pos]=textlabel(parent,pos,string,varargin)">textlabel</a>(hpanel(1),pos,labelA{kmaxA},<span class="keyword">...</span>
+0148     <span class="string">'String'</span>,<span class="string">'D3 amplitude='</span>,<span class="string">'HorizontalAlignment'</span>,<span class="string">'right'</span>);
+0149 pos(1)=pos(1)+pos(3);
+0150 [hedit,pos]=<a href="editbox.html" class="code" title="function [h,pos]=editbox(parent,pos,string,varargin)">editbox</a>(hpanel(1),pos,number0,<span class="keyword">...</span>
+0151     <span class="string">'Tag'</span>,<span class="string">'D3amplitude'</span>,<span class="string">'String'</span>,<span class="string">''</span>,<span class="string">'Callback'</span>,@<a href="#_sub6" class="code" title="subfunction UpdateFits(src,varargin)">UpdateFits</a>);
+0152 pos(1)=pos(1)+pos(3);
+0153 [h,pos]=<a href="checkbox.html" class="code" title="function [h,pos]=checkbox(parent,pos,string,varargin)">checkbox</a>(hpanel(1),pos,<span class="string">'fix'</span>,<span class="keyword">...</span>
+0154     <span class="string">'Tag'</span>,<span class="string">'fixD3amplitude'</span>,<span class="string">'Callback'</span>,@<a href="#_sub3" class="code" title="subfunction FixEditBox(src,varargin)">FixEditBox</a>,<span class="string">'UserData'</span>,hedit);
+0155 
+0156 pos(1)=data.xmargin;
+0157 pos(2)=pos(2)-data.ygap-pos(4);
+0158 [h,pos]=<a href="textlabel.html" class="code" title="function [h,pos]=textlabel(parent,pos,string,varargin)">textlabel</a>(hpanel(1),pos,labelA{kmaxA},<span class="keyword">...</span>
+0159     <span class="string">'String'</span>,<span class="string">'D2 lead (deg)='</span>,<span class="string">'HorizontalAlignment'</span>,<span class="string">'right'</span>);
+0160 pos(1)=pos(1)+pos(3);
+0161 [hedit,pos]=<a href="editbox.html" class="code" title="function [h,pos]=editbox(parent,pos,string,varargin)">editbox</a>(hpanel(1),pos,number0,<span class="keyword">...</span>
+0162     <span class="string">'Tag'</span>,<span class="string">'betaplus'</span>,<span class="string">'String'</span>,<span class="string">''</span>,<span class="string">'Callback'</span>,@<a href="#_sub6" class="code" title="subfunction UpdateFits(src,varargin)">UpdateFits</a>);
+0163 pos(1)=pos(1)+pos(3);
+0164 [h,pos]=<a href="checkbox.html" class="code" title="function [h,pos]=checkbox(parent,pos,string,varargin)">checkbox</a>(hpanel(1),pos,<span class="string">'fix'</span>,<span class="keyword">...</span>
+0165     <span class="string">'Tag'</span>,<span class="string">'fixbetaplus'</span>,<span class="string">'Callback'</span>,@<a href="#_sub3" class="code" title="subfunction FixEditBox(src,varargin)">FixEditBox</a>,<span class="string">'UserData'</span>,hedit);
+0166 pos(1)=pos(1)+pos(3)+data.xmargin;
+0167 [h,pos]=<a href="textlabel.html" class="code" title="function [h,pos]=textlabel(parent,pos,string,varargin)">textlabel</a>(hpanel(1),pos,labelA{kmaxA},<span class="keyword">...</span>
+0168     <span class="string">'String'</span>,<span class="string">'D3 lag (deg)='</span>,<span class="string">'HorizontalAlignment'</span>,<span class="string">'right'</span>);
+0169 pos(1)=pos(1)+pos(3);
+0170 [hedit,pos]=<a href="editbox.html" class="code" title="function [h,pos]=editbox(parent,pos,string,varargin)">editbox</a>(hpanel(1),pos,number0,<span class="keyword">...</span>
+0171     <span class="string">'Tag'</span>,<span class="string">'betaminus'</span>,<span class="string">'String'</span>,<span class="string">''</span>,<span class="string">'Callback'</span>,@<a href="#_sub6" class="code" title="subfunction UpdateFits(src,varargin)">UpdateFits</a>);
+0172 pos(1)=pos(1)+pos(3);
+0173 [h,pos]=<a href="checkbox.html" class="code" title="function [h,pos]=checkbox(parent,pos,string,varargin)">checkbox</a>(hpanel(1),pos,<span class="string">'fix'</span>,<span class="keyword">...</span>
+0174     <span class="string">'Tag'</span>,<span class="string">'fixbetaminus'</span>,<span class="string">'Callback'</span>,@<a href="#_sub3" class="code" title="subfunction FixEditBox(src,varargin)">FixEditBox</a>,<span class="string">'UserData'</span>,hedit);
+0175 
+0176 pos(1)=data.xmargin;
+0177 pos(2)=pos(2)-2*data.ygap-pos(4);
+0178 [h,pos]=<a href="textlabel.html" class="code" title="function [h,pos]=textlabel(parent,pos,string,varargin)">textlabel</a>(hpanel(1),pos, <span class="string">'Assume:'</span>,<span class="keyword">...</span>
+0179     <span class="string">'HorizontalAlignment'</span>,<span class="string">'right'</span>);
+0180 pos(1)=pos(1)+pos(3);
+0181 choice={<span class="string">'ref &gt; target (D1)'</span>,<span class="string">'ref &lt; target (D1)'</span>};
+0182 [hpop(1),pos]=<a href="popupmenu.html" class="code" title="function [h,pos]=popupmenu(parent,pos,string,varargin)">popupmenu</a>(hpanel(1),pos,choice,<span class="keyword">...</span>
+0183     <span class="string">'Tag'</span>,<span class="string">'D1assumption'</span>,<span class="string">'Callback'</span>,@<a href="#_sub6" class="code" title="subfunction UpdateFits(src,varargin)">UpdateFits</a>,<span class="keyword">...</span>
+0184     <span class="string">'ToolTipString'</span>,<span class="string">'Select D1 coupling assumption'</span>);
+0185 pos(1)=pos(1)+pos(3);
+0186 choice={<span class="string">'ref &gt; target (D2)'</span>,<span class="string">'ref &lt; target (D2)'</span>};
+0187 [hpop(2),pos]=<a href="popupmenu.html" class="code" title="function [h,pos]=popupmenu(parent,pos,string,varargin)">popupmenu</a>(hpanel(1),pos,choice,<span class="keyword">...</span>
+0188     <span class="string">'Tag'</span>,<span class="string">'D2assumption'</span>,<span class="string">'Callback'</span>,@<a href="#_sub6" class="code" title="subfunction UpdateFits(src,varargin)">UpdateFits</a>,<span class="keyword">...</span>
+0189     <span class="string">'ToolTipString'</span>,<span class="string">'Select D2 coupling assumption'</span>);
+0190 pos(1)=pos(1)+pos(3);
+0191 choice={<span class="string">'ref &gt; target (D3)'</span>,<span class="string">'ref &lt; target (D3)'</span>};
+0192 [hpop(3),pos]=<a href="popupmenu.html" class="code" title="function [h,pos]=popupmenu(parent,pos,string,varargin)">popupmenu</a>(hpanel(1),pos,choice,<span class="keyword">...</span>
+0193     <span class="string">'Tag'</span>,<span class="string">'D3assumption'</span>,<span class="string">'Callback'</span>,@<a href="#_sub6" class="code" title="subfunction UpdateFits(src,varargin)">UpdateFits</a>,<span class="keyword">...</span>
+0194     <span class="string">'ToolTipString'</span>,<span class="string">'Select D3 coupling assumption'</span>);
+0195 pos(1)=pos(1)+pos(3);
+0196 link.hpop=hpop;
+0197 [h,pos]=<a href="checkbox.html" class="code" title="function [h,pos]=checkbox(parent,pos,string,varargin)">checkbox</a>(hpanel(1),pos,<span class="string">'link'</span>,<span class="keyword">...</span>
+0198     <span class="string">'Tag'</span>,<span class="string">'linkassumptions'</span>,<span class="string">'Callback'</span>,@<a href="#_sub4" class="code" title="subfunction LinkAssumptions(src,varargin)">LinkAssumptions</a>,<span class="string">'UserData'</span>,link,<span class="keyword">...</span>
+0199     <span class="string">'Value'</span>,1);
+0200 <a href="#_sub4" class="code" title="subfunction LinkAssumptions(src,varargin)">LinkAssumptions</a>(h); <span class="comment">% default to on</span>
+0201 
+0202 pos(1)=data.xmargin;
+0203 pos(2)=pos(2)-data.ygap-pos(4);
+0204 [h,pos]=<a href="textlabel.html" class="code" title="function [h,pos]=textlabel(parent,pos,string,varargin)">textlabel</a>(hpanel(1),pos,<span class="string">'R12='</span>,<span class="keyword">...</span>
+0205     <span class="string">'HorizontalAlignment'</span>,<span class="string">'right'</span>);
+0206 pos(1)=pos(1)+pos(3);
+0207 [hedit,pos]=<a href="textlabel.html" class="code" title="function [h,pos]=textlabel(parent,pos,string,varargin)">textlabel</a>(hpanel(1),pos,number0,<span class="keyword">...</span>
+0208     <span class="string">'Tag'</span>,<span class="string">'R12'</span>,<span class="string">'String'</span>,<span class="string">'TBD'</span>,<span class="string">'HorizontalAlignment'</span>,<span class="string">'left'</span>,<span class="keyword">...</span>
+0209     <span class="string">'Callback'</span>,@<a href="ReadEditBox.html" class="code" title="function data=ReadEditBox(src,varargin)">ReadEditBox</a>);
+0210 pos(1)=pos(1)+pos(3)+data.xmargin;
+0211 [h,pos]=<a href="textlabel.html" class="code" title="function [h,pos]=textlabel(parent,pos,string,varargin)">textlabel</a>(hpanel(1),pos,<span class="string">'R13='</span>,<span class="keyword">...</span>
+0212     <span class="string">'HorizontalAlignment'</span>,<span class="string">'right'</span>);
+0213 pos(1)=pos(1)+pos(3);
+0214 [hedit,pos]=<a href="textlabel.html" class="code" title="function [h,pos]=textlabel(parent,pos,string,varargin)">textlabel</a>(hpanel(1),pos,number0,<span class="keyword">...</span>
+0215     <span class="string">'Tag'</span>,<span class="string">'R13'</span>,<span class="string">'String'</span>,<span class="string">'TBD'</span>,<span class="string">'HorizontalAlignment'</span>,<span class="string">'left'</span>,<span class="keyword">...</span>
+0216     <span class="string">'Callback'</span>,@<a href="ReadEditBox.html" class="code" title="function data=ReadEditBox(src,varargin)">ReadEditBox</a>);
+0217 pos(1)=pos(1)+pos(3);
+0218 [h,pos]=<a href="checkbox.html" class="code" title="function [h,pos]=checkbox(parent,pos,string,varargin)">checkbox</a>(hpanel(1),pos,<span class="string">'AC coupling'</span>,<span class="keyword">...</span>
+0219     <span class="string">'Tag'</span>,<span class="string">'ACcoupling'</span>,<span class="string">'Value'</span>,0,<span class="string">'Callback'</span>,@<a href="#_sub5" class="code" title="subfunction DetectorCoupling(src,varargin)">DetectorCoupling</a>,<span class="keyword">...</span>
+0220     <span class="string">'ToolTipString'</span>,<span class="string">'Check this box if measurement used AC coupled detectors'</span>);
+0221 
+0222 panelpos=get(hpanel(1),<span class="string">'Position'</span>);
+0223 offset=abs(pos(2));
+0224 panelpos(4)=pos(4)+offset+2*data.ymargin;
+0225 hc=get(hpanel(1),<span class="string">'Children'</span>);
+0226 right=0;
+0227 <span class="keyword">for</span> k=1:numel(hc)
+0228     pos=get(hc(k),<span class="string">'Position'</span>);
+0229     pos(2)=pos(2)+offset+data.ymargin;
+0230     set(hc(k),<span class="string">'Position'</span>,pos);
+0231     right=max([right pos(1)+pos(3)]);
+0232 <span class="keyword">end</span>
+0233 panelpos(3)=right+data.xmargin;
+0234 set(hpanel(1),<span class="string">'Position'</span>,panelpos,<span class="string">'UserData'</span>,data);
+0235 
+0236 <span class="comment">% create plot panel</span>
+0237 hpanel(2)=<a href="custom_uipanel.html" class="code" title="function h=custom_uipanel(varargin)">custom_uipanel</a>(<span class="string">'Parent'</span>,fig,<span class="string">'Tag'</span>,<span class="string">'PlotPanel'</span>);
+0238 set(hpanel(2),<span class="string">'BorderType'</span>,<span class="string">'line'</span>);
+0239 
+0240 ha=axes(<span class="string">'Parent'</span>,hpanel(2),<span class="string">'Tag'</span>,<span class="string">'D1D2plot'</span>,<span class="keyword">...</span>
+0241     <span class="string">'Units'</span>,<span class="string">'normalized'</span>,<span class="string">'OuterPosition'</span>,[0 0 0.5 1],<span class="keyword">...</span>
+0242     <span class="string">'FontUnits'</span>,<span class="string">'points'</span>,<span class="string">'FontSize'</span>,14,<span class="keyword">...</span>
+0243     <span class="string">'DataAspectRatio'</span>,[1 1 1],<span class="string">'PlotBoxAspectRatio'</span>,[1 1 1],<span class="string">'Box'</span>,<span class="string">'on'</span>);
+0244 <span class="comment">%color=repmat(2/3,[1 3]);</span>
+0245 color=[0 1 0];
+0246 line(<span class="string">'Parent'</span>,ha,<span class="string">'Tag'</span>,<span class="string">'D1D2data'</span>,<span class="keyword">...</span>
+0247     <span class="string">'Marker'</span>,<span class="string">'o'</span>,<span class="string">'LineStyle'</span>,<span class="string">'none'</span>,<span class="string">'MarkerSize'</span>,4,<span class="keyword">...</span>
+0248     <span class="string">'MarkerEdgeColor'</span>,color,<span class="string">'MarkerFaceColor'</span>,color);
+0249 line(<span class="string">'Parent'</span>,ha,<span class="string">'Tag'</span>,<span class="string">'D1D2fit'</span>,<span class="string">'XData'</span>,[],<span class="string">'YData'</span>,[],<span class="keyword">...</span>
+0250     <span class="string">'LineStyle'</span>,<span class="string">'-'</span>,<span class="string">'Marker'</span>,<span class="string">'none'</span>,<span class="string">'Color'</span>,[0 0 0],<span class="keyword">...</span>
+0251     <span class="string">'LineWidth'</span>,2,<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+0252 xlabel(ha,<span class="string">'D1'</span>);
+0253 ylabel(ha,<span class="string">'D2'</span>);
+0254 title(ha,<span class="string">'D1-D2 ellipse'</span>);
+0255 
+0256 ha=axes(<span class="string">'Parent'</span>,hpanel(2),<span class="string">'Tag'</span>,<span class="string">'D1D3plot'</span>,<span class="keyword">...</span>
+0257     <span class="string">'Units'</span>,<span class="string">'normalized'</span>,<span class="string">'OuterPosition'</span>,[0.5 0 0.5 1],<span class="keyword">...</span>
+0258     <span class="string">'FontUnits'</span>,<span class="string">'points'</span>,<span class="string">'FontSize'</span>,14,<span class="keyword">...</span>
+0259     <span class="string">'DataAspectRatio'</span>,[1 1 1],<span class="string">'PlotBoxAspectRatio'</span>,[1 1 1],<span class="string">'Box'</span>,<span class="string">'on'</span>);
+0260 line(<span class="string">'Parent'</span>,ha,<span class="string">'Tag'</span>,<span class="string">'D1D3data'</span>,<span class="keyword">...</span>
+0261         <span class="string">'Marker'</span>,<span class="string">'o'</span>,<span class="string">'LineStyle'</span>,<span class="string">'none'</span>,<span class="string">'MarkerSize'</span>,4,<span class="keyword">...</span>
+0262     <span class="string">'MarkerEdgeColor'</span>,color,<span class="string">'MarkerFaceColor'</span>,color);
+0263 line(<span class="string">'Parent'</span>,ha,<span class="string">'Tag'</span>,<span class="string">'D1D3fit'</span>,<span class="string">'XData'</span>,[],<span class="string">'YData'</span>,[],<span class="keyword">...</span><span class="comment">    </span>
+0264     <span class="string">'LineStyle'</span>,<span class="string">'-'</span>,<span class="string">'Marker'</span>,<span class="string">'none'</span>,<span class="string">'Color'</span>,[0 0 0],<span class="keyword">...</span>
+0265     <span class="string">'LineWidth'</span>,2,<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+0266 xlabel(ha,<span class="string">'D1'</span>);
+0267 ylabel(ha,<span class="string">'D3'</span>);
+0268 title(ha,<span class="string">'D1-D3 ellipse'</span>);
+0269 
+0270 h=uicontrol(<span class="string">'Parent'</span>,hpanel(2),<span class="string">'Tag'</span>,<span class="string">'ClonePlot'</span>,<span class="keyword">...</span>
+0271     <span class="string">'String'</span>,<span class="string">' clone '</span>,<span class="string">'Callback'</span>,@<a href="ClonePlot.html" class="code" title="function ClonePlot(src,varargin)">ClonePlot</a>,<span class="string">'Units'</span>,<span class="string">'pixels'</span>,<span class="keyword">...</span>
+0272     <span class="string">'ToolTipString'</span>,<span class="string">'Clone plot to separate window'</span>);
+0273 extent=get(h,<span class="string">'Extent'</span>);
+0274 set(h,<span class="string">'Position'</span>,extent);
+0275 
+0276 <span class="comment">% create next/previous buttons</span>
+0277 h=<a href="custom_uicontrol.html" class="code" title="function [h,pos]=custom_uicontrol(varargin)">custom_uicontrol</a>(<span class="string">'Parent'</span>,fig,<span class="string">'Style'</span>,<span class="string">'pushbutton'</span>,<span class="keyword">...</span>
+0278     <span class="string">'Tag'</span>,<span class="string">'Previous'</span>,<span class="string">'String'</span>,<span class="string">' &lt; Previous '</span>,<span class="string">'Callback'</span>,@<a href="#_sub9" class="code" title="subfunction PreviousButton(src,varargin)">PreviousButton</a>);
+0279 pos=get(h,<span class="string">'Position'</span>);
+0280 h=<a href="custom_uicontrol.html" class="code" title="function [h,pos]=custom_uicontrol(varargin)">custom_uicontrol</a>(<span class="string">'Parent'</span>,fig,<span class="string">'Style'</span>,<span class="string">'pushbutton'</span>,<span class="keyword">...</span>
+0281     <span class="string">'Tag'</span>,<span class="string">'Next'</span>,<span class="string">'String'</span>,<span class="string">' Next &gt; '</span>,<span class="string">'Callback'</span>,@<a href="#_sub10" class="code" title="subfunction NextButton(src,varargin)">NextButton</a>);
+0282 set(h,<span class="string">'Position'</span>,pos);
+0283 <a href="custom_uicontrol.html" class="code" title="function [h,pos]=custom_uicontrol(varargin)">custom_uicontrol</a>(<span class="string">'Parent'</span>,fig,<span class="string">'Style'</span>,<span class="string">'text'</span>,<span class="keyword">...</span>
+0284     <span class="string">'Tag'</span>,<span class="string">'GUIlabel'</span>,<span class="string">'String'</span>,<span class="string">'Ellipse characterization'</span>,<span class="string">'FontWeight'</span>,<span class="string">'bold'</span>,<span class="keyword">...</span>
+0285     <span class="string">'BackgroundColor'</span>,get(fig,<span class="string">'Color'</span>));
+0286 
+0287 <span class="comment">% final items</span>
+0288 set(fig,<span class="string">'ResizeFcn'</span>,@<a href="#_sub2" class="code" title="subfunction ResizeFcn(src,varargin)">ResizeFcn</a>);
+0289 <a href="NudgeTextBoxes.html" class="code" title="function NudgeTextBoxes(fig)">NudgeTextBoxes</a>(fig);
+0290 <a href="NudgePopupMenus.html" class="code" title="function NudgePopupMenus(fig)">NudgePopupMenus</a>(fig);
+0291 
+0292 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0293 <span class="comment">% figure resize function %</span>
+0294 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0295 <a name="_sub2" href="#_subfunctions" class="code">function ResizeFcn(src,varargin)</a>
+0296 
+0297 <span class="comment">% get handles and data</span>
+0298 fig=ancestor(src,<span class="string">'figure'</span>);
+0299 h=guihandles(fig);
+0300 data=get(h.ControlPanel,<span class="string">'UserData'</span>);
+0301 
+0302 <span class="comment">% enforce mininum dimensions</span>
+0303 units=get(fig,<span class="string">'Units'</span>);
+0304 set(fig,<span class="string">'Units'</span>,<span class="string">'pixels'</span>);
+0305 figpos=get(fig,<span class="string">'Position'</span>);
+0306 <span class="keyword">if</span> figpos(3)&lt;data.Lx
+0307     figpos(3)=data.Lx;
+0308 <span class="keyword">end</span>
+0309 <span class="keyword">if</span> figpos(4)&lt;data.Ly
+0310     dy=data.Ly-figpos(4);
+0311     figpos(2)=figpos(2)-dy;
+0312     figpos(4)=data.Ly;
+0313 <span class="keyword">end</span>
+0314 set(fig,<span class="string">'Position'</span>,figpos,<span class="string">'Units'</span>,units);
+0315 
+0316 <span class="comment">% position control panel</span>
+0317 pos=get(h.ControlPanel,<span class="string">'Position'</span>);
+0318 pos(1)=0;
+0319 pos(2)=figpos(4)-pos(4);
+0320 pos(3)=figpos(3);
+0321 set(h.ControlPanel,<span class="string">'Position'</span>,pos);
+0322 y2=pos(2);
+0323 
+0324 <span class="comment">% position next/previous buttons (fixed height)</span>
+0325 pos=get(h.Previous,<span class="string">'Position'</span>);
+0326 y0=pos(2);
+0327 pos(1)=2*data.xmargin;
+0328 pos(2)=data.ymargin;
+0329 set(h.Previous,<span class="string">'Position'</span>,pos);
+0330 left=pos(1)+pos(3);
+0331 
+0332 pos=get(h.Next,<span class="string">'Position'</span>);
+0333 pos(1)=figpos(3)-2*data.xmargin-pos(3);
+0334 pos(2)=data.ymargin;
+0335 set(h.Next,<span class="string">'Position'</span>,pos);
+0336 right=pos(1);
+0337 
+0338 <span class="comment">% position GUI label</span>
+0339 pos=get(h.GUIlabel,<span class="string">'Position'</span>);
+0340 pos(1)=left;
+0341 pos(2)=pos(2)-y0+data.ymargin;
+0342 pos(3)=right-left;
+0343 set(h.GUIlabel,<span class="string">'Position'</span>,pos);
+0344 y1=pos(2)+pos(4)+data.ymargin;
+0345 
+0346 <span class="comment">% position plot panel</span>
+0347 pos(1)=0;
+0348 pos(2)=y1;
+0349 pos(3)=figpos(3);
+0350 pos(4)=y2-y1;
+0351 set(h.PlotPanel,<span class="string">'Position'</span>,pos);
+0352 
+0353 <span class="comment">% position clone plot button</span>
+0354 panelpos=get(h.PlotPanel,<span class="string">'Position'</span>);
+0355 border=get(h.PlotPanel,<span class="string">'BorderWidth'</span>);
+0356 pos=get(h.ClonePlot,<span class="string">'Position'</span>);
+0357 pos(1)=panelpos(3)-pos(3)-border;
+0358 pos(2)=panelpos(4)-pos(4)-border;
+0359 set(h.ClonePlot,<span class="string">'Position'</span>,pos);
+0360 
+0361 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%</span>
+0362 <span class="comment">% fix button callback %</span>
+0363 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%</span>
+0364 <a name="_sub3" href="#_subfunctions" class="code">function FixEditBox(src,varargin)</a>
+0365 
+0366 target=get(src,<span class="string">'UserData'</span>);
+0367 <span class="keyword">if</span> get(src,<span class="string">'Value'</span>)==1 <span class="comment">% button on</span>
+0368     set(target,<span class="string">'Enable'</span>,<span class="string">'off'</span>); <span class="comment">% disable edit box</span>
+0369 <span class="keyword">else</span> <span class="comment">% button off</span>
+0370     set(target,<span class="string">'Enable'</span>,<span class="string">'on'</span>); <span class="comment">% enable edit box</span>
+0371 <span class="keyword">end</span>
+0372 
+0373 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0374 <span class="comment">% link button callback %</span>
+0375 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0376 <a name="_sub4" href="#_subfunctions" class="code">function LinkAssumptions(src,varargin)</a>
+0377 
+0378 link=get(src,<span class="string">'UserData'</span>);
+0379 <span class="keyword">if</span> get(src,<span class="string">'Value'</span>)==1 <span class="comment">% button on</span>
+0380     link.handle=linkprop(link.hpop,<span class="string">'Value'</span>); <span class="comment">% link assumptions</span>
+0381     set(src,<span class="string">'UserData'</span>,link);
+0382 <span class="keyword">else</span> <span class="comment">% button off</span>
+0383     removeprop(link.handle,<span class="string">'Value'</span>);  <span class="comment">% unlink assumptions</span>
+0384 <span class="keyword">end</span>
+0385 
+0386 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0387 <span class="comment">% set detector coupling (AC/DC) %</span>
+0388 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0389 <a name="_sub5" href="#_subfunctions" class="code">function DetectorCoupling(src,varargin)</a>
+0390 
+0391 <span class="comment">% get handles</span>
+0392 fig=ancestor(src,<span class="string">'figure'</span>);
+0393 h=guihandles(fig);
+0394 
+0395 hass=[h.D1assumption h.D2assumption h.D3assumption h.linkassumptions];
+0396 hR=[h.R12 h.R13];
+0397 <span class="keyword">if</span> get(src,<span class="string">'Value'</span>)==1 <span class="comment">% AC coupling</span>
+0398     set(hass,<span class="string">'Enable'</span>,<span class="string">'off'</span>);
+0399     <span class="keyword">for</span> k=1:numel(hR) <span class="comment">% fix vertical position</span>
+0400         string=get(hR(k),<span class="string">'String'</span>);
+0401         set(hR(k),<span class="string">'String'</span>,<span class="string">''</span>);
+0402         pos=get(hR(k),<span class="string">'Position'</span>);
+0403         extent=get(hR(k),<span class="string">'Extent'</span>);
+0404         pos(2)=pos(2)+2*extent(4);
+0405         set(hR(k),<span class="string">'Position'</span>,pos,<span class="string">'String'</span>,string,<span class="keyword">...</span>
+0406             <span class="string">'String'</span>,<span class="string">'1'</span>,<span class="string">'UserData'</span>,1);
+0407     <span class="keyword">end</span>    
+0408     set(hR,<span class="string">'Style'</span>,<span class="string">'edit'</span>,<span class="string">'BackgroundColor'</span>,[1 1 1]);
+0409 <span class="keyword">else</span> <span class="comment">% DC coupling</span>
+0410     set(hass,<span class="string">'Enable'</span>,<span class="string">'on'</span>);
+0411      <span class="keyword">for</span> k=1:numel(hR) <span class="comment">% fix vertical position</span>
+0412         string=get(hR(k),<span class="string">'String'</span>);
+0413         set(hR(k),<span class="string">'String'</span>,<span class="string">''</span>);
+0414         pos=get(hR(k),<span class="string">'Position'</span>);
+0415         extent=get(hR(k),<span class="string">'Extent'</span>);
+0416         pos(2)=pos(2)-2*extent(4);
+0417         set(hR(k),<span class="string">'Position'</span>,pos,<span class="string">'String'</span>,string);       
+0418     <span class="keyword">end</span>    
+0419     parent=get(h.R12,<span class="string">'Parent'</span>);
+0420     bgcolor=get(parent,<span class="string">'BackgroundColor'</span>);
+0421     set(hR,<span class="string">'Style'</span>,<span class="string">'text'</span>,<span class="string">'BackgroundColor'</span>,bgcolor);    
+0422     refresh(fig);
+0423 <span class="keyword">end</span>
+0424 
+0425 <a href="#_sub6" class="code" title="subfunction UpdateFits(src,varargin)">UpdateFits</a>(src,varargin{:});
+0426 
+0427 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%</span>
+0428 <span class="comment">% update fit callback %</span>
+0429 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%</span>
+0430 <a name="_sub6" href="#_subfunctions" class="code">function UpdateFits(src,varargin)</a>
+0431 
+0432 <span class="comment">% get handles</span>
+0433 fig=ancestor(src,<span class="string">'figure'</span>);
+0434 h=guihandles(fig);
+0435 
+0436 Nfit=500; <span class="comment">% number of display points in ellise fits</span>
+0437 
+0438 <span class="comment">% D1-D2 fit</span>
+0439 x0=<a href="ReadEditBox.html" class="code" title="function data=ReadEditBox(src,varargin)">ReadEditBox</a>(h.D1baseline);
+0440 Lx=<a href="ReadEditBox.html" class="code" title="function data=ReadEditBox(src,varargin)">ReadEditBox</a>(h.D1amplitude);
+0441 y0=<a href="ReadEditBox.html" class="code" title="function data=ReadEditBox(src,varargin)">ReadEditBox</a>(h.D2baseline);
+0442 Ly=<a href="ReadEditBox.html" class="code" title="function data=ReadEditBox(src,varargin)">ReadEditBox</a>(h.D2amplitude);
+0443 betaplus=<a href="ReadEditBox.html" class="code" title="function data=ReadEditBox(src,varargin)">ReadEditBox</a>(h.betaplus);
+0444 epsilon=(betaplus-90)*(pi/180);
+0445 params=[x0 y0 Lx Ly epsilon];
+0446 <span class="keyword">if</span> numel(params)==5
+0447     phi=linspace(0,2*pi,Nfit);
+0448     xfit=params(1)+params(3)*cos(phi);
+0449     yfit=params(2)+params(4)*sin(phi-params(5));
+0450     set(h.D1D2fit,<span class="string">'XData'</span>,xfit,<span class="string">'YData'</span>,yfit,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0451 <span class="keyword">else</span>
+0452     set(h.D1D2fit,<span class="string">'Visible'</span>,<span class="string">'off'</span>);    
+0453 <span class="keyword">end</span>
+0454 
+0455 <span class="comment">% D1-D3 fit</span>
+0456 z0=<a href="ReadEditBox.html" class="code" title="function data=ReadEditBox(src,varargin)">ReadEditBox</a>(h.D3baseline);
+0457 Lz=<a href="ReadEditBox.html" class="code" title="function data=ReadEditBox(src,varargin)">ReadEditBox</a>(h.D3amplitude);
+0458 betaminus=<a href="ReadEditBox.html" class="code" title="function data=ReadEditBox(src,varargin)">ReadEditBox</a>(h.betaminus);
+0459 epsilon=(betaminus-90)*(pi/180);
+0460 params=[x0 z0 Lx Lz epsilon];
+0461 <span class="keyword">if</span> numel(params)==5
+0462     phi=linspace(0,2*pi,Nfit);
+0463     xfit=params(1)+params(3)*cos(phi);
+0464     yfit=params(2)+params(4)*sin(phi-params(5));
+0465     set(h.D1D3fit,<span class="string">'XData'</span>,xfit,<span class="string">'YData'</span>,yfit,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0466 <span class="keyword">else</span>
+0467     set(h.D1D3fit,<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+0468 <span class="keyword">end</span>
+0469 
+0470 <span class="comment">% parameter ratios</span>
+0471 <span class="keyword">if</span> get(h.ACcoupling,<span class="string">'Value'</span>)==1 <span class="comment">% AC coupling</span>
+0472     <span class="comment">% do nothing</span>
+0473 <span class="keyword">else</span> <span class="comment">% DC coupling</span>
+0474     contrast=[Lx/x0 Ly/y0 Lz/z0];
+0475     <span class="keyword">if</span> any(contrast&gt;1)
+0476         warndlg(<span class="string">'Unphysical contrast estimates set to unity'</span>,<span class="keyword">...</span>
+0477             <span class="string">'Unphysical contrast'</span>);
+0478         contrast(contrast&gt;1)=1;
+0479     <span class="keyword">end</span>
+0480     <span class="keyword">if</span> numel(contrast)==3
+0481         rootsign=<span class="string">'+++'</span>;
+0482         choice={<span class="string">'+'</span>,<span class="string">'-'</span>};
+0483         value=get(h.D1assumption,<span class="string">'Value'</span>);
+0484         rootsign(1)=choice{value};
+0485         value=get(h.D2assumption,<span class="string">'Value'</span>);
+0486         rootsign(2)=choice{value};
+0487         value=get(h.D3assumption,<span class="string">'Value'</span>);
+0488         rootsign(3)=choice{value};
+0489         ratio=<a href="ParameterRatios.html" class="code" title="function R=ParameterRatios(contrast,rootsign)">ParameterRatios</a>(contrast,rootsign);
+0490         sigfig=5;
+0491         set(h.R12,<span class="string">'String'</span>,num2str(ratio(1),sigfig));
+0492         set(h.R13,<span class="string">'String'</span>,num2str(ratio(2),sigfig));
+0493     <span class="keyword">else</span>
+0494         set(h.R12,<span class="string">'String'</span>,<span class="string">'TBD'</span>);
+0495         set(h.R13,<span class="string">'String'</span>,<span class="string">'TBD'</span>);
+0496     <span class="keyword">end</span>
+0497 <span class="keyword">end</span>
+0498 
+0499 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0500 <span class="comment">% guess parameter callback %</span>
+0501 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0502 <a name="_sub7" href="#_subfunctions" class="code">function GuessParameters(src,varargin)</a>
+0503 
+0504 <span class="comment">% get handles</span>
+0505 fig=ancestor(src,<span class="string">'figure'</span>);
+0506 h=guihandles(fig);
+0507 
+0508 <span class="comment">% extract data</span>
+0509 D1=get(h.D1D2data,<span class="string">'XData'</span>);
+0510 D2=get(h.D1D2data,<span class="string">'YData'</span>);
+0511 D3=get(h.D1D3data,<span class="string">'YData'</span>);
+0512 
+0513 <span class="comment">% perform and interpret ellipse fits</span>
+0514 params1=<a href="DirectEllipseFit.html" class="code" title="function [params1,params2]=DirectEllipseFit(x,y)">DirectEllipseFit</a>(D1,D2);
+0515 params2=<a href="DirectEllipseFit.html" class="code" title="function [params1,params2]=DirectEllipseFit(x,y)">DirectEllipseFit</a>(D1,D3);
+0516 D1baseline=mean([params1(1) params2(1)]);
+0517 D2baseline=params1(2);
+0518 D3baseline=params2(2);
+0519 D1amplitude=mean([params1(3) params2(3)]);
+0520 D2amplitude=params1(4);
+0521 D3amplitude=params2(4);
+0522 betaplus=params1(5)*(180/pi)+90;
+0523 betaminus=params2(5)*(180/pi)+90;
+0524 
+0525 <span class="comment">% update edit boxes</span>
+0526 sigfig=5;
+0527 set(h.D1baseline,<span class="string">'UserData'</span>,D1baseline,<span class="string">'String'</span>,num2str(D1baseline,sigfig));
+0528 set(h.D1amplitude,<span class="string">'UserData'</span>,D1amplitude,<span class="string">'String'</span>,num2str(D1amplitude,sigfig));
+0529 set(h.D2baseline,<span class="string">'UserData'</span>,D2baseline,<span class="string">'String'</span>,num2str(D2baseline,sigfig));
+0530 set(h.D2amplitude,<span class="string">'UserData'</span>,D2amplitude,<span class="string">'String'</span>,num2str(D2amplitude,sigfig));
+0531 set(h.D3baseline,<span class="string">'UserData'</span>,D3baseline,<span class="string">'String'</span>,num2str(D3baseline,sigfig));
+0532 set(h.D3amplitude,<span class="string">'UserData'</span>,D3amplitude,<span class="string">'String'</span>,num2str(D3amplitude,sigfig));
+0533 set(h.betaplus,<span class="string">'UserData'</span>,betaplus,<span class="string">'String'</span>,num2str(betaplus,sigfig));
+0534 set(h.betaminus,<span class="string">'UserData'</span>,betaminus,<span class="string">'String'</span>,num2str(betaminus,sigfig));
+0535 
+0536 <span class="comment">% update fit plots</span>
+0537 handle=get(h.D1baseline,<span class="string">'Callback'</span>);
+0538 feval(handle,h.D1baseline);
+0539 
+0540 <span class="comment">% undo all fixed settings</span>
+0541 tag=fields(h);
+0542 <span class="keyword">for</span> k=1:numel(tag)
+0543     <span class="keyword">if</span> strncmp(tag{k},<span class="string">'fix'</span>,3)
+0544         set(h.(tag{k}),<span class="string">'Value'</span>,0);
+0545         handle=get(h.(tag{k}),<span class="string">'Callback'</span>);
+0546         feval(handle,h.(tag{k}));
+0547     <span class="keyword">end</span>
+0548 <span class="keyword">end</span>
+0549 
+0550 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0551 <span class="comment">% optimize parameter callback %</span>
+0552 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0553 <a name="_sub8" href="#_subfunctions" class="code">function OptimizeParameters(src,varargin)</a>
+0554 
+0555 <span class="comment">% get handles</span>
+0556 fig=ancestor(src,<span class="string">'figure'</span>);
+0557 h=guihandles(fig);
+0558 
+0559 <span class="comment">% extract data</span>
+0560 D1=get(h.D1D2data,<span class="string">'XData'</span>);
+0561 D2=get(h.D1D2data,<span class="string">'YData'</span>);
+0562 D3=get(h.D1D3data,<span class="string">'YData'</span>);
+0563 
+0564 
+0565 <span class="comment">%guess=zeros(1,8);</span>
+0566 guess=cell(1,8);
+0567 guess{1}=get(h.D1baseline,<span class="string">'UserData'</span>);
+0568 guess{2}=get(h.D1amplitude,<span class="string">'UserData'</span>);
+0569 guess{3}=get(h.D2baseline,<span class="string">'UserData'</span>);
+0570 guess{4}=get(h.D2amplitude,<span class="string">'UserData'</span>);
+0571 guess{5}=get(h.D3baseline,<span class="string">'UserData'</span>);
+0572 guess{6}=get(h.D3amplitude,<span class="string">'UserData'</span>);
+0573 guess{7}=get(h.betaplus,<span class="string">'UserData'</span>);
+0574 guess{8}=get(h.betaminus,<span class="string">'UserData'</span>);
+0575 <span class="keyword">for</span> k=1:8
+0576     <span class="keyword">if</span> isempty(guess{k})
+0577         msg{1}=<span class="string">'ERROR: missing optimization guess'</span>;
+0578         msg{2}=<span class="string">'All parameters need a guess value for optimization'</span>;
+0579         msg=sprintf(<span class="string">'%s\n'</span>,msg{:});
+0580         errordlg(msg,<span class="string">'Missing optimization guess'</span>);
+0581     <span class="keyword">return</span>
+0582     <span class="keyword">end</span>
+0583 <span class="keyword">end</span>
+0584 guess=cell2mat(guess);
+0585 guess(7:8)=(guess(7:8)-90)*(pi/180);
+0586 
+0587 fixed=zeros(1,8);
+0588 fixed(1)=get(h.fixD1baseline,<span class="string">'Value'</span>);
+0589 fixed(2)=get(h.fixD1amplitude,<span class="string">'Value'</span>);
+0590 fixed(3)=get(h.fixD2baseline,<span class="string">'Value'</span>);
+0591 fixed(4)=get(h.fixD2amplitude,<span class="string">'Value'</span>);
+0592 fixed(5)=get(h.fixD3baseline,<span class="string">'Value'</span>);
+0593 fixed(6)=get(h.fixD3amplitude,<span class="string">'Value'</span>);
+0594 fixed(7)=get(h.fixbetaplus,<span class="string">'Value'</span>);
+0595 fixed(8)=get(h.fixbetaminus,<span class="string">'Value'</span>);
+0596 fixed=logical(fixed);
+0597 
+0598 <span class="comment">% perform and interpret ellipse fits</span>
+0599 params=<a href="IterativeEllipseFit.html" class="code" title="function params=IterativeEllipseFit(D1,D2,D3,guess,fixed,options)">IterativeEllipseFit</a>(D1,D2,D3,guess,fixed);
+0600 D1baseline=params(1);
+0601 D1amplitude=params(2);
+0602 D2baseline=params(3);
+0603 D2amplitude=params(4);
+0604 D3baseline=params(5);
+0605 D3amplitude=params(6);
+0606 betaplus=params(7)*(180/pi)+90;
+0607 betaminus=params(8)*(180/pi)+90;
+0608 
+0609 <span class="comment">% update edit boxes</span>
+0610 sigfig=5;
+0611 set(h.D1baseline,<span class="string">'UserData'</span>,D1baseline,<span class="string">'String'</span>,num2str(D1baseline,sigfig));
+0612 set(h.D1amplitude,<span class="string">'UserData'</span>,D1amplitude,<span class="string">'String'</span>,num2str(D1amplitude,sigfig));
+0613 set(h.D2baseline,<span class="string">'UserData'</span>,D2baseline,<span class="string">'String'</span>,num2str(D2baseline,sigfig));
+0614 set(h.D2amplitude,<span class="string">'UserData'</span>,D2amplitude,<span class="string">'String'</span>,num2str(D2amplitude,sigfig));
+0615 set(h.D3baseline,<span class="string">'UserData'</span>,D3baseline,<span class="string">'String'</span>,num2str(D3baseline,sigfig));
+0616 set(h.D3amplitude,<span class="string">'UserData'</span>,D3amplitude,<span class="string">'String'</span>,num2str(D3amplitude,sigfig));
+0617 set(h.betaplus,<span class="string">'UserData'</span>,betaplus,<span class="string">'String'</span>,num2str(betaplus,sigfig));
+0618 set(h.betaminus,<span class="string">'UserData'</span>,betaminus,<span class="string">'String'</span>,num2str(betaminus,sigfig));
+0619 
+0620 <span class="comment">% update fit plots</span>
+0621 handle=get(h.D1baseline,<span class="string">'Callback'</span>);
+0622 feval(handle,h.D1baseline);
+0623 
+0624 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0625 <span class="comment">% previous button callback %</span>
+0626 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0627 <a name="_sub9" href="#_subfunctions" class="code">function PreviousButton(src,varargin)</a>
+0628 
+0629 fig=ancestor(src,<span class="string">'figure'</span>);
+0630 <a href="LoadScreen.html" class="code" title="function fig=LoadScreen(oldfig)">LoadScreen</a>(fig);
+0631 set(fig,<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+0632 
+0633 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0634 <span class="comment">% next button callback %</span>
+0635 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0636 <a name="_sub10" href="#_subfunctions" class="code">function NextButton(src,varargin)</a>
+0637 
+0638 <span class="comment">% get handles</span>
+0639 fig=ancestor(src,<span class="string">'figure'</span>);
+0640 h=guihandles(fig);
+0641 
+0642 <span class="comment">% make sure everything is ready before moving on</span>
+0643 flag(1)=strcmp(get(h.D1D2fit,<span class="string">'Visible'</span>),<span class="string">'off'</span>);
+0644 flag(2)=strcmp(get(h.D1D3fit,<span class="string">'Visible'</span>),<span class="string">'off'</span>);
+0645 flag(3)=strcmp(get(h.R12,<span class="string">'String'</span>),<span class="string">'TBD'</span>);
+0646 flag(4)=strcmp(get(h.R13,<span class="string">'String'</span>),<span class="string">'TBD'</span>);
+0647 <span class="keyword">if</span> all(flag)   <span class="comment">% move to next screen</span>
+0648     msg{1}=<span class="string">'ERROR: incomplete characterization'</span>;
+0649     msg{2}=<span class="string">'Please finish ellipse fits before proceeding.'</span>;
+0650     msg=sprintf(<span class="string">'%s\n'</span>,msg{:});
+0651     errordlg(msg,<span class="string">'Incomplete characterization'</span>);
+0652     <span class="keyword">return</span>
+0653 <span class="keyword">end</span>
+0654 
+0655 <span class="comment">% move to the next screen</span>
+0656 <a href="QuadratureScreen.html" class="code" title="function fig=QuadratureScreen(oldfig)">QuadratureScreen</a>(fig);
+0657 set(fig,<span class="string">'Visible'</span>,<span class="string">'off'</span>);</pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

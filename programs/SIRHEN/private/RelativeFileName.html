@@ -1,0 +1,81 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of RelativeFileName</title>
+  <meta name="keywords" content="RelativeFileName">
+  <meta name="description" content="RelativeFileName : determine the relative path between two directories">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">SIRHEN</a> &gt; <a href="index.html">private</a> &gt; RelativeFileName.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/SIRHEN/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>RelativeFileName
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>RelativeFileName : determine the relative path between two directories</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function func=RelativeFileName(filename,sourcepath) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> RelativeFileName : determine the relative path between two directories</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="AbsoluteFileName.html" class="code" title="function func=AbsoluteFileName(filename,sourcepath)">AbsoluteFileName</a>	AbsoluteFileName : determine absolute path of a file</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="AnalysisScreen.html" class="code" title="function fig=AnalysisScreen(prevfig)">AnalysisScreen</a>	allocate mising input</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% RelativeFileName : determine the relative path between two directories</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%</span>
+0005 <a name="_sub0" href="#_subfunctions" class="code">function func=RelativeFileName(filename,sourcepath)</a>
+0006 
+0007 <span class="keyword">if</span> (nargin&lt;2) || isempty(sourcepath)
+0008     sourcepath=pwd;
+0009 <span class="keyword">end</span>
+0010 
+0011 filename=<a href="AbsoluteFileName.html" class="code" title="function func=AbsoluteFileName(filename,sourcepath)">AbsoluteFileName</a>(filename);
+0012 sourcepath=<a href="AbsoluteFileName.html" class="code" title="function func=AbsoluteFileName(filename,sourcepath)">AbsoluteFileName</a>(sourcepath);
+0013 
+0014 [filepath,filename,ext]=fileparts(filename);
+0015 filename=[filename ext];
+0016 M=min(numel(filepath),numel(sourcepath));
+0017 match=(sourcepath(1:M)==filepath(1:M));
+0018 <span class="keyword">if</span> numel(match)==0
+0019     error(<span class="string">'ERROR: no relative path can be generated'</span>);
+0020 <span class="keyword">end</span>
+0021 start=sum(match)+1;
+0022 
+0023 sourcepath=sourcepath(start:end);
+0024 <span class="keyword">if</span> isempty(sourcepath)    
+0025     relpath=<span class="string">'.'</span>;
+0026 <span class="keyword">else</span>
+0027     <span class="keyword">if</span> sourcepath(1)~=filesep
+0028         sourcepath=[filesep sourcepath];
+0029     <span class="keyword">end</span>
+0030     N=sum(sourcepath==filesep);
+0031     relpath=[<span class="string">'..'</span> filesep];
+0032     relpath=repmat(relpath,[1 N]);
+0033 <span class="keyword">end</span>
+0034 func=fullfile(relpath,filepath(start:end),filename);</pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

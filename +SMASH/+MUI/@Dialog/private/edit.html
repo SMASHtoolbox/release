@@ -1,0 +1,100 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of edit</title>
+  <meta name="keywords" content="edit">
+  <meta name="description" content="handle input">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../../index.html">SMASHtoolbox</a> &gt; <a href="../../../index.html">+SMASH</a> &gt; <a href="../../index.html">+MUI</a> &gt; <a href="../index.html">@Dialog</a> &gt; <a href="index.html">private</a> &gt; edit.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../../index.html"><img alt="<" border="0" src="../../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+MUI/@Dialog/private&nbsp;<img alt=">" border="0" src="../../../../../../right.png"></a></td></tr></table>-->
+
+<h1>edit
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>handle input</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>function varargout=edit(object,label,minwidth,SkipLabel) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> handle input</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="local_uicontrol.html" class="code" title="function varargout=local_uicontrol(object,varargin)">local_uicontrol</a>	% local uicontrol (could be pushed out to separate classes</li><li><a href="text.html" class="code" title="function varargout=text(object,label,minwidth)">text</a>	handle input</li><li><a href="verify.html" class="code" title="function verify(object)">verify</a>	</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="custom.html" class="code" title="function varargout=custom(object,Control,varargin)">custom</a>	dialog.custom : add a line of custom uicontrols</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function varargout=edit(object,label,minwidth,SkipLabel)</a>
+0002 
+0003 <span class="comment">% handle input</span>
+0004 <span class="keyword">if</span> (nargin&lt;2) || isempty(label)
+0005     label=<span class="string">'Label: '</span>;
+0006 <span class="keyword">end</span>
+0007 
+0008 <span class="keyword">if</span> (nargin&lt;3) || isempty(minwidth)
+0009     minwidth=0;
+0010 <span class="keyword">end</span>
+0011 
+0012 <span class="keyword">if</span> nargin&lt;4
+0013      SkipLabel=<span class="string">''</span>;
+0014 <span class="keyword">end</span>
+0015 <span class="keyword">if</span> strcmpi(SkipLabel,<span class="string">'SkipLabel'</span>)
+0016     SkipLabel=true;
+0017 <span class="keyword">else</span>
+0018     SkipLabel=false;
+0019 <span class="keyword">end</span>
+0020 
+0021 <span class="comment">% error checking</span>
+0022 <a href="verify.html" class="code" title="function verify(object)">verify</a>(object);
+0023 
+0024 <span class="comment">% create block</span>
+0025 <span class="keyword">if</span> SkipLabel
+0026     h=nan; 
+0027 <span class="keyword">else</span>
+0028     [h,temp]=<a href="text.html" class="code" title="function varargout=text(object,label,minwidth)">text</a>(object,label,minwidth);
+0029     minwidth=max(temp,minwidth);
+0030     object.pushup(1,object.VerticalGap);
+0031 <span class="keyword">end</span>
+0032 
+0033 dummy=repmat(<span class="string">'M'</span>,[1 minwidth]);
+0034 h(end+1)=<a href="local_uicontrol.html" class="code" title="function varargout=local_uicontrol(object,varargin)">local_uicontrol</a>(object,<span class="keyword">...</span>
+0035     <span class="string">'Style'</span>,<span class="string">'edit'</span>,<span class="string">'HorizontalAlignment'</span>,<span class="string">'left'</span>,<span class="keyword">...</span>
+0036     <span class="string">'Max'</span>,1,<span class="string">'Min'</span>,0,<span class="keyword">...</span>
+0037     <span class="string">'String'</span>,dummy);
+0038 set(h(end),<span class="string">'String'</span>,<span class="string">''</span>);
+0039 object.pushup;
+0040 object.make_room;
+0041 
+0042 object.Controls(end+1)=h(end);
+0043 
+0044 <span class="comment">% handle output</span>
+0045 <span class="keyword">if</span> nargout&gt;=1
+0046     varargout{1}=h;
+0047 <span class="keyword">end</span>
+0048 
+0049 <span class="keyword">if</span> nargout&gt;=2
+0050     varargout{2}=minwidth;
+0051 <span class="keyword">end</span>
+0052 
+0053 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

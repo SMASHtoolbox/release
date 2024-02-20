@@ -1,0 +1,336 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of read_sbfp</title>
+  <meta name="keywords" content="read_sbfp">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../../index.html">SMASHtoolbox</a> &gt; <a href="../../../index.html">+SMASH</a> &gt; <a href="../../index.html">+FileAccess</a> &gt; <a href="../index.html">@ImageFile</a> &gt; <a href="index.html">private</a> &gt; read_sbfp.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../../index.html"><img alt="<" border="0" src="../../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+FileAccess/@ImageFile/private&nbsp;<img alt=">" border="0" src="../../../../../../right.png"></a></td></tr></table>-->
+
+<h1>read_sbfp
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>function varargout=read_sbfp(filename) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function [ image, header ]  = read_SBF_img(fileName)</a></li><li><a href="#_sub2" class="code">function siz = fsize(filename)</a></li><li><a href="#_sub3" class="code">function  [ type, param, allParam ] = isImgType(image, header, ignoreClass )</a></li><li><a href="#_sub4" class="code">function [ aray, header ]  = readBinaryArrayFile(fileName,arraySize,headerSize,precision,rowMajor,byteSwap)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function varargout=read_sbfp(filename)</a>
+0002 
+0003 varargout=cell(nargout,1);
+0004 
+0005 <span class="keyword">if</span> (nargin&lt;1) || isempty(filename)
+0006     [fname,pname]=uigetfile({<span class="string">'*.img'</span>;<span class="string">'*.IMG'</span>},<span class="string">'Select image file'</span>);
+0007     <span class="keyword">if</span> isnumeric(fname) <span class="comment">% user pressed cancel</span>
+0008         <span class="keyword">return</span>
+0009     <span class="keyword">end</span>
+0010     filename=fullfile(pname,fname);
+0011 <span class="keyword">end</span>
+0012 
+0013 [array,header]=<a href="#_sub1" class="code" title="subfunction [ image, header ]  = read_SBF_img(fileName)">read_SBF_img</a>(filename);
+0014 <span class="keyword">if</span> isempty(array)
+0015     fprintf(<span class="string">'No image data read from file %s\n'</span>,filename);
+0016 <span class="keyword">end</span>
+0017 
+0018 <span class="keyword">if</span> nargout==0
+0019     figure;
+0020     imagesc(array);
+0021     axis image;
+0022     <span class="keyword">return</span>
+0023 <span class="keyword">end</span>
+0024 <span class="keyword">if</span> nargout&gt;=1
+0025     varargout{1}=array;
+0026 <span class="keyword">end</span>
+0027 <span class="keyword">if</span> nargout&gt;=2
+0028     varargout{2}=header;
+0029 <span class="keyword">end</span>
+0030 
+0031 <span class="keyword">end</span>
+0032 
+0033 <a name="_sub1" href="#_subfunctions" class="code">function [ image, header ]  = read_SBF_img(fileName)</a>
+0034 <span class="comment">% Reads single image from an image file (*.img) created by WinIR3 software.</span>
+0035 <span class="comment">% Determines the format to read from the size of the file and returns</span>
+0036 <span class="comment">% image and header.  Assumes file contains a header followed by binary</span>
+0037 <span class="comment">% image.  Assumes that size of the file uniquely determines the type of</span>
+0038 <span class="comment">% file.</span>
+0039 
+0040 image   = [];
+0041 header  = [];
+0042 fileSize = <a href="#_sub2" class="code" title="subfunction siz = fsize(filename)">fsize</a>(fileName);
+0043 <span class="keyword">if</span> isempty(fileSize)                    <span class="comment">% If file not found return [].</span>
+0044     <span class="keyword">return</span>
+0045 <span class="keyword">end</span>
+0046 
+0047 [ dummy, dummy2, fileParam ]   = <a href="#_sub3" class="code" title="subfunction  [ type, param, allParam ] = isImgType(image, header, ignoreClass )">isImgType</a>([],[]);
+0048     <span class="comment">% allParam contains the array of structures</span>
+0049 nTypes = numel(fileParam);
+0050 <span class="comment">%</span>
+0051 <span class="comment">%-- Look thru the structures for a file type that matches fileSize.</span>
+0052 <span class="comment">%</span>
+0053 <span class="keyword">for</span> k = 1:nTypes
+0054     <span class="comment">%-- Look up the sizes</span>
+0055     <span class="comment">%</span>
+0056     imageSize       = fileParam(k).imageSize;          <span class="comment">% [ nrows, ncols ]</span>
+0057     nrows           = imageSize(1);
+0058     ncols           = imageSize(2);        
+0059     headerSize      = fileParam(k).headerSize;
+0060     bytesPerElement = fileParam(k).bytesPerElement;
+0061     <span class="comment">%</span>
+0062     <span class="comment">%-- Calc number of bytes</span>
+0063     <span class="comment">%</span>
+0064     nBytes = headerSize + ( nrows*ncols*bytesPerElement);
+0065     <span class="keyword">if</span> nBytes == fileSize           <span class="comment">% Found a matching size</span>
+0066         precision   = fileParam(k).class;
+0067         rowMajor    = fileParam(k).rowMajor;
+0068         byteSwap    = fileParam(k).byteSwap;
+0069         <span class="comment">%</span>
+0070         <span class="comment">%-- Read the image</span>
+0071         <span class="comment">%</span>
+0072         [ image, header ]    <span class="keyword">...</span>
+0073             = <a href="#_sub4" class="code" title="subfunction [ aray, header ]  = readBinaryArrayFile(fileName,arraySize,headerSize,precision,rowMajor,byteSwap)">readBinaryArrayFile</a>(fileName,imageSize,headerSize,precision,rowMajor,byteSwap);
+0074         <span class="keyword">return</span>
+0075     <span class="keyword">end</span>
+0076 <span class="keyword">end</span>
+0077 <span class="keyword">end</span>
+0078 
+0079 <a name="_sub2" href="#_subfunctions" class="code">function siz = fsize(filename)</a>
+0080 <span class="comment">% fsize  returns the size of a file</span>
+0081 <span class="keyword">if</span> exist(filename,<span class="string">'file'</span>)  ~= 2   
+0082     siz = [];
+0083     <span class="keyword">return</span>;
+0084 <span class="keyword">end</span>
+0085 fid = fopen(filename);          <span class="comment">% Open the file</span>
+0086 fseek(fid, 0, <span class="string">'eof'</span>);           <span class="comment">% Go to the end</span>
+0087 siz = ftell(fid);               <span class="comment">% Get size in bytes</span>
+0088 fclose(fid);
+0089 <span class="keyword">end</span>
+0090 
+0091 <a name="_sub3" href="#_subfunctions" class="code">function  [ type, param, allParam ] = isImgType(image, header, ignoreClass )</a>
+0092 <span class="comment">% isImgType  determines if image and header match those of an</span>
+0093 <span class="comment">% .img image file generated by WinIR3.</span>
+0094 <span class="comment">% INPUTS:</span>
+0095 <span class="comment">%   image           image array</span>
+0096 <span class="comment">%   header          byte vector</span>
+0097 <span class="comment">%   ignoreClass     1 to ignore the class of image when checking for known</span>
+0098 <span class="comment">%                   .img format.   0 not to ignore the class.</span>
+0099 <span class="comment">%                   Default = 0;</span>
+0100 <span class="comment">% OUTPUTS:</span>
+0101 <span class="comment">%   type             0 if didn't match</span>
+0102 <span class="comment">%                   1 for SBF191</span>
+0103 <span class="comment">%                   2 for SBF134</span>
+0104 <span class="comment">%                   3 for SBF191 standard deviations</span>
+0105 <span class="comment">%   param           structure containing the parameters of the</span>
+0106 <span class="comment">%                   known type.</span>
+0107 <span class="comment">%   allParam        array of structures containing parameters of known types</span>
+0108 <span class="keyword">if</span> nargin &lt; 3
+0109     ignoreClass = 0;
+0110 <span class="keyword">end</span>
+0111 param   = [];           <span class="comment">% Default</span>
+0112 type    = 0;            <span class="comment">% default</span>
+0113 <span class="comment">%</span>
+0114 <span class="comment">%-- Param for image from SBF191 which is type 1</span>
+0115 <span class="comment">%</span>
+0116 allParam(1).name              =<span class="string">'SBF191'</span>;
+0117 allParam(1).fileExt           =<span class="string">'img'</span>;
+0118 allParam(1).imageSize         = [ 512, 640 ];          <span class="comment">% 512 rows x 640 cols</span>
+0119 allParam(1).class             = <span class="string">'uint16'</span>;              <span class="comment">% 16-bits unsigned</span>
+0120 allParam(1).bytesPerElement   = 2;
+0121 allParam(1).headerSize        = 512;                   <span class="comment">% 512 byte header</span>
+0122 allParam(1).rowMajor          = 1;                     <span class="comment">% Written row major</span>
+0123 allParam(1).byteSwap          = 0;                     <span class="comment">% with no byte swap</span>
+0124 allParam(1).description       = <span class="string">'SBF191 from WinIR3 with header'</span>;
+0125 <span class="comment">%</span>
+0126 <span class="comment">%-- Param for SBF134 which is type 2</span>
+0127 <span class="comment">%</span>
+0128 allParam(2).name              =<span class="string">'SBF134'</span>;
+0129 allParam(2).fileExt           =<span class="string">'img'</span>;
+0130 allParam(2).imageSize         = [ 256, 256 ];          <span class="comment">% 256 rows x 256 cols</span>
+0131 allParam(2).class             = <span class="string">'int16'</span>;               <span class="comment">% 16-bits signed</span>
+0132 allParam(2).bytesPerElement   = 2;
+0133 allParam(2).headerSize        = 512;                   <span class="comment">% 512 byte header</span>
+0134 allParam(2).rowMajor          = 1;                     <span class="comment">% Written row major</span>
+0135 allParam(2).byteSwap          = 0;                     <span class="comment">% with no byte swap</span>
+0136 allParam(2).description       = <span class="string">'SBF134 from WinIR3 with header'</span>;
+0137 <span class="comment">%</span>
+0138 <span class="comment">%-- Param for standard deviation image from SBF191 which is type 3</span>
+0139 <span class="comment">%</span>
+0140 allParam(3).name              =<span class="string">'SBF191_SD'</span>;
+0141 allParam(3).fileExt           =<span class="string">'img'</span>;
+0142 allParam(3).imageSize         = [ 512, 640 ];          <span class="comment">% 512 rows x 640 cols</span>
+0143 allParam(3).class             = <span class="string">'single'</span>;              <span class="comment">% Single prec. floating.</span>
+0144 allParam(3).bytesPerElement   = 4;
+0145 allParam(3).headerSize        = 512;                   <span class="comment">% 512 byte header</span>
+0146 allParam(3).rowMajor          = 1;                     <span class="comment">% Written row major</span>
+0147 allParam(3).byteSwap          = 0;                     <span class="comment">% with no byte swap</span>
+0148 allParam(3).description       = <span class="string">'SBF191 standard deviations from WinIR3 with header'</span>;
+0149 <span class="comment">%</span>
+0150 <span class="comment">%-- Need a match for image shape, class, header size</span>
+0151 <span class="comment">%</span>
+0152 [ nrows, ncols ]    = size(image);
+0153 imageSize           = [ nrows, ncols ];
+0154 headerSize          = length(cast(header,<span class="string">'int8'</span>));      <span class="comment">% in bytes</span>
+0155 
+0156 nTypes = numel(allParam);
+0157 <span class="keyword">for</span> k = 1:nTypes   
+0158     imageSizeK     = allParam(k).imageSize;
+0159     result  = find(imageSizeK == imageSize);            <span class="comment">% [ 1 2 ]  if they match</span>
+0160     <span class="keyword">if</span> numel(result) ~= 2 <span class="comment">% imageSize doesn't match</span>
+0161         <span class="keyword">continue</span>       
+0162     <span class="keyword">end</span>   
+0163     headerSizeK     =  allParam(k).headerSize;
+0164     <span class="keyword">if</span> headerSizeK ~= headerSize <span class="comment">% headerSize doesn't match</span>
+0165         <span class="keyword">continue</span>
+0166     <span class="keyword">end</span>   
+0167     classK  =    allParam(k).class;
+0168     <span class="keyword">if</span> ~ignoreClass
+0169         <span class="keyword">if</span> ~strcmp( classK, class(image) )  <span class="comment">% class doesn't match</span>
+0170             <span class="keyword">continue</span>
+0171         <span class="keyword">end</span>
+0172     <span class="keyword">end</span>
+0173     <span class="comment">%</span>
+0174     <span class="comment">%-- Found a match in imageSize, headerSize, and class so fill param structure  %</span>
+0175     <span class="comment">%</span>
+0176     param = allParam(k);
+0177     type = k;
+0178     <span class="keyword">return</span>;
+0179 <span class="keyword">end</span>
+0180 <span class="keyword">end</span>
+0181 
+0182 <a name="_sub4" href="#_subfunctions" class="code">function [ aray, header ]  = readBinaryArrayFile(fileName,arraySize,headerSize,precision,rowMajor,byteSwap)</a>
+0183 <span class="comment">% readBinaryArrayFile    Reads array and header from a binary file assuming format: header followed by aray</span>
+0184 <span class="comment">%</span>
+0185 <span class="comment">% INPUTS:</span>
+0186 <span class="comment">%   fileName        string containing name of file. Required parameter.</span>
+0187 <span class="comment">%   arraySize       2-element vector giving array dimensions [ nrows, ncolumns ]</span>
+0188 <span class="comment">%                   Optional parameter. Default = [ 512, 640 ]</span>
+0189 <span class="comment">%   headerSize      scalar length of header in bytes.</span>
+0190 <span class="comment">%                   Optional parameter. Default = 0 for no header.</span>
+0191 <span class="comment">%   precision       precision controls the form and size of the result.</span>
+0192 <span class="comment">%                   Optional parameter.  Default = 'uint16'.</span>
+0193 <span class="comment">%                   See the list of allowed precisions under fread.</span>
+0194 <span class="comment">%   rowMajor        1 if array was written row major ( along rows )</span>
+0195 <span class="comment">%                   0 if array was written column major</span>
+0196 <span class="comment">%                   Optional parameter.  Default = 'row' for row major.</span>
+0197 <span class="comment">%   byteSwap        1 if bytes are to be swapped.  0 if no swap.</span>
+0198 <span class="comment">%                   Optional parameter. Default = no swap.</span>
+0199 <span class="comment">%</span>
+0200 <span class="comment">% OUTPUTS:</span>
+0201 <span class="comment">%   aray            array</span>
+0202 <span class="comment">%   header          header</span>
+0203 <span class="keyword">if</span> nargin &lt; 2       
+0204     arraySize     = [];
+0205 <span class="keyword">end</span>
+0206 <span class="keyword">if</span> nargin &lt; 3
+0207     headerSize  = [];
+0208 <span class="keyword">end</span>
+0209 <span class="keyword">if</span> nargin &lt; 4
+0210     precision   = [];
+0211 <span class="keyword">end</span>
+0212 <span class="keyword">if</span> nargin &lt; 5 
+0213     rowMajor    = [];
+0214 <span class="keyword">end</span>
+0215 <span class="keyword">if</span> nargin &lt; 6
+0216     byteSwap    = [];
+0217 <span class="keyword">end</span>
+0218 <span class="keyword">if</span> isempty(arraySize)
+0219     arraySize    = [ 512, 640 ];                 <span class="comment">% Default to 512 rows x 640 cols</span>
+0220 <span class="keyword">end</span>
+0221 <span class="keyword">if</span> isempty(headerSize)
+0222     headerSize    = 0;                            <span class="comment">% Default to 0.</span>
+0223 <span class="keyword">end</span>
+0224 <span class="keyword">if</span> isempty(precision)
+0225     precision    = <span class="string">'uint16'</span>;                     <span class="comment">% Default to unsigned 16-bit.</span>
+0226 <span class="keyword">end</span>
+0227 <span class="keyword">if</span> isempty(rowMajor)
+0228     rowMajor = 1;                               <span class="comment">% Default is row major</span>
+0229 <span class="keyword">end</span>
+0230 <span class="keyword">if</span> isempty(byteSwap)
+0231     byteSwap = 0;                               <span class="comment">% Default no byte swap</span>
+0232 <span class="keyword">end</span>
+0233 <span class="comment">%</span>
+0234 <span class="comment">%-- If is row major will read rows into columns and then transpose</span>
+0235 <span class="comment">%</span>
+0236 <span class="keyword">if</span> rowMajor  
+0237     arraySize = arraySize( [ 2 1 ]);
+0238 <span class="keyword">end</span>
+0239 
+0240 <span class="keyword">try</span>                                             <span class="comment">% Begin trapping errors</span>
+0241     <span class="comment">%</span>
+0242     <span class="comment">%-- Open the file</span>
+0243     fid=fopen(fileName,<span class="string">'rb'</span>);
+0244 
+0245     <span class="comment">%-- Optionally, read the header. Matlab returns double by default.</span>
+0246     header = [];
+0247     <span class="keyword">if</span> headerSize &gt; 0
+0248         header = fread(fid, headerSize, <span class="string">'uint8'</span>);
+0249         header = uint8(header);
+0250     <span class="keyword">end</span>
+0251 
+0252     <span class="comment">%-- Read the file.</span>
+0253     aray    = fread(fid, arraySize, precision);
+0254 
+0255     <span class="comment">%-- Matlab returns double by default. Convert to the desired class</span>
+0256     aray    = cast(aray, precision);
+0257 
+0258     <span class="keyword">if</span> byteSwap
+0259         aray = swapbytes(aray);
+0260     <span class="keyword">end</span>
+0261     <span class="comment">%</span>
+0262     <span class="comment">%-- Need to swap rows and columns if array was written row major since</span>
+0263     <span class="comment">%   fread reads column major</span>
+0264     <span class="comment">%</span>
+0265     <span class="keyword">if</span> rowMajor
+0266         aray = aray';
+0267     <span class="keyword">end</span>
+0268     fclose(fid);
+0269 <span class="keyword">catch</span>               <span class="comment">% Errors are trapped here.</span>
+0270     <span class="comment">%</span>
+0271     <span class="comment">%     LASTERROR returns a structure containing the last error message issued</span>
+0272     <span class="comment">%     by MATLAB as well as other last error-related information. The</span>
+0273     <span class="comment">%     LASTERROR structure is guaranteed to contain at least the following</span>
+0274     <span class="comment">%     fields:</span>
+0275     <span class="comment">%</span>
+0276     <span class="comment">%        message    : the text of the error message</span>
+0277     <span class="comment">%         identifier : the message identifier of the error message</span>
+0278     <span class="comment">%          stack       : the location of the error, in the same format as the</span>
+0279     <span class="comment">%                       output of dbstack.</span>
+0280     <span class="comment">%</span>
+0281     err = lasterror();
+0282     <span class="comment">%</span>
+0283     <span class="comment">%-- Rethrow the error</span>
+0284     <span class="comment">%</span>
+0285     error( [<span class="string">'FATAL ERROR IN readBinaryFile: '</span>, err.message ]);
+0286 <span class="keyword">end</span>
+0287 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

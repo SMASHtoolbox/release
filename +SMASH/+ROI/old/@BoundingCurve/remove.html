@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of remove</title>
+  <meta name="keywords" content="remove">
+  <meta name="description" content="remove Manually remove points from a BoundingCurve">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../../index.html">SMASHtoolbox</a> &gt; <a href="../../../index.html">+SMASH</a> &gt; <a href="../../index.html">+ROI</a> &gt; <a href="#">old</a> &gt; <a href="index.html">@BoundingCurve</a> &gt; remove.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../../index.html"><img alt="<" border="0" src="../../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+ROI/old/@BoundingCurve&nbsp;<img alt=">" border="0" src="../../../../../../right.png"></a></td></tr></table>-->
+
+<h1>remove
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>remove Manually remove points from a BoundingCurve</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>function remove(object,varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> remove Manually remove points from a BoundingCurve
+
+ This method removes points from a BoudingCurve object
+    &gt;&gt; object=remove(object,index);
+    &gt;&gt; object=remove(object,'all');
+
+ See also <a href="BoundingCurve.html" class="code" title="">BoundingCurve</a>, <a href="define.html" class="code" title="function object=define(object,data)">define</a>, <a href="insert.html" class="code" title="function object=insert(object,data)">insert</a>, <a href="select.html" class="code" title="function varargout=select(object,target,varargin)">select</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="remove.html" class="code" title="function remove(object,varargin)">remove</a>	remove Manually remove points from a BoundingCurve</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="remove.html" class="code" title="function remove(object,varargin)">remove</a>	remove Manually remove points from a BoundingCurve</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% remove Manually remove points from a BoundingCurve</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This method removes points from a BoudingCurve object</span>
+0004 <span class="comment">%    &gt;&gt; object=remove(object,index);</span>
+0005 <span class="comment">%    &gt;&gt; object=remove(object,'all');</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% See also BoundingCurve, define, insert, select</span>
+0008 <span class="comment">%</span>
+0009 
+0010 <span class="comment">%</span>
+0011 <span class="comment">% created November 18, 2014 by Daniel Dolan (Sandia National Laboratories)</span>
+0012 <span class="comment">%</span>
+0013 <a name="_sub0" href="#_subfunctions" class="code">function remove(object,varargin)</a>
+0014 
+0015 Narg=numel(varargin);
+0016 <span class="comment">% index modes</span>
+0017 <span class="keyword">if</span> Narg==1
+0018     <span class="keyword">if</span> isnumeric(varargin{1})
+0019         index=varargin{1};
+0020         assert(all(index==round(index)),<span class="string">'ERROR: invalid index'</span>);
+0021         M=size(object.Data,1);
+0022         assert(all(M&gt;=1) &amp; all(M&lt;=M),<span class="string">'ERROR: invalid index'</span>);
+0023         keep=true(M,1);
+0024         keep(index)=false;
+0025         object.Data=object.Data(keep,:);       
+0026     <span class="keyword">elseif</span> strcmpi(varargin{1},<span class="string">'all'</span>)
+0027         object.Data=[];
+0028     <span class="keyword">end</span>    
+0029 <span class="keyword">end</span>
+0030 
+0031 <span class="comment">% nearest mode</span>
+0032 <span class="keyword">if</span> Narg==2
+0033     x=varargin{1};
+0034     y=varargin{2};
+0035     assert(isnumeric(x) &amp; isnumeric(y),<span class="string">'ERROR: invalid input'</span>);
+0036     assert(numel(x)==numel(y),<span class="string">'ERROR: invalid input'</span>);
+0037     <span class="keyword">for</span> k=1:numel(x)
+0038         L2=(x(k)-object.Data(:,1)).^2+(y(k)-object.Data(:,2)).^2;
+0039         [~,index]=min(L2);
+0040         object=<a href="remove.html" class="code" title="function remove(object,varargin)">remove</a>(object,index);
+0041     <span class="keyword">end</span>
+0042 <span class="keyword">end</span>
+0043 
+0044 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,139 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of probe</title>
+  <meta name="keywords" content="probe">
+  <meta name="description" content="PROBE Probe the column block file">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="../../index.html">+SMASH</a> &gt; <a href="../index.html">+FileAccess</a> &gt; <a href="index.html">@BlockFile</a> &gt; probe.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+FileAccess/@BlockFile&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>probe
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>PROBE Probe the column block file</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function varargout=probe(object,delim,mincol) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> PROBE Probe the column block file
+
+ Syntax:
+    &gt;&gt; output=probe(object,[delim],[mincol]); 
+ The output is a structure with the following fields.
+    -HeaderLines
+    -NumberColumns
+    -Format
+
+ See also <a href="BlockFile.html" class="code" title="">BlockFile</a>, <a href="read.html" class="code" title="function output=read(object,delim,mincol)">read</a>, <a href="write.html" class="code" title="function success=write(object,data,format,header)">write</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="read.html" class="code" title="function output=read(object,delim,mincol)">read</a>	READ Read from a column block file</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% PROBE Probe the column block file</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% Syntax:</span>
+0004 <span class="comment">%    &gt;&gt; output=probe(object,[delim],[mincol]);</span>
+0005 <span class="comment">% The output is a structure with the following fields.</span>
+0006 <span class="comment">%    -HeaderLines</span>
+0007 <span class="comment">%    -NumberColumns</span>
+0008 <span class="comment">%    -Format</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% See also BlockFile, read, write</span>
+0011 <span class="comment">%</span>
+0012 
+0013 <a name="_sub0" href="#_subfunctions" class="code">function varargout=probe(object,delim,mincol)</a>
+0014 
+0015 <span class="keyword">if</span> isempty(object.FileName)
+0016     object=select(object);
+0017 <span class="keyword">elseif</span> ~exist(object.FullName,<span class="string">'file'</span>)
+0018     error(<span class="string">'ERROR: file does not exist'</span>);
+0019 <span class="keyword">end</span>
+0020 
+0021 <span class="keyword">if</span> (nargin&lt;2) || isempty(delim)
+0022     delim={<span class="string">','</span> <span class="string">';'</span> <span class="string">'&amp;'</span>};
+0023 <span class="keyword">end</span>
+0024 
+0025 <span class="keyword">if</span> (nargin&lt;3) || isempty(mincol)
+0026     mincol=1;
+0027 <span class="keyword">end</span>
+0028     
+0029 <span class="comment">% open file and look for purely numerical rows</span>
+0030 fid=fopen(object.FullName,<span class="string">'r'</span>);     
+0031 finish=onCleanup(@() fclose(fid));
+0032 
+0033 report=[];
+0034 <span class="keyword">while</span> ~feof(fid) <span class="comment">% file scan</span>
+0035     report(end+1).Start=ftell(fid);
+0036     skip=0;
+0037     <span class="keyword">while</span> true <span class="comment">% block scan</span>
+0038         numcol=0;
+0039         format=<span class="string">''</span>;
+0040         temp=fgets(fid);
+0041         in=strtrim(temp);
+0042         <span class="keyword">while</span> numel(in)&gt;0
+0043             in=strtrim(in); <span class="comment">% remove extraneous whitespace</span>
+0044             <span class="comment">% try to read a number</span>
+0045             [~,count,~,next]=sscanf(in,<span class="string">'%g'</span>,1);
+0046             <span class="keyword">if</span> count==1 <span class="comment">% numerical value read</span>
+0047                 format=[format <span class="string">'%g'</span>]; <span class="comment">%#ok&lt;AGROW&gt;</span>
+0048                 numcol=numcol+1;
+0049                 in=in(next:end);
+0050                 <span class="keyword">continue</span>
+0051             <span class="keyword">end</span>
+0052             <span class="comment">% try to read a delimeter</span>
+0053             [value,~,~,next]=sscanf(in,<span class="string">'%c'</span>,1);
+0054             <span class="keyword">switch</span> value
+0055                 <span class="keyword">case</span> delim
+0056                     format=[format <span class="string">'%*1s'</span>]; <span class="comment">%#ok&lt;AGROW&gt;</span>
+0057                     in=in(next:end);
+0058                 <span class="keyword">otherwise</span>
+0059                     format=<span class="string">''</span>;
+0060                     <span class="keyword">break</span>
+0061             <span class="keyword">end</span>
+0062         <span class="keyword">end</span>
+0063         <span class="comment">% see if data has been reached</span>
+0064         <span class="keyword">if</span> isempty(format) || (numcol&lt;mincol)
+0065             skip=skip+1;
+0066         <span class="keyword">else</span>
+0067             fscanf(fid,format,[numcol inf]);
+0068             <span class="keyword">break</span>
+0069         <span class="keyword">end</span>
+0070     <span class="keyword">end</span>
+0071     report(end).HeaderLines=skip;
+0072     report(end).NumberColumns=numcol;
+0073     report(end).Format=format;
+0074 <span class="keyword">end</span>
+0075 
+0076 <span class="comment">% handle output</span>
+0077 <span class="keyword">if</span> nargout==0
+0078     disp(report);
+0079 <span class="keyword">else</span>
+0080     varargout{1}=report;
+0081 <span class="keyword">end</span>
+0082 
+0083 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of sort</title>
+  <meta name="keywords" content="sort">
+  <meta name="description" content="sort Sort database records">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="../../index.html">+SMASH</a> &gt; <a href="../index.html">+FileAccess</a> &gt; <a href="index.html">@SimpleDatabase</a> &gt; sort.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+FileAccess/@SimpleDatabase&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>sort
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>sort Sort database records</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function sort(object,name,direction) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> sort Sort database records
+
+ This method sorts records in an exisiting database file.  Sorting is
+ performed on a specified field name.
+    &gt;&gt; sort(object,name);
+ A third input controls the sort order.
+   &gt;&gt; sort(object,name,'ascend'); % default behavior
+   &gt;&gt; sort(object,name,'descend');
+
+ See also <a href="SimpleDatabase.html" class="code" title="">SimpleDatabase</a>, <a href="remove.html" class="code" title="function remove(object,varargin)">remove</a>, <a href="view.html" class="code" title="function view(object,index)">view</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="read.html" class="code" title="function data=read(object)">read</a>	read Read from database file</li><li><a href="sort.html" class="code" title="function sort(object,name,direction)">sort</a>	sort Sort database records</li><li><a href="write.html" class="code" title="function write(object,data)">write</a>	write Write to database file</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="add.html" class="code" title="function add(object,record)">add</a>	add Add to the database file</li><li><a href="sort.html" class="code" title="function sort(object,name,direction)">sort</a>	sort Sort database records</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% sort Sort database records</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This method sorts records in an exisiting database file.  Sorting is</span>
+0004 <span class="comment">% performed on a specified field name.</span>
+0005 <span class="comment">%    &gt;&gt; sort(object,name);</span>
+0006 <span class="comment">% A third input controls the sort order.</span>
+0007 <span class="comment">%   &gt;&gt; sort(object,name,'ascend'); % default behavior</span>
+0008 <span class="comment">%   &gt;&gt; sort(object,name,'descend');</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% See also SimpleDatabase, remove, view</span>
+0011 <span class="comment">%</span>
+0012 
+0013 <span class="comment">%</span>
+0014 <span class="comment">% created May 30, 2014 by Daniel Dolan (Sandia National Laboratories)</span>
+0015 <span class="comment">%</span>
+0016 <a name="_sub0" href="#_subfunctions" class="code">function sort(object,name,direction)</a>
+0017 
+0018 <span class="comment">% handle input</span>
+0019 assert(nargin&gt;=2,<span class="string">'ERROR: insufficient input'</span>);
+0020 
+0021 <span class="keyword">if</span> (nargin&lt;3) || isempty(direction)
+0022     direction=<span class="string">'ascend'</span>;
+0023 <span class="keyword">end</span>
+0024 <span class="keyword">switch</span> lower(direction)
+0025     <span class="keyword">case</span> {<span class="string">'ascend'</span>,<span class="string">'ascending'</span>}
+0026         direction=<span class="string">'ascend'</span>;
+0027     <span class="keyword">case</span> {<span class="string">'descend'</span>,<span class="string">'descending'</span>}
+0028         direction=<span class="string">'descend'</span>;
+0029 <span class="keyword">end</span>
+0030 
+0031 
+0032 <span class="comment">% verify name</span>
+0033 data=<a href="read.html" class="code" title="function data=read(object)">read</a>(object);
+0034 assert(isfield(data,name),<span class="string">'Invalid name'</span>);
+0035 
+0036 <span class="comment">% create sort table</span>
+0037 N=numel(data);
+0038 table=cell(N,1);
+0039 <span class="keyword">for</span> n=1:N
+0040     table{n}=data(n).(name);
+0041 <span class="keyword">end</span>
+0042 
+0043 <span class="keyword">if</span> isnumeric(data(1).(name)) || islogical(data(1).(name))
+0044     L=cellfun(@numel,table);
+0045     assert(all(L==L(1)),<span class="string">'ERROR: cannot sort nonscalar data'</span>)
+0046     table=cell2mat(table);
+0047 <span class="keyword">end</span>
+0048 [~,index]=<a href="sort.html" class="code" title="function sort(object,name,direction)">sort</a>(table,1,direction);
+0049 
+0050 <span class="comment">% sort data</span>
+0051 data=data(index);
+0052 <a href="write.html" class="code" title="function write(object,data)">write</a>(object,data);
+0053 
+0054 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

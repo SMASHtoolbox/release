@@ -1,0 +1,208 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of SmoothDerivative</title>
+  <meta name="keywords" content="SmoothDerivative">
+  <meta name="description" content="SmoothDerivative : calculate a smooth derivative using the Savitzky-Golay">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">THRIVE</a> &gt; <a href="index.html">private</a> &gt; SmoothDerivative.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/THRIVE/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>SmoothDerivative
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>SmoothDerivative : calculate a smooth derivative using the Savitzky-Golay</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function varargout=SmoothDerivative(deriv,param,y,x) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> SmoothDerivative : calculate a smooth derivative using the Savitzky-Golay
+ method.  The derivative level may be specified by an array of positive
+ integers (including zero); the result for each array entry is returned as
+ a separate function output. The order and number of points used in the
+ calculation are specified by an array param=[order numpoints].  Dependent
+ data to be smoothed is specified in a 1D array y.  The distance between
+ adjacent samples may be specified by a fourth input, which can be a
+ scalar or an evenly spaced array.
+
+ Standard usage:
+   &gt;&gt;dydx=SmoothDerivative(1,param,y,x);
+   &gt;&gt;ys=SmoothDerivative(0,param,y,x);
+   &gt;&gt;[ys,dydx]=SmoothDerivative([0 1],param,y,x);
+
+ Advanced usage:
+   &gt;&gt;weight=SmoothDeriv(deriv,param); % no data specified
+   When no data is specified, the function returns the convolution weights
+   that would be used for the specied derivative level(s).  
+   &gt;&gt;[dydx,param]=SmoothDerivative(1,param,y,x);
+   The actual parameter set used by the function is always the *last*
+   output value.  The output value may differ from the input if
+   the order and/or number of points are inconsisent with the specified
+   derivatives(s).</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="ResultsScreen.html" class="code" title="function fig=ResultsScreen(oldfig)">ResultsScreen</a>	ResultsScreen:</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function [weight,cond_num]=SGweight(order,numpoints,kr)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% SmoothDerivative : calculate a smooth derivative using the Savitzky-Golay</span>
+0002 <span class="comment">% method.  The derivative level may be specified by an array of positive</span>
+0003 <span class="comment">% integers (including zero); the result for each array entry is returned as</span>
+0004 <span class="comment">% a separate function output. The order and number of points used in the</span>
+0005 <span class="comment">% calculation are specified by an array param=[order numpoints].  Dependent</span>
+0006 <span class="comment">% data to be smoothed is specified in a 1D array y.  The distance between</span>
+0007 <span class="comment">% adjacent samples may be specified by a fourth input, which can be a</span>
+0008 <span class="comment">% scalar or an evenly spaced array.</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% Standard usage:</span>
+0011 <span class="comment">%   &gt;&gt;dydx=SmoothDerivative(1,param,y,x);</span>
+0012 <span class="comment">%   &gt;&gt;ys=SmoothDerivative(0,param,y,x);</span>
+0013 <span class="comment">%   &gt;&gt;[ys,dydx]=SmoothDerivative([0 1],param,y,x);</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% Advanced usage:</span>
+0016 <span class="comment">%   &gt;&gt;weight=SmoothDeriv(deriv,param); % no data specified</span>
+0017 <span class="comment">%   When no data is specified, the function returns the convolution weights</span>
+0018 <span class="comment">%   that would be used for the specied derivative level(s).</span>
+0019 <span class="comment">%   &gt;&gt;[dydx,param]=SmoothDerivative(1,param,y,x);</span>
+0020 <span class="comment">%   The actual parameter set used by the function is always the *last*</span>
+0021 <span class="comment">%   output value.  The output value may differ from the input if</span>
+0022 <span class="comment">%   the order and/or number of points are inconsisent with the specified</span>
+0023 <span class="comment">%   derivatives(s).</span>
+0024 
+0025 <span class="comment">% created 1/7/2008 by Daniel Dolan</span>
+0026 <span class="comment">% updated 1/16/2008 by Daniel Dolan</span>
+0027 <span class="comment">%   -added matrix scaling to improve condition number</span>
+0028 <span class="comment">% updated 7/14/2009 by Daniel Dolan</span>
+0029 <span class="comment">%   -deriv may now be an array, creating multiple function outputs</span>
+0030 <span class="comment">%   -convolution is automatically oriented for column or row vectors</span>
+0031 <span class="comment">% updated 8/5/2009 by Daniel Dolan</span>
+0032 <span class="comment">%   -modified the skip algorithm to prevent dropping too many points</span>
+0033 <span class="comment">%   -fixed several bugs with input/output handling</span>
+0034 <span class="comment">%   -fixed a small bug in which two factorial corrections were applied to</span>
+0035 <span class="comment">%   derivative calculations</span>
+0036 <a name="_sub0" href="#_subfunctions" class="code">function varargout=SmoothDerivative(deriv,param,y,x) </a>
+0037 
+0038 <span class="comment">% handle input</span>
+0039 <span class="keyword">if</span> (nargin&lt;1) || isempty(deriv)
+0040     deriv=1;
+0041 <span class="keyword">end</span>
+0042 deriv=ceil(deriv);
+0043 <span class="keyword">if</span> any(deriv&lt;0)
+0044     error(<span class="string">'ERROR: negative derivative specified'</span>);
+0045 <span class="keyword">end</span>
+0046 
+0047 <span class="keyword">if</span> (nargin&lt;2) || isempty(param)
+0048     order=0;
+0049     numpoints=0;
+0050 <span class="keyword">else</span>
+0051     param=ceil(param);    
+0052     order=param(1);
+0053     numpoints=param(2);
+0054 <span class="keyword">end</span>
+0055 order=max([order max(deriv)]);
+0056 numpoints=max([numpoints order+1]);
+0057 <span class="keyword">if</span> rem(numpoints,2)==0
+0058     numpoints=numpoints+1; <span class="comment">% use an odd number of points</span>
+0059 <span class="keyword">end</span>
+0060 param=[order numpoints];
+0061 
+0062 <span class="comment">% generate convolution weights</span>
+0063 jr=floor((numpoints+1)/2);
+0064 weight=<a href="#_sub1" class="code" title="subfunction [weight,cond_num]=SGweight(order,numpoints,kr)">SGweight</a>(order,numpoints,jr);
+0065 weight=weight(deriv+1,end:-1:1);
+0066 
+0067 <span class="comment">% determine step size</span>
+0068 <span class="keyword">if</span> nargin&lt;3 <span class="comment">% no data given</span>
+0069     varargout{1}=weight;
+0070     varargout{2}=param;
+0071     <span class="keyword">return</span>
+0072 <span class="keyword">elseif</span> nargin==3
+0073     dx=1;
+0074 <span class="keyword">elseif</span> numel(x)==1
+0075     dx=x;
+0076 <span class="keyword">else</span>
+0077     dx=(x(end)-x(1))/(numel(x)-1);
+0078 <span class="keyword">end</span>
+0079 
+0080 <span class="comment">% check signal shape</span>
+0081 <span class="keyword">if</span> size(y,1)==1
+0082     isrow=true;
+0083 <span class="keyword">else</span>
+0084     isrow=false;
+0085 <span class="keyword">end</span>
+0086 
+0087 <span class="comment">% identify boundary points</span>
+0088 N=numel(y);
+0089 nskip=(numpoints-1)/2;
+0090 skip=[1:nskip (N+1-nskip):N];
+0091 
+0092 <span class="comment">% calculate derivatives</span>
+0093 M=numel(deriv);
+0094 varargout=cell(1,M+1);
+0095 <span class="keyword">for</span> k=1:M
+0096     <span class="keyword">if</span> isrow
+0097         kernel=weight(k,:);
+0098     <span class="keyword">else</span>
+0099         kernel=transpose(weight(k,:));
+0100     <span class="keyword">end</span>
+0101     varargout{k}=conv2(y,kernel,<span class="string">'same'</span>);
+0102     kderiv=deriv(k);
+0103     <span class="keyword">if</span> kderiv&gt;0
+0104         varargout{k}=varargout{k}/dx^(kderiv);
+0105     <span class="keyword">end</span>
+0106     varargout{k}(skip)=nan;
+0107 <span class="keyword">end</span>
+0108 varargout{end}=param;
+0109 
+0110 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0111 <span class="comment">% Savitzky-Golay weight generator %</span>
+0112 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0113 <a name="_sub1" href="#_subfunctions" class="code">function [weight,cond_num]=SGweight(order,numpoints,kr)</a>
+0114 
+0115 <span class="keyword">if</span> (nargin&lt;3) || isempty(kr)
+0116     kr=ceil(numpoints/2);
+0117 <span class="keyword">end</span>
+0118 
+0119 N=numpoints;
+0120 M=order+1;
+0121 
+0122 [n,k]=ndgrid(1:M,1:N);
+0123 L=((k-kr)/N).^(n-1);
+0124 
+0125 R=zeros(order+1,order+1);
+0126 k=((1:N)-kr)/N;
+0127 <span class="keyword">for</span> n=1:M
+0128     <span class="keyword">for</span> m=1:M
+0129         R(n,m)=sum(k.^(n+m-2));
+0130     <span class="keyword">end</span>
+0131 <span class="keyword">end</span>
+0132 
+0133 cond_num=rcond(R);
+0134 weight=R\L;
+0135 <span class="keyword">for</span> q=0:order
+0136     weight(q+1,:)=weight(q+1,:)*factorial(q)/N^q; 
+0137 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

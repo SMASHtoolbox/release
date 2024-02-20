@@ -1,0 +1,89 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of decay</title>
+  <meta name="keywords" content="decay">
+  <meta name="description" content="% define data">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../../index.html">SMASHtoolbox</a> &gt; <a href="../../../index.html">+SMASH</a> &gt; <a href="../../index.html">+CurveFit</a> &gt; <a href="../index.html">@Curve</a> &gt; <a href="index.html">examples</a> &gt; decay.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../../index.html"><img alt="<" border="0" src="../../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+CurveFit/@Curve/examples&nbsp;<img alt=">" border="0" src="../../../../../../right.png"></a></td></tr></table>-->
+
+<h1>decay
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>% define data</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">% define data</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">%% define data</span>
+0002 x=[4.15 3.13 15.00 11.67 37.00 873.32 54.43 2.60 22.97 107.13 1144.53 <span class="keyword">...</span>
+0003    275.63 47.00 14309.00 54.47 3.30 3.15 183.68 3986.33 336.62 3921.80 <span class="keyword">...</span>
+0004    362.53 978.83 367.98 497.67 5801.53 198.83];
+0005 
+0006 y=[1.01 1.00 0.91 0.94 0.83 0.66 0.81 0.98 0.85 0.77 0.62 0.72 0.81 0.22 <span class="keyword">...</span>
+0007    0.81 1.00 0.98 0.73 0.45 0.74 0.46 0.70 0.64 0.70 0.70 0.39 0.73];
+0008 
+0009 <span class="comment">%% set up Curve object with three basis functions</span>
+0010 object=SMASH.CurveFit.Curve([x(:) y(:)]);
+0011 
+0012 object=add(object,@(p,x) ones(size(x)),[]);
+0013 
+0014 exponential=@(p,x) exp(-x/p);
+0015 object=add(object,exponential,50,<span class="string">'lower'</span>,0,<span class="string">'upper'</span>,100);
+0016 object=add(object,exponential,1000,<span class="string">'lower'</span>,100,<span class="string">'upper'</span>,10e3);
+0017 
+0018 <span class="comment">%% adjust fit parameters</span>
+0019 object=fit(object);
+0020 summarize(object);
+0021 report=summarize(object);
+0022 
+0023 <span class="comment">%% display results</span>
+0024 xfit=linspace(min(x),max(x),10e3);
+0025 
+0026 plot(x,y,<span class="string">'o'</span>,xfit,evaluate(object,xfit));
+0027 xlabel(<span class="string">' time (minutes)'</span>)
+0028 ylabel(<span class="string">' IP fading factor'</span>)
+0029 label=<span class="string">'f(x) ='</span>;
+0030 label=sprintf(<span class="string">'%s %5.3f +'</span>,label,report(1).Scale(1));
+0031 label=sprintf(<span class="string">'%s + %5.3f exp(-x/%5.3f)'</span>,<span class="keyword">...</span>
+0032     label,report(2).Scale(1),report(2).Parameter(1));
+0033 label=sprintf(<span class="string">'%s + %5.3f exp(-x/%5.3f)'</span>,<span class="keyword">...</span>
+0034     label,report(3).Scale(1),report(3).Parameter(1));
+0035 title(label)
+0036 
+0037 set(gca,<span class="string">'XScale'</span>,<span class="string">'log'</span>);
+0038 figure(gcf);
+0039 
+0040 <span class="comment">%% uncertainty analysis</span>
+0041 report=analyze(object,[x(:) y(:)],10e3);
+0042 confidence(report)</pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

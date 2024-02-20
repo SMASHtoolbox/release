@@ -1,0 +1,117 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of Session</title>
+  <meta name="keywords" content="Session">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../../index.html">datninja</a> &gt; <a href="#">+datninja</a> &gt; <a href="index.html">@Session</a> &gt; Session.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../../index.html"><img alt="<" border="0" src="../../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/datninja/+datninja/@Session&nbsp;<img alt=">" border="0" src="../../../../../../right.png"></a></td></tr></table>-->
+
+<h1>Session
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="Session.html" class="code" title="">Session</a>	</li><li><a href="generateExamples.html" class="code" title="function generateExamples(varargin)">generateExamples</a>	generateExamples();</li><li><a href="loadImage.html" class="code" title="function loadImage(object,file)">loadImage</a>	loadImage(object);</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="Session.html" class="code" title="">Session</a>	</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function object=Session(varargin)</a></li><li><a href="#_sub2" class="code">function object=restore(data)</a></li><li><a href="#_sub3" class="code">function set.LogScaling(object,value)</a></li><li><a href="#_sub4" class="code">function set.ReferenceTable(object,value)</a></li><li><a href="#_sub5" class="code">function set.DataTable(object,value)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 classdef <a href="Session.html" class="code" title="">Session</a> &lt; handle
+0002     <span class="comment">%%</span>
+0003     properties (SetAccess=protected)
+0004         Image <span class="comment">% Image data (grayscale or RGB array)</span>
+0005         ColorMap <span class="comment">% Color map</span>
+0006         ImageFile <span class="comment">% Image file</span>
+0007         ParameterMatrix <span class="comment">% Transformation parameter matrix (3x2)</span>
+0008     <span class="keyword">end</span>
+0009     properties
+0010         LogScaling=<span class="string">'none'</span>; <span class="comment">% Logarithmic scaling ('none', 'horizontal', 'vertical', or 'both')</span>
+0011         ReferenceTable <span class="comment">% Reference table: [m n x y]</span>
+0012         DataTable <span class="comment">% Data table: [m n x y]</span>
+0013     <span class="keyword">end</span>
+0014     <span class="comment">%%</span>
+0015     methods (Hidden=true)
+0016         <a name="_sub0" href="#_subfunctions" class="code">function object=Session(varargin)</a>
+0017             <span class="keyword">if</span> nargin &gt; 0
+0018                 <a href="loadImage.html" class="code" title="function loadImage(object,file)">loadImage</a>(object,varargin);
+0019             <span class="keyword">end</span>
+0020         <span class="keyword">end</span>
+0021     <span class="keyword">end</span>
+0022     <span class="comment">%%</span>
+0023     methods (Static=true)
+0024         varargout=<a href="generateExamples.html" class="code" title="function generateExamples(varargin)">generateExamples</a>(varargin)
+0025     <span class="keyword">end</span>
+0026     methods (Static=true, Hidden=true)
+0027         <a name="_sub1" href="#_subfunctions" class="code">function object=restore(data)</a>
+0028             object=datninja.Session();
+0029             name=fieldnames(data);
+0030             <span class="keyword">for</span> k=1:numel(name)
+0031                 <span class="keyword">try</span>
+0032                     object.(name{k})=data.(name{k});
+0033                 <span class="keyword">catch</span>
+0034                 <span class="keyword">end</span>                
+0035             <span class="keyword">end</span>
+0036         <span class="keyword">end</span>
+0037     <span class="keyword">end</span>
+0038     <span class="comment">%% setters</span>
+0039     methods
+0040         <a name="_sub2" href="#_subfunctions" class="code">function set.LogScaling(object,value)</a>
+0041             assert(ischar(value),<span class="string">'ERROR: invalid log scaling'</span>);
+0042             <span class="keyword">switch</span> lower(value)
+0043                 <span class="keyword">case</span> {<span class="string">'none'</span> <span class="string">'horizontal'</span> <span class="string">'vertical'</span> <span class="string">'both'</span>}
+0044                     object.LogScaling=lower(value);
+0045                 <span class="keyword">otherwise</span>
+0046                     error(<span class="string">'ERROR: %s in not a valid type of log scaling'</span>);
+0047             <span class="keyword">end</span>
+0048         <span class="keyword">end</span>
+0049         <a name="_sub3" href="#_subfunctions" class="code">function set.ReferenceTable(object,value)</a>
+0050             <span class="keyword">if</span> isempty(value)
+0051                 object.ReferenceTable=nan(0,4);
+0052                 <span class="keyword">return</span>
+0053             <span class="keyword">end</span>
+0054             assert(isnumeric(value) &amp;&amp; ismatrix(value) &amp;&amp; (size(value,2) == 4),<span class="keyword">...</span>
+0055                 <span class="string">'ERROR: invalid reference table'</span>);
+0056             object.ReferenceTable=value;
+0057         <span class="keyword">end</span>
+0058         <a name="_sub4" href="#_subfunctions" class="code">function set.DataTable(object,value)</a>
+0059             <span class="keyword">if</span> isempty(value)
+0060                 object.DataTable=nan(0,4);
+0061                 <span class="keyword">return</span>
+0062             <span class="keyword">end</span>
+0063             assert(isnumeric(value) &amp;&amp; ismatrix(value) &amp;&amp; (size(value,2) == 4),<span class="keyword">...</span>
+0064                 <span class="string">'ERROR: invalid reference table'</span>);
+0065             object.DataTable=value;
+0066         <span class="keyword">end</span>
+0067     <span class="keyword">end</span>
+0068 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

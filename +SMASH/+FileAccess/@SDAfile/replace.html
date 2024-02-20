@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of replace</title>
+  <meta name="keywords" content="replace">
+  <meta name="description" content="replace Replace record data">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="../../index.html">+SMASH</a> &gt; <a href="../index.html">+FileAccess</a> &gt; <a href="index.html">@SDAfile</a> &gt; replace.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+FileAccess/@SDAfile&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>replace
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>replace Replace record data</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function replace(object,label,data) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> replace Replace record data
+
+ This method replaces data in an existing record with a new dataset of the
+ same type and size.
+    replace(archive,label,new);
+ NOTE: only numeric, logical, and character records can be replaced! 
+
+ See also <a href="SDAfile.html" class="code" title="">SDAfile</a>, <a href="append.html" class="code" title="function append(object,label,dimension,data)">append</a>, <a href="insert.html" class="code" title="function insert(archive,label,data,description,deflate)">insert</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="probe.html" class="code" title="function varargout=probe(object,target)">probe</a>	probe Probe archive file</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% replace Replace record data</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This method replaces data in an existing record with a new dataset of the</span>
+0004 <span class="comment">% same type and size.</span>
+0005 <span class="comment">%    replace(archive,label,new);</span>
+0006 <span class="comment">% NOTE: only numeric, logical, and character records can be replaced!</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% See also SDAfile, append, insert</span>
+0009 <span class="comment">%</span>
+0010 
+0011 <span class="comment">%</span>
+0012 <span class="comment">% created November 23, 2016 by Daniel Dolan (Sandia National Laboratories)</span>
+0013 <span class="comment">%</span>
+0014 <a name="_sub0" href="#_subfunctions" class="code">function replace(object,label,data)</a>
+0015 
+0016 <span class="comment">% manage input</span>
+0017 assert(nargin &gt;=3,<span class="string">'ERROR: insufficient input'</span>);
+0018 
+0019 [name,type]=<a href="probe.html" class="code" title="function varargout=probe(object,target)">probe</a>(object);
+0020 
+0021 found=false;
+0022 <span class="keyword">for</span> n=1:numel(label)
+0023     <span class="keyword">if</span> strcmp(name{n},label)
+0024         found=true;
+0025         <span class="keyword">break</span>
+0026     <span class="keyword">end</span>
+0027 <span class="keyword">end</span>
+0028 assert(found,<span class="string">'ERROR: record not found'</span>);
+0029 <span class="keyword">switch</span> type{n}
+0030     <span class="keyword">case</span> <span class="string">'numeric'</span>
+0031         assert(isnumeric(data),<span class="string">'ERROR: numeric records can only be replaced with numeric data'</span>);
+0032     <span class="keyword">case</span> <span class="string">'logical'</span>
+0033         assert(islogical(data),<span class="string">'ERROR: logical records can only be replaced with logical data'</span>);
+0034         data=uint8(data);
+0035     <span class="keyword">case</span> <span class="string">'character'</span> 
+0036         assert(ischar(data),<span class="string">'ERROR: character records can only be replaced with character data'</span>);
+0037         data=uint8(data);
+0038     <span class="keyword">otherwise</span>
+0039         error(<span class="string">'ERROR: only primitive records can be replaced'</span>);
+0040 <span class="keyword">end</span>
+0041 
+0042 <span class="comment">% perform insertion</span>
+0043 location=sprintf(<span class="string">'/%s/%s'</span>,label,label);
+0044 old=h5read(object.ArchiveFile,location);
+0045 assert(all(size(old)==size(data)),<span class="string">'ERROR: replacement size must match original size'</span>);
+0046 h5write(object.ArchiveFile,location,data);
+0047 
+0048 
+0049 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

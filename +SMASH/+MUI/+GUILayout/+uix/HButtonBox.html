@@ -1,0 +1,149 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of HButtonBox</title>
+  <meta name="keywords" content="HButtonBox">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../../index.html">SMASHtoolbox</a> &gt; <a href="../../../index.html">+SMASH</a> &gt; <a href="../../index.html">+MUI</a> &gt; <a href="#">+GUILayout</a> &gt; <a href="index.html">+uix</a> &gt; HButtonBox.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../../index.html"><img alt="<" border="0" src="../../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+MUI/+GUILayout/+uix&nbsp;<img alt=">" border="0" src="../../../../../../right.png"></a></td></tr></table>-->
+
+<h1>HButtonBox
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="HButtonBox.html" class="code" title="">HButtonBox</a>	</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="HButtonBox.html" class="code" title="">HButtonBox</a>	</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function obj = HButtonBox( varargin )</a></li><li><a href="#_sub2" class="code">function redraw( obj )</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 classdef <a href="HButtonBox.html" class="code" title="">HButtonBox</a> &lt; uix.ButtonBox
+0002     <span class="comment">%uix.HButtonBox  Horizontal button box</span>
+0003     <span class="comment">%</span>
+0004     <span class="comment">%  b = uix.HButtonBox(p1,v1,p2,v2,...) constructs a horizontal button</span>
+0005     <span class="comment">%  box and sets parameter p1 to value v1, etc.</span>
+0006     <span class="comment">%</span>
+0007     <span class="comment">%  A horizontal button box lays out equally sized buttons from left to</span>
+0008     <span class="comment">%  right.</span>
+0009     <span class="comment">%</span>
+0010     <span class="comment">%  See also: uix.VButtonBox</span>
+0011     
+0012     <span class="comment">%  Copyright 2009-2016 The MathWorks, Inc.</span>
+0013     <span class="comment">%  $Revision: 1436 $ $Date: 2016-11-17 17:53:29 +0000 (Thu, 17 Nov 2016) $</span>
+0014     
+0015     methods
+0016         
+0017         <a name="_sub0" href="#_subfunctions" class="code">function obj = HButtonBox( varargin )</a>
+0018             <span class="comment">%uix.HButtonBox  Horizontal button box constructor</span>
+0019             <span class="comment">%</span>
+0020             <span class="comment">%  b = uix.HButtonBox() constructs a horizontal button box.</span>
+0021             <span class="comment">%</span>
+0022             <span class="comment">%  b = uix.HButtonBox(p1,v1,p2,v2,...) sets parameter p1 to</span>
+0023             <span class="comment">%  value v1, etc.</span>
+0024             
+0025             <span class="comment">% Set properties</span>
+0026             <span class="keyword">if</span> nargin &gt; 0
+0027                 <span class="keyword">try</span>
+0028                     assert( rem( nargin, 2 ) == 0, <span class="string">'uix:InvalidArgument'</span>, <span class="keyword">...</span>
+0029                         <span class="string">'Parameters and values must be provided in pairs.'</span> )
+0030                     set( obj, varargin{:} )
+0031                 <span class="keyword">catch</span> e
+0032                     delete( obj )
+0033                     e.throwAsCaller()
+0034                 <span class="keyword">end</span>
+0035             <span class="keyword">end</span>
+0036             
+0037         <span class="keyword">end</span> <span class="comment">% constructor</span>
+0038         
+0039     <span class="keyword">end</span> <span class="comment">% structors</span>
+0040     
+0041     methods( Access = protected )
+0042         
+0043         <a name="_sub1" href="#_subfunctions" class="code">function redraw( obj )</a>
+0044             
+0045             <span class="comment">% Compute positions</span>
+0046             bounds = hgconvertunits( ancestor( obj, <span class="string">'figure'</span> ), <span class="keyword">...</span>
+0047                 [0 0 1 1], <span class="string">'normalized'</span>, <span class="string">'pixels'</span>, obj );
+0048             buttonSize = obj.ButtonSize_;
+0049             padding = obj.Padding_;
+0050             spacing = obj.Spacing_;
+0051             c = numel( obj.Contents_ );
+0052             <span class="keyword">if</span> 2 * padding + (c-1) * spacing + c * buttonSize(1) &gt; bounds(3)
+0053                 xSizes = uix.calcPixelSizes( bounds(3), -ones( [c 1] ), <span class="keyword">...</span>
+0054                     ones( [c 1] ), padding, spacing ); <span class="comment">% shrink to fit</span>
+0055             <span class="keyword">else</span>
+0056                 xSizes = repmat( buttonSize(1), [c 1] );
+0057             <span class="keyword">end</span>
+0058             <span class="keyword">switch</span> obj.HorizontalAlignment
+0059                 <span class="keyword">case</span> <span class="string">'left'</span>
+0060                     xPositions = [cumsum( [0; xSizes(1:c-1,:)] ) + <span class="keyword">...</span>
+0061                         padding + spacing * transpose( 0:c-1 ) + 1, xSizes];
+0062                 <span class="keyword">case</span> <span class="string">'center'</span>
+0063                     xPositions = [cumsum( [0; xSizes(1:c-1,:)] ) + <span class="keyword">...</span>
+0064                         spacing * transpose( 0:c-1 ) + bounds(3) / 2 - <span class="keyword">...</span>
+0065                         sum( xSizes ) / 2 - spacing * (c-1) / 2 + 1, <span class="keyword">...</span>
+0066                         xSizes];
+0067                 <span class="keyword">case</span> <span class="string">'right'</span>
+0068                     xPositions = [cumsum( [0; xSizes(1:c-1,:)] ) + <span class="keyword">...</span>
+0069                         spacing * transpose( 0:c-1 ) + bounds(3) - <span class="keyword">...</span>
+0070                         sum( xSizes ) - spacing * (c-1) - padding + 1, <span class="keyword">...</span>
+0071                         xSizes];
+0072             <span class="keyword">end</span>
+0073             <span class="keyword">if</span> 2 * padding + buttonSize(2) &gt; bounds(4)
+0074                 ySizes = repmat( uix.calcPixelSizes( bounds(4), -1, 1, <span class="keyword">...</span>
+0075                     padding, spacing ), [c 1] ); <span class="comment">% shrink to fit</span>
+0076             <span class="keyword">else</span>
+0077                 ySizes = repmat( buttonSize(2), [c 1] );
+0078             <span class="keyword">end</span>
+0079             <span class="keyword">switch</span> obj.VerticalAlignment
+0080                 <span class="keyword">case</span> <span class="string">'top'</span>
+0081                     yPositions = [bounds(4) - ySizes - padding + 1, ySizes];
+0082                 <span class="keyword">case</span> <span class="string">'middle'</span>
+0083                     yPositions = [(bounds(4) - ySizes) / 2 + 1, ySizes];
+0084                 <span class="keyword">case</span> <span class="string">'bottom'</span>
+0085                     yPositions = [repmat( padding, [c 1] ) + 1, ySizes];
+0086             <span class="keyword">end</span>
+0087             positions = [xPositions(:,1), yPositions(:,1), <span class="keyword">...</span>
+0088                 xPositions(:,2), yPositions(:,2)];
+0089             
+0090             <span class="comment">% Set positions</span>
+0091             children = obj.Contents_;
+0092             <span class="keyword">for</span> ii = 1:numel( children )
+0093                 uix.setPosition( children(ii), positions(ii,:), <span class="string">'pixels'</span> )
+0094             <span class="keyword">end</span>
+0095             
+0096         <span class="keyword">end</span> <span class="comment">% redraw</span>
+0097         
+0098     <span class="keyword">end</span> <span class="comment">% template methods</span>
+0099     
+0100 <span class="keyword">end</span> <span class="comment">% classdef</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

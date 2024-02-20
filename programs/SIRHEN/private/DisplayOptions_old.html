@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of DisplayOptions_old</title>
+  <meta name="keywords" content="DisplayOptions_old">
+  <meta name="description" content="handle input">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">SIRHEN</a> &gt; <a href="index.html">private</a> &gt; DisplayOptions_old.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/SIRHEN/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>DisplayOptions_old
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>handle input</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function DisplayOptions(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> handle input</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="DisplayOptions.html" class="code" title="function DisplayOptions(varargin)">DisplayOptions</a>	handle input</li><li><a href="datadlg.html" class="code" title="function answer=datadlg(name,label,default,button,options)">datadlg</a>	datadlg: create a data dialog box</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function DisplayOptions(varargin)</a>
+0002 
+0003 <span class="comment">% handle input</span>
+0004 fig=varargin{3};
+0005 updatefunc=varargin{4};
+0006 
+0007 <span class="comment">% access data</span>
+0008 data=get(fig,<span class="string">'UserData'</span>);
+0009 
+0010 <span class="comment">% prompt user</span>
+0011 label{1}=<span class="string">'Color scaling ([linear] or log) :'</span>;
+0012 label{2}=<span class="string">'Scale range (min max, [0 1]):'</span>;
+0013 label{3}=<span class="string">'Color map ([jet], gray, inverse_gray)'</span>;
+0014 default={data.scaling, sprintf(<span class="string">'%g '</span>,data.clim), data.map};
+0015 answer=<a href="datadlg.html" class="code" title="function answer=datadlg(name,label,default,button,options)">datadlg</a>(<span class="string">'Display parameters'</span>,label,default);
+0016 <span class="keyword">if</span> isempty(answer)
+0017     <span class="keyword">return</span>
+0018 <span class="keyword">end</span>
+0019 
+0020 scaling=sscanf(answer{1},<span class="string">'%s'</span>,1);
+0021 clim=sort(sscanf(answer{2},<span class="string">'%g'</span>,2));
+0022 map=sscanf(answer{3},<span class="string">'%s'</span>,1);
+0023 <span class="keyword">if</span> isempty(scaling) || (numel(clim)&lt;2) || isempty(map)
+0024     <a href="DisplayOptions.html" class="code" title="function DisplayOptions(varargin)">DisplayOptions</a>([],[],varargin{:});
+0025     <span class="keyword">return</span>
+0026 <span class="keyword">end</span>
+0027 
+0028 <span class="comment">% look for changes</span>
+0029 change=~strcmp(data.scaling,scaling)| any(data.clim(:)~=clim(:))<span class="keyword">...</span>
+0030     | ~strcmp(data.map,map);
+0031 <span class="keyword">if</span> change
+0032     data.scaling=scaling;
+0033     data.clim=clim;
+0034     data.map=map;
+0035     set(fig,<span class="string">'UserData'</span>,data);
+0036     feval(updatefunc,fig);
+0037 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of SessionPreference</title>
+  <meta name="keywords" content="SessionPreference">
+  <meta name="description" content="SessionPreference(name,value); % set">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="../../index.html">+SMASH</a> &gt; <a href="../index.html">+System</a> &gt; <a href="index.html">private</a> &gt; SessionPreference.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+System/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>SessionPreference
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>SessionPreference(name,value); % set</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function varargout=SessionPreference(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> SessionPreference(name,value); % set
+ value=SessionPreference(name); % get
+
+ data=SessionPreference(); % reveal settings
+ SessionPreference(name,[],'remove'); % remove setting</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% SessionPreference(name,value); % set</span>
+0002 <span class="comment">% value=SessionPreference(name); % get</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% data=SessionPreference(); % reveal settings</span>
+0005 <span class="comment">% SessionPreference(name,[],'remove'); % remove setting</span>
+0006 
+0007 <a name="_sub0" href="#_subfunctions" class="code">function varargout=SessionPreference(varargin)</a>
+0008 
+0009 <span class="keyword">persistent</span> data
+0010 <span class="keyword">if</span> isempty(data)
+0011     data=struct();
+0012 <span class="keyword">end</span>
+0013 mlock
+0014 
+0015 <span class="comment">% reveal mode</span>
+0016 <span class="keyword">if</span> nargin==0
+0017     varargout{1}=data;
+0018     <span class="keyword">return</span>
+0019 <span class="keyword">end</span>
+0020 
+0021 <span class="comment">% get/set modes</span>
+0022 name=varargin{1};
+0023 assert(isvarname(name),<span class="string">'ERROR: invalid setting name'</span>);
+0024 
+0025 <span class="keyword">if</span> nargin==1 <span class="comment">% get preference</span>
+0026     assert(isfield(data,name),<span class="string">'ERROR: invalid setting name'</span>);
+0027     varargout{1}=data.(name);
+0028 <span class="keyword">elseif</span> nargin==2 <span class="comment">% set preference</span>
+0029     data.(name)=varargin{2};
+0030 <span class="keyword">elseif</span> nargin==3 &amp;&amp; strcmpi(varargin{3},<span class="string">'remove'</span>) <span class="comment">% remove preference</span>
+0031     <span class="keyword">if</span> isfield(data,name)
+0032         data=rmfield(data,name);
+0033     <span class="keyword">end</span>
+0034 <span class="keyword">else</span>
+0035     error(<span class="string">'ERROR: invalid input'</span>);
+0036 <span class="keyword">end</span>
+0037 
+0038 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

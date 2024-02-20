@@ -1,0 +1,112 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of report</title>
+  <meta name="keywords" content="report">
+  <meta name="description" content="report Report curve coordinates">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="../../index.html">+SMASH</a> &gt; <a href="../index.html">+ROI</a> &gt; <a href="index.html">@Curve</a> &gt; report.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+ROI/@Curve&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>report
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>report Report curve coordinates</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function [value,width,location]=report(object,location) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> report Report curve coordinates
+
+ This method returns curve coordinates and widths as separate arrays.
+    [value,width,location]=report(object);
+ Passing a second input:
+    [value,width]=report(object,location);
+ interpolates the curve value and width at the requested location(s).
+
+ See also Points, <a href="define.html" class="code" title="function [object,index]=define(object,table,width)">define</a>, <a href="view.html" class="code" title="function varargout=view(object,target)">view</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% report Report curve coordinates</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This method returns curve coordinates and widths as separate arrays.</span>
+0004 <span class="comment">%    [value,width,location]=report(object);</span>
+0005 <span class="comment">% Passing a second input:</span>
+0006 <span class="comment">%    [value,width]=report(object,location);</span>
+0007 <span class="comment">% interpolates the curve value and width at the requested location(s).</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% See also Points, define, view</span>
+0010 <span class="comment">%</span>
+0011 
+0012 <span class="comment">%</span>
+0013 <span class="comment">% created October 3, 2017 by Daniel Dolan (Sandia National Laboratories)</span>
+0014 <span class="comment">%</span>
+0015 <a name="_sub0" href="#_subfunctions" class="code">function [value,width,location]=report(object,location)</a>
+0016 
+0017 <span class="keyword">if</span> isempty(object.Data)
+0018     value=[];
+0019     width=[];
+0020     location=[];
+0021     <span class="keyword">return</span>
+0022 <span class="keyword">end</span>
+0023 
+0024 <span class="comment">% manage input</span>
+0025 <span class="keyword">if</span> (nargin &lt;  2) || isempty(location)
+0026     <span class="keyword">switch</span> object.Mode
+0027         <span class="keyword">case</span> <span class="string">'x'</span>
+0028             location=object.Data(:,1);
+0029         <span class="keyword">case</span> <span class="string">'y'</span>
+0030             location=object.Data(:,2);
+0031     <span class="keyword">end</span>
+0032 <span class="keyword">end</span>
+0033 assert(isnumeric(location) &amp;&amp; all(isfinite(location)),<span class="keyword">...</span>
+0034     <span class="string">'ERROR: invalid location(s) requested'</span>);
+0035 
+0036 <span class="comment">% look up values/widths</span>
+0037 Nrows=size(object.Data,1);
+0038 <span class="keyword">switch</span> object.Mode
+0039     <span class="keyword">case</span> <span class="string">'x'</span>
+0040         <span class="keyword">if</span> Nrows &gt; 1
+0041             value=interp1(object.Data(:,1),object.Data(:,2),location);
+0042             width=interp1(object.Data(:,1),object.Data(:,3),location);
+0043         <span class="keyword">else</span>
+0044             value=object.Data(:,2);
+0045             width=object.Data(:,3);
+0046         <span class="keyword">end</span>
+0047     <span class="keyword">case</span> <span class="string">'y'</span>
+0048         <span class="keyword">if</span> Nrows &gt; 1
+0049             value=interp1(object.Data(:,2),object.Data(:,1),location);
+0050             width=interp1(object.Data(:,2),object.Data(:,3),location);
+0051         <span class="keyword">else</span>
+0052             value=object.Data(:,1);
+0053             width=object.Data(:,3);
+0054         <span class="keyword">end</span>
+0055 <span class="keyword">end</span>
+0056 
+0057 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

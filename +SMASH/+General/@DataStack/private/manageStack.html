@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of manageStack</title>
+  <meta name="keywords" content="manageStack">
+  <meta name="description" content="Valid modes:">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../../index.html">SMASHtoolbox</a> &gt; <a href="../../../index.html">+SMASH</a> &gt; <a href="../../index.html">+General</a> &gt; <a href="../index.html">@DataStack</a> &gt; <a href="index.html">private</a> &gt; manageStack.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../../index.html"><img alt="<" border="0" src="../../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+General/@DataStack/private&nbsp;<img alt=">" border="0" src="../../../../../../right.png"></a></td></tr></table>-->
+
+<h1>manageStack
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>Valid modes:</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>function varargout=manageStack(mode,varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Valid modes:
+    manageStack('push',name,value);
+
+    value=manageStack('pop',name);
+
+    list=manageStack('probe',name);
+
+    manageStack('delete',name,...);</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% Valid modes:</span>
+0002 <span class="comment">%    manageStack('push',name,value);</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%    value=manageStack('pop',name);</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%    list=manageStack('probe',name);</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%    manageStack('delete',name,...);</span>
+0009 <span class="comment">%</span>
+0010 <a name="_sub0" href="#_subfunctions" class="code">function varargout=manageStack(mode,varargin)</a>
+0011 
+0012 mlock
+0013 <span class="keyword">persistent</span> StackMemory
+0014 <span class="keyword">if</span> isempty(StackMemory)
+0015     StackMemory=struct();
+0016 <span class="keyword">end</span>
+0017 
+0018 <span class="keyword">if</span> strcmp(mode,<span class="string">'push'</span>)
+0019     name=varargin{1};
+0020     value=varargin{2};
+0021     <span class="keyword">if</span> ~isfield(StackMemory,name)
+0022         StackMemory.(name)={};
+0023     <span class="keyword">end</span>
+0024     StackMemory.(name){end+1}=value;
+0025     <span class="keyword">return</span>
+0026 <span class="keyword">end</span>
+0027 
+0028 <span class="keyword">switch</span> mode       
+0029     <span class="keyword">case</span> <span class="string">'pop'</span>
+0030         name=varargin{1};
+0031         msg=sprintf(<span class="string">'ERROR: stack &quot;%s&quot; not defined'</span>,name);
+0032         assert(isfield(StackMemory,name),msg);
+0033         <span class="keyword">if</span> isempty(StackMemory.(name))
+0034             varargout{1}=[];
+0035         <span class="keyword">else</span>
+0036             varargout{1}=StackMemory.(name){end};
+0037         <span class="keyword">end</span>
+0038         StackMemory.(name)=StackMemory.(name)(1:end-1);
+0039     <span class="keyword">case</span> <span class="string">'probe'</span>
+0040         <span class="keyword">if</span> nargin == 1
+0041             varargout{1}=fieldnames(StackMemory);
+0042         <span class="keyword">else</span>
+0043         name=varargin{1};
+0044         msg=sprintf(<span class="string">'ERROR: stack &quot;%s&quot; not defined'</span>,name);
+0045         assert(isfield(StackMemory,name),msg);
+0046             varargout{1}=numel(StackMemory.(name));
+0047         <span class="keyword">end</span>
+0048     <span class="keyword">case</span> <span class="string">'delete'</span>
+0049         <span class="keyword">if</span> nargin == 1
+0050             StackMemory=struct();
+0051         <span class="keyword">else</span>
+0052         name=varargin{1};
+0053         msg=sprintf(<span class="string">'ERROR: stack &quot;%s&quot; not defined'</span>,name);
+0054         assert(isfield(StackMemory,name),msg);
+0055             StackMemory=rmfield(StackMemory,name);
+0056         <span class="keyword">end</span>
+0057 <span class="keyword">end</span>
+0058 
+0059 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

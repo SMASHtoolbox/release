@@ -1,0 +1,420 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of select</title>
+  <meta name="keywords" content="select">
+  <meta name="description" content="select Interactive curve selection">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="../../index.html">+SMASH</a> &gt; <a href="../index.html">+ROI</a> &gt; <a href="index.html">@Curve</a> &gt; select.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+ROI/@Curve&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>select
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>select Interactive curve selection</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function object=select(object,target) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> select Interactive curve selection
+
+ This method provides interactive selection of curve points using the mouse.
+    object=select(object); % use current axes
+    object=select(object,target); % use target axes
+ Simultaneous selection is performed when multiple target objects (within
+ the same figure) are specified.
+
+ See also <a href="Curve.html" class="code" title="">Curve</a>, <a href="define.html" class="code" title="function [object,index]=define(object,table,width)">define</a>, <a href="view.html" class="code" title="function varargout=view(object,target)">view</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="define.html" class="code" title="function [object,index]=define(object,table,width)">define</a>	define Manually define curve</li><li><a href="view.html" class="code" title="function varargout=view(object,target)">view</a>	view Display curve</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function keypress(src,EventData)</a></li><li><a href="#_sub2" class="code">function mousepress(~,~)</a></li><li><a href="#_sub3" class="code">function value=getNearestTargetPoint()</a></li><li><a href="#_sub4" class="code">function index=getNearestIndex(pos)</a></li><li><a href="#_sub5" class="code">function changeName(varargin)</a></li><li><a href="#_sub6" class="code">function changeComments(varargin)</a></li><li><a href="#_sub7" class="code">function changePoint(varargin)</a></li><li><a href="#_sub8" class="code">function removePoint(varargin)</a></li><li><a href="#_sub9" class="code">function useWidthEverywhere(varargin)</a></li><li><a href="#_sub10" class="code">function checkValue(src,~)</a></li><li><a href="#_sub11" class="code">function useMouseButton(varargin)</a></li><li><a href="#_sub12" class="code">function mouseHelp(varargin)</a></li><li><a href="#_sub13" class="code">function doneButton(varargin)</a></li><li><a href="#_sub14" class="code">function update()</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% select Interactive curve selection</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This method provides interactive selection of curve points using the mouse.</span>
+0004 <span class="comment">%    object=select(object); % use current axes</span>
+0005 <span class="comment">%    object=select(object,target); % use target axes</span>
+0006 <span class="comment">% Simultaneous selection is performed when multiple target objects (within</span>
+0007 <span class="comment">% the same figure) are specified.</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% See also Curve, define, view</span>
+0010 <span class="comment">%</span>
+0011 
+0012 <span class="comment">%</span>
+0013 <span class="comment">% created September 24, 2017 by Daniel Dolan (Sandia National Laboratories)</span>
+0014 <span class="comment">% significantly revised October 27 by Daniel Dolan</span>
+0015 <span class="comment">%    -Selection begins and ends with dialog box</span>
+0016 <span class="comment">%    -Points can now be deleted from the dialog box</span>
+0017 <span class="comment">%    -Valid coordinate changes are applied immediately</span>
+0018 <span class="comment">%</span>
+0019 <a name="_sub0" href="#_subfunctions" class="code">function object=select(object,target)</a>
+0020 
+0021 <span class="keyword">persistent</span> FigureTools
+0022 <span class="keyword">if</span> isempty(FigureTools)
+0023     FigureTools=packtools.import(<span class="string">'SMASH.Graphics.FigureTools.*'</span>);
+0024 <span class="keyword">end</span>
+0025 
+0026 <span class="comment">%% manage input</span>
+0027 assert(numel(object) == 1,<span class="keyword">...</span>
+0028     <span class="string">'ERROR: interactive selection must be done one region at a time'</span>);
+0029 
+0030 <span class="keyword">if</span> (nargin &lt; 2) || isempty(target)
+0031     target=gca;    
+0032 <span class="keyword">else</span>
+0033     <span class="keyword">for</span> k=1:numel(target)
+0034         assert(ishandle(target(k)) &amp;&amp; strcmpi(target(k).Type,<span class="string">'axes'</span>),<span class="keyword">...</span>
+0035             <span class="string">'ERROR: invalid target axes'</span>);       
+0036     <span class="keyword">end</span>    
+0037 <span class="keyword">end</span>
+0038 
+0039 <span class="comment">%% display figure with existing ROI (if present)</span>
+0040 fig=ancestor(target(1),<span class="string">'figure'</span>);
+0041 <span class="keyword">for</span> k=2:numel(target)
+0042     temp=ancestor(target(k),<span class="string">'figure'</span>);
+0043     assert(temp == fig,<span class="string">'Target objects must be in the same figure'</span>);
+0044 <span class="keyword">end</span>
+0045 figure(fig);
+0046 
+0047 <span class="keyword">for</span> k=1:numel(target)
+0048     temp=<a href="view.html" class="code" title="function varargout=view(object,target)">view</a>(object,target(k));
+0049     <span class="keyword">if</span> k == 1
+0050        selection=repmat(temp,[numel(target) 1]);
+0051     <span class="keyword">else</span>
+0052         selection(k,:)=temp;
+0053     <span class="keyword">end</span>        
+0054 <span class="keyword">end</span>
+0055 
+0056 <span class="keyword">if</span> isempty(object.DefaultWidth)
+0057     <span class="keyword">switch</span> object.Mode
+0058         <span class="keyword">case</span> <span class="string">'x'</span>
+0059             width=get(target(1),<span class="string">'YLim'</span>);
+0060         <span class="keyword">case</span> <span class="string">'y'</span>
+0061             width=get(target(1),<span class="string">'XLim'</span>);
+0062     <span class="keyword">end</span>
+0063     object.DefaultWidth=(width(2)-width(1))*0.05;
+0064 <span class="keyword">end</span>
+0065 
+0066 <span class="keyword">persistent</span> ZoomPan
+0067 <span class="keyword">if</span> isempty(ZoomPan)
+0068     local=packtools.import(<span class="string">'.*'</span>);
+0069     ZoomPan=local.ZoomPan;
+0070 <span class="keyword">end</span>
+0071 ZPstate=ZoomPan(<span class="string">'state'</span>);
+0072 ZoomPan(fig,<span class="string">'on'</span>);
+0073 
+0074 CurrentPoint=1;
+0075 width=max(selection(1).LineWidth,2);
+0076 scale=1.5;
+0077 <span class="keyword">for</span> k=1:numel(target)
+0078     temp=line(<span class="string">'Parent'</span>,target(k),<span class="keyword">...</span>
+0079         <span class="string">'Marker'</span>,<span class="string">'o'</span>,<span class="string">'MarkerSize'</span>,scale*selection(1).MarkerSize,<span class="string">'LineWidth'</span>,width,<span class="keyword">...</span>
+0080         <span class="string">'MarkerEdgeColor'</span>,selection(1).ConjugateColor,<span class="string">'MarkerFaceColor'</span>,selection(1).Color,<span class="keyword">...</span>
+0081         <span class="string">'LineStyle'</span>,<span class="string">'none'</span>,<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+0082     <span class="keyword">if</span> k == 1
+0083         highlight=repmat(temp,[numel(target) 1]);
+0084     <span class="keyword">else</span>
+0085         highlight(k)=temp;
+0086     <span class="keyword">end</span>
+0087 <span class="keyword">end</span>
+0088 
+0089 previous.KeyPress=get(fig,<span class="string">'WindowKeyPressFcn'</span>);
+0090 previous.ButtonDown=get(fig,<span class="string">'WindowButtonDownFcn'</span>);
+0091 previous.ButtonUp=get(fig,<span class="string">'WindowButtonUpFcn'</span>);
+0092 previous.Motion=get(fig,<span class="string">'WindowButtonMotionFcn'</span>);
+0093 
+0094 set(fig,<span class="string">'WindowKeypressFcn'</span>,@<a href="#_sub1" class="code" title="subfunction keypress(src,EventData)">keypress</a>,<span class="string">'WindowButtonDownFcn'</span>,@<a href="#_sub2" class="code" title="subfunction mousepress(~,~)">mousepress</a>,<span class="keyword">...</span>
+0095     <span class="string">'WindowButtonUpFcn'</span>,<span class="string">''</span>,<span class="string">'WindowButtonMotionFcn'</span>,<span class="string">''</span>)
+0096     <a name="_sub1" href="#_subfunctions" class="code">function keypress(src,EventData)</a>
+0097         <span class="keyword">switch</span> lower(EventData.Key)
+0098             <span class="keyword">case</span> {<span class="string">'enter'</span> <span class="string">'return'</span>}
+0099                 figure(dlg.Handle);                              
+0100             <span class="keyword">case</span> {<span class="string">'backspace'</span> <span class="string">'delete'</span>}
+0101                 <span class="keyword">if</span> isempty(CurrentPoint)
+0102                     <span class="keyword">return</span>
+0103                 <span class="keyword">end</span>
+0104                 keep=true(size(object.Data,1),1);
+0105                 keep(CurrentPoint)=false;
+0106                 object=<a href="define.html" class="code" title="function [object,index]=define(object,table,width)">define</a>(object,object.Data(keep,:));
+0107                 <span class="keyword">if</span> CurrentPoint &gt; 1
+0108                     CurrentPoint=CurrentPoint-1;
+0109                 <span class="keyword">end</span>
+0110                 <a href="#_sub14" class="code" title="subfunction update()">update</a>();
+0111             <span class="keyword">otherwise</span>
+0112                 <span class="keyword">try</span>
+0113                     previous.KeyPress(src,EventData);
+0114                 <span class="keyword">catch</span>
+0115                 <span class="keyword">end</span>
+0116         <span class="keyword">end</span>
+0117     <span class="keyword">end</span>
+0118     <a name="_sub2" href="#_subfunctions" class="code">function mousepress(~,~)      </a>
+0119         <span class="keyword">switch</span> get(fig,<span class="string">'SelectionType'</span>)
+0120             <span class="keyword">case</span> <span class="string">'normal'</span>                
+0121                 pos=<a href="#_sub3" class="code" title="subfunction value=getNearestTargetPoint()">getNearestTargetPoint</a>();
+0122                 <span class="keyword">if</span> isempty(pos)
+0123                     <span class="keyword">return</span>
+0124                 <span class="keyword">end</span>
+0125                 data=object.Data;
+0126                 data(end+1,:)=[pos object.DefaultWidth];                
+0127                 [object,index]=<a href="define.html" class="code" title="function [object,index]=define(object,table,width)">define</a>(object,data);
+0128                 [~,CurrentPoint]=max(index);                
+0129             <span class="keyword">case</span> <span class="string">'extend'</span>
+0130                 <span class="keyword">if</span> isempty(object.Data)
+0131                     <span class="keyword">return</span>
+0132                 <span class="keyword">end</span>
+0133                 pos=<a href="#_sub3" class="code" title="subfunction value=getNearestTargetPoint()">getNearestTargetPoint</a>();
+0134                 <span class="keyword">if</span> isempty(pos)
+0135                     <span class="keyword">return</span>
+0136                 <span class="keyword">end</span>
+0137                 index=<a href="#_sub4" class="code" title="subfunction index=getNearestIndex(pos)">getNearestIndex</a>(pos);
+0138                 keep=true(size(object.Data,1),1);
+0139                 keep(index)=false;
+0140                 object=<a href="define.html" class="code" title="function [object,index]=define(object,table,width)">define</a>(object,object.Data(keep,:));
+0141                 <span class="keyword">if</span> CurrentPoint &gt; 1
+0142                     CurrentPoint=CurrentPoint-1;
+0143                 <span class="keyword">end</span>        
+0144             <span class="keyword">case</span> <span class="string">'alt'</span> <span class="comment">% control-click</span>
+0145                 pos=<a href="#_sub3" class="code" title="subfunction value=getNearestTargetPoint()">getNearestTargetPoint</a>();
+0146                 <span class="keyword">if</span> isempty(pos)
+0147                     <span class="keyword">return</span>
+0148                 <span class="keyword">end</span>
+0149                 index=<a href="#_sub4" class="code" title="subfunction index=getNearestIndex(pos)">getNearestIndex</a>(pos);                
+0150                 CurrentPoint=index;
+0151         <span class="keyword">end</span>
+0152         set(Selection(2),<span class="string">'Value'</span>,1);
+0153         <a href="#_sub14" class="code" title="subfunction update()">update</a>();
+0154     <span class="keyword">end</span> 
+0155     <a name="_sub3" href="#_subfunctions" class="code">function value=getNearestTargetPoint()</a>
+0156         value=[];
+0157         <span class="keyword">for</span> kk=1:numel(target)
+0158             <span class="keyword">if</span> target(kk) ~= fig.CurrentAxes
+0159                 <span class="keyword">continue</span>
+0160             <span class="keyword">end</span>
+0161             temp=get(fig.CurrentAxes,<span class="string">'CurrentPoint'</span>);
+0162             temp=temp(1,1:2);
+0163             bound=get(fig.CurrentAxes,<span class="string">'XLim'</span>);
+0164             <span class="keyword">if</span> (temp(1) &lt; bound(1)) || (temp(1) &gt; bound(2))
+0165                 <span class="keyword">return</span>
+0166             <span class="keyword">end</span>
+0167             bound=get(fig.CurrentAxes,<span class="string">'YLim'</span>);
+0168             <span class="keyword">if</span> (temp(2) &lt; bound(1)) || (temp(2) &gt; bound(2))
+0169                 <span class="keyword">return</span>
+0170             <span class="keyword">end</span>
+0171             value=temp;
+0172             <span class="keyword">break</span>            
+0173         <span class="keyword">end</span>             
+0174     <span class="keyword">end</span>
+0175     <a name="_sub4" href="#_subfunctions" class="code">function index=getNearestIndex(pos)</a>
+0176          xb=get(fig.CurrentAxes,<span class="string">'XLim'</span>);
+0177          yb=get(fig.CurrentAxes,<span class="string">'YLim'</span>);
+0178          L2=object.Data(:,1:2)-pos;
+0179          L2(:,1)=L2(:,1)/diff(xb);
+0180          L2(:,2)=L2(:,2)/diff(yb);
+0181          L2=sum(L2.^2,2);
+0182          [~,index]=min(L2);
+0183     <span class="keyword">end</span>
+0184 
+0185 <span class="comment">% create dialog</span>
+0186 FigureTools.focus(<span class="string">'off'</span>);
+0187 dlg=SMASH.MUI.Dialog(<span class="string">'FontSize'</span>,get(target(1),<span class="string">'FontSize'</span>));
+0188 dlg.Hidden=true;
+0189 dlg.Name=<span class="string">'ROI settings'</span>;
+0190 
+0191 Name=addblock(dlg,<span class="string">'edit_button'</span>,{<span class="string">'Name:'</span> <span class="string">'Comments'</span>},20);
+0192 set(Name(2),<span class="string">'String'</span>,object.Name,<span class="string">'Callback'</span>,@<a href="#_sub5" class="code" title="subfunction changeName(varargin)">changeName</a>)
+0193     <a name="_sub5" href="#_subfunctions" class="code">function changeName(varargin)</a>
+0194         object.Name=get(Name(2),<span class="string">'String'</span>);
+0195     <span class="keyword">end</span>
+0196 set(Name(3),<span class="string">'Callback'</span>,@<a href="#_sub6" class="code" title="subfunction changeComments(varargin)">changeComments</a>)
+0197     <a name="_sub6" href="#_subfunctions" class="code">function changeComments(varargin)</a>
+0198         object=comment(object);
+0199     <span class="keyword">end</span>
+0200 
+0201 Selection=addblock(dlg,<span class="string">'popup_button'</span>,{<span class="string">'Current point:'</span> <span class="string">' Remove '</span>},{<span class="string">'()'</span>},20);
+0202 set(Selection(2),<span class="string">'Callback'</span>,@<a href="#_sub7" class="code" title="subfunction changePoint(varargin)">changePoint</a>);
+0203     <a name="_sub7" href="#_subfunctions" class="code">function changePoint(varargin)</a>
+0204         index=get(Selection(2),<span class="string">'Value'</span>);
+0205         CurrentPoint=index;        
+0206         x=object.Data(index,1);
+0207         temp=sprintf(<span class="string">'%g'</span>,x);
+0208         set(Coordinate(1),<span class="string">'String'</span>,temp,<span class="string">'UserData'</span>,temp);
+0209         y=object.Data(index,2);
+0210         temp=sprintf(<span class="string">'%g'</span>,y);
+0211         set(Coordinate(2),<span class="string">'String'</span>,temp,<span class="string">'UserData'</span>,temp);
+0212         w=object.Data(index,3);
+0213         temp=sprintf(<span class="string">'%g'</span>,w);
+0214         set(Coordinate(3),<span class="string">'String'</span>,temp,<span class="string">'UserData'</span>,temp);       
+0215         set(highlight,<span class="string">'XData'</span>,x,<span class="string">'YData'</span>,y,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0216     <span class="keyword">end</span>
+0217 set(Selection(3),<span class="string">'Callback'</span>,@<a href="#_sub8" class="code" title="subfunction removePoint(varargin)">removePoint</a>)
+0218     <a name="_sub8" href="#_subfunctions" class="code">function removePoint(varargin)</a>
+0219         index=CurrentPoint;
+0220         keep=true(size(object.Data,1),1);
+0221         keep(index)=false;
+0222         object=<a href="define.html" class="code" title="function [object,index]=define(object,table,width)">define</a>(object,object.Data(keep,:));       
+0223         CurrentPoint=min(CurrentPoint,size(object.Data,1)); 
+0224         <a href="#_sub14" class="code" title="subfunction update()">update</a>()
+0225     <span class="keyword">end</span>
+0226 
+0227 label=get(get(target(1),<span class="string">'XLabel'</span>),<span class="string">'String'</span>);
+0228 <span class="keyword">if</span> isempty(label)
+0229     label=<span class="string">'x'</span>;
+0230 <span class="keyword">end</span>
+0231 label=[label <span class="string">' :'</span>];
+0232 h=addblock(dlg,<span class="string">'edit'</span>,label,20);
+0233 Coordinate(1)=h(end);
+0234 <span class="comment">%</span>
+0235 label=get(get(target(1),<span class="string">'YLabel'</span>),<span class="string">'String'</span>);
+0236 <span class="keyword">if</span> isempty(label)
+0237     label=<span class="string">'y'</span>;
+0238 <span class="keyword">end</span>
+0239 label=[label <span class="string">' :'</span>];
+0240 h=addblock(dlg,<span class="string">'edit'</span>,label,20);
+0241 Coordinate(2)=h(end);
+0242 <span class="comment">%</span>
+0243 h=addblock(dlg,<span class="string">'edit_button'</span>,{<span class="string">'Width :'</span> <span class="string">'Use everywhere'</span>},15);
+0244 Coordinate(3)=h(2);
+0245 set(h(3),<span class="string">'Callback'</span>,@<a href="#_sub9" class="code" title="subfunction useWidthEverywhere(varargin)">useWidthEverywhere</a>);
+0246     <a name="_sub9" href="#_subfunctions" class="code">function useWidthEverywhere(varargin)</a>
+0247         w=sscanf(get(Coordinate(3),<span class="string">'String'</span>),<span class="string">'%g'</span>);
+0248         object.Data(:,3)=w;
+0249         <a href="#_sub14" class="code" title="subfunction update()">update</a>();
+0250         object.DefaultWidth=w;
+0251     <span class="keyword">end</span>
+0252 <span class="comment">%</span>
+0253 set(Coordinate,<span class="string">'Callback'</span>,@<a href="#_sub10" class="code" title="subfunction checkValue(src,~)">checkValue</a>);
+0254     <a name="_sub10" href="#_subfunctions" class="code">function checkValue(src,~)</a>
+0255         in=sscanf(get(src,<span class="string">'String'</span>),<span class="string">'%s'</span>,1);
+0256         set(src,<span class="string">'String'</span>,in);
+0257         value=sscanf(in,<span class="string">'%g'</span>,1);
+0258         <span class="keyword">if</span> isempty(value)
+0259             set(src,<span class="string">'String'</span>,get(src,<span class="string">'UserData'</span>))            
+0260         <span class="keyword">else</span>
+0261             set(src,<span class="string">'UserData'</span>,in);
+0262             temp=[];
+0263             temp(1)=sscanf(get(Coordinate(1),<span class="string">'String'</span>),<span class="string">'%g'</span>,1);
+0264             temp(2)=sscanf(get(Coordinate(2),<span class="string">'String'</span>),<span class="string">'%g'</span>,1);
+0265             temp(3)=sscanf(get(Coordinate(3),<span class="string">'String'</span>),<span class="string">'%g'</span>,1);
+0266             object.Data(CurrentPoint,:)=temp;
+0267             <a href="#_sub14" class="code" title="subfunction update()">update</a>();
+0268         <span class="keyword">end</span>
+0269     <span class="keyword">end</span>
+0270 
+0271 Button=addblock(dlg,<span class="string">'button'</span>,{<span class="string">'Use mouse'</span> <span class="string">'Help'</span>},10);
+0272 set(Button(1),<span class="string">'Callback'</span>,@<a href="#_sub11" class="code" title="subfunction useMouseButton(varargin)">useMouseButton</a>);
+0273 set(dlg.Handle,<span class="string">'KeyPressFcn'</span>,@<a href="#_sub11" class="code" title="subfunction useMouseButton(varargin)">useMouseButton</a>);
+0274     <a name="_sub11" href="#_subfunctions" class="code">function useMouseButton(varargin)</a>
+0275         <span class="comment">% what if the target was deleted?</span>
+0276         figure(fig);
+0277     <span class="keyword">end</span>
+0278 set(Button(2),<span class="string">'Callback'</span>,@<a href="#_sub12" class="code" title="subfunction mouseHelp(varargin)">mouseHelp</a>)
+0279     <a name="_sub12" href="#_subfunctions" class="code">function mouseHelp(varargin)        </a>
+0280         FigureTools.focus(<span class="string">'off'</span>);
+0281         new=findall(groot,<span class="string">'Type'</span>,<span class="string">'figure'</span>,<span class="string">'Tag'</span>,<span class="string">'CurveSelectHelp'</span>);
+0282         <span class="keyword">if</span> isempty(new)
+0283             junk=SMASH.MUI.Dialog;
+0284             junk.Hidden=true;
+0285             junk.Name=<span class="string">'Use mouse'</span>;
+0286             HelpSummary{1}=<span class="string">'Click mouse to select points, press return when finished.'</span>;
+0287             HelpSummary{end+1}=<span class="string">'Delete key removes current point; shift-click removes nearest point.'</span>;
+0288             HelpSummary{end+1}=<span class="string">'Control-click makes the nearest point current.'</span>;
+0289             HelpSummary{end+1}=<span class="string">'Use arrow keys to pan, shift-arrow keys to zoom.'</span>;
+0290             HelpSummary{end+1}=<span class="string">'Press &quot;a&quot; to auto scale, &quot;t&quot; to tight scale'</span>;
+0291             addblock(junk,<span class="string">'text'</span>,HelpSummary);
+0292             locate(junk,<span class="string">'center'</span>,dlg.Handle);
+0293             trim(junk);
+0294             junk.Hidden=false;
+0295             new=junk.Handle;
+0296             new.Tag=<span class="string">'CurveSelectHelp'</span>;
+0297         <span class="keyword">end</span>
+0298         FigureTools.focus([new dlg.Handle fig]);              
+0299     <span class="keyword">end</span>
+0300 
+0301 Button(3)=addblock(dlg,<span class="string">'button'</span>,<span class="string">'Done'</span>,10);
+0302 set(Button(3),<span class="string">'Callback'</span>,@<a href="#_sub13" class="code" title="subfunction doneButton(varargin)">doneButton</a>)
+0303     <a name="_sub13" href="#_subfunctions" class="code">function doneButton(varargin)</a>
+0304         delete(dlg);
+0305         h=findall(groot,<span class="string">'Type'</span>,<span class="string">'figure'</span>,<span class="string">'Tag'</span>,<span class="string">'CurveSelectHelp'</span>);        
+0306         delete(h);
+0307         delete(selection);       
+0308     <span class="keyword">end</span>
+0309 set(dlg.Handle,<span class="string">'DeleteFcn'</span>,@<a href="#_sub13" class="code" title="subfunction doneButton(varargin)">doneButton</a>);
+0310 
+0311 <span class="comment">%% show dialog</span>
+0312 <a href="#_sub14" class="code" title="subfunction update()">update</a>();
+0313 locate(dlg,<span class="string">'center'</span>,fig);
+0314 dlg.Hidden=false;
+0315 FigureTools.focus([dlg.Handle fig]);
+0316 uiwait(dlg.Handle);
+0317 FigureTools.focus(<span class="string">'off'</span>);
+0318 
+0319 <span class="keyword">if</span> ishandle(fig)
+0320     delete(Selection);
+0321     delete(highlight);
+0322     set(fig,<span class="string">'WindowKeyPressFcn'</span>,previous.KeyPress,<span class="keyword">...</span>
+0323         <span class="string">'WindowButtonDownFcn'</span>,previous.ButtonDown,<span class="keyword">...</span>
+0324         <span class="string">'WindowButtonUpFcn'</span>,previous.ButtonUp,<span class="keyword">...</span>
+0325         <span class="string">'WindowButtonMotionFcn'</span>,previous.Motion);
+0326     <span class="keyword">if</span> strcmp(ZPstate,<span class="string">'off'</span>)
+0327         ZoomPan(fig,<span class="string">'off'</span>);
+0328     <span class="keyword">end</span>
+0329 <span class="keyword">end</span>
+0330 
+0331 <span class="comment">%% utility functions</span>
+0332     <a name="_sub14" href="#_subfunctions" class="code">function update()</a>
+0333         <span class="keyword">if</span> isempty(object.Data)      
+0334             set(Selection(2),<span class="string">'Enable'</span>,<span class="string">'off'</span>,<span class="string">'String'</span>,<span class="string">'(none selected)'</span>);           
+0335             <span class="keyword">for</span> n=1:size(selection,1)
+0336                 selection(n,1).Visible=<span class="string">'off'</span>;
+0337                 selection(n,2).Visible=<span class="string">'off'</span>;
+0338             <span class="keyword">end</span>
+0339             set(highlight,<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+0340             CurrentPoint=[];
+0341             set(Coordinate,<span class="string">'Enable'</span>,<span class="string">'off'</span>,<span class="string">'String'</span>,<span class="string">''</span>);            
+0342             <span class="keyword">return</span>
+0343         <span class="keyword">end</span>
+0344         <span class="comment">%</span>
+0345         table=generateTable(object);
+0346         <span class="keyword">for</span> n=1:size(selection,1)
+0347             selection(n,1).Data=table{1};
+0348             selection(n,1).Visible=<span class="string">'on'</span>;
+0349             selection(n,2).Data=table{2};
+0350             selection(n,2).Visible=<span class="string">'on'</span>;
+0351         <span class="keyword">end</span>
+0352         <span class="comment">%</span>
+0353         N=size(object.Data,1);
+0354         label=cell(N,1);
+0355         <span class="keyword">for</span> n=1:N
+0356             label{n}=sprintf(<span class="string">'Point %d'</span>,n);
+0357         <span class="keyword">end</span>
+0358         set(Selection(2),<span class="string">'String'</span>,label,<span class="string">'Value'</span>,CurrentPoint,<span class="string">'Enable'</span>,<span class="string">'on'</span>);
+0359         set(Coordinate,<span class="string">'Enable'</span>,<span class="string">'on'</span>);
+0360         <a href="#_sub7" class="code" title="subfunction changePoint(varargin)">changePoint</a>();
+0361     <span class="keyword">end</span>
+0362 
+0363 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

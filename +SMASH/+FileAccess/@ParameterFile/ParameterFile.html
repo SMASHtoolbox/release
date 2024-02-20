@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of ParameterFile</title>
+  <meta name="keywords" content="ParameterFile">
+  <meta name="description" content="This class manages text files where parameters are stored in named">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="../../index.html">+SMASH</a> &gt; <a href="../index.html">+FileAccess</a> &gt; <a href="index.html">@ParameterFile</a> &gt; ParameterFile.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+FileAccess/@ParameterFile&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>ParameterFile
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>This class manages text files where parameters are stored in named</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> This class manages text files where parameters are stored in named
+ blocks.  For example:
+    begin{Experiment}
+       Temperature = 300 % K
+       Pressure = 1 % atm
+    end
+ defines a parameter set named &quot;Experiment&quot; with numeric parameters
+ &quot;Temperature&quot; and &quot;Pressure&quot;.  Multiple blocks can be defined in a
+ parameter file, and each block can be assigned to its own (case
+ sensitive) parameter set. Repeated names define a parameter set array.
+
+ Parameter definitions are &quot;name = value&quot; statements that follow MATLAB
+ conventions.
+    -The parameter name must be a sequence letters, numbers, and
+    underscores (up to 63 characters long).  The first character must be a
+    letter, and the name cannot be a MATLAB keyword.  Parameter names are
+    case sensitive.
+    -The equal sign is required; space before and after this character is
+    optional.
+    -Parameter values numeric scalars/arrays, character arrays, or cell
+    arrays.  Arithmetic expressions are permitted.
+    -Definitions can span multiple lines by using ellipsis (...)
+ Percent signs indicate comments that are ignored when a parameter file is
+ read.  Comments can be placed inside or outside parameter set blocks.
+
+ Parameter file objects are created by specifying a text file name.
+    object=ParameterFile(filename);
+ New parameter files should be explicitly named.  If no name is specified,
+ the user is prompted to select an existing file.
+
+ See also SMASH.FileAccess</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="ParameterFile.html" class="code" title="">ParameterFile</a>	This class manages text files where parameters are stored in named</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="ParameterFile.html" class="code" title="">ParameterFile</a>	This class manages text files where parameters are stored in named</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function object=ParameterFile(filename)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% This class manages text files where parameters are stored in named</span>
+0002 <span class="comment">% blocks.  For example:</span>
+0003 <span class="comment">%    begin{Experiment}</span>
+0004 <span class="comment">%       Temperature = 300 % K</span>
+0005 <span class="comment">%       Pressure = 1 % atm</span>
+0006 <span class="comment">%    end</span>
+0007 <span class="comment">% defines a parameter set named &quot;Experiment&quot; with numeric parameters</span>
+0008 <span class="comment">% &quot;Temperature&quot; and &quot;Pressure&quot;.  Multiple blocks can be defined in a</span>
+0009 <span class="comment">% parameter file, and each block can be assigned to its own (case</span>
+0010 <span class="comment">% sensitive) parameter set. Repeated names define a parameter set array.</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% Parameter definitions are &quot;name = value&quot; statements that follow MATLAB</span>
+0013 <span class="comment">% conventions.</span>
+0014 <span class="comment">%    -The parameter name must be a sequence letters, numbers, and</span>
+0015 <span class="comment">%    underscores (up to 63 characters long).  The first character must be a</span>
+0016 <span class="comment">%    letter, and the name cannot be a MATLAB keyword.  Parameter names are</span>
+0017 <span class="comment">%    case sensitive.</span>
+0018 <span class="comment">%    -The equal sign is required; space before and after this character is</span>
+0019 <span class="comment">%    optional.</span>
+0020 <span class="comment">%    -Parameter values numeric scalars/arrays, character arrays, or cell</span>
+0021 <span class="comment">%    arrays.  Arithmetic expressions are permitted.</span>
+0022 <span class="comment">%    -Definitions can span multiple lines by using ellipsis (...)</span>
+0023 <span class="comment">% Percent signs indicate comments that are ignored when a parameter file is</span>
+0024 <span class="comment">% read.  Comments can be placed inside or outside parameter set blocks.</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">% Parameter file objects are created by specifying a text file name.</span>
+0027 <span class="comment">%    object=ParameterFile(filename);</span>
+0028 <span class="comment">% New parameter files should be explicitly named.  If no name is specified,</span>
+0029 <span class="comment">% the user is prompted to select an existing file.</span>
+0030 <span class="comment">%</span>
+0031 <span class="comment">% See also SMASH.FileAccess</span>
+0032 <span class="comment">%</span>
+0033 
+0034 <span class="comment">%</span>
+0035 <span class="comment">% created May 10, 2018 by Daniel Dolan (Sandia National Laboratories)</span>
+0036 <span class="comment">%</span>
+0037 classdef <a href="ParameterFile.html" class="code" title="">ParameterFile</a> &lt; SMASH.FileAccess.File
+0038     <span class="comment">%%</span>
+0039     properties (Hidden=true)
+0040         FilterSpec={<span class="keyword">...</span>
+0041             <span class="string">'*.dat;*.DAT;*.txt;*.TXT;'</span>,<span class="string">'Common text files'</span>;<span class="keyword">...</span>
+0042             <span class="string">'*.*'</span>,<span class="string">'All files'</span>;};
+0043     <span class="keyword">end</span>
+0044     <span class="comment">%%</span>
+0045     methods (Hidden=true)
+0046         <a name="_sub0" href="#_subfunctions" class="code">function object=ParameterFile(filename)</a>
+0047             object=object@SMASH.FileAccess.File();
+0048             <span class="keyword">if</span> nargin&lt;1
+0049                 filename=<span class="string">''</span>;
+0050             <span class="keyword">end</span>
+0051             object=select(object,filename);
+0052         <span class="keyword">end</span>
+0053     <span class="keyword">end</span>
+0054     
+0055 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

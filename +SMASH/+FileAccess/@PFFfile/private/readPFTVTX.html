@@ -1,0 +1,72 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of readPFTVTX</title>
+  <meta name="keywords" content="readPFTVTX">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../../index.html">SMASHtoolbox</a> &gt; <a href="../../../index.html">+SMASH</a> &gt; <a href="../../index.html">+FileAccess</a> &gt; <a href="../index.html">@PFFfile</a> &gt; <a href="index.html">private</a> &gt; readPFTVTX.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../../index.html"><img alt="<" border="0" src="../../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+FileAccess/@PFFfile/private&nbsp;<img alt=">" border="0" src="../../../../../../right.png"></a></td></tr></table>-->
+
+<h1>readPFTVTX
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>function data=readPFTVTX(fid) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="ReadFloatArray.html" class="code" title="function result=ReadFloatArray(fid)">ReadFloatArray</a>	</li><li><a href="ReadLong.html" class="code" title="function result=ReadLong(fid,number)">ReadLong</a>	</li><li><a href="ReadString.html" class="code" title="function result=ReadString(fid)">ReadString</a>	</li><li><a href="ReadWord.html" class="code" title="function result=ReadWord(fid,number)">ReadWord</a>	</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function data=readPFTVTX(fid)</a>
+0002 
+0003 data=struct(<span class="string">'Format'</span>,<span class="string">'pff'</span>,<span class="string">'PFFdataset'</span>,<span class="string">'PFTVTX'</span>);
+0004 data.VertexDim=<a href="ReadWord.html" class="code" title="function result=ReadWord(fid,number)">ReadWord</a>(fid);
+0005 data.AttributeDim=<a href="ReadWord.html" class="code" title="function result=ReadWord(fid,number)">ReadWord</a>(fid);
+0006 data.NumVertices=<a href="ReadLong.html" class="code" title="function result=ReadLong(fid,number)">ReadLong</a>(fid);
+0007 <a href="ReadWord.html" class="code" title="function result=ReadWord(fid,number)">ReadWord</a>(fid,5); <span class="comment">% skip ISPARE</span>
+0008 data.VertexLabel=cell(data.VertexDim,1);
+0009 <span class="keyword">for</span> m=1:data.VertexDim
+0010     data.VertexLabel{m}=<a href="ReadString.html" class="code" title="function result=ReadString(fid)">ReadString</a>(fid);
+0011 <span class="keyword">end</span>
+0012 data.AttributeLabel=cell(data.AttributeDim,1);
+0013 <span class="keyword">for</span> n=1:data.AttributeDim
+0014     data.AttributeLabel{n}=<a href="ReadString.html" class="code" title="function result=ReadString(fid)">ReadString</a>(fid);
+0015 <span class="keyword">end</span>
+0016 <span class="keyword">if</span> (VDS==-3) &amp;&amp; (data.VertexDim&gt;0)
+0017     data.VertexList=<a href="ReadFloatArray.html" class="code" title="function result=ReadFloatArray(fid)">ReadFloatArray</a>(fid);
+0018     data.VertexList=reshape(data.VertexList,<span class="keyword">...</span>
+0019         [data.VertexDim data.NumVertices]);
+0020 <span class="keyword">elseif</span> VDS==1
+0021     data.VertexList=<a href="ReadFloatArray.html" class="code" title="function result=ReadFloatArray(fid)">ReadFloatArray</a>(fid);
+0022 <span class="keyword">end</span>
+0023 data.AttributeList=<a href="ReadFloatArray.html" class="code" title="function result=ReadFloatArray(fid)">ReadFloatArray</a>(fid);
+0024 
+0025 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

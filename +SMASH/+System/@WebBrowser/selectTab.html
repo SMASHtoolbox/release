@@ -1,0 +1,83 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of selectTab</title>
+  <meta name="keywords" content="selectTab">
+  <meta name="description" content="selectTab Select browser tab">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="../../index.html">+SMASH</a> &gt; <a href="../index.html">+System</a> &gt; <a href="index.html">@WebBrowser</a> &gt; selectTab.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+System/@WebBrowser&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>selectTab
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>selectTab Select browser tab</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function selectTab(object,index) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> selectTab Select browser tab
+
+ This method selects a particular tab in the web browser.
+    selectTab(object); % command window selection
+    selectTab(object,index);
+
+ See also <a href="WebBrowser.html" class="code" title="">WebBrowser</a>, <a href="createTab.html" class="code" title="function createTab(object,address)">createTab</a>, <a href="probeTab.html" class="code" title="function [address,content]=probeTab(object,index)">probeTab</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="chooseIndex.html" class="code" title="function index=chooseIndex(object)">chooseIndex</a>	</li><li><a href="clickItem.html" class="code" title="function clickItem(object,target)">clickItem</a>	</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="rehash.html" class="code" title="function rehash(object)">rehash</a>	rehash Scan browser contents</li><li><a href="updateTab.html" class="code" title="function updateTab(object,address,index)">updateTab</a>	updateTab Update browser tab</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% selectTab Select browser tab</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This method selects a particular tab in the web browser.</span>
+0004 <span class="comment">%    selectTab(object); % command window selection</span>
+0005 <span class="comment">%    selectTab(object,index);</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% See also WebBrowser, createTab, probeTab</span>
+0008 <span class="comment">%</span>
+0009 
+0010 <span class="comment">%</span>
+0011 <span class="comment">% created April 20, 2018 by Daniel Dolan (Sandia National Laboratories)</span>
+0012 <span class="comment">%</span>
+0013 <a name="_sub0" href="#_subfunctions" class="code">function selectTab(object,index)</a>
+0014 
+0015 <span class="comment">% manage input</span>
+0016 valid=1:numel(object.Tab);
+0017 <span class="keyword">if</span> (nargin &lt; 2) || isempty(index)
+0018    index=<a href="chooseIndex.html" class="code" title="function index=chooseIndex(object)">chooseIndex</a>(object);
+0019    <span class="keyword">if</span> isempty(index)
+0020        <span class="keyword">return</span>
+0021    <span class="keyword">end</span>
+0022 <span class="keyword">else</span>
+0023     assert(any(index == valid),<span class="string">'ERROR: invalid tab index'</span>);
+0024 <span class="keyword">end</span>
+0025 
+0026 <span class="comment">% simulate mouse click</span>
+0027 report=getappdata(groot,<span class="string">'WebBrowser'</span>);
+0028 <a href="clickItem.html" class="code" title="function clickItem(object,target)">clickItem</a>(object,report.Tab(index).Handle);
+0029 
+0030 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

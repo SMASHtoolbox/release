@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of datninja_reader</title>
+  <meta name="keywords" content="datninja_reader">
+  <meta name="description" content="datninja_reader : read data file created by datninja">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">datninja</a> &gt; <a href="index.html">old</a> &gt; datninja_reader.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/datninja/old&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>datninja_reader
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>datninja_reader : read data file created by datninja</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function [x,y]=datninja_reader(filename) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> datninja_reader : read data file created by datninja
+ Usage:
+ &gt;&gt; [x,y]=datninja_reader(filename);</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% datninja_reader : read data file created by datninja</span>
+0002 <span class="comment">% Usage:</span>
+0003 <span class="comment">% &gt;&gt; [x,y]=datninja_reader(filename);</span>
+0004 <span class="comment">%</span>
+0005 
+0006 <span class="comment">% created November 24, 2008 by Daniel Dolan (Sandia National Labs)</span>
+0007 <a name="_sub0" href="#_subfunctions" class="code">function [x,y]=datninja_reader(filename)</a>
+0008 
+0009 message{1}=<span class="string">'The datninja program is obsolete and will be removed in future toolbox releases'</span>;
+0010 message{2}=<span class="string">'Use the datninja app instead'</span>;
+0011 warning(<span class="string">'%s\n'</span>,message{:});
+0012 
+0013 <span class="comment">% prompt user if file name is missing</span>
+0014 <span class="keyword">if</span> (nargin&lt;1) || isempty(filename)
+0015     filterspec={};
+0016     filterspec(1,:)={<span class="string">'*.txt;*.TXT'</span>; <span class="string">'Text files'</span>};
+0017     filterspec(2,:)={<span class="string">'*.*'</span> <span class="string">'All files'</span>};
+0018     [filename,pathname]=uigetfile(filterspec,<span class="string">'Select data file'</span>);
+0019     <span class="keyword">if</span> isnumeric(filename) 
+0020         <span class="keyword">return</span> 
+0021     <span class="keyword">end</span>
+0022     filename=fullfile(pathname,filename);    
+0023 <span class="keyword">end</span>
+0024 
+0025 <span class="comment">% read data points from file</span>
+0026 [x,y]=deal([]);
+0027 fid=fopen(filename,<span class="string">'rt'</span>);
+0028 <span class="keyword">while</span> ~feof(fid)
+0029     temp=fgetl(fid);
+0030     [first,count,err,next]=sscanf(temp,<span class="string">'%s'</span>,1);    
+0031     <span class="keyword">if</span> strcmp(first,<span class="string">'data:'</span>)
+0032         temp=temp(next:end);
+0033         [value,count]=sscanf(temp,<span class="string">'%g'</span>);
+0034     <span class="keyword">else</span> 
+0035         <span class="keyword">continue</span>
+0036     <span class="keyword">end</span>
+0037     <span class="keyword">if</span>  count&gt;=4
+0038         x(end+1)=value(3);
+0039         y(end+1)=value(4);
+0040     <span class="keyword">else</span>
+0041         <span class="keyword">continue</span>
+0042     <span class="keyword">end</span>        
+0043 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

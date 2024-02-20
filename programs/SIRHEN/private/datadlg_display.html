@@ -1,0 +1,303 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of datadlg_display</title>
+  <meta name="keywords" content="datadlg_display">
+  <meta name="description" content="datadlg: create a data dialog box">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">SIRHEN</a> &gt; <a href="index.html">private</a> &gt; datadlg_display.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/SIRHEN/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>datadlg_display
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>datadlg: create a data dialog box</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function answer=datadlg_display(name,label,default,options) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> datadlg: create a data dialog box</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="DisplayOptions.html" class="code" title="function DisplayOptions(varargin)">DisplayOptions</a>	handle input</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function movedlg(dlg,target,location)</a></li><li><a href="#_sub2" class="code">function doPopupClick(src,eventdata,popupnum,oldval,popupstring)</a></li><li><a href="#_sub3" class="code">function callbackOK(src,varargin)</a></li><li><a href="#_sub4" class="code">function callbackCancel(varargin)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% datadlg: create a data dialog box</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">%</span>
+0004 <a name="_sub0" href="#_subfunctions" class="code">function answer=datadlg_display(name,label,default,options)</a>
+0005 
+0006 <span class="comment">% handle input</span>
+0007 <span class="keyword">if</span> (nargin&lt;1) || isempty(name)
+0008     name=<span class="string">'Data Dialog'</span>;
+0009 <span class="keyword">end</span>
+0010 
+0011 <span class="keyword">if</span> (nargin&lt;2) || isempty(label)
+0012     label={<span class="string">'Parameter:'</span>};
+0013 <span class="keyword">end</span>
+0014 
+0015 <span class="keyword">if</span> (nargin&lt;3) || isempty(default)
+0016     default={<span class="string">''</span>};
+0017 <span class="keyword">end</span>
+0018 
+0019 <span class="keyword">if</span> (nargin&lt;4) || isempty(options)
+0020     options=struct();
+0021 <span class="keyword">end</span>
+0022 field=<span class="string">'style'</span>;
+0023 <span class="keyword">if</span> ~isfield(options,field) || isempty(options.(field))
+0024     options.(field)=<span class="string">'modal'</span>;
+0025 <span class="keyword">end</span>
+0026 field=<span class="string">'minwidth'</span>;
+0027 <span class="keyword">if</span> ~isfield(options,field) || isempty(options.(field))
+0028     options.(field)=20; <span class="comment">% characters</span>
+0029 <span class="keyword">end</span>
+0030 field=<span class="string">'root'</span>;
+0031 <span class="keyword">if</span> ~isfield(options,field) || isempty(options.(field))
+0032     options.(field)=0; <span class="comment">% root object (the screen)</span>
+0033 <span class="keyword">end</span>
+0034 field=<span class="string">'location'</span>;
+0035 <span class="keyword">if</span> ~isfield(options,field) || isempty(options.(field))
+0036     options.(field)=<span class="string">'center'</span>; 
+0037 <span class="keyword">end</span>
+0038 field=<span class="string">'fontname'</span>;
+0039 <span class="keyword">if</span> ~isfield(options,field) || isempty(options.(field))
+0040     options.(field)=get(0,<span class="string">'DefaultUIcontrolFontName'</span>); 
+0041 <span class="keyword">end</span>
+0042 field=<span class="string">'fontsize'</span>;
+0043 <span class="keyword">if</span> ~isfield(options,field) || isempty(options.(field))
+0044     options.(field)=get(0,<span class="string">'DefaultUIcontrolFontSize'</span>);
+0045 <span class="keyword">end</span>
+0046 
+0047 popupstring1={<span class="string">'linear'</span>,<span class="string">'log'</span>};
+0048 <span class="keyword">switch</span> default{1};
+0049     <span class="keyword">case</span> popupstring1{1}
+0050         popupval1=1;
+0051     <span class="keyword">case</span> popupstring1{2}
+0052         popupval1=2;
+0053 <span class="keyword">end</span>
+0054 popupstring2={<span class="string">'jet'</span>,<span class="string">'gray'</span>,<span class="string">'rainbow'</span>,<span class="string">'red'</span>,<span class="string">'green'</span>,<span class="string">'blue'</span>,<span class="string">'cool'</span>,<span class="string">'hot'</span>,<span class="keyword">...</span>
+0055     <span class="string">'spring'</span>,<span class="string">'summer'</span>,<span class="string">'autumn'</span>,<span class="string">'winter'</span>,<span class="keyword">...</span>
+0056     <span class="string">'bone'</span>,<span class="string">'copper'</span>,<span class="string">'pink'</span>};
+0057 <span class="keyword">for</span> k=1:numel(popupstring2)
+0058     <span class="keyword">if</span> strcmp(default{3},popupstring2{k})
+0059         popupval2=k;
+0060     <span class="keyword">end</span>
+0061 <span class="keyword">end</span>
+0062 
+0063 popupstring3 = {<span class="string">'yes'</span>,<span class="string">'no'</span>};
+0064 <span class="keyword">if</span> ischar(default{4})
+0065     <span class="keyword">if</span> strcmpi(default{4},<span class="string">'yes'</span>)
+0066         popupval3=1;
+0067     <span class="keyword">else</span>
+0068         popupval3=2;
+0069     <span class="keyword">end</span>
+0070 <span class="keyword">elseif</span> default{4}
+0071     popupval3=1;
+0072 <span class="keyword">else</span>
+0073     popupval3=2;
+0074 <span class="keyword">end</span>
+0075 
+0076 edit{1}=default{1};
+0077 edit{2}=default{2};
+0078 edit{3}=default{3};
+0079 edit{4}=default{4};
+0080 data.edit=edit;
+0081 
+0082 <span class="comment">% create and size dialog</span>
+0083 fig=figure(<span class="string">'NumberTitle'</span>,<span class="string">'off'</span>,<span class="string">'Name'</span>,name,<span class="keyword">...</span>
+0084     <span class="string">'Menubar'</span>,<span class="string">'none'</span>,<span class="string">'Toolbar'</span>,<span class="string">'none'</span>,<span class="keyword">...</span>
+0085     <span class="string">'Resize'</span>,<span class="string">'off'</span>,<span class="string">'Units'</span>,<span class="string">'characters'</span>,<span class="keyword">...</span>
+0086     <span class="string">'ToolBar'</span>,<span class="string">'none'</span>,<span class="string">'MenuBar'</span>,<span class="string">'none'</span>,<span class="keyword">...</span>
+0087     <span class="string">'IntegerHandle'</span>,<span class="string">'off'</span>,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0088 hgap=1.00; <span class="comment">% horizontal gap [characters]</span>
+0089 vgap=0.50; <span class="comment">% vertical gap [characters]</span>
+0090 textbg=get(fig,<span class="string">'Color'</span>);
+0091 
+0092 <span class="comment">%set(fig,'Position',[0 0 32 18],'Visible','off');</span>
+0093 set(fig,<span class="string">'Position'</span>,[0 0 32 21.5],<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+0094 <a href="#_sub1" class="code" title="subfunction movedlg(dlg,target,location)">movedlg</a>(fig,options.root,options.location);
+0095 set(fig,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0096 
+0097 edittext = uicontrol(<span class="string">'Style'</span>,<span class="string">'text'</span>,<span class="string">'String'</span>,label{2},<span class="keyword">...</span>
+0098         <span class="string">'Units'</span>,<span class="string">'characters'</span>,<span class="string">'Position'</span>,[5 19 25 1.2],<span class="keyword">...</span>
+0099         <span class="string">'BackgroundColor'</span>,textbg,<span class="string">'HorizontalAlignment'</span>,<span class="string">'left'</span>);
+0100 editbox = uicontrol(<span class="string">'Style'</span>,<span class="string">'edit'</span>,<span class="string">'String'</span>,edit{2},<span class="keyword">...</span>
+0101         <span class="string">'Units'</span>,<span class="string">'characters'</span>,<span class="string">'Position'</span>,[5 17 18 2],<span class="keyword">...</span>
+0102         <span class="string">'BackgroundColor'</span>,<span class="string">'w'</span>,<span class="string">'HorizontalAlignment'</span>,<span class="string">'left'</span>);
+0103 
+0104 popuptext1 = uicontrol(<span class="string">'Style'</span>,<span class="string">'Text'</span>,<span class="string">'String'</span>,label{1},<span class="keyword">...</span>
+0105     <span class="string">'Units'</span>,<span class="string">'characters'</span>,<span class="string">'HorizontalAlignment'</span>,<span class="string">'left'</span>,<span class="keyword">...</span>
+0106     <span class="string">'BackgroundColor'</span>,textbg,<span class="string">'Position'</span>,[5 15.5 15 1.2]);
+0107 popupstring1 = {<span class="string">'linear'</span>,<span class="string">'log'</span>};
+0108 popupbox1 = uicontrol(<span class="string">'style'</span>,<span class="string">'popupmenu'</span>,<span class="keyword">...</span>
+0109     <span class="string">'Units'</span>,<span class="string">'characters'</span>,<span class="keyword">...</span>
+0110     <span class="string">'position'</span>,[5 13.5 20 1.2],<span class="keyword">...</span>
+0111     <span class="string">'string'</span>,popupstring1,<span class="keyword">...</span>
+0112     <span class="string">'backgroundcolor'</span>,<span class="string">'w'</span>,<span class="keyword">...</span>
+0113     <span class="string">'value'</span>,popupval1, <span class="keyword">...</span>
+0114     <span class="string">'tag'</span>,<span class="string">'listbox'</span>,<span class="keyword">...</span>
+0115     <span class="string">'callback'</span>, {@<a href="#_sub2" class="code" title="subfunction doPopupClick(src,eventdata,popupnum,oldval,popupstring)">doPopupClick</a>,1,popupval1,popupstring1});
+0116 
+0117 popuptext2 = uicontrol(<span class="string">'Style'</span>,<span class="string">'Text'</span>,<span class="string">'String'</span>,label{3},<span class="string">'Units'</span>,<span class="string">'characters'</span>,<span class="keyword">...</span>
+0118     <span class="string">'Units'</span>,<span class="string">'characters'</span>,<span class="string">'HorizontalAlignment'</span>,<span class="string">'left'</span>,<span class="keyword">...</span>
+0119     <span class="string">'BackgroundColor'</span>,textbg,<span class="string">'Position'</span>,[5 11 15 1.2]);
+0120 <span class="comment">%popupstring2 = {'jet','gray','inverse_gray','cool','hot'};</span>
+0121 popupbox2 = uicontrol(<span class="string">'style'</span>,<span class="string">'popupmenu'</span>,<span class="keyword">...</span>
+0122     <span class="string">'Units'</span>,<span class="string">'characters'</span>,<span class="keyword">...</span>
+0123     <span class="string">'position'</span>,[5 9.5 20 1.2],<span class="keyword">...</span>
+0124     <span class="string">'string'</span>,popupstring2,<span class="keyword">...</span>
+0125     <span class="string">'backgroundcolor'</span>,<span class="string">'w'</span>,<span class="keyword">...</span>
+0126     <span class="string">'value'</span>,popupval2, <span class="keyword">...</span>
+0127     <span class="string">'tag'</span>,<span class="string">'listbox'</span>,<span class="keyword">...</span>
+0128     <span class="string">'callback'</span>, {@<a href="#_sub2" class="code" title="subfunction doPopupClick(src,eventdata,popupnum,oldval,popupstring)">doPopupClick</a>,3,popupval2,popupstring2});
+0129 
+0130 popuptext3 = uicontrol(<span class="string">'Style'</span>,<span class="string">'Text'</span>,<span class="string">'String'</span>,label{4},<span class="string">'Units'</span>,<span class="string">'characters'</span>,<span class="keyword">...</span>
+0131     <span class="string">'Units'</span>,<span class="string">'characters'</span>,<span class="string">'HorizontalAlignment'</span>,<span class="string">'left'</span>,<span class="keyword">...</span>
+0132     <span class="string">'BackgroundColor'</span>,textbg,<span class="string">'Position'</span>,[5 7 15 1.2]);
+0133 <span class="comment">%popupval3={'yes','no'};</span>
+0134 popupbox3 = uicontrol(<span class="string">'style'</span>,<span class="string">'popupmenu'</span>,<span class="keyword">...</span>
+0135     <span class="string">'Units'</span>,<span class="string">'characters'</span>,<span class="keyword">...</span>
+0136     <span class="string">'position'</span>,[5 5.5 20 1.2],<span class="keyword">...</span>
+0137     <span class="string">'string'</span>,popupstring3,<span class="keyword">...</span>
+0138     <span class="string">'backgroundcolor'</span>,<span class="string">'w'</span>,<span class="keyword">...</span>
+0139     <span class="string">'value'</span>,popupval3, <span class="keyword">...</span>
+0140     <span class="string">'tag'</span>,<span class="string">'listbox'</span>,<span class="keyword">...</span>
+0141     <span class="string">'callback'</span>, {@<a href="#_sub2" class="code" title="subfunction doPopupClick(src,eventdata,popupnum,oldval,popupstring)">doPopupClick</a>,4,popupval3,popupstring3});
+0142 
+0143 pushbutton1 = uicontrol(<span class="string">'Style'</span>,<span class="string">'pushbutton'</span>,<span class="string">'String'</span>,<span class="string">'OK'</span>,<span class="keyword">...</span>
+0144         <span class="string">'Units'</span>,<span class="string">'characters'</span>,<span class="string">'Position'</span>,[5 1 10 2],<span class="keyword">...</span>
+0145         <span class="string">'Callback'</span>,@<a href="#_sub3" class="code" title="subfunction callbackOK(src,varargin)">callbackOK</a>);
+0146 pushbutton2 = uicontrol(<span class="string">'Style'</span>,<span class="string">'pushbutton'</span>,<span class="string">'String'</span>,<span class="string">'Cancel'</span>,<span class="keyword">...</span>
+0147         <span class="string">'Units'</span>,<span class="string">'characters'</span>,<span class="string">'Position'</span>,[15 1 10 2],<span class="keyword">...</span>
+0148         <span class="string">'Callback'</span>,@<a href="#_sub4" class="code" title="subfunction callbackCancel(varargin)">callbackCancel</a>);
+0149 
+0150 <span class="comment">% store data in figure</span>
+0151 data.editbox=editbox;
+0152 data.previous=default;
+0153 data.current=default;
+0154 set(fig,<span class="string">'UserData'</span>,data);
+0155 
+0156 <span class="comment">% finish up and wait for user input</span>
+0157 set(fig,<span class="string">'Visible'</span>,<span class="string">'on'</span>,<span class="string">'HandleVisibility'</span>,<span class="string">'Callback'</span>);
+0158 <span class="keyword">if</span> strcmp(options.style,<span class="string">'modal'</span>)
+0159     set(fig,<span class="string">'WindowStyle'</span>,options.style);
+0160 <span class="keyword">end</span>
+0161 uiwait(fig);
+0162 <span class="keyword">if</span> ishandle(fig)
+0163     data=get(fig,<span class="string">'UserData'</span>);
+0164     answer=data.current;
+0165     delete(fig);
+0166 <span class="keyword">else</span>
+0167     answer={};
+0168 <span class="keyword">end</span>
+0169 
+0170 
+0171 <span class="comment">%%%%%%%%%%%%%%%%%%%%%</span>
+0172 <span class="comment">% utility functions %</span>
+0173 <span class="comment">%%%%%%%%%%%%%%%%%%%%%</span>
+0174 <a name="_sub1" href="#_subfunctions" class="code">function movedlg(dlg,target,location)</a>
+0175 
+0176 <span class="keyword">if</span> (nargin&lt;1) || isempty(location)
+0177     location=<span class="string">'center'</span>;
+0178 <span class="keyword">end</span>
+0179 
+0180 <span class="comment">% determine absolute figure position</span>
+0181 units=get(target,<span class="string">'Units'</span>);
+0182 set(target,<span class="string">'Units'</span>,<span class="string">'pixels'</span>);
+0183 <span class="keyword">if</span> target==0
+0184    targetpos=get(target,<span class="string">'MonitorPositions'</span>);
+0185    targetpos=targetpos(1,:);
+0186 <span class="keyword">else</span>
+0187     targetpos=get(target,<span class="string">'Position'</span>);
+0188 <span class="keyword">end</span>
+0189 set(target,<span class="string">'Units'</span>,units);
+0190 
+0191 <span class="comment">% position dialog relative to figure</span>
+0192 units=get(dlg,<span class="string">'Units'</span>) ;
+0193 set(dlg,<span class="string">'Units'</span>,<span class="string">'pixels'</span>);
+0194 dlgpos=get(dlg,<span class="string">'Position'</span>);
+0195 x=targetpos(1)+(targetpos(3)-dlgpos(3))*[0 1/2 1];
+0196 y=targetpos(2)+(targetpos(4)-dlgpos(4))*[0 1/2 1];
+0197 <span class="keyword">switch</span> lower(location)
+0198     <span class="keyword">case</span> <span class="string">'north'</span>
+0199         dlgpos(1:2)=[x(2) y(3)];
+0200     <span class="keyword">case</span> <span class="string">'south'</span>
+0201         dlgpos(1:2)=[x(2) y(1)];
+0202     <span class="keyword">case</span> <span class="string">'east'</span>
+0203         dlgpos(1:2)=[x(1) y(2)];
+0204     <span class="keyword">case</span> <span class="string">'west'</span>
+0205         dlgpos(1:2)=[x(3) y(2)];
+0206     <span class="keyword">case</span> <span class="string">'northeast'</span>
+0207         dlgpos(1:2)=[x(3) y(3)];
+0208     <span class="keyword">case</span> <span class="string">'northwest'</span>
+0209         dlgpos(1:2)=[x(1) y(3)];
+0210     <span class="keyword">case</span> <span class="string">'southeast'</span>
+0211         dlgpos(1:2)=[x(3) y(1)];
+0212     <span class="keyword">case</span> <span class="string">'southwest'</span>
+0213         dlgpos(1:2)=[x(1) y(1)];
+0214     <span class="keyword">case</span> <span class="string">'center'</span>
+0215         dlgpos(1:2)=[x(2) y(2)];
+0216     <span class="keyword">otherwise</span> 
+0217         error(<span class="string">'ERROR: %s is not a valid location'</span>,location);
+0218 <span class="keyword">end</span>
+0219 set(dlg,<span class="string">'Position'</span>,dlgpos);
+0220 set(dlg,<span class="string">'Units'</span>,units);
+0221 
+0222 <a name="_sub2" href="#_subfunctions" class="code">function doPopupClick(src,eventdata,popupnum,oldval,popupstring)</a>
+0223 
+0224 fig=gcbf;
+0225 data=get(fig,<span class="string">'UserData'</span>);
+0226 nold = oldval;
+0227 n = get(src,<span class="string">'Value'</span>);
+0228 <span class="keyword">if</span> n == 0
+0229     n = nold;
+0230 <span class="keyword">end</span>
+0231 set(src,<span class="string">'Value'</span>,n);
+0232 data.edit{popupnum}=popupstring{n};
+0233 
+0234 set(fig,<span class="string">'UserData'</span>,data);
+0235 
+0236 
+0237 
+0238 <span class="comment">%%%%%%%%%%%%%%%%%%%%%</span>
+0239 <span class="comment">% default callbacks %</span>
+0240 <span class="comment">%%%%%%%%%%%%%%%%%%%%%</span>
+0241 <a name="_sub3" href="#_subfunctions" class="code">function callbackOK(src,varargin)</a>
+0242 fig=gcbf;
+0243 data=get(fig,<span class="string">'UserData'</span>);
+0244 uiresume(fig);
+0245 data.edit{2}=get(data.editbox,<span class="string">'String'</span>);
+0246 data.current=data.edit;
+0247 set(fig,<span class="string">'UserData'</span>,data);
+0248 
+0249 <a name="_sub4" href="#_subfunctions" class="code">function callbackCancel(varargin)</a>
+0250 fig=gcbf;
+0251 uiresume(fig);
+0252 data=get(fig,<span class="string">'UserData'</span>);
+0253 data.current={};
+0254 set(fig,<span class="string">'UserData'</span>,data);</pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

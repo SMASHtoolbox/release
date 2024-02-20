@@ -1,0 +1,5 @@
+%
+https://physics.nist.gov/PhysRefData/FFast/html/form.html
+https://www.nist.gov/pml/productsservices/physical-reference-data
+
+http://henke.lbl.gov/optical_constants/

@@ -1,0 +1,316 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of custom</title>
+  <meta name="keywords" content="custom">
+  <meta name="description" content="dialog.custom : add a line of custom uicontrols">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../../index.html">SMASHtoolbox</a> &gt; <a href="../../../index.html">+SMASH</a> &gt; <a href="../../index.html">+MUI</a> &gt; <a href="../index.html">@Dialog</a> &gt; <a href="index.html">private</a> &gt; custom.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../../index.html"><img alt="<" border="0" src="../../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+MUI/@Dialog/private&nbsp;<img alt=">" border="0" src="../../../../../../right.png"></a></td></tr></table>-->
+
+<h1>custom
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>dialog.custom : add a line of custom uicontrols</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>function varargout=custom(object,Control,varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> dialog.custom : add a line of custom uicontrols
+
+ Usage:
+
+   &gt;&gt; h=object.custom(object,{Control},{labels},[minwidth], height,{Choices},Rows);
+
+ This function allows for the generation of a series of arbitrary controls
+ aligned horizontally.  It is designed to provide more flexibility for
+ situations where the more common combined controls, like edit_button, are
+ insufficient.  Two arguments must be passed to this function:  the object
+ and a cell array of strings representing the controls to be added in
+ horizonatal order from left to right.  If no other options are passed,
+ the defaults for each control option are used.  The labels input should
+ be a cell array of strings.  If there are more controls specified than
+ labels, the labels are applied sequentially and all remaining controls
+ recieve the default label.  If no label is desired for an edit or slider
+ control, passing a label of 'skiplabel' will remove them.  Minwdith
+ represents the minimum width of each control from left to right.  It
+ should be an array of numbers.  If the number of elements specified in
+ minwidth is less than the number of controls, the last number specified
+ in minwidth is applied to all remaining controls.  The height input is
+ applied only to 'medit' controls and specified the number of lines.  It
+ should be an array of numbers.  If the number of elements specified in
+ height is less than the number of controls, the last number specified is
+ applied to all remaining controls.  the choices input applies to
+ 'listbox' and 'popup' controls.  It should be a cell array where each
+ entry is a cell array of strings representing all the choices for each
+ object to be applied sequentially.  The rows input applies on to
+ 'tables'.  It should be an array of numbers representing the number of
+ rows for each table sequentially.  If the number of elements in rows is
+ less than the number of controls specified, the last number specified in
+ rows is applied to all remaining tables.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="button.html" class="code" title="function varargout=button(object,label,minwidth)">button</a>	dialog.button : add button block to dialog</li><li><a href="check.html" class="code" title="function varargout=check(object,label,minwidth)">check</a>	dialog.check : add check block to dialog</li><li><a href="edit.html" class="code" title="function varargout=edit(object,label,minwidth,SkipLabel)">edit</a>	handle input</li><li><a href="listbox.html" class="code" title="function varargout=listbox(object,label,choices,minwidth,rows)">listbox</a>	dialog.popup : add popup block to dialog</li><li><a href="medit.html" class="code" title="function varargout=medit(object,label,minwidth,rows,fontname)">medit</a>	handle input</li><li><a href="popup.html" class="code" title="function varargout=popup(object,label,choices,minwidth,SkipLabel)">popup</a>	dialog.popup : add popup block to dialog</li><li><a href="radio.html" class="code" title="function varargout=radio(object,label,minwidth)">radio</a>	dialog.radio : add radio block to dialog</li><li><a href="table.html" class="code" title="function varargout=table(object,label,minwidth,rows)">table</a>	handle input</li><li><a href="text.html" class="code" title="function varargout=text(object,label,minwidth)">text</a>	handle input</li><li><a href="toggle.html" class="code" title="function varargout=toggle(object,label,minwidth)">toggle</a>	dialog.toggle : add toggle block to dialog</li><li><a href="verify.html" class="code" title="function verify(object)">verify</a>	</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% dialog.custom : add a line of custom uicontrols</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% Usage:</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%   &gt;&gt; h=object.custom(object,{Control},{labels},[minwidth], height,{Choices},Rows);</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% This function allows for the generation of a series of arbitrary controls</span>
+0008 <span class="comment">% aligned horizontally.  It is designed to provide more flexibility for</span>
+0009 <span class="comment">% situations where the more common combined controls, like edit_button, are</span>
+0010 <span class="comment">% insufficient.  Two arguments must be passed to this function:  the object</span>
+0011 <span class="comment">% and a cell array of strings representing the controls to be added in</span>
+0012 <span class="comment">% horizonatal order from left to right.  If no other options are passed,</span>
+0013 <span class="comment">% the defaults for each control option are used.  The labels input should</span>
+0014 <span class="comment">% be a cell array of strings.  If there are more controls specified than</span>
+0015 <span class="comment">% labels, the labels are applied sequentially and all remaining controls</span>
+0016 <span class="comment">% recieve the default label.  If no label is desired for an edit or slider</span>
+0017 <span class="comment">% control, passing a label of 'skiplabel' will remove them.  Minwdith</span>
+0018 <span class="comment">% represents the minimum width of each control from left to right.  It</span>
+0019 <span class="comment">% should be an array of numbers.  If the number of elements specified in</span>
+0020 <span class="comment">% minwidth is less than the number of controls, the last number specified</span>
+0021 <span class="comment">% in minwidth is applied to all remaining controls.  The height input is</span>
+0022 <span class="comment">% applied only to 'medit' controls and specified the number of lines.  It</span>
+0023 <span class="comment">% should be an array of numbers.  If the number of elements specified in</span>
+0024 <span class="comment">% height is less than the number of controls, the last number specified is</span>
+0025 <span class="comment">% applied to all remaining controls.  the choices input applies to</span>
+0026 <span class="comment">% 'listbox' and 'popup' controls.  It should be a cell array where each</span>
+0027 <span class="comment">% entry is a cell array of strings representing all the choices for each</span>
+0028 <span class="comment">% object to be applied sequentially.  The rows input applies on to</span>
+0029 <span class="comment">% 'tables'.  It should be an array of numbers representing the number of</span>
+0030 <span class="comment">% rows for each table sequentially.  If the number of elements in rows is</span>
+0031 <span class="comment">% less than the number of controls specified, the last number specified in</span>
+0032 <span class="comment">% rows is applied to all remaining tables.</span>
+0033 
+0034 <a name="_sub0" href="#_subfunctions" class="code">function varargout=custom(object,Control,varargin)</a>
+0035 
+0036 <span class="comment">%error checking</span>
+0037 <a href="verify.html" class="code" title="function verify(object)">verify</a>(object);
+0038 <span class="keyword">if</span> (nargin&lt;2) || isempty(Control)
+0039     error(<span class="string">'ERROR: no controls specified'</span>);
+0040 <span class="keyword">end</span>
+0041 <span class="keyword">if</span> ~iscellstr(Control)
+0042     error(<span class="string">'Error: Controls must be specified as a cell array of strings'</span>);
+0043 <span class="keyword">end</span>
+0044 
+0045 <span class="comment">%generate initial inputs</span>
+0046 N=numel(Control);
+0047 label=cell(1,N);
+0048 minwidth=zeros(1,N);
+0049 height=minwidth;
+0050 choices=label;
+0051 rows=minwidth;
+0052 <span class="comment">%use the passed inputs to modify the initial inputs</span>
+0053 ind=ones(1,3);
+0054 <span class="keyword">for</span> k=1:numel(varargin)
+0055     n=numel(varargin{k});
+0056     <span class="keyword">if</span> k == 1
+0057         <span class="keyword">if</span> ~iscell(varargin{k})
+0058             error(<span class="string">'Error: Labels must be specified as a cell array of strings'</span>);
+0059         <span class="keyword">end</span>
+0060         <span class="keyword">for</span> m=1:min([n,N])
+0061             label{m}=varargin{k}{m};
+0062         <span class="keyword">end</span>
+0063     <span class="keyword">elseif</span> k == 2
+0064         <span class="keyword">if</span> ~isnumeric(varargin{k})
+0065             error(<span class="string">'Error: Minwidth must be specified as an array'</span>);
+0066         <span class="keyword">end</span>
+0067         <span class="keyword">for</span> m=1:N
+0068             <span class="keyword">if</span> m &lt;= n
+0069                 minwidth(m)=varargin{k}(m);
+0070             <span class="keyword">else</span>
+0071                 minwidth(m)=varargin{k}(end);
+0072             <span class="keyword">end</span>
+0073         <span class="keyword">end</span>
+0074     <span class="keyword">elseif</span> k == 3
+0075         <span class="keyword">if</span> ~isnumeric(varargin{k})
+0076             error(<span class="string">'Error: Height must be specified as an array'</span>);
+0077         <span class="keyword">end</span>
+0078         <span class="keyword">for</span> m=1:N
+0079             <span class="keyword">switch</span> lower(Control{m})
+0080                 <span class="keyword">case</span> <span class="string">'medit'</span>
+0081                     height(m)=varargin{k}(ind(1));
+0082                     <span class="keyword">if</span> numel(varargin{k}) &gt; ind(1)
+0083                         ind(1)=ind(1)+1;
+0084                     <span class="keyword">end</span>
+0085             <span class="keyword">end</span>
+0086         <span class="keyword">end</span>
+0087     <span class="keyword">elseif</span> k == 4
+0088         <span class="keyword">if</span> ~iscell(varargin{k})
+0089             error(<span class="string">'Error: Choices must be specified as a cell array of strings'</span>);
+0090         <span class="keyword">end</span>
+0091         <span class="keyword">for</span> m=1:N
+0092             <span class="keyword">switch</span> lower(Control{m})
+0093                 <span class="keyword">case</span> {<span class="string">'list'</span>,<span class="string">'listbox'</span>,<span class="string">'popup'</span>}
+0094                     choices{m}=varargin{k}{ind(2)};
+0095                     <span class="keyword">if</span> numel(varargin{k}) &gt; ind(2)
+0096                         ind(2)=ind(2)+1;
+0097                     <span class="keyword">end</span>
+0098             <span class="keyword">end</span>
+0099         <span class="keyword">end</span>
+0100     <span class="keyword">elseif</span> k == 5
+0101         <span class="keyword">if</span> ~isnumeric(varargin{k})
+0102             error(<span class="string">'Error: Rows must be specified as an array'</span>);
+0103         <span class="keyword">end</span>
+0104         <span class="keyword">for</span> m=1:N
+0105             <span class="keyword">switch</span> lower(Control{m})
+0106                 <span class="keyword">case</span> <span class="string">'table'</span>
+0107                     rows(m)=varargin{k}(ind(3));
+0108                     <span class="keyword">if</span> numel(varargin{k}) &gt; ind(3)
+0109                         ind(3)=ind(3)+1;
+0110                     <span class="keyword">end</span>
+0111             <span class="keyword">end</span>
+0112         <span class="keyword">end</span>
+0113     <span class="keyword">end</span>
+0114 <span class="keyword">end</span>
+0115 <span class="comment">%generate each control vertically using the addblock commands for each</span>
+0116 h=[];
+0117 a=[];
+0118 removed=0;
+0119 <span class="keyword">for</span> k=1:numel(Control)
+0120     <span class="keyword">switch</span> lower(Control{k})
+0121         <span class="keyword">case</span> <span class="string">'text'</span>
+0122             h(end+1)=<a href="text.html" class="code" title="function varargout=text(object,label,minwidth)">text</a>(object,label{k},minwidth(k));
+0123         <span class="keyword">case</span> <span class="string">'edit'</span>
+0124             <span class="keyword">switch</span> lower(label{k})
+0125                 <span class="keyword">case</span> <span class="string">'skiplabel'</span>
+0126                     h(end+1:end+2)=<a href="edit.html" class="code" title="function varargout=edit(object,label,minwidth,SkipLabel)">edit</a>(object,<span class="string">' '</span>,minwidth(k),<span class="string">'skiplabel'</span>);
+0127                 <span class="keyword">otherwise</span>
+0128                     h(end+1:end+2)=<a href="edit.html" class="code" title="function varargout=edit(object,label,minwidth,SkipLabel)">edit</a>(object,label{k},minwidth(k));
+0129             <span class="keyword">end</span>
+0130         <span class="keyword">case</span> <span class="string">'medit'</span>
+0131             h(end+1:end+2)=<a href="medit.html" class="code" title="function varargout=medit(object,label,minwidth,rows,fontname)">medit</a>(object,label{k},minwidth(k),height(k));
+0132         <span class="keyword">case</span> {<span class="string">'button'</span>,<span class="string">'buttons'</span>}
+0133             h(end+1)=<a href="button.html" class="code" title="function varargout=button(object,label,minwidth)">button</a>(object,label{k},minwidth(k));
+0134         <span class="keyword">case</span> {<span class="string">'check'</span>,<span class="string">'checkbox'</span>}
+0135             h(end+1)=<a href="check.html" class="code" title="function varargout=check(object,label,minwidth)">check</a>(object,label{k},minwidth(k));
+0136         <span class="keyword">case</span> {<span class="string">'list'</span>,<span class="string">'listbox'</span>}
+0137             h(end+1:end+2)=<a href="listbox.html" class="code" title="function varargout=listbox(object,label,choices,minwidth,rows)">listbox</a>(object,label{k},choices{k},minwidth(k));
+0138         <span class="keyword">case</span> <span class="string">'popup'</span>
+0139             <span class="keyword">switch</span> lower(label{k})
+0140                 <span class="keyword">case</span> <span class="string">'skiplabel'</span>
+0141                     h(end+1:end+2)=<a href="popup.html" class="code" title="function varargout=popup(object,label,choices,minwidth,SkipLabel)">popup</a>(object,label{k},choices{k},minwidth(k),<span class="string">'skiplabel'</span>);
+0142                 <span class="keyword">otherwise</span>
+0143                     h(end+1:end+2)=<a href="popup.html" class="code" title="function varargout=popup(object,label,choices,minwidth,SkipLabel)">popup</a>(object,label{k},choices{k},minwidth(k));
+0144             <span class="keyword">end</span>
+0145         <span class="keyword">case</span> <span class="string">'radio'</span>
+0146             h(end+1)=<a href="radio.html" class="code" title="function varargout=radio(object,label,minwidth)">radio</a>(object,label{k},minwidth(k));
+0147         <span class="keyword">case</span> <span class="string">'toggle'</span>
+0148             h(end+1)=<a href="toggle.html" class="code" title="function varargout=toggle(object,label,minwidth)">toggle</a>(object,label{k},minwidth(k));
+0149         <span class="keyword">case</span> <span class="string">'table'</span>
+0150             n=numel(label{k});
+0151             h(end+1:end+n+1)=<a href="table.html" class="code" title="function varargout=table(object,label,minwidth,rows)">table</a>(object,label{k},minwidth(k),rows(k));
+0152         <span class="keyword">case</span> <span class="string">'slider'</span>
+0153             <span class="keyword">switch</span> lower(label{k})
+0154                 <span class="keyword">case</span> <span class="string">'skiplabel'</span>
+0155                     h(end+1:end+3)=<a href="edit.html" class="code" title="function varargout=edit(object,label,minwidth,SkipLabel)">edit</a>(object,<span class="string">' '</span>,minwidth(k),<span class="string">'skiplabel'</span>);
+0156                 <span class="keyword">otherwise</span>
+0157                     h(end+1:end+3)=<a href="edit.html" class="code" title="function varargout=edit(object,label,minwidth,SkipLabel)">edit</a>(object,label{k},minwidth(k));
+0158             <span class="keyword">end</span>
+0159         <span class="keyword">otherwise</span>
+0160             error(<span class="string">'ERROR: %s is not a supported dialog style'</span>,Control{k});
+0161     <span class="keyword">end</span>
+0162     <span class="comment">%identify all NaN outputs to make reordering of the controls easier</span>
+0163     <span class="comment">%Store all output for each control (ignoring labels) in &quot;a&quot;</span>
+0164     <span class="keyword">if</span> numel(h) &gt; 1
+0165         <span class="keyword">if</span> isnan(h(numel(h)-1));
+0166             removed=removed+1;
+0167         <span class="keyword">end</span>
+0168             a(end+1)=numel(h)-removed;
+0169     <span class="keyword">else</span>
+0170         a(end+1)=numel(h);
+0171     <span class="keyword">end</span>
+0172 <span class="keyword">end</span>
+0173 <span class="comment">%eliminate NaN in the output array</span>
+0174 h=h(~isnan(h));
+0175 <span class="comment">%get the control handles for each created</span>
+0176 hands=get(object.Handle,<span class="string">'Children'</span>);
+0177 index=numel(h);
+0178 <span class="comment">%reorder a to match hands</span>
+0179 a=index-a+1;
+0180 spacer=object.HorizontalGap;
+0181 pos=zeros(index,4);
+0182 <span class="comment">%get initial positions of each control</span>
+0183 <span class="keyword">for</span> m=1:index
+0184     pos(m,1:4)=hands(m).Position;
+0185 <span class="keyword">end</span>
+0186 <span class="comment">%get the top location of the upper most control</span>
+0187 [gap,ind]=max(pos(:,2));
+0188 gap=gap+pos(ind,4);
+0189 <span class="comment">%arrange the controls horizontally at the bottom of the object</span>
+0190 top=0;
+0191 <span class="keyword">for</span> n=1:numel(a)
+0192     <span class="keyword">if</span> n == 1
+0193         start=spacer;
+0194     <span class="keyword">end</span>
+0195     hands(a(n)).Position=[start object.VerticalGap pos(a(n),3) pos(a(n),4)];
+0196     start=start+pos(a(n),3)+spacer;
+0197     <span class="comment">%save the highest top postion for rearranging any prior controls</span>
+0198     top=max([top object.VerticalGap+pos(a(n),4)]);
+0199 <span class="keyword">end</span>
+0200 <span class="comment">%align the controls just incase everything isn't placed properly</span>
+0201 align(hands(a),<span class="string">'None'</span>,<span class="string">'Top'</span>);
+0202 <span class="comment">%Now move all the labels ontop of their corresponding controls</span>
+0203 <span class="keyword">for</span> p=1:numel(a)
+0204     <span class="keyword">if</span> p == 1
+0205         N=index+1;
+0206     <span class="keyword">else</span>
+0207         N=a(p-1);
+0208     <span class="keyword">end</span>
+0209     <span class="keyword">if</span> a(p) ~= (N-1)
+0210         loc=hands(a(p)).Position;
+0211         <span class="keyword">for</span> q=a(p)+1:(N-1)
+0212             hands(q).Position=[loc(1)+(pos(q,1)-pos(a(p),1)) loc(2)+(pos(q,2)-pos(a(p),2)) pos(q,3) pos(q,4)];
+0213             <span class="comment">%store the highest top of the labels for rearranging any prior</span>
+0214             <span class="comment">%controls</span>
+0215             top=max([top,loc(2)+(pos(q,2)-pos(a(p),2))+pos(q,4)]);
+0216         <span class="keyword">end</span>
+0217     <span class="keyword">end</span>
+0218 <span class="keyword">end</span>
+0219 <span class="comment">%push all prior controls in the box down so they are aligned above the</span>
+0220 <span class="comment">%custom controls just created</span>
+0221 C=get(object.Handle,<span class="string">'Children'</span>);
+0222 <span class="keyword">for</span> k=numel(h)+1:numel(C)
+0223     C(k).Position(2)=C(k).Position(2)-(gap-top);
+0224 <span class="keyword">end</span>
+0225 <span class="comment">%resize the object to remove all the empty top space</span>
+0226 make_room(object);
+0227 
+0228 <span class="comment">%update the object</span>
+0229 object.Controls(end+1:end+numel(h))=h;
+0230 
+0231 <span class="comment">%generate the output</span>
+0232 <span class="keyword">if</span> nargout&gt;=1
+0233     varargout{1}=h;
+0234 <span class="keyword">end</span>
+0235 
+0236 
+0237 
+0238</pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

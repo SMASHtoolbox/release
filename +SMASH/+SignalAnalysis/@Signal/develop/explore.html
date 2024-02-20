@@ -1,0 +1,163 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of explore</title>
+  <meta name="keywords" content="explore">
+  <meta name="description" content="EXPLORE Interactive object exploration">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../../index.html">SMASHtoolbox</a> &gt; <a href="../../../index.html">+SMASH</a> &gt; <a href="../../index.html">+SignalAnalysis</a> &gt; <a href="../index.html">@Signal</a> &gt; <a href="index.html">develop</a> &gt; explore.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../../index.html"><img alt="<" border="0" src="../../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+SignalAnalysis/@Signal/develop&nbsp;<img alt=">" border="0" src="../../../../../../right.png"></a></td></tr></table>-->
+
+<h1>explore
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>EXPLORE Interactive object exploration</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>function explore(object) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> EXPLORE Interactive object exploration
+
+ This method displays signal objects in an figure that
+ provides interactive manipulation.
+    &gt;&gt; explore(object); 
+
+ See also Signal, conv, crop, limit, locate, map, scale, shift,
+ smooth, store, transform, view</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function h=FindOrCreate(src,name)</a></li><li><a href="#_sub2" class="code">function CropSignal(src,varargin)</a></li><li><a href="#_sub3" class="code">function DetectFull(varargin)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% EXPLORE Interactive object exploration</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This method displays signal objects in an figure that</span>
+0004 <span class="comment">% provides interactive manipulation.</span>
+0005 <span class="comment">%    &gt;&gt; explore(object);</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% See also Signal, conv, crop, limit, locate, map, scale, shift,</span>
+0008 <span class="comment">% smooth, store, transform, view</span>
+0009 <span class="comment">%</span>
+0010 
+0011 <span class="comment">% created October 5, 2013 by Daniel Dolan (Sandia National Laboratories)</span>
+0012 <a name="_sub0" href="#_subfunctions" class="code">function explore(object)</a>
+0013 
+0014 <span class="comment">%% create figure</span>
+0015 name=sprintf(<span class="string">'Explore &quot;%s&quot;'</span>,object.GraphicOptions.Title);
+0016 set(fig.Handle,<span class="string">'Name'</span>,name);
+0017 
+0018 ha(1)=axes(<span class="string">'Parent'</span>,fig.Handle,<span class="string">'Tag'</span>,<span class="string">'FullPlot'</span>,<span class="keyword">...</span>
+0019     <span class="string">'Units'</span>,<span class="string">'normalized'</span>,<span class="string">'OuterPosition'</span>,[0 0.5 1 0.5]);
+0020 index=object.LimitIndex;
+0021 object=limit(object,<span class="string">'all'</span>);
+0022 view(object,<span class="string">'Parent'</span>,ha(1));
+0023 xlabel(ha(1),object.GridLabel);
+0024 ylabel(ha(1),object.DataLabel);
+0025 title(<span class="string">'Full range'</span>);
+0026 
+0027 object=limit(object,<span class="string">'Index'</span>,index);
+0028 ha(2)=axes(<span class="string">'Parent'</span>,fig.Handle,<span class="string">'Tag'</span>,<span class="string">'LimitedPlot'</span>,<span class="keyword">...</span>
+0029     <span class="string">'Units'</span>,<span class="string">'normalized'</span>,<span class="string">'OuterPosition'</span>,[0 0. 1 0.5]);
+0030 view(object,<span class="string">'Parent'</span>,ha(2));
+0031 xlabel(ha(2),object.GridLabel);
+0032 ylabel(ha(2),object.DataLabel);
+0033 title(<span class="string">'Limited range'</span>);
+0034 
+0035 set(ha,<span class="string">'Box'</span>,<span class="string">'on'</span>,<span class="string">'XLimMode'</span>,<span class="string">'auto'</span>,<span class="string">'YLimMode'</span>,<span class="string">'auto'</span>);
+0036 
+0037 <span class="comment">%% create Signal menu</span>
+0038 hm=uimenu(fig.Handle,<span class="string">'Label'</span>,<span class="string">'Signal'</span>);
+0039 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Crop'</span>,<span class="string">'Callback'</span>,@<a href="#_sub2" class="code" title="subfunction CropSignal(src,varargin)">CropSignal</a>);    
+0040 
+0041 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Limit'</span>);
+0042 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Store'</span>);
+0043 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Export'</span>);
+0044 <span class="comment">%uimenu(hm,'Label','Close');</span>
+0045 
+0046 <span class="comment">%% create Grid menu</span>
+0047 hm=uimenu(fig.Handle,<span class="string">'Label'</span>,<span class="string">'Grid'</span>);
+0048 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Shift'</span>);
+0049 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Scale'</span>);
+0050 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Label'</span>);
+0051 
+0052 <span class="comment">%% create Data menu</span>
+0053 hm=uimenu(fig.Handle,<span class="string">'Label'</span>,<span class="string">'Data'</span>);
+0054 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Map'</span>);
+0055 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Smooth'</span>);
+0056 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Label'</span>);
+0057 
+0058 <span class="comment">% create Analyze menu</span>
+0059 hm=uimenu(fig.Handle,<span class="string">'Label'</span>,<span class="string">'Analyze'</span>);
+0060 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Calculate power spectrum'</span>);
+0061 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Locate feature'</span>);
+0062 
+0063 <span class="keyword">end</span>
+0064 
+0065 <span class="comment">%% utilities</span>
+0066 <a name="_sub1" href="#_subfunctions" class="code">function h=FindOrCreate(src,name)</a>
+0067 <span class="keyword">if</span> isappdata(src,name)
+0068     h=getappdata(src,name);
+0069     <span class="keyword">if</span> ishandle(h)
+0070         figure(h)
+0071         <span class="keyword">return</span>
+0072     <span class="keyword">end</span>
+0073 <span class="keyword">end</span>
+0074 MUI=module(<span class="string">'uplevel=1'</span>,<span class="string">'MUI'</span>);
+0075 h=call(MUI,<span class="string">'Dialog'</span>);
+0076 setappdata(src,name,h.Handle);
+0077 <span class="keyword">end</span>
+0078 
+0079 <span class="comment">%%</span>
+0080 <a name="_sub2" href="#_subfunctions" class="code">function CropSignal(src,varargin)     </a>
+0081 
+0082 <span class="comment">% see if dialog already exists</span>
+0083 dlg=<a href="#_sub1" class="code" title="subfunction h=FindOrCreate(src,name)">FindOrCreate</a>(src,<span class="string">'CropDialog'</span>);
+0084 <span class="keyword">if</span> ishandle(dlg)
+0085     <span class="keyword">return</span>
+0086 <span class="keyword">end</span>
+0087 
+0088 <span class="comment">% fill out new dialog box</span>
+0089 fig=ancestor(src,<span class="string">'figure'</span>);
+0090 dlg.Hidden=true;
+0091 dlg.Name=<span class="string">'Crop Signal'</span>;
+0092 
+0093 left=addblock(dlg,<span class="string">'edit'</span>,<span class="string">'Left boundary: '</span>);
+0094 right=addblock(dlg,<span class="string">'edit'</span>,<span class="string">'Right boundary:'</span>);
+0095 full=addblock(dlg,<span class="string">'buttons'</span>,<span class="string">'  Full plot   '</span>);
+0096 set(full,<span class="string">'Callback'</span>,@<a href="#_sub3" class="code" title="subfunction DetectFull(varargin)">DetectFull</a>);
+0097     <a name="_sub3" href="#_subfunctions" class="code">function DetectFull(varargin)</a>
+0098         h=findobj(fig,<span class="string">'Tag'</span>,<span class="string">'FullPlot'</span>);
+0099         xb=get(h,<span class="string">'XLim'</span>);
+0100         set(left(end),<span class="string">'String'</span>,sprintf(<span class="string">'%#+g'</span>,xb(1)));
+0101         set(right(end),<span class="string">'String'</span>,sprintf(<span class="string">'%#+g'</span>,xb(2)));
+0102     <span class="keyword">end</span>
+0103 
+0104 addblock(dlg,<span class="string">'buttons'</span>,<span class="string">' Limited plot '</span>);
+0105 addblock(dlg,<span class="string">'buttons'</span>,{<span class="string">'Apply'</span>,<span class="string">'Done'</span>});
+0106 dlg.Hidden=false;
+0107 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

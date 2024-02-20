@@ -1,0 +1,139 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of newVariableRecord</title>
+  <meta name="keywords" content="newVariableRecord">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">SDAbrowser</a> &gt; <a href="index.html">private</a> &gt; newVariableRecord.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/SDAbrowser/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>newVariableRecord
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function new=newVariableRecord(archive) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="createDialog.html" class="code" title="function createDialog(filename)">createDialog</a>	UNDER CONSTRUCTION</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function setLabel(varargin)</a></li><li><a href="#_sub2" class="code">function ok(varargin)</a></li><li><a href="#_sub3" class="code">function cancel(varargin)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function new=newVariableRecord(archive)</a>
+0002 
+0003 new=<span class="string">''</span>;
+0004 <span class="comment">% verify that data exists</span>
+0005 vars=evalin(<span class="string">'base'</span>,<span class="string">'whos'</span>);
+0006 <span class="keyword">if</span> isempty(vars)
+0007     warndlg(<span class="string">'No variables found in the base workspace'</span>,<span class="string">'Empty workspace'</span>);
+0008     <span class="keyword">return</span>;
+0009 <span class="keyword">else</span>
+0010     N=numel(vars);
+0011     VariableName=cell(N,1);
+0012     <span class="keyword">for</span> k=1:N
+0013         VariableName{k}=vars(k).name;
+0014     <span class="keyword">end</span>    
+0015 <span class="keyword">end</span>
+0016 
+0017 <span class="comment">% create dialog box</span>
+0018 dlg=SMASH.MUI.Dialog();
+0019 dlg.Hidden=true;
+0020 dlg.Name=<span class="string">'New variable record'</span>;
+0021 
+0022 Variable=addblock(dlg,<span class="string">'popup'</span>,<span class="string">'Variable name:'</span>,VariableName,40);
+0023 
+0024 Label=addblock(dlg,<span class="string">'edit'</span>,<span class="string">'Label (required):'</span>,40);
+0025 set(Label(2),<span class="string">'UserData'</span>,<span class="string">''</span>,<span class="string">'Callback'</span>,@<a href="#_sub1" class="code" title="subfunction setLabel(varargin)">setLabel</a>);
+0026 
+0027 Description=addblock(dlg,<span class="string">'medit'</span>,<span class="string">'Description (optional):'</span>,40,5);
+0028 
+0029 deflate=cell(10,1);
+0030 <span class="keyword">for</span> k=1:10
+0031     <span class="keyword">switch</span> k-1
+0032         <span class="keyword">case</span> 0
+0033             deflate{k}=sprintf(<span class="string">'%d (none)'</span>,k-1);
+0034         <span class="keyword">case</span> 9
+0035             deflate{k}=sprintf(<span class="string">'%d (max)'</span>,k-1);
+0036         <span class="keyword">otherwise</span>
+0037             deflate{k}=sprintf(<span class="string">'%d'</span>,k-1);
+0038     <span class="keyword">end</span>
+0039 <span class="keyword">end</span>
+0040 Deflate=addblock(dlg,<span class="string">'popup'</span>,<span class="string">'Deflate setting:'</span>,deflate);
+0041 
+0042 Action=addblock(dlg,<span class="string">'button'</span>,{<span class="string">'Done'</span>,<span class="string">'Cancel'</span>});
+0043 set(Action(1),<span class="string">'Callback'</span>,@<a href="#_sub2" class="code" title="subfunction ok(varargin)">ok</a>);
+0044 set(Action(2),<span class="string">'Callback'</span>,@<a href="#_sub3" class="code" title="subfunction cancel(varargin)">cancel</a>);
+0045 
+0046 <span class="comment">% set up callbacks</span>
+0047     <a name="_sub1" href="#_subfunctions" class="code">function setLabel(varargin)</a>
+0048         new=get(Label(2),<span class="string">'String'</span>);
+0049         new=strtrim(new);
+0050         current=probe(archive);        
+0051         <span class="keyword">for</span> n=1:numel(current)
+0052            <span class="keyword">if</span> strcmp(new,current{n})
+0053                message{1}=<span class="string">'This label is already in use'</span>;
+0054                message{2}=<span class="string">'Please choose something else'</span>;
+0055                errordlg(message,<span class="string">'Duplicate label'</span>,<span class="string">'modal'</span>);
+0056                set(Label(2),<span class="string">'String'</span>,get(Label(2),<span class="string">'UserData'</span>));
+0057                <span class="keyword">return</span>
+0058            <span class="keyword">end</span>
+0059         <span class="keyword">end</span>
+0060         set(Label(2),<span class="string">'UserData'</span>,new);
+0061     <span class="keyword">end</span>
+0062 
+0063     <a name="_sub2" href="#_subfunctions" class="code">function ok(varargin)</a>
+0064         value=get(Variable(2),<span class="string">'Value'</span>);
+0065         <span class="keyword">if</span> isempty(value)
+0066             <span class="keyword">return</span>       
+0067         <span class="keyword">end</span>
+0068         variable=get(Variable(2),<span class="string">'String'</span>);        
+0069         variable=variable{value};
+0070         variable=evalin(<span class="string">'base'</span>,variable);
+0071         new=get(Label(2),<span class="string">'String'</span>);
+0072         slash=(new == <span class="string">'/'</span>) | (new == <span class="string">'\'</span>);
+0073         new(slash)=<span class="string">'_'</span>;
+0074         description=get(Description(2),<span class="string">'String'</span>);
+0075         deflate=get(Deflate(2),<span class="string">'Value'</span>)-1;
+0076         insert(archive,new,variable,description,deflate);
+0077         delete(dlg);
+0078     <span class="keyword">end</span>
+0079     <a name="_sub3" href="#_subfunctions" class="code">function cancel(varargin)</a>
+0080         delete(dlg);
+0081     <span class="keyword">end</span>
+0082 
+0083 <span class="comment">% finish and show dialog box</span>
+0084 locate(dlg,<span class="string">'center'</span>);
+0085 dlg.Modal=true;
+0086 dlg.Hidden=false;
+0087 
+0088 uiwait(dlg.Handle);
+0089 
+0090 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

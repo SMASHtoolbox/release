@@ -1,0 +1,166 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of Empty</title>
+  <meta name="keywords" content="Empty">
+  <meta name="description" content="uix.Empty  Create an empty space">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../../index.html">SMASHtoolbox</a> &gt; <a href="../../../index.html">+SMASH</a> &gt; <a href="../../index.html">+MUI</a> &gt; <a href="#">+GUILayout</a> &gt; <a href="index.html">+uix</a> &gt; Empty.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../../index.html"><img alt="<" border="0" src="../../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+MUI/+GUILayout/+uix&nbsp;<img alt=">" border="0" src="../../../../../../right.png"></a></td></tr></table>-->
+
+<h1>Empty
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>uix.Empty  Create an empty space</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>function obj = Empty( varargin ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">uix.Empty  Create an empty space
+
+   obj = uix.Empty() creates an empty space that can be used to add gaps
+   between elements in layouts.
+
+   obj = uix.Empty(param,value,...) also sets one or more property
+   values.
+
+   See the &lt;a href=&quot;matlab:doc uix.Empty&quot;&gt;documentation&lt;/a&gt; for more detail and the list of properties.
+
+   Examples:
+   &gt;&gt; f = figure();
+   &gt;&gt; box = uix.HBox( 'Parent', f );
+   &gt;&gt; uicontrol( 'Parent', box, 'Background', 'r' )
+   &gt;&gt; uix.Empty( 'Parent', box )
+   &gt;&gt; uicontrol( 'Parent', box, 'Background', 'b' )</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function onParentChanged( obj )</a></li><li><a href="#_sub2" class="code">function onParentColorChanged( obj )</a></li><li><a href="#_sub3" class="code">function name = getColorProperty( obj )</a></li><li><a href="#_sub4" class="code">function updateColor( obj )</a></li><li><a href="#_sub5" class="code">function updateListener( obj )</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function obj = Empty( varargin )</a>
+0002 <span class="comment">%uix.Empty  Create an empty space</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">%   obj = uix.Empty() creates an empty space that can be used to add gaps</span>
+0005 <span class="comment">%   between elements in layouts.</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%   obj = uix.Empty(param,value,...) also sets one or more property</span>
+0008 <span class="comment">%   values.</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%   See the &lt;a href=&quot;matlab:doc uix.Empty&quot;&gt;documentation&lt;/a&gt; for more detail and the list of properties.</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">%   Examples:</span>
+0013 <span class="comment">%   &gt;&gt; f = figure();</span>
+0014 <span class="comment">%   &gt;&gt; box = uix.HBox( 'Parent', f );</span>
+0015 <span class="comment">%   &gt;&gt; uicontrol( 'Parent', box, 'Background', 'r' )</span>
+0016 <span class="comment">%   &gt;&gt; uix.Empty( 'Parent', box )</span>
+0017 <span class="comment">%   &gt;&gt; uicontrol( 'Parent', box, 'Background', 'b' )</span>
+0018 
+0019 <span class="comment">%   Copyright 2009-2016 The MathWorks, Inc.</span>
+0020 <span class="comment">%   $Revision: 1436 $ $Date: 2016-11-17 17:53:29 +0000 (Thu, 17 Nov 2016) $</span>
+0021 
+0022 <span class="comment">% Create uicontainer</span>
+0023 obj = matlab.ui.container.internal.UIContainer( <span class="string">'Tag'</span>, <span class="string">'empty'</span>, varargin{:} );
+0024 
+0025 <span class="comment">% Create property for Parent listener</span>
+0026 p = addprop( obj, <span class="string">'ParentListener'</span> );
+0027 p.Hidden = true;
+0028 
+0029 <span class="comment">% Create Parent listener</span>
+0030 obj.ParentListener = event.proplistener( obj, <span class="keyword">...</span>
+0031     findprop( obj, <span class="string">'Parent'</span> ), <span class="string">'PostSet'</span>, @(~,~)<a href="#_sub1" class="code" title="subfunction onParentChanged( obj )">onParentChanged</a>(obj) );
+0032 
+0033 <span class="comment">% Create property for Parent color listener</span>
+0034 p = addprop( obj, <span class="string">'ParentColorListener'</span> );
+0035 p.Hidden = true;
+0036 
+0037 <span class="comment">% Initialize color and listener</span>
+0038 <a href="#_sub4" class="code" title="subfunction updateColor( obj )">updateColor</a>( obj )
+0039 <a href="#_sub5" class="code" title="subfunction updateListener( obj )">updateListener</a>( obj )
+0040 
+0041 <span class="keyword">end</span> <span class="comment">% uix.Empty</span>
+0042 
+0043 <a name="_sub1" href="#_subfunctions" class="code">function onParentChanged( obj )</a>
+0044 <span class="comment">%onParentColorChanged  Event handler</span>
+0045 
+0046 <span class="comment">% Update color and listener</span>
+0047 <a href="#_sub4" class="code" title="subfunction updateColor( obj )">updateColor</a>( obj )
+0048 <a href="#_sub5" class="code" title="subfunction updateListener( obj )">updateListener</a>( obj )
+0049 
+0050 <span class="keyword">end</span> <span class="comment">% onParentChanged</span>
+0051 
+0052 <a name="_sub2" href="#_subfunctions" class="code">function onParentColorChanged( obj )</a>
+0053 <span class="comment">%onParentColorChanged  Event handler</span>
+0054 
+0055 <span class="comment">% Update color</span>
+0056 <a href="#_sub4" class="code" title="subfunction updateColor( obj )">updateColor</a>( obj )
+0057 
+0058 <span class="keyword">end</span> <span class="comment">% onParentColorChanged</span>
+0059 
+0060 <a name="_sub3" href="#_subfunctions" class="code">function name = getColorProperty( obj )</a>
+0061 <span class="comment">%getColorProperty  Get color property</span>
+0062 
+0063 names = {<span class="string">'Color'</span>,<span class="string">'BackgroundColor'</span>}; <span class="comment">% possible names</span>
+0064 <span class="keyword">for</span> ii = 1:numel( names ) <span class="comment">% loop over possible names</span>
+0065     name = names{ii};
+0066     <span class="keyword">if</span> isprop( obj, name )
+0067         <span class="keyword">return</span>
+0068     <span class="keyword">end</span>
+0069 <span class="keyword">end</span>
+0070 error( <span class="string">'Cannot find color property for %s.'</span>, class( obj ) )
+0071 
+0072 <span class="keyword">end</span> <span class="comment">% getColorProperty</span>
+0073 
+0074 <a name="_sub4" href="#_subfunctions" class="code">function updateColor( obj )</a>
+0075 <span class="comment">%updateColor  Set uicontainer BackgroundColor to match Parent</span>
+0076 
+0077 parent = obj.Parent;
+0078 <span class="keyword">if</span> isempty( parent ), <span class="keyword">return</span>, <span class="keyword">end</span>
+0079 property = <a href="#_sub3" class="code" title="subfunction name = getColorProperty( obj )">getColorProperty</a>( parent );
+0080 color = parent.( property );
+0081 <span class="keyword">try</span>
+0082     obj.BackgroundColor = color;
+0083 <span class="keyword">catch</span> e
+0084     warning( e.identifier, e.message ) <span class="comment">% rethrow as warning</span>
+0085 <span class="keyword">end</span>
+0086 
+0087 <span class="keyword">end</span> <span class="comment">% updateColor</span>
+0088 
+0089 <a name="_sub5" href="#_subfunctions" class="code">function updateListener( obj )</a>
+0090 <span class="comment">%updateListener  Create listener to parent color property</span>
+0091 
+0092 parent = obj.Parent;
+0093 <span class="keyword">if</span> isempty( parent )
+0094     obj.ParentColorListener = [];
+0095 <span class="keyword">else</span>
+0096     property = <a href="#_sub3" class="code" title="subfunction name = getColorProperty( obj )">getColorProperty</a>( parent );
+0097     obj.ParentColorListener = event.proplistener( parent, <span class="keyword">...</span>
+0098         findprop( parent, property ), <span class="string">'PostSet'</span>, <span class="keyword">...</span>
+0099         @(~,~)<a href="#_sub2" class="code" title="subfunction onParentColorChanged( obj )">onParentColorChanged</a>(obj) );
+0100 <span class="keyword">end</span>
+0101 
+0102 <span class="keyword">end</span> <span class="comment">% updateListener</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

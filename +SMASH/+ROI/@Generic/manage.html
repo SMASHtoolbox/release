@@ -1,0 +1,233 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of manage</title>
+  <meta name="keywords" content="manage">
+  <meta name="description" content="manage Manage region of interest array">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="../../index.html">+SMASH</a> &gt; <a href="../index.html">+ROI</a> &gt; <a href="index.html">@Generic</a> &gt; manage.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+ROI/@Generic&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>manage
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>manage Manage region of interest array</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function object=manage(object,varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> manage Manage region of interest array
+
+ This method manages region of interest arrays.
+    object=manage(object);
+ An interactive dialog box allows users to add, remove, promote, or demote
+ array elements.  Existing elements can also be modified by calling the
+ &quot;select&quot; method of the object class.
+
+ Name/value pairs passed to this method:
+    object=manage(object,name,value,...);
+ control the appearance and  behavior of the dialog box.
+    -'Target' specifies the axes where modifications are displayed
+    (defaults to the current axes).
+    -'Fixed' determines if the array can be changed (default value is
+    false).  Setting this value to true removes buttons for adding,
+    removing, promoting, and demoting array elements; existing elements
+    can still be modified.
+    -'Title' and 'FigureName' control the first line of text and figure
+    name of the dialog box.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="add.html" class="code" title="function object=add(object,mode)">add</a>	add Add a new region of interest</li><li><a href="demote.html" class="code" title="function object=demote(object,index)">demote</a>	demote Move region of interest down in an array</li><li><a href="promote.html" class="code" title="function object=promote(object,index)">promote</a>	promote Move region of interest up in an array</li><li><a href="remove.html" class="code" title="function object=remove(object,index)">remove</a>	remove Remove region(s) of interest</li><li><a href="wipe.html" class="code" title="function wipe(object,target,mode)">wipe</a>	wipe Delete ROI displays</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function showSelection(varargin)</a></li><li><a href="#_sub2" class="code">function modifyButton(varargin)</a></li><li><a href="#_sub3" class="code">function addButton(varargin)</a></li><li><a href="#_sub4" class="code">function removeButton(varargin)</a></li><li><a href="#_sub5" class="code">function promoteButton(varargin)</a></li><li><a href="#_sub6" class="code">function demoteButton(varargin)</a></li><li><a href="#_sub7" class="code">function updateList(varargin)</a></li><li><a href="#_sub8" class="code">function doneButton(varargin)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% manage Manage region of interest array</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This method manages region of interest arrays.</span>
+0004 <span class="comment">%    object=manage(object);</span>
+0005 <span class="comment">% An interactive dialog box allows users to add, remove, promote, or demote</span>
+0006 <span class="comment">% array elements.  Existing elements can also be modified by calling the</span>
+0007 <span class="comment">% &quot;select&quot; method of the object class.</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% Name/value pairs passed to this method:</span>
+0010 <span class="comment">%    object=manage(object,name,value,...);</span>
+0011 <span class="comment">% control the appearance and  behavior of the dialog box.</span>
+0012 <span class="comment">%    -'Target' specifies the axes where modifications are displayed</span>
+0013 <span class="comment">%    (defaults to the current axes).</span>
+0014 <span class="comment">%    -'Fixed' determines if the array can be changed (default value is</span>
+0015 <span class="comment">%    false).  Setting this value to true removes buttons for adding,</span>
+0016 <span class="comment">%    removing, promoting, and demoting array elements; existing elements</span>
+0017 <span class="comment">%    can still be modified.</span>
+0018 <span class="comment">%    -'Title' and 'FigureName' control the first line of text and figure</span>
+0019 <span class="comment">%    name of the dialog box.</span>
+0020 <span class="comment">%</span>
+0021 
+0022 <span class="comment">%</span>
+0023 <span class="comment">% created September 24, 2017 by Daniel Dolan (Sandia National Laboratories)</span>
+0024 <span class="comment">%</span>
+0025 <a name="_sub0" href="#_subfunctions" class="code">function object=manage(object,varargin)</a>
+0026 
+0027 <span class="comment">% manage input</span>
+0028 option.Target=[];
+0029 option.Fixed=false;
+0030 option.Title=<span class="string">'Regions of interest:'</span>;
+0031 option.FigureName=<span class="string">'Manage ROIs'</span>;
+0032 Narg=numel(varargin);
+0033 assert(rem(Narg,2) == 0,<span class="string">'ERROR: unmatched name/value pair'</span>);
+0034 <span class="keyword">for</span> n=1:2:Narg
+0035     name=varargin{n};
+0036     value=varargin{n+1};
+0037     <span class="keyword">switch</span> lower(name)
+0038         <span class="keyword">case</span> <span class="string">'target'</span>
+0039             assert(all(ishandle(value)),<span class="string">'ERROR: invalid target handle'</span>);
+0040             <span class="keyword">for</span> m=1:numel(value)
+0041                 <span class="keyword">switch</span> get(value(m),<span class="string">'Type'</span>)
+0042                     <span class="keyword">case</span> <span class="string">'axes'</span>
+0043                         <span class="comment">% do nothing</span>
+0044                     <span class="keyword">case</span> <span class="string">'figure'</span>
+0045                         value(m)=get(value(m),<span class="string">'CurrentAxes'</span>);
+0046                     <span class="keyword">otherwise</span>
+0047                         value(m)=ancestor(value(m),<span class="string">'axes'</span>);
+0048                 <span class="keyword">end</span>
+0049             <span class="keyword">end</span>
+0050             option.Target=value;
+0051         <span class="keyword">case</span> <span class="string">'fixed'</span>
+0052             <span class="keyword">if</span> isnumeric(value)
+0053                 value=logical(value);
+0054             <span class="keyword">end</span>
+0055             assert(islogical(value),<span class="string">'ERROR: invalid fixed value'</span>);
+0056             option.Fixed=value;
+0057         <span class="keyword">case</span> <span class="string">'title'</span>
+0058             assert(ischar(value) || iscellstr(value),<span class="keyword">...</span>
+0059                 <span class="string">'ERROR: invalid title'</span>);
+0060             option.Title=value;
+0061         <span class="keyword">case</span> <span class="string">'figurename'</span>
+0062             assert(ischar(value),<span class="string">'ERROR: invalid figure name'</span>);
+0063             option.FigureName=value;        
+0064         <span class="keyword">otherwise</span>
+0065             error(<span class="string">'ERROR: invalid option &quot;%s&quot;'</span>,name);
+0066     <span class="keyword">end</span>
+0067 <span class="keyword">end</span>
+0068 
+0069 <span class="keyword">if</span> isempty(option.Target)
+0070     option.Target=gca;
+0071 <span class="keyword">end</span>
+0072 <span class="comment">%fig=ancestor(option.Target,'figure');</span>
+0073 fig(n)=ancestor(option.Target(1),<span class="string">'figure'</span>);
+0074 
+0075 
+0076 <span class="comment">% create dialog box</span>
+0077 dlg=SMASH.MUI.Dialog(<span class="string">'FontSize'</span>,get(option.Target(1),<span class="string">'FontSize'</span>));
+0078 dlg.Hidden=true;
+0079 dlg.Name=option.FigureName;
+0080 
+0081 ROIlist=addblock(dlg,<span class="string">'listbox_button'</span>,{option.Title <span class="string">'Modify'</span>},{<span class="string">''</span>},25,10);
+0082 <a href="#_sub7" class="code" title="subfunction updateList(varargin)">updateList</a>();
+0083 <a href="#_sub1" class="code" title="subfunction showSelection(varargin)">showSelection</a>();
+0084 set(ROIlist(2),<span class="string">'Callback'</span>,@<a href="#_sub1" class="code" title="subfunction showSelection(varargin)">showSelection</a>);
+0085     <a name="_sub1" href="#_subfunctions" class="code">function showSelection(varargin)</a>
+0086         <a href="wipe.html" class="code" title="function wipe(object,target,mode)">wipe</a>(object,option.Target);
+0087         index=get(ROIlist(2),<span class="string">'Value'</span>);
+0088         <span class="keyword">if</span> index &lt;= numel(object)
+0089             view(object(index),option.Target);
+0090         <span class="keyword">end</span>
+0091     <span class="keyword">end</span>
+0092 set(ROIlist(3),<span class="string">'Callback'</span>,@<a href="#_sub2" class="code" title="subfunction modifyButton(varargin)">modifyButton</a>);
+0093     <a name="_sub2" href="#_subfunctions" class="code">function modifyButton(varargin)</a>
+0094         h=findall(dlg.Handle,<span class="string">'Type'</span>,<span class="string">'uicontrol'</span>);
+0095         set(h,<span class="string">'Enable'</span>,<span class="string">'off'</span>);        
+0096         index=get(ROIlist(2),<span class="string">'Value'</span>);
+0097         <a href="wipe.html" class="code" title="function wipe(object,target,mode)">wipe</a>(object,option.Target);
+0098         object(index)=select(object(index),option.Target);
+0099         <a href="#_sub7" class="code" title="subfunction updateList(varargin)">updateList</a>();
+0100         set(h,<span class="string">'Enable'</span>,<span class="string">'on'</span>);
+0101         view(object(index),option.Target);
+0102         figure(dlg.Handle);
+0103     <span class="keyword">end</span>
+0104 
+0105 <span class="keyword">if</span> ~option.Fixed
+0106     action=addblock(dlg,<span class="string">'button'</span>,{<span class="string">'Add'</span> <span class="string">'Remove'</span> <span class="string">'Promote'</span> <span class="string">'Demote'</span>});
+0107     set(action(1),<span class="string">'Callback'</span>,@<a href="#_sub3" class="code" title="subfunction addButton(varargin)">addButton</a>);
+0108     set(action(2),<span class="string">'Callback'</span>,@<a href="#_sub4" class="code" title="subfunction removeButton(varargin)">removeButton</a>)
+0109     set(action(3),<span class="string">'Callback'</span>,@<a href="#_sub5" class="code" title="subfunction promoteButton(varargin)">promoteButton</a>);
+0110     set(action(4),<span class="string">'Callback'</span>,@<a href="#_sub6" class="code" title="subfunction demoteButton(varargin)">demoteButton</a>);    
+0111 <span class="keyword">end</span>
+0112     <a name="_sub3" href="#_subfunctions" class="code">function addButton(varargin)</a>
+0113         <span class="keyword">if</span> numel(object) &gt; 0
+0114             index=get(ROIlist(2),<span class="string">'Value'</span>);
+0115             mode=object(index).Mode;
+0116         <span class="keyword">else</span>
+0117             mode=<span class="string">''</span>;
+0118         <span class="keyword">end</span>
+0119         object=<a href="add.html" class="code" title="function object=add(object,mode)">add</a>(object,mode);       
+0120         <a href="#_sub7" class="code" title="subfunction updateList(varargin)">updateList</a>();
+0121         set(ROIlist(2),<span class="string">'Value'</span>,numel(object));       
+0122     <span class="keyword">end</span>
+0123     <a name="_sub4" href="#_subfunctions" class="code">function removeButton(varargin)</a>
+0124         index=get(ROIlist(2),<span class="string">'Value'</span>);
+0125         object=<a href="remove.html" class="code" title="function object=remove(object,index)">remove</a>(object,index);
+0126         index=max(index-1,1);
+0127         set(ROIlist(2),<span class="string">'Value'</span>,index);
+0128         <a href="#_sub7" class="code" title="subfunction updateList(varargin)">updateList</a>();
+0129     <span class="keyword">end</span>
+0130     <a name="_sub5" href="#_subfunctions" class="code">function promoteButton(varargin)</a>
+0131         index=get(ROIlist(2),<span class="string">'Value'</span>);
+0132         object=<a href="promote.html" class="code" title="function object=promote(object,index)">promote</a>(object,index);
+0133         index=max(index-1,1);
+0134         set(ROIlist(2),<span class="string">'Value'</span>,index);
+0135         <a href="#_sub7" class="code" title="subfunction updateList(varargin)">updateList</a>();
+0136     <span class="keyword">end</span>
+0137     <a name="_sub6" href="#_subfunctions" class="code">function demoteButton(varargin)</a>
+0138         index=get(ROIlist(2),<span class="string">'Value'</span>);
+0139         object=<a href="demote.html" class="code" title="function object=demote(object,index)">demote</a>(object,index);
+0140         index=min(index+1,numel(object));
+0141         set(ROIlist(2),<span class="string">'Value'</span>,index);
+0142         <a href="#_sub7" class="code" title="subfunction updateList(varargin)">updateList</a>();
+0143     <span class="keyword">end</span>
+0144     
+0145     <a name="_sub7" href="#_subfunctions" class="code">function updateList(varargin)</a>
+0146         temp=cell(numel(object),1);
+0147         <span class="keyword">for</span> nn=1:numel(object)
+0148             temp{nn}=object(nn).Name;
+0149         <span class="keyword">end</span>
+0150         set(ROIlist(2),<span class="string">'String'</span>,temp);
+0151     <span class="keyword">end</span>
+0152 
+0153 button=addblock(dlg,<span class="string">'button'</span>,<span class="string">'Done'</span>,10);
+0154 set(button(1),<span class="string">'Callback'</span>,@<a href="#_sub8" class="code" title="subfunction doneButton(varargin)">doneButton</a>);
+0155     <a name="_sub8" href="#_subfunctions" class="code">function doneButton(varargin)</a>
+0156         <a href="wipe.html" class="code" title="function wipe(object,target,mode)">wipe</a>(object,option.Target);
+0157         delete(dlg);
+0158     <span class="keyword">end</span>
+0159 
+0160 locate(dlg,<span class="string">'center'</span>,fig);
+0161 dlg.Hidden=false;
+0162 
+0163 <span class="comment">% wait for user to finish</span>
+0164 waitfor(dlg.Handle);
+0165 
+0166 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

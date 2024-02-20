@@ -1,0 +1,701 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of local_graphic</title>
+  <meta name="keywords" content="local_graphic">
+  <meta name="description" content="local_graphic : local graphics for MinimalFigure">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">fringen</a> &gt; <a href="index.html">private</a> &gt; local_graphic.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/fringen/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>local_graphic
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>local_graphic : local graphics for MinimalFigure</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function cdata=local_graphic(name) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> local_graphic : local graphics for MinimalFigure</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="MinimalFigure.html" class="code" title="function varargout=MinimalFigure(varargin)">MinimalFigure</a>	MinimalFigure: create a minimalistic figure useful for GUIs</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 
+0002 <span class="comment">% local_graphic : local graphics for MinimalFigure</span>
+0003 
+0004 <a name="_sub0" href="#_subfunctions" class="code">function cdata=local_graphic(name)</a>
+0005 
+0006 <span class="keyword">switch</span> name
+0007     <span class="keyword">case</span> <span class="string">'AutoScaleIcon'</span>
+0008         cdata(:,:,1) = [ <span class="keyword">...</span>
+0009             NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0010             NaN 255 255 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0011             NaN 255   0 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0012             NaN 255   0 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0013             NaN 255   0 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0014             NaN 255   0 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0015             NaN 255   0 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0016             NaN 255   0 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0017             NaN 255   0 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0018             NaN 255   0 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0019             NaN 255   0 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0020             NaN 255   0 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0021             NaN 255   0 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0022             NaN 255   0   0   0   0   0   0   0   0   0   0   0   0 255 NaN ; <span class="keyword">...</span>
+0023             NaN 255 255 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0024             NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0025             ]/255;
+0026         cdata(:,:,2) = [ <span class="keyword">...</span>
+0027             NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0028             NaN 255 255 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0029             NaN 255   0 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0030             NaN 255   0 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0031             NaN 255   0 255 255 255 255   0   0   0 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0032             NaN 255   0 255 255 255   0   0 255   0   0 255 255 255 255 NaN ; <span class="keyword">...</span>
+0033             NaN 255   0 255 255   0   0 255 255 255   0   0 255 255 255 NaN ; <span class="keyword">...</span>
+0034             NaN 255   0 255 255   0 255 255 255 255 255   0 255 255 255 NaN ; <span class="keyword">...</span>
+0035             NaN 255   0 255 255   0   0   0   0   0   0   0 255 255 255 NaN ; <span class="keyword">...</span>
+0036             NaN 255   0 255 255   0 255 255 255 255 255   0 255 255 255 NaN ; <span class="keyword">...</span>
+0037             NaN 255   0 255 255   0 255 255 255 255 255   0 255 255 255 NaN ; <span class="keyword">...</span>
+0038             NaN 255   0 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0039             NaN 255   0 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0040             NaN 255   0   0   0   0   0   0   0   0   0   0   0   0 255 NaN ; <span class="keyword">...</span>
+0041             NaN 255 255 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0042             NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0043             ]/255;
+0044         cdata(:,:,3) = [ <span class="keyword">...</span>
+0045             NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0046             NaN 255 255 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0047             NaN 255   0 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0048             NaN 255   0 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0049             NaN 255   0 255 255 255 255   0   0   0 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0050             NaN 255   0 255 255 255   0   0 255   0   0 255 255 255 255 NaN ; <span class="keyword">...</span>
+0051             NaN 255   0 255 255   0   0 255 255 255   0   0 255 255 255 NaN ; <span class="keyword">...</span>
+0052             NaN 255   0 255 255   0 255 255 255 255 255   0 255 255 255 NaN ; <span class="keyword">...</span>
+0053             NaN 255   0 255 255   0   0   0   0   0   0   0 255 255 255 NaN ; <span class="keyword">...</span>
+0054             NaN 255   0 255 255   0 255 255 255 255 255   0 255 255 255 NaN ; <span class="keyword">...</span>
+0055             NaN 255   0 255 255   0 255 255 255 255 255   0 255 255 255 NaN ; <span class="keyword">...</span>
+0056             NaN 255   0 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0057             NaN 255   0 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0058             NaN 255   0   0   0   0   0   0   0   0   0   0   0   0 255 NaN ; <span class="keyword">...</span>
+0059             NaN 255 255 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0060             NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0061             ]/255;
+0062     <span class="keyword">case</span> <span class="string">'CloneIcon'</span>
+0063         cdata(:,:,1) = [ <span class="keyword">...</span>
+0064             NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0065             NaN   0 255 255 255 255 255 NaN NaN   0 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0066             NaN   0 255 255 255 255 255 NaN NaN   0 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0067             NaN   0 255 255 255 255 255 NaN NaN   0 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0068             NaN   0 255 255 255 255 255 NaN NaN   0 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0069             NaN   0 255 255 255 255 255 NaN NaN   0 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0070             NaN   0   0   0   0   0   0 NaN NaN   0   0   0   0   0   0 NaN ; <span class="keyword">...</span>
+0071             NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0072             NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0073             NaN   0 255 255 255 255 255 NaN NaN   0 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0074             NaN   0 255 255 255 255 255 NaN NaN   0 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0075             NaN   0 255 255 255 255 255 NaN NaN   0 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0076             NaN   0 255 255 255 255 255 NaN NaN   0 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0077             NaN   0 255 255 255 255 255 NaN NaN   0 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0078             NaN   0   0   0   0   0   0 NaN NaN   0   0   0   0   0   0 NaN ; <span class="keyword">...</span>
+0079             NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0080             ]/255;
+0081         cdata(:,:,2) = [ <span class="keyword">...</span>
+0082             NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0083             NaN   0 255 255 255   0 255 NaN NaN   0 255 255 255   0 255 NaN ; <span class="keyword">...</span>
+0084             NaN   0 255 255   0 255 255 NaN NaN   0 255 255   0 255 255 NaN ; <span class="keyword">...</span>
+0085             NaN   0 255   0 255 255 255 NaN NaN   0 255   0 255 255 255 NaN ; <span class="keyword">...</span>
+0086             NaN   0   0 255 255 255 255 NaN NaN   0   0 255 255 255 255 NaN ; <span class="keyword">...</span>
+0087             NaN   0 255 255 255 255 255 NaN NaN   0 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0088             NaN   0   0   0   0   0   0 NaN NaN   0   0   0   0   0   0 NaN ; <span class="keyword">...</span>
+0089             NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0090             NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0091             NaN   0 255 255 255   0 255 NaN NaN   0 255 255 255   0 255 NaN ; <span class="keyword">...</span>
+0092             NaN   0 255 255   0 255 255 NaN NaN   0 255 255   0 255 255 NaN ; <span class="keyword">...</span>
+0093             NaN   0 255   0 255 255 255 NaN NaN   0 255   0 255 255 255 NaN ; <span class="keyword">...</span>
+0094             NaN   0   0 255 255 255 255 NaN NaN   0   0 255 255 255 255 NaN ; <span class="keyword">...</span>
+0095             NaN   0 255 255 255 255 255 NaN NaN   0 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0096             NaN   0   0   0   0   0   0 NaN NaN   0   0   0   0   0   0 NaN ; <span class="keyword">...</span>
+0097             NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0098             ]/255;
+0099         cdata(:,:,3) = [ <span class="keyword">...</span>
+0100             NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0101             NaN   0 255 255 255   0 255 NaN NaN   0 255 255 255   0 255 NaN ; <span class="keyword">...</span>
+0102             NaN   0 255 255   0 255 255 NaN NaN   0 255 255   0 255 255 NaN ; <span class="keyword">...</span>
+0103             NaN   0 255   0 255 255 255 NaN NaN   0 255   0 255 255 255 NaN ; <span class="keyword">...</span>
+0104             NaN   0   0 255 255 255 255 NaN NaN   0   0 255 255 255 255 NaN ; <span class="keyword">...</span>
+0105             NaN   0 255 255 255 255 255 NaN NaN   0 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0106             NaN   0   0   0   0   0   0 NaN NaN   0   0   0   0   0   0 NaN ; <span class="keyword">...</span>
+0107             NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0108             NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0109             NaN   0 255 255 255   0 255 NaN NaN   0 255 255 255   0 255 NaN ; <span class="keyword">...</span>
+0110             NaN   0 255 255   0 255 255 NaN NaN   0 255 255   0 255 255 NaN ; <span class="keyword">...</span>
+0111             NaN   0 255   0 255 255 255 NaN NaN   0 255   0 255 255 255 NaN ; <span class="keyword">...</span>
+0112             NaN   0   0 255 255 255 255 NaN NaN   0   0 255 255 255 255 NaN ; <span class="keyword">...</span>
+0113             NaN   0 255 255 255 255 255 NaN NaN   0 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0114             NaN   0   0   0   0   0   0 NaN NaN   0   0   0   0   0   0 NaN ; <span class="keyword">...</span>
+0115             NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0116             ]/255;
+0117     <span class="keyword">case</span> <span class="string">'DatatipIcon'</span>
+0118         cdata(:,:,1) = [ <span class="keyword">...</span>
+0119             NaN NaN NaN NaN NaN 255 255 255 255 255 255 255 255 255 255 255 ; <span class="keyword">...</span>
+0120             NaN NaN NaN NaN NaN 255 255 255 255 255 255 255 255 255 255 255 ; <span class="keyword">...</span>
+0121             NaN NaN NaN NaN NaN 255 255   0   8   8   8   8   8   8 255 255 ; <span class="keyword">...</span>
+0122             41 NaN NaN NaN NaN 255 255 255 255 255 255 255 255 255 255 255 ; <span class="keyword">...</span>
+0123             41 NaN NaN NaN NaN 255 255 255 255 255 255 255 255 255 255 255 ; <span class="keyword">...</span>
+0124             41 NaN NaN NaN NaN 255 255 255 255 255 255 255 255 255 255 255 ; <span class="keyword">...</span>
+0125             NaN  41 NaN NaN NaN 255 255   0   8   8   8   8   8   8 255 255 ; <span class="keyword">...</span>
+0126             NaN  41 NaN NaN   8   8 255 255 255 255 255 255 255 255 255 255 ; <span class="keyword">...</span>
+0127             NaN NaN  41 NaN   8   8 255 255 255 255 255 255 255 255 255 255 ; <span class="keyword">...</span>
+0128             NaN NaN NaN NaN   0   8 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0129             NaN   8   8   8   8   8   8   8   8 NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0130             NaN   8   8   8   0   8   8   8   8 NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0131             NaN NaN NaN NaN   8   8 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0132             NaN NaN NaN NaN   0   8 NaN  41  41 NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0133             NaN NaN NaN NaN   8   8 NaN NaN NaN  41  41  41 NaN NaN NaN NaN ; <span class="keyword">...</span>
+0134             NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN  41  41  41 NaN ; <span class="keyword">...</span>
+0135             ]/255;
+0136         cdata(:,:,2) = [ <span class="keyword">...</span>
+0137             NaN NaN NaN NaN NaN 255 255 255 255 255 255 255 255 255 255 255 ; <span class="keyword">...</span>
+0138             NaN NaN NaN NaN NaN 255 255 255 255 255 255 255 255 255 255 255 ; <span class="keyword">...</span>
+0139             NaN NaN NaN NaN NaN 255 255   0   0   0   0   0   0   0 255 255 ; <span class="keyword">...</span>
+0140             16 NaN NaN NaN NaN 255 255 255 255 255 255 255 255 255 255 255 ; <span class="keyword">...</span>
+0141             16 NaN NaN NaN NaN 255 255 255 255 255 255 255 255 255 255 255 ; <span class="keyword">...</span>
+0142             16 NaN NaN NaN NaN 255 255 255 255 255 255 255 255 255 255 255 ; <span class="keyword">...</span>
+0143             NaN  16 NaN NaN NaN 255 255   0   0   0   0   0   0   0 255 255 ; <span class="keyword">...</span>
+0144             NaN  16 NaN NaN   0   0 255 255 255 255 255 255 255 255 255 255 ; <span class="keyword">...</span>
+0145             NaN NaN  16 NaN   0   0 255 255 255 255 255 255 255 255 255 255 ; <span class="keyword">...</span>
+0146             NaN NaN NaN NaN   0   0 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0147             NaN   0   0   0   0   0   0   0   0 NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0148             NaN   0   0   0   0   0   0   0   0 NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0149             NaN NaN NaN NaN   0   0 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0150             NaN NaN NaN NaN   0   0 NaN  16  16 NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0151             NaN NaN NaN NaN   0   0 NaN NaN NaN  16  16  16 NaN NaN NaN NaN ; <span class="keyword">...</span>
+0152             NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN  16  16  16 NaN ; <span class="keyword">...</span>
+0153             ]/255;
+0154         cdata(:,:,3) = [ <span class="keyword">...</span>
+0155             NaN NaN NaN NaN NaN 189 189 189 189 189 189 189 189 189 189 189 ; <span class="keyword">...</span>
+0156             NaN NaN NaN NaN NaN 189 189 189 189 189 189 189 189 189 189 189 ; <span class="keyword">...</span>
+0157             NaN NaN NaN NaN NaN 189 189   0   0   0   0   0   0   0 189 189 ; <span class="keyword">...</span>
+0158             255 NaN NaN NaN NaN 189 189 189 189 189 189 189 189 189 189 189 ; <span class="keyword">...</span>
+0159             255 NaN NaN NaN NaN 189 189 189 189 189 189 189 189 189 189 189 ; <span class="keyword">...</span>
+0160             255 NaN NaN NaN NaN 189 189 189 189 189 189 189 189 189 189 189 ; <span class="keyword">...</span>
+0161             NaN 255 NaN NaN NaN 189 189   0   0   0   0   0   0   0 189 189 ; <span class="keyword">...</span>
+0162             NaN 255 NaN NaN   0   0 189 189 189 189 189 189 189 189 189 189 ; <span class="keyword">...</span>
+0163             NaN NaN 255 NaN   0   0 189 189 189 189 189 189 189 189 189 189 ; <span class="keyword">...</span>
+0164             NaN NaN NaN NaN   0   0 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0165             NaN   0   0   0   0   0   0   0   0 NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0166             NaN   0   0   0   0   0   0   0   0 NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0167             NaN NaN NaN NaN   0   0 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0168             NaN NaN NaN NaN   0   0 NaN 255 255 NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0169             NaN NaN NaN NaN   0   0 NaN NaN NaN 255 255 255 NaN NaN NaN NaN ; <span class="keyword">...</span>
+0170             NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN 255 255 255 NaN ; <span class="keyword">...</span>
+0171             ]/255;
+0172     <span class="keyword">case</span> <span class="string">'FolderIcon'</span>
+0173         cdata(:,:,1) = [ <span class="keyword">...</span>
+0174             NaN NaN 123 123 123 123 123 NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0175             NaN 123 255 255 255 255 128 123 NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0176             123 128 255 255 255 255 255 128 123 123 123 123 123 123 NaN ; <span class="keyword">...</span>
+0177             123 255 255 255 255 255 255 255 255 255 255 255 255 123   0 ; <span class="keyword">...</span>
+0178             123 255 255 255 255 255 255 255 255 255 255 255 255 123   0 ; <span class="keyword">...</span>
+0179             123 255 255 255 255 255 255 255 255 255 255 255 255 123   0 ; <span class="keyword">...</span>
+0180             123 255 255 255 255 255 255 255 255 255 255 255 255 123   0 ; <span class="keyword">...</span>
+0181             123 255 255 255 255 255 255 255 255 255 255 255 255 123   0 ; <span class="keyword">...</span>
+0182             123 255 255 255 255 255 255 255 255 255 255 255 255 123   0 ; <span class="keyword">...</span>
+0183             123 255 255 255 255 255 255 255 255 255 255 255 255 123   0 ; <span class="keyword">...</span>
+0184             123 255 255 255 255 255 255 255 255 255 255 255 255 123   0 ; <span class="keyword">...</span>
+0185             123 123 123 123 123 123 123 123 123 123 123 123 123 123   0 ; <span class="keyword">...</span>
+0186             NaN   0   0   0   0   0   0   0   0   0   0   0   0   0   0 ; <span class="keyword">...</span>
+0187             ]/255;
+0188         cdata(:,:,2) = [ <span class="keyword">...</span>
+0189             NaN NaN 123 123 123 123 123 NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0190             NaN 123 255 255 255 255 128 123 NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0191             123 128 255 255 255 255 255 128 123 123 123 123 123 123 NaN ; <span class="keyword">...</span>
+0192             123 255 255 255 255 255 255 255 255 255 255 255 255 123   0 ; <span class="keyword">...</span>
+0193             123 255 255 255 255 255 255 255 255 255 255 255 255 123   0 ; <span class="keyword">...</span>
+0194             123 255 255 255 255 255 255 255 255 255 255 255 255 123   0 ; <span class="keyword">...</span>
+0195             123 255 255 255 255 255 255 255 255 255 255 255 255 123   0 ; <span class="keyword">...</span>
+0196             123 255 255 255 255 255 255 255 255 255 255 255 255 123   0 ; <span class="keyword">...</span>
+0197             123 255 255 255 255 255 255 255 255 255 255 255 255 123   0 ; <span class="keyword">...</span>
+0198             123 255 255 255 255 255 255 255 255 255 255 255 255 123   0 ; <span class="keyword">...</span>
+0199             123 255 255 255 255 255 255 255 255 255 255 255 255 123   0 ; <span class="keyword">...</span>
+0200             123 123 123 123 123 123 123 123 123 123 123 123 123 123   0 ; <span class="keyword">...</span>
+0201             NaN   0   0   0   0   0   0   0   0   0   0   0   0   0   0 ; <span class="keyword">...</span>
+0202             ]/255;
+0203         cdata(:,:,3) = [ <span class="keyword">...</span>
+0204             NaN NaN 123 123 123 123 123 NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0205             NaN 123   0   0   0   0 128 123 NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0206             123 128   0   0   0   0   0 128 123 123 123 123 123 123 NaN ; <span class="keyword">...</span>
+0207             123 255 255 255 255 255 255 255 255 255 255 255 255 123   0 ; <span class="keyword">...</span>
+0208             123 255   0   0   0   0   0   0   0   0   0   0   0 123   0 ; <span class="keyword">...</span>
+0209             123 255   0   0   0   0   0   0   0   0   0   0   0 123   0 ; <span class="keyword">...</span>
+0210             123 255   0   0   0   0   0   0   0   0   0   0   0 123   0 ; <span class="keyword">...</span>
+0211             123 255   0   0   0   0   0   0   0   0   0   0   0 123   0 ; <span class="keyword">...</span>
+0212             123 255   0   0   0   0   0   0   0   0   0   0   0 123   0 ; <span class="keyword">...</span>
+0213             123 255   0   0   0   0   0   0   0   0   0   0   0 123   0 ; <span class="keyword">...</span>
+0214             123 255   0   0   0   0   0   0   0   0   0   0   0 123   0 ; <span class="keyword">...</span>
+0215             123 123 123 123 123 123 123 123 123 123 123 123 123 123   0 ; <span class="keyword">...</span>
+0216             NaN   0   0   0   0   0   0   0   0   0   0   0   0   0   0 ; <span class="keyword">...</span>
+0217             ]/255;
+0218     <span class="keyword">case</span> <span class="string">'HelpIcon'</span>
+0219         cdata(:,:,1) = [ <span class="keyword">...</span>
+0220             NaN NaN NaN NaN NaN NaN 102 102 102 102 NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0221             NaN NaN NaN NaN NaN 102 255 255 255 255 102 NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0222             NaN NaN NaN NaN 102 255 204 204 204 204 255 102 NaN NaN NaN NaN ; <span class="keyword">...</span>
+0223             NaN NaN NaN 102 255 255 102 102 102 102 255 255 102 NaN NaN NaN ; <span class="keyword">...</span>
+0224             NaN NaN NaN 102 255 255 102   0   0 102 255 255 102   0 NaN NaN ; <span class="keyword">...</span>
+0225             NaN NaN NaN NaN 102 102   0   0 206 102 255 255 102   0 NaN NaN ; <span class="keyword">...</span>
+0226             NaN NaN NaN NaN NaN   0   0 206 102 255 255 102   0   0 NaN NaN ; <span class="keyword">...</span>
+0227             NaN NaN NaN NaN NaN NaN NaN 102 255 255 102   0   0 NaN NaN NaN ; <span class="keyword">...</span>
+0228             NaN NaN NaN NaN NaN NaN 102 255 255 102   0   0 NaN NaN NaN NaN ; <span class="keyword">...</span>
+0229             NaN NaN NaN NaN NaN 102 204 255 102   0   0 NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0230             NaN NaN NaN NaN NaN 102 204 204 102   0 NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0231             NaN NaN NaN NaN NaN NaN 102 102   0   0 NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0232             NaN NaN NaN NaN NaN 102 255 255 102 NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0233             NaN NaN NaN NaN NaN 102 255 255 102   0 NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0234             NaN NaN NaN NaN NaN NaN 102 102   0   0 NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0235             NaN NaN NaN NaN NaN NaN NaN   0   0 NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0236             ]/255;
+0237         cdata(:,:,2) = [ <span class="keyword">...</span>
+0238             NaN NaN NaN NaN NaN NaN 102 102 102 102 NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0239             NaN NaN NaN NaN NaN 102 255 255 255 255 102 NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0240             NaN NaN NaN NaN 102 255 204 204 204 204 255 102 NaN NaN NaN NaN ; <span class="keyword">...</span>
+0241             NaN NaN NaN 102 255 255 102 102 102 102 255 255 102 NaN NaN NaN ; <span class="keyword">...</span>
+0242             NaN NaN NaN 102 255 255 102   0   0 102 255 255 102   0 NaN NaN ; <span class="keyword">...</span>
+0243             NaN NaN NaN NaN 102 102   0   0 207 102 255 255 102   0 NaN NaN ; <span class="keyword">...</span>
+0244             NaN NaN NaN NaN NaN   0   0 207 102 255 255 102   0   0 NaN NaN ; <span class="keyword">...</span>
+0245             NaN NaN NaN NaN NaN NaN NaN 102 255 255 102   0   0 NaN NaN NaN ; <span class="keyword">...</span>
+0246             NaN NaN NaN NaN NaN NaN 102 255 255 102   0   0 NaN NaN NaN NaN ; <span class="keyword">...</span>
+0247             NaN NaN NaN NaN NaN 102 204 255 102   0   0 NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0248             NaN NaN NaN NaN NaN 102 204 204 102   0 NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0249             NaN NaN NaN NaN NaN NaN 102 102   0   0 NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0250             NaN NaN NaN NaN NaN 102 255 255 102 NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0251             NaN NaN NaN NaN NaN 102 255 255 102   0 NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0252             NaN NaN NaN NaN NaN NaN 102 102   0   0 NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0253             NaN NaN NaN NaN NaN NaN NaN   0   0 NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0254             ]/255;
+0255         cdata(:,:,3) = [ <span class="keyword">...</span>
+0256             NaN NaN NaN NaN NaN NaN   0   0   0   0 NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0257             NaN NaN NaN NaN NaN   0   0   0   0   0   0 NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0258             NaN NaN NaN NaN   0   0   0   0   0   0   0   0 NaN NaN NaN NaN ; <span class="keyword">...</span>
+0259             NaN NaN NaN   0   0   0   0   0   0   0   0   0   0 NaN NaN NaN ; <span class="keyword">...</span>
+0260             NaN NaN NaN   0   0   0   0 132 132   0   0   0   0 132 NaN NaN ; <span class="keyword">...</span>
+0261             NaN NaN NaN NaN   0   0 132 132 206   0   0   0   0 132 NaN NaN ; <span class="keyword">...</span>
+0262             NaN NaN NaN NaN NaN 132 132 206   0   0   0   0 132 132 NaN NaN ; <span class="keyword">...</span>
+0263             NaN NaN NaN NaN NaN NaN NaN   0   0   0   0 132 132 NaN NaN NaN ; <span class="keyword">...</span>
+0264             NaN NaN NaN NaN NaN NaN   0   0   0   0 132 132 NaN NaN NaN NaN ; <span class="keyword">...</span>
+0265             NaN NaN NaN NaN NaN   0   0   0   0 132 132 NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0266             NaN NaN NaN NaN NaN   0   0   0   0 132 NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0267             NaN NaN NaN NaN NaN NaN   0   0 132 132 NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0268             NaN NaN NaN NaN NaN   0   0   0   0 NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0269             NaN NaN NaN NaN NaN   0   0   0   0 132 NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0270             NaN NaN NaN NaN NaN NaN   0   0 132 132 NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0271             NaN NaN NaN NaN NaN NaN NaN 132 132 NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0272             ]/255;
+0273     <span class="keyword">case</span> <span class="string">'ManualScaleIcon'</span>
+0274         cdata(:,:,1) = [ <span class="keyword">...</span>
+0275             NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0276             NaN 255 255 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0277             NaN 255   0 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0278             NaN 255   0 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0279             NaN 255   0 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0280             NaN 255   0 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0281             NaN 255   0 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0282             NaN 255   0 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0283             NaN 255   0 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0284             NaN 255   0 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0285             NaN 255   0 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0286             NaN 255   0 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0287             NaN 255   0 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0288             NaN 255   0   0   0   0   0   0   0   0   0   0   0   0 255 NaN ; <span class="keyword">...</span>
+0289             NaN 255 255 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0290             NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0291             ]/255;
+0292         cdata(:,:,2) = [ <span class="keyword">...</span>
+0293             NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0294             NaN 255 255 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0295             NaN 255   0 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0296             NaN 255   0 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0297             NaN 255   0 255 255   0   0 255 255 255   0   0 255 255 255 NaN ; <span class="keyword">...</span>
+0298             NaN 255   0 255 255   0   0   0 255   0   0   0 255 255 255 NaN ; <span class="keyword">...</span>
+0299             NaN 255   0 255 255   0 255   0   0   0 255   0 255 255 255 NaN ; <span class="keyword">...</span>
+0300             NaN 255   0 255 255   0 255 255   0 255 255   0 255 255 255 NaN ; <span class="keyword">...</span>
+0301             NaN 255   0 255 255   0 255 255 255 255 255   0 255 255 255 NaN ; <span class="keyword">...</span>
+0302             NaN 255   0 255 255   0 255 255 255 255 255   0 255 255 255 NaN ; <span class="keyword">...</span>
+0303             NaN 255   0 255 255   0 255 255 255 255 255   0 255 255 255 NaN ; <span class="keyword">...</span>
+0304             NaN 255   0 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0305             NaN 255   0 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0306             NaN 255   0   0   0   0   0   0   0   0   0   0   0   0 255 NaN ; <span class="keyword">...</span>
+0307             NaN 255 255 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0308             NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0309             ]/255;
+0310         cdata(:,:,3) = [ <span class="keyword">...</span>
+0311             NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0312             NaN 255 255 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0313             NaN 255   0 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0314             NaN 255   0 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0315             NaN 255   0 255 255   0   0 255 255 255   0   0 255 255 255 NaN ; <span class="keyword">...</span>
+0316             NaN 255   0 255 255   0   0   0 255   0   0   0 255 255 255 NaN ; <span class="keyword">...</span>
+0317             NaN 255   0 255 255   0 255   0   0   0 255   0 255 255 255 NaN ; <span class="keyword">...</span>
+0318             NaN 255   0 255 255   0 255 255   0 255 255   0 255 255 255 NaN ; <span class="keyword">...</span>
+0319             NaN 255   0 255 255   0 255 255 255 255 255   0 255 255 255 NaN ; <span class="keyword">...</span>
+0320             NaN 255   0 255 255   0 255 255 255 255 255   0 255 255 255 NaN ; <span class="keyword">...</span>
+0321             NaN 255   0 255 255   0 255 255 255 255 255   0 255 255 255 NaN ; <span class="keyword">...</span>
+0322             NaN 255   0 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0323             NaN 255   0 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0324             NaN 255   0   0   0   0   0   0   0   0   0   0   0   0 255 NaN ; <span class="keyword">...</span>
+0325             NaN 255 255 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0326             NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0327             ]/255;
+0328     <span class="keyword">case</span> <span class="string">'OverlayIcon'</span>
+0329         cdata(:,:,1) = [ <span class="keyword">...</span>
+0330             NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0331             NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0332             NaN 255   0 255 255 255 255 255 255 255 255 255   0 255 NaN NaN ; <span class="keyword">...</span>
+0333             NaN 255   0 255 255 255 255 255 255 255 255   0 255 255 NaN NaN ; <span class="keyword">...</span>
+0334             NaN 255   0 255 255 255 255 255 255 255   0 255 255 255 NaN 255 ; <span class="keyword">...</span>
+0335             NaN 255   0 NaN   0   0 255 255 255   0 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0336             NaN 255   0   0 255 255   0 255   0 255 255 255 255 255 NaN NaN ; <span class="keyword">...</span>
+0337             NaN 255   0 255 255 255 255   0 255 255 255 255 255 255 NaN NaN ; <span class="keyword">...</span>
+0338             NaN   0   0 255 255 255   0   0 255 255 255 255 255 255 NaN NaN ; <span class="keyword">...</span>
+0339             0 255   0 255 255   0 255 255   0 255 255 255 255 255 NaN NaN ; <span class="keyword">...</span>
+0340             NaN 255   0 255   0 255 255 255 255 255 255 255 255 255 NaN NaN ; <span class="keyword">...</span>
+0341             NaN 255   0 255 255 255 255 255 255 255   0 255 255 255 NaN NaN ; <span class="keyword">...</span>
+0342             NaN 255   0 255 255 255 255 255 255 255 255   0 255 255 NaN NaN ; <span class="keyword">...</span>
+0343             NaN 255   0   0   0   0 255   0   0   0   0   0   0   0 NaN NaN ; <span class="keyword">...</span>
+0344             NaN 255 255 255 255 255 255 255 255 255 255 255 255   0 NaN NaN ; <span class="keyword">...</span>
+0345             NaN NaN NaN NaN 255 NaN NaN NaN NaN NaN NaN NaN NaN NaN   0 NaN ; <span class="keyword">...</span>
+0346             ]/255;
+0347         cdata(:,:,2) = [ <span class="keyword">...</span>
+0348             NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0349             NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0350             NaN 255   0 255 255 255 255 255 255 255 255 255   0 255 NaN NaN ; <span class="keyword">...</span>
+0351             NaN 255   0 255 255 255 255 255 255 255 255   0 255 255 NaN NaN ; <span class="keyword">...</span>
+0352             NaN 255   0 255 255 255 255 255 255 255   0 255 255 255 NaN   0 ; <span class="keyword">...</span>
+0353             NaN 255   0 NaN 255 255 255 255 255   0 255 255 255 255   0 NaN ; <span class="keyword">...</span>
+0354             NaN 255   0 255 255 255 255 255   0 255 255 255 255   0 NaN NaN ; <span class="keyword">...</span>
+0355             NaN 255 255 255 255 255 255 255 255 255 255 255   0 255 NaN NaN ; <span class="keyword">...</span>
+0356             NaN 255   0 255 255 255   0 255 255 255 255   0 255 255 NaN NaN ; <span class="keyword">...</span>
+0357             255 255   0 255 255   0 255 255 255 255   0 255 255 255 NaN NaN ; <span class="keyword">...</span>
+0358             NaN 255   0 255   0 255 255 255 255   0 255 255 255 255 NaN NaN ; <span class="keyword">...</span>
+0359             NaN 255   0 255 255 255 255 255   0 255 255 255 255 255 NaN NaN ; <span class="keyword">...</span>
+0360             NaN 255   0 255 255 255 255   0 255 255 255 255 255 255 NaN NaN ; <span class="keyword">...</span>
+0361             NaN 255   0   0   0   0   0   0   0   0   0   0 255   0 NaN NaN ; <span class="keyword">...</span>
+0362             NaN 255 255 255 255   0 255 255 255 255 255 255 255 255 NaN NaN ; <span class="keyword">...</span>
+0363             NaN NaN NaN NaN   0 NaN NaN NaN NaN NaN NaN NaN NaN NaN 255 NaN ; <span class="keyword">...</span>
+0364             ]/255;
+0365         cdata(:,:,3) = [ <span class="keyword">...</span>
+0366             NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0367             NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0368             NaN 255   0 255 255 255 255 255 255 255 255 255   0 255 NaN NaN ; <span class="keyword">...</span>
+0369             NaN 255   0 255 255 255 255 255 255 255 255   0 255 255 NaN NaN ; <span class="keyword">...</span>
+0370             NaN 255   0 255 255 255 255 255 255 255   0 255 255 255 NaN   0 ; <span class="keyword">...</span>
+0371             NaN 255   0 NaN   0   0 255 255 255   0 255 255 255 255   0 NaN ; <span class="keyword">...</span>
+0372             NaN 255   0   0 255 255   0 255   0 255 255 255 255   0 NaN NaN ; <span class="keyword">...</span>
+0373             NaN 255   0 255 255 255 255   0 255 255 255 255   0 255 NaN NaN ; <span class="keyword">...</span>
+0374             NaN   0   0 255 255 255   0   0 255 255 255   0 255 255 NaN NaN ; <span class="keyword">...</span>
+0375             0 255   0 255 255   0 255 255   0 255   0 255 255 255 NaN NaN ; <span class="keyword">...</span>
+0376             NaN 255   0 255   0 255 255 255 255   0 255 255 255 255 NaN NaN ; <span class="keyword">...</span>
+0377             NaN 255   0 255 255 255 255 255   0 255   0 255 255 255 NaN NaN ; <span class="keyword">...</span>
+0378             NaN 255   0 255 255 255 255   0 255 255 255   0 255 255 NaN NaN ; <span class="keyword">...</span>
+0379             NaN 255   0   0   0   0   0   0   0   0   0   0   0   0 NaN NaN ; <span class="keyword">...</span>
+0380             NaN 255 255 255 255   0 255 255 255 255 255 255 255   0 NaN NaN ; <span class="keyword">...</span>
+0381             NaN NaN NaN NaN   0 NaN NaN NaN NaN NaN NaN NaN NaN NaN   0 NaN ; <span class="keyword">...</span>
+0382             ]/255;
+0383     <span class="keyword">case</span> <span class="string">'PanIcon'</span>
+0384         cdata(:,:,1) = [ <span class="keyword">...</span>
+0385             NaN NaN NaN NaN NaN NaN NaN   0   0 NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0386             NaN NaN NaN   0   0 NaN   0 255 255   0   0   0 NaN NaN NaN NaN ; <span class="keyword">...</span>
+0387             NaN NaN   0 255 255   0   0 255 255   0 255 255   0 NaN NaN NaN ; <span class="keyword">...</span>
+0388             NaN NaN   0 255 255   0   0 255 255   0 255 255   0 NaN   0 NaN ; <span class="keyword">...</span>
+0389             NaN NaN NaN   0 255 255   0 255 255   0 255 255   0   0 255   0 ; <span class="keyword">...</span>
+0390             NaN NaN NaN   0 255 255   0 255 255   0 255 255   0 255 255   0 ; <span class="keyword">...</span>
+0391             NaN   0   0 NaN   0 255 255 255 255 255 255 255 255 255 255   0 ; <span class="keyword">...</span>
+0392             0 255 255   0   0 255 255 255 255 255 255 255 255 255 255   0 ; <span class="keyword">...</span>
+0393             0 255 255 255   0 255 255 255 255 255 255 255 255 255   0 NaN ; <span class="keyword">...</span>
+0394             NaN   0 255 255 255 255 255 255 255 255 255 255 255 255   0 NaN ; <span class="keyword">...</span>
+0395             NaN NaN   0 255 255 255 255 255 255 255 255 255 255 255   0 NaN ; <span class="keyword">...</span>
+0396             NaN NaN   0 255 255 255 255 255 255 255 255 255 255   0 NaN NaN ; <span class="keyword">...</span>
+0397             NaN NaN NaN   0 255 255 255 255 255 255 255 255 255   0 NaN NaN ; <span class="keyword">...</span>
+0398             NaN NaN NaN NaN   0 255 255 255 255 255 255 255   0 NaN NaN NaN ; <span class="keyword">...</span>
+0399             NaN NaN NaN NaN NaN   0 255 255 255 255 255 255   0 NaN NaN NaN ; <span class="keyword">...</span>
+0400             NaN NaN NaN NaN NaN   0 255 255 255 255 255 255   0 NaN NaN NaN ; <span class="keyword">...</span>
+0401             ]/255;
+0402         cdata(:,:,2) = [ <span class="keyword">...</span>
+0403             NaN NaN NaN NaN NaN NaN NaN   0   0 NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0404             NaN NaN NaN   0   0 NaN   0 255 255   0   0   0 NaN NaN NaN NaN ; <span class="keyword">...</span>
+0405             NaN NaN   0 255 255   0   0 255 255   0 255 255   0 NaN NaN NaN ; <span class="keyword">...</span>
+0406             NaN NaN   0 255 255   0   0 255 255   0 255 255   0 NaN   0 NaN ; <span class="keyword">...</span>
+0407             NaN NaN NaN   0 255 255   0 255 255   0 255 255   0   0 255   0 ; <span class="keyword">...</span>
+0408             NaN NaN NaN   0 255 255   0 255 255   0 255 255   0 255 255   0 ; <span class="keyword">...</span>
+0409             NaN   0   0 NaN   0 255 255 255 255 255 255 255 255 255 255   0 ; <span class="keyword">...</span>
+0410             0 255 255   0   0 255 255 255 255 255 255 255 255 255 255   0 ; <span class="keyword">...</span>
+0411             0 255 255 255   0 255 255 255 255 255 255 255 255 255   0 NaN ; <span class="keyword">...</span>
+0412             NaN   0 255 255 255 255 255 255 255 255 255 255 255 255   0 NaN ; <span class="keyword">...</span>
+0413             NaN NaN   0 255 255 255 255 255 255 255 255 255 255 255   0 NaN ; <span class="keyword">...</span>
+0414             NaN NaN   0 255 255 255 255 255 255 255 255 255 255   0 NaN NaN ; <span class="keyword">...</span>
+0415             NaN NaN NaN   0 255 255 255 255 255 255 255 255 255   0 NaN NaN ; <span class="keyword">...</span>
+0416             NaN NaN NaN NaN   0 255 255 255 255 255 255 255   0 NaN NaN NaN ; <span class="keyword">...</span>
+0417             NaN NaN NaN NaN NaN   0 255 255 255 255 255 255   0 NaN NaN NaN ; <span class="keyword">...</span>
+0418             NaN NaN NaN NaN NaN   0 255 255 255 255 255 255   0 NaN NaN NaN ; <span class="keyword">...</span>
+0419             ]/255;
+0420         cdata(:,:,3) = [ <span class="keyword">...</span>
+0421             NaN NaN NaN NaN NaN NaN NaN   0   0 NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0422             NaN NaN NaN   0   0 NaN   0 255 255   0   0   0 NaN NaN NaN NaN ; <span class="keyword">...</span>
+0423             NaN NaN   0 255 255   0   0 255 255   0 255 255   0 NaN NaN NaN ; <span class="keyword">...</span>
+0424             NaN NaN   0 255 255   0   0 255 255   0 255 255   0 NaN   0 NaN ; <span class="keyword">...</span>
+0425             NaN NaN NaN   0 255 255   0 255 255   0 255 255   0   0 255   0 ; <span class="keyword">...</span>
+0426             NaN NaN NaN   0 255 255   0 255 255   0 255 255   0 255 255   0 ; <span class="keyword">...</span>
+0427             NaN   0   0 NaN   0 255 255 255 255 255 255 255 255 255 255   0 ; <span class="keyword">...</span>
+0428             0 255 255   0   0 255 255 255 255 255 255 255 255 255 255   0 ; <span class="keyword">...</span>
+0429             0 255 255 255   0 255 255 255 255 255 255 255 255 255   0 NaN ; <span class="keyword">...</span>
+0430             NaN   0 255 255 255 255 255 255 255 255 255 255 255 255   0 NaN ; <span class="keyword">...</span>
+0431             NaN NaN   0 255 255 255 255 255 255 255 255 255 255 255   0 NaN ; <span class="keyword">...</span>
+0432             NaN NaN   0 255 255 255 255 255 255 255 255 255 255   0 NaN NaN ; <span class="keyword">...</span>
+0433             NaN NaN NaN   0 255 255 255 255 255 255 255 255 255   0 NaN NaN ; <span class="keyword">...</span>
+0434             NaN NaN NaN NaN   0 255 255 255 255 255 255 255   0 NaN NaN NaN ; <span class="keyword">...</span>
+0435             NaN NaN NaN NaN NaN   0 255 255 255 255 255 255   0 NaN NaN NaN ; <span class="keyword">...</span>
+0436             NaN NaN NaN NaN NaN   0 255 255 255 255 255 255   0 NaN NaN NaN ; <span class="keyword">...</span>
+0437             ]/255;
+0438     <span class="keyword">case</span> <span class="string">'ROIicon'</span>
+0439         cdata(:,:,1) = [ <span class="keyword">...</span>
+0440             NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0441             NaN 255 255 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0442             NaN 255   0 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0443             NaN 255   0 255   0 255   0 255   0 255   0 255   0 255 255 NaN ; <span class="keyword">...</span>
+0444             NaN 255   0 255 255 255 255 255 255 255 255 255 255   0 255 NaN ; <span class="keyword">...</span>
+0445             NaN 255   0 255   0 255 255 255 255 255 255 255   0 255 255 NaN ; <span class="keyword">...</span>
+0446             NaN 255   0 255 255 255 255 255 255 255 255   0 255 255 255 NaN ; <span class="keyword">...</span>
+0447             NaN 255   0 255   0 255 255 255 255 255   0 255   0 255 255 NaN ; <span class="keyword">...</span>
+0448             NaN 255   0 255 255 255 255 255 255   0 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0449             NaN 255   0 255   0 255 255 255   0 255 255 255   0 255 255 NaN ; <span class="keyword">...</span>
+0450             NaN 255   0 255 255 255 255   0 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0451             NaN 255   0 255   0 255   0 255   0 255   0 255   0 255 255 NaN ; <span class="keyword">...</span>
+0452             NaN 255   0 255 255   0 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0453             NaN 255   0   0   0   0   0   0   0   0   0   0   0   0 255 NaN ; <span class="keyword">...</span>
+0454             NaN 255 255 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0455             NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0456             ]/255;
+0457         cdata(:,:,2) = [ <span class="keyword">...</span>
+0458             NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0459             NaN 255 255 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0460             NaN 255   0 255 255 255 255 255 255 255   0 255 255 255 255 NaN ; <span class="keyword">...</span>
+0461             NaN 255   0 255   0 255   0 255   0   0   0 255   0 255 255 NaN ; <span class="keyword">...</span>
+0462             NaN 255   0 255 255 255 255 255   0 255 255 255 255   0 255 NaN ; <span class="keyword">...</span>
+0463             NaN 255   0 255   0 255 255   0 255 255 255 255   0 255 255 NaN ; <span class="keyword">...</span>
+0464             NaN 255   0 255 255 255   0 255 255 255 255   0 255 255 255 NaN ; <span class="keyword">...</span>
+0465             NaN 255   0 255   0   0 255 255 255 255   0 255   0 255 255 NaN ; <span class="keyword">...</span>
+0466             NaN 255   0 255   0 255 255 255 255   0 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0467             NaN 255   0   0   0 255 255 255   0 255 255 255   0 255 255 NaN ; <span class="keyword">...</span>
+0468             NaN 255   0 255 255 255 255   0 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0469             NaN 255   0 255   0 255   0 255   0 255   0 255   0 255 255 NaN ; <span class="keyword">...</span>
+0470             NaN 255   0 255 255   0 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0471             NaN 255   0   0   0   0   0   0   0   0   0   0   0   0 255 NaN ; <span class="keyword">...</span>
+0472             NaN 255 255 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0473             NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0474             ]/255;
+0475         cdata(:,:,3) = [ <span class="keyword">...</span>
+0476             NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0477             NaN 255 255 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0478             NaN 255   0 255 255 255 255 255 255 255   0 255 255 255 255 NaN ; <span class="keyword">...</span>
+0479             NaN 255   0 255   0 255   0 255   0   0   0 255   0 255 255 NaN ; <span class="keyword">...</span>
+0480             NaN 255   0 255 255 255 255 255   0 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0481             NaN 255   0 255   0 255 255   0 255 255 255 255   0 255 255 NaN ; <span class="keyword">...</span>
+0482             NaN 255   0 255 255 255   0 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0483             NaN 255   0 255   0   0 255 255 255 255 255 255   0 255 255 NaN ; <span class="keyword">...</span>
+0484             NaN 255   0 255   0 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0485             NaN 255   0   0   0 255 255 255 255 255 255 255   0 255 255 NaN ; <span class="keyword">...</span>
+0486             NaN 255   0 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0487             NaN 255   0 255   0 255   0 255   0 255   0 255   0 255 255 NaN ; <span class="keyword">...</span>
+0488             NaN 255   0 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0489             NaN 255   0   0   0   0   0   0   0   0   0   0   0   0 255 NaN ; <span class="keyword">...</span>
+0490             NaN 255 255 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0491             NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0492             ]/255;
+0493     <span class="keyword">case</span> <span class="string">'SaveIcon'</span>
+0494         cdata(:,:,1) = [ <span class="keyword">...</span>
+0495             NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0496             NaN   0   0   0   0   0   0   0   0   0   0   0   0   0   0 NaN ; <span class="keyword">...</span>
+0497             NaN   0 115   0 NaN NaN NaN NaN NaN NaN NaN NaN   0 NaN   0 NaN ; <span class="keyword">...</span>
+0498             NaN   0 115   0 NaN NaN NaN NaN NaN NaN NaN NaN   0   0   0 NaN ; <span class="keyword">...</span>
+0499             NaN   0 115   0 NaN NaN NaN NaN NaN NaN NaN NaN   0 115   0 NaN ; <span class="keyword">...</span>
+0500             NaN   0 115   0 NaN NaN NaN NaN NaN NaN NaN NaN   0 115   0 NaN ; <span class="keyword">...</span>
+0501             NaN   0 115   0 NaN NaN NaN NaN NaN NaN NaN NaN   0 115   0 NaN ; <span class="keyword">...</span>
+0502             NaN   0 115   0 NaN NaN NaN NaN NaN NaN NaN NaN   0 115   0 NaN ; <span class="keyword">...</span>
+0503             NaN   0 115 115   0   0   0   0   0   0   0   0 115 115   0 NaN ; <span class="keyword">...</span>
+0504             NaN   0 115 115 115 115 115 115 115 115 115 115 115 115   0 NaN ; <span class="keyword">...</span>
+0505             NaN   0 115 115   0   0   0   0   0   0   0   0   0 115   0 NaN ; <span class="keyword">...</span>
+0506             NaN   0 115 115   0   0   0   0   0   0 NaN NaN   0 115   0 NaN ; <span class="keyword">...</span>
+0507             NaN   0 115 115   0   0   0   0   0   0 NaN NaN   0 115   0 NaN ; <span class="keyword">...</span>
+0508             NaN   0 115 115   0   0   0   0   0   0 NaN NaN   0 115   0 NaN ; <span class="keyword">...</span>
+0509             NaN NaN   0   0   0   0   0   0   0   0   0   0   0   0   0 NaN ; <span class="keyword">...</span>
+0510             ]/255;
+0511         cdata(:,:,2) = [ <span class="keyword">...</span>
+0512             NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0513             NaN   0   0   0   0   0   0   0   0   0   0   0   0   0   0 NaN ; <span class="keyword">...</span>
+0514             NaN   0 115   0 NaN NaN NaN NaN NaN NaN NaN NaN   0 NaN   0 NaN ; <span class="keyword">...</span>
+0515             NaN   0 115   0 NaN NaN NaN NaN NaN NaN NaN NaN   0   0   0 NaN ; <span class="keyword">...</span>
+0516             NaN   0 115   0 NaN NaN NaN NaN NaN NaN NaN NaN   0 115   0 NaN ; <span class="keyword">...</span>
+0517             NaN   0 115   0 NaN NaN NaN NaN NaN NaN NaN NaN   0 115   0 NaN ; <span class="keyword">...</span>
+0518             NaN   0 115   0 NaN NaN NaN NaN NaN NaN NaN NaN   0 115   0 NaN ; <span class="keyword">...</span>
+0519             NaN   0 115   0 NaN NaN NaN NaN NaN NaN NaN NaN   0 115   0 NaN ; <span class="keyword">...</span>
+0520             NaN   0 115 115   0   0   0   0   0   0   0   0 115 115   0 NaN ; <span class="keyword">...</span>
+0521             NaN   0 115 115 115 115 115 115 115 115 115 115 115 115   0 NaN ; <span class="keyword">...</span>
+0522             NaN   0 115 115   0   0   0   0   0   0   0   0   0 115   0 NaN ; <span class="keyword">...</span>
+0523             NaN   0 115 115   0   0   0   0   0   0 NaN NaN   0 115   0 NaN ; <span class="keyword">...</span>
+0524             NaN   0 115 115   0   0   0   0   0   0 NaN NaN   0 115   0 NaN ; <span class="keyword">...</span>
+0525             NaN   0 115 115   0   0   0   0   0   0 NaN NaN   0 115   0 NaN ; <span class="keyword">...</span>
+0526             NaN NaN   0   0   0   0   0   0   0   0   0   0   0   0   0 NaN ; <span class="keyword">...</span>
+0527             ]/255;
+0528         cdata(:,:,3) = [ <span class="keyword">...</span>
+0529             NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0530             NaN   0   0   0   0   0   0   0   0   0   0   0   0   0   0 NaN ; <span class="keyword">...</span>
+0531             NaN   0   0   0 NaN NaN NaN NaN NaN NaN NaN NaN   0 NaN   0 NaN ; <span class="keyword">...</span>
+0532             NaN   0   0   0 NaN NaN NaN NaN NaN NaN NaN NaN   0   0   0 NaN ; <span class="keyword">...</span>
+0533             NaN   0   0   0 NaN NaN NaN NaN NaN NaN NaN NaN   0   0   0 NaN ; <span class="keyword">...</span>
+0534             NaN   0   0   0 NaN NaN NaN NaN NaN NaN NaN NaN   0   0   0 NaN ; <span class="keyword">...</span>
+0535             NaN   0   0   0 NaN NaN NaN NaN NaN NaN NaN NaN   0   0   0 NaN ; <span class="keyword">...</span>
+0536             NaN   0   0   0 NaN NaN NaN NaN NaN NaN NaN NaN   0   0   0 NaN ; <span class="keyword">...</span>
+0537             NaN   0   0   0   0   0   0   0   0   0   0   0   0   0   0 NaN ; <span class="keyword">...</span>
+0538             NaN   0   0   0   0   0   0   0   0   0   0   0   0   0   0 NaN ; <span class="keyword">...</span>
+0539             NaN   0   0   0   0   0   0   0   0   0   0   0   0   0   0 NaN ; <span class="keyword">...</span>
+0540             NaN   0   0   0   0   0   0   0   0   0 NaN NaN   0   0   0 NaN ; <span class="keyword">...</span>
+0541             NaN   0   0   0   0   0   0   0   0   0 NaN NaN   0   0   0 NaN ; <span class="keyword">...</span>
+0542             NaN   0   0   0   0   0   0   0   0   0 NaN NaN   0   0   0 NaN ; <span class="keyword">...</span>
+0543             NaN NaN   0   0   0   0   0   0   0   0   0   0   0   0   0 NaN ; <span class="keyword">...</span>
+0544             ]/255;
+0545     <span class="keyword">case</span> <span class="string">'TightScaleIcon'</span>
+0546         cdata(:,:,1) = [ <span class="keyword">...</span>
+0547             NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0548             NaN 255 255 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0549             NaN 255   0 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0550             NaN 255   0 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0551             NaN 255   0 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0552             NaN 255   0 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0553             NaN 255   0 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0554             NaN 255   0 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0555             NaN 255   0 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0556             NaN 255   0 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0557             NaN 255   0 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0558             NaN 255   0 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0559             NaN 255   0 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0560             NaN 255   0   0   0   0   0   0   0   0   0   0   0   0 255 NaN ; <span class="keyword">...</span>
+0561             NaN 255 255 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0562             NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0563             ]/255;
+0564         cdata(:,:,2) = [ <span class="keyword">...</span>
+0565             NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0566             NaN 255 255 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0567             NaN 255   0 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0568             NaN 255   0 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0569             NaN 255   0 255 255   0   0   0   0   0   0   0 255 255 255 NaN ; <span class="keyword">...</span>
+0570             NaN 255   0 255 255 255 255 255   0 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0571             NaN 255   0 255 255 255 255 255   0 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0572             NaN 255   0 255 255 255 255 255   0 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0573             NaN 255   0 255 255 255 255 255   0 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0574             NaN 255   0 255 255 255 255 255   0 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0575             NaN 255   0 255 255 255 255 255   0 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0576             NaN 255   0 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0577             NaN 255   0 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0578             NaN 255   0   0   0   0   0   0   0   0   0   0   0   0 255 NaN ; <span class="keyword">...</span>
+0579             NaN 255 255 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0580             NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0581             ]/255;
+0582         cdata(:,:,3) = [ <span class="keyword">...</span>
+0583             NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0584             NaN 255 255 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0585             NaN 255   0 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0586             NaN 255   0 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0587             NaN 255   0 255 255   0   0   0   0   0   0   0 255 255 255 NaN ; <span class="keyword">...</span>
+0588             NaN 255   0 255 255 255 255 255   0 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0589             NaN 255   0 255 255 255 255 255   0 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0590             NaN 255   0 255 255 255 255 255   0 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0591             NaN 255   0 255 255 255 255 255   0 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0592             NaN 255   0 255 255 255 255 255   0 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0593             NaN 255   0 255 255 255 255 255   0 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0594             NaN 255   0 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0595             NaN 255   0 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0596             NaN 255   0   0   0   0   0   0   0   0   0   0   0   0 255 NaN ; <span class="keyword">...</span>
+0597             NaN 255 255 255 255 255 255 255 255 255 255 255 255 255 255 NaN ; <span class="keyword">...</span>
+0598             NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0599             ]/255;
+0600     <span class="keyword">case</span> <span class="string">'ZoomIcon'</span>
+0601         cdata(:,:,1) = [ <span class="keyword">...</span>
+0602             NaN NaN NaN NaN NaN NaN NaN NaN   0   0   0   0 NaN NaN NaN NaN ; <span class="keyword">...</span>
+0603             NaN NaN NaN NaN NaN NaN   0   0 255 255 255 255   0   0 NaN NaN ; <span class="keyword">...</span>
+0604             NaN NaN NaN NaN NaN   0 255 255 255 255 255 255 255 255   0 NaN ; <span class="keyword">...</span>
+0605             NaN NaN NaN NaN NaN   0 255 255 255 255 255 255 255 255   0 NaN ; <span class="keyword">...</span>
+0606             NaN NaN NaN NaN   0 255 255 255 255 255 255 255 255 255 255   0 ; <span class="keyword">...</span>
+0607             NaN NaN NaN NaN   0 255 255 255 255 255 255 255 255 255 255   0 ; <span class="keyword">...</span>
+0608             NaN NaN NaN NaN   0 255 255 255 255 255 255 255 255 255 255   0 ; <span class="keyword">...</span>
+0609             NaN NaN NaN NaN   0 255 255 255 255 255 255 255 255 255 255   0 ; <span class="keyword">...</span>
+0610             NaN NaN NaN NaN NaN   0 255 255 255 255 255 255 255 255   0 NaN ; <span class="keyword">...</span>
+0611             NaN NaN NaN NaN NaN   0 255 255 255 255 255 255 255 255   0 NaN ; <span class="keyword">...</span>
+0612             NaN NaN NaN NaN   0   0   0   0 255 255 255 255   0   0 NaN NaN ; <span class="keyword">...</span>
+0613             NaN NaN NaN   0   0   0 NaN NaN   0   0   0   0 NaN NaN NaN NaN ; <span class="keyword">...</span>
+0614             NaN NaN   0   0   0 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0615             NaN   0   0   0 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0616             NaN NaN   0 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0617             ]/255;
+0618         cdata(:,:,2) = [ <span class="keyword">...</span>
+0619             NaN NaN NaN NaN NaN NaN NaN NaN   0   0   0   0 NaN NaN NaN NaN ; <span class="keyword">...</span>
+0620             NaN NaN NaN NaN NaN NaN   0   0 255 255 255 255   0   0 NaN NaN ; <span class="keyword">...</span>
+0621             NaN NaN NaN NaN NaN   0 255 255 255 255 255 255 255 255   0 NaN ; <span class="keyword">...</span>
+0622             NaN NaN NaN NaN NaN   0 255 255 255 255 255 255 255 255   0 NaN ; <span class="keyword">...</span>
+0623             NaN NaN NaN NaN   0 255 255 255 255 255 255 255 255 255 255   0 ; <span class="keyword">...</span>
+0624             NaN NaN NaN NaN   0 255 255 255 255 255 255 255 255 255 255   0 ; <span class="keyword">...</span>
+0625             NaN NaN NaN NaN   0 255 255 255 255 255 255 255 255 255 255   0 ; <span class="keyword">...</span>
+0626             NaN NaN NaN NaN   0 255 255 255 255 255 255 255 255 255 255   0 ; <span class="keyword">...</span>
+0627             NaN NaN NaN NaN NaN   0 255 255 255 255 255 255 255 255   0 NaN ; <span class="keyword">...</span>
+0628             NaN NaN NaN NaN NaN   0 255 255 255 255 255 255 255 255   0 NaN ; <span class="keyword">...</span>
+0629             NaN NaN NaN NaN   0   0   0   0 255 255 255 255   0   0 NaN NaN ; <span class="keyword">...</span>
+0630             NaN NaN NaN   0   0   0 NaN NaN   0   0   0   0 NaN NaN NaN NaN ; <span class="keyword">...</span>
+0631             NaN NaN   0   0   0 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0632             NaN   0   0   0 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0633             NaN NaN   0 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0634             ]/255;
+0635         cdata(:,:,3) = [ <span class="keyword">...</span>
+0636             NaN NaN NaN NaN NaN NaN NaN NaN   0   0   0   0 NaN NaN NaN NaN ; <span class="keyword">...</span>
+0637             NaN NaN NaN NaN NaN NaN   0   0 255 255 255 255   0   0 NaN NaN ; <span class="keyword">...</span>
+0638             NaN NaN NaN NaN NaN   0 255 255 255 255 255 255 255 255   0 NaN ; <span class="keyword">...</span>
+0639             NaN NaN NaN NaN NaN   0 255 255 255 255 255 255 255 255   0 NaN ; <span class="keyword">...</span>
+0640             NaN NaN NaN NaN   0 255 255 255 255 255 255 255 255 255 255   0 ; <span class="keyword">...</span>
+0641             NaN NaN NaN NaN   0 255 255 255 255 255 255 255 255 255 255   0 ; <span class="keyword">...</span>
+0642             NaN NaN NaN NaN   0 255 255 255 255 255 255 255 255 255 255   0 ; <span class="keyword">...</span>
+0643             NaN NaN NaN NaN   0 255 255 255 255 255 255 255 255 255 255   0 ; <span class="keyword">...</span>
+0644             NaN NaN NaN NaN NaN   0 255 255 255 255 255 255 255 255   0 NaN ; <span class="keyword">...</span>
+0645             NaN NaN NaN NaN NaN   0 255 255 255 255 255 255 255 255   0 NaN ; <span class="keyword">...</span>
+0646             NaN NaN NaN NaN   0   0   0   0 255 255 255 255   0   0 NaN NaN ; <span class="keyword">...</span>
+0647             NaN NaN NaN   0   0   0 NaN NaN   0   0   0   0 NaN NaN NaN NaN ; <span class="keyword">...</span>
+0648             NaN NaN   0   0   0 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0649             NaN   0   0   0 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0650             NaN NaN   0 NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN NaN ; <span class="keyword">...</span>
+0651             ]/255;
+0652     <span class="keyword">otherwise</span>
+0653         error(<span class="string">'ERROR: %s is not a valid name'</span>,name);
+0654 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

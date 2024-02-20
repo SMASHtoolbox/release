@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of introduction</title>
+  <meta name="keywords" content="introduction">
+  <meta name="description" content="These examples illustrate two basic curve fits with straight. The first">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../../index.html">SMASHtoolbox</a> &gt; <a href="../../../index.html">+SMASH</a> &gt; <a href="../../index.html">+CurveFit</a> &gt; <a href="../index.html">@Curve</a> &gt; <a href="index.html">examples</a> &gt; introduction.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../../index.html"><img alt="<" border="0" src="../../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+CurveFit/@Curve/examples&nbsp;<img alt=">" border="0" src="../../../../../../right.png"></a></td></tr></table>-->
+
+<h1>introduction
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>These examples illustrate two basic curve fits with straight. The first</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> These examples illustrate two basic curve fits with straight. The first
+ example uses a line with zero slope, which is effectively the same thing
+ as averaging.  The second example uses a straightly line with a non-zero
+ slope.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% These examples illustrate two basic curve fits with straight. The first</span>
+0002 <span class="comment">% example uses a line with zero slope, which is effectively the same thing</span>
+0003 <span class="comment">% as averaging.  The second example uses a straightly line with a non-zero</span>
+0004 <span class="comment">% slope.</span>
+0005 
+0006 <span class="comment">%%</span>
+0007 close all
+0008 clear
+0009 clc
+0010 
+0011 <span class="comment">%% flat line</span>
+0012 x=linspace(0,1,100);
+0013 y=+1*randn(size(x));
+0014 data=[x(:) y(:)];
+0015 
+0016 object=SMASH.CurveFit.Curve(data);
+0017 object=add(object,@(p,x) ones(size(x)),[]);
+0018 
+0019 object=fit(object);
+0020 view(object);
+0021 
+0022 <span class="keyword">for</span> N=[1e3 1e4]
+0023     report=analyze(object,N);
+0024     fprintf(<span class="string">'Flat line analyzed with %d iterations\n'</span>,N);
+0025     fprintf(<span class="string">'\tAnalytic mean  : %#.4g +/- %#.3g\n'</span>,<span class="keyword">...</span>
+0026         mean(y),std(y)/sqrt(numel(y)));
+0027     fprintf(<span class="string">'\tEstimated mean : %#.4g +/- %#.3g\n'</span>,<span class="keyword">...</span>
+0028         object.Scale{1},sqrt(report.Moments(2)));
+0029 <span class="keyword">end</span>
+0030 fprintf(<span class="string">'\n'</span>);
+0031 
+0032 
+0033 
+0034 <span class="comment">%% straight line</span>
+0035 y=x+0.2*randn(size(x));
+0036 data=[x(:) y(:)];
+0037 
+0038 object=SMASH.CurveFit.Curve(data);
+0039 object=add(object,@(p,x) ones(size(x)),[]);
+0040 object=add(object,@(p,x) x,[]);
+0041 
+0042 object=fit(object);
+0043 view(object)
+0044 
+0045 M=numel(x);
+0046 Delta=M*sum(x.^2)-(sum(x)).^2;
+0047 A=(sum(x.^2)*sum(y)-sum(x)*sum(x.*y))/Delta;
+0048 B=(M*sum(x.*y)-sum(x)*sum(y))/Delta;
+0049 sigmay=sqrt(sum((y-A-B*x).^2)/(M-2));
+0050 sigmaA=sigmay*sqrt(sum(x.^2)/Delta);
+0051 sigmaB=sigmay*sqrt(M/Delta);
+0052 
+0053 N=1e4;
+0054 report=analyze(object,N);
+0055 fprintf(<span class="string">'Straight line analyzed with %d iterations\n'</span>,N);
+0056 a=polyfit(x,y,1);
+0057 fprintf(<span class="string">'\tAnalytic slope  : %#.4g +/- %#.3g\n'</span>,<span class="keyword">...</span>
+0058     B,sigmaB);
+0059 fprintf(<span class="string">'\tEstimated slope : %#.4g +/- %#.3g\n'</span>,<span class="keyword">...</span>
+0060     object.Scale{2},sqrt(report.Moments(2,2)));
+0061 fprintf(<span class="string">'\tAnalytic intercept  : %#.4g +/- %#.3g\n'</span>,<span class="keyword">...</span>
+0062     A,sigmaA);
+0063 fprintf(<span class="string">'\tEstimated intercept : %#.4g +/- %#.3g\n'</span>,<span class="keyword">...</span>
+0064     object.Scale{1},sqrt(report.Moments(1,2)));
+0065 fprintf(<span class="string">'\n'</span>);
+0066 
+0067 
+0068 report=configure(report,<span class="string">'VariableName'</span>,{<span class="string">'Intercept'</span> <span class="string">'Slope'</span>});
+0069 view(report);
+0070 summarize(report);</pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

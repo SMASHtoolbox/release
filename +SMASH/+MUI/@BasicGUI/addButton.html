@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of addButton</title>
+  <meta name="keywords" content="addButton">
+  <meta name="description" content="addButton Add button to the interface">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="../../index.html">+SMASH</a> &gt; <a href="../index.html">+MUI</a> &gt; <a href="index.html">@BasicGUI</a> &gt; addButton.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+MUI/@BasicGUI&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>addButton
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>addButton Add button to the interface</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function varargout=addButton(object,label) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> addButton Add button to the interface
+
+ This method adds a new button to the graphical interface.
+    addButton(object,label); 
+ Specifying an output returns the handle of the new button.
+    ha=addButton(...);
+
+ Buttons are placed from left to right in the order they are created.
+
+ See also <a href="BasicGUI.html" class="code" title="">BasicGUI</a>, <a href="addAxes.html" class="code" title="function varargout=addAxes(object,position)">addAxes</a>, <a href="refresh.html" class="code" title="function refresh(object,choice)">refresh</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="refresh.html" class="code" title="function refresh(object,choice)">refresh</a>	refresh Refresh interface</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% addButton Add button to the interface</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This method adds a new button to the graphical interface.</span>
+0004 <span class="comment">%    addButton(object,label);</span>
+0005 <span class="comment">% Specifying an output returns the handle of the new button.</span>
+0006 <span class="comment">%    ha=addButton(...);</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% Buttons are placed from left to right in the order they are created.</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% See also BasicGUI, addAxes, refresh</span>
+0011 <span class="comment">%</span>
+0012 
+0013 <span class="comment">%</span>
+0014 <span class="comment">% created December 2, 2015 by Daniel Dolan (Sandia National Laboratories)</span>
+0015 <span class="comment">%</span>
+0016 <a name="_sub0" href="#_subfunctions" class="code">function varargout=addButton(object,label)</a>
+0017 
+0018 <span class="comment">% manage input</span>
+0019 <span class="keyword">if</span> (nargin&lt;2) || isempty(label)
+0020     label=<span class="string">' button '</span>;
+0021 <span class="keyword">end</span>
+0022 
+0023 assert(ischar(label),<span class="string">'ERROR: invalid button label'</span>);
+0024 
+0025 <span class="comment">% create button</span>
+0026 dummy=repmat(<span class="string">'M'</span>,size(label));
+0027 h=uicontrol(<span class="string">'Parent'</span>,object.ButtonPanel,<span class="keyword">...</span>
+0028     <span class="string">'Style'</span>,<span class="string">'pushbutton'</span>,<span class="string">'String'</span>,dummy);
+0029 position=get(h,<span class="string">'Extent'</span>);
+0030 set(h,<span class="string">'Position'</span>,position,<span class="string">'String'</span>,label);
+0031 
+0032 object.ButtonObject(end+1)=h;
+0033 <a href="refresh.html" class="code" title="function refresh(object,choice)">refresh</a>(object,<span class="string">'button'</span>);
+0034 
+0035 <span class="comment">% manage output</span>
+0036 <span class="keyword">if</span> nargout&gt;0
+0037     varargout{1}=h;
+0038 <span class="keyword">end</span>
+0039 
+0040 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

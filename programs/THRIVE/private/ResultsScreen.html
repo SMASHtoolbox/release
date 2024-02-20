@@ -1,0 +1,577 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of ResultsScreen</title>
+  <meta name="keywords" content="ResultsScreen">
+  <meta name="description" content="ResultsScreen:">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">THRIVE</a> &gt; <a href="index.html">private</a> &gt; ResultsScreen.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/THRIVE/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>ResultsScreen
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>ResultsScreen:</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function fig=ResultsScreen(oldfig) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> ResultsScreen:</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="ClonePlot.html" class="code" title="function ClonePlot(src,varargin)">ClonePlot</a>	get handles</li><li><a href="HelpWindow.html" class="code" title="function HelpWindow(src,varargin)">HelpWindow</a>	get handles</li><li><a href="MatchFigures.html" class="code" title="function MatchFigures(old,new)">MatchFigures</a>	match the position of two figures</li><li><a href="MinimalFigure.html" class="code" title="function varargout=MinimalFigure(varargin)">MinimalFigure</a>	MinimalFigure: create a minimalistic figure useful for GUIs</li><li><a href="NudgeTextBoxes.html" class="code" title="function NudgeTextBoxes(fig)">NudgeTextBoxes</a>	</li><li><a href="QuadratureScreen.html" class="code" title="function fig=QuadratureScreen(oldfig)">QuadratureScreen</a>	this function needs to be significantly revised. Entry into the figure</li><li><a href="ReadEditBox.html" class="code" title="function data=ReadEditBox(src,varargin)">ReadEditBox</a>	read edit box callback</li><li><a href="SelectFile.html" class="code" title="function SelectFile(src,eventdata,target,RWoption,FilterSpec,DialogTitle)">SelectFile</a>	select file callback (read from and write to target edit box)</li><li><a href="SmoothDerivative.html" class="code" title="function varargout=SmoothDerivative(deriv,param,y,x)">SmoothDerivative</a>	SmoothDerivative : calculate a smooth derivative using the Savitzky-Golay</li><li><a href="StartOver.html" class="code" title="function StartOver(src,varargin)">StartOver</a>	prompt user</li><li><a href="aboutTHRIVE.html" class="code" title="function varargout=aboutTHRIVE(varargin)">aboutTHRIVE</a>	</li><li><a href="custom_uicontrol.html" class="code" title="function [h,pos]=custom_uicontrol(varargin)">custom_uicontrol</a>	customized uicontrol function</li><li><a href="custom_uipanel.html" class="code" title="function h=custom_uipanel(varargin)">custom_uipanel</a>	</li><li><a href="editbox.html" class="code" title="function [h,pos]=editbox(parent,pos,string,varargin)">editbox</a>	</li><li><a href="popupmenu.html" class="code" title="function [h,pos]=popupmenu(parent,pos,string,varargin)">popupmenu</a>	</li><li><a href="pushbutton.html" class="code" title="function [h,pos]=pushbutton(parent,pos,string,varargin)">pushbutton</a>	</li><li><a href="textlabel.html" class="code" title="function [h,pos]=textlabel(parent,pos,string,varargin)">textlabel</a>	</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="QuadratureScreen.html" class="code" title="function fig=QuadratureScreen(oldfig)">QuadratureScreen</a>	this function needs to be significantly revised. Entry into the figure</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function fig=createGUI(varargin)</a></li><li><a href="#_sub2" class="code">function ResizeFcn(src,varargin)</a></li><li><a href="#_sub3" class="code">function InterferometerType(src,varargin)</a></li><li><a href="#_sub4" class="code">function ExportOptions(src,varargin)</a></li><li><a href="#_sub5" class="code">function GenerateResults(src,varargin)</a></li><li><a href="#_sub6" class="code">function SelectVariable(src,varargin)</a></li><li><a href="#_sub7" class="code">function ExportData(src,varargin)</a></li><li><a href="#_sub8" class="code">function PreviousButton(src,varargin)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% ResultsScreen:</span>
+0002 
+0003 <span class="comment">%</span>
+0004 <a name="_sub0" href="#_subfunctions" class="code">function fig=ResultsScreen(oldfig)</a>
+0005 
+0006 <span class="comment">% allocate mising input</span>
+0007 <span class="keyword">if</span> nargin&lt;1
+0008     oldfig=<span class="string">''</span>;
+0009 <span class="keyword">end</span>
+0010 
+0011 <span class="comment">% create figure (if necessary)</span>
+0012 tag=<span class="string">'THRIVE_ResultsScreen'</span>;
+0013 fig=findall(0,<span class="string">'Type'</span>,<span class="string">'figure'</span>,<span class="string">'Tag'</span>,tag);
+0014 <span class="keyword">if</span> isempty(fig)        
+0015     fig=<a href="#_sub1" class="code" title="subfunction fig=createGUI(varargin)">createGUI</a>(<span class="string">'Tag'</span>,tag);
+0016 <span class="keyword">end</span>
+0017   
+0018 <span class="comment">% determine how figure was called</span>
+0019 <span class="keyword">if</span> isempty(oldfig)
+0020     <span class="keyword">return</span>
+0021 <span class="keyword">end</span>
+0022 <span class="keyword">switch</span> get(oldfig,<span class="string">'Tag'</span>);           
+0023     <span class="keyword">case</span> <span class="string">'THRIVE_QuadratureScreen'</span>
+0024         <span class="comment">% extract information from quadrature screen</span>
+0025         hprev=guihandles(oldfig);
+0026         data=get(hprev.ControlPanel,<span class="string">'UserData'</span>);        
+0027         <span class="comment">% store fringe data</span>
+0028         h=findobj(fig,<span class="string">'Tag'</span>,<span class="string">'PlotPanel'</span>);
+0029         set(h,<span class="string">'UserData'</span>,data);
+0030         <a href="#_sub5" class="code" title="subfunction GenerateResults(src,varargin)">GenerateResults</a>(fig);
+0031 <span class="keyword">end</span>
+0032 <a href="MatchFigures.html" class="code" title="function MatchFigures(old,new)">MatchFigures</a>(oldfig,fig);
+0033 
+0034 <span class="comment">% give the axes a helpful title</span>
+0035 figA=findobj(0,<span class="string">'Type'</span>,<span class="string">'figure'</span>,<span class="string">'Tag'</span>,<span class="string">'THRIVE_LoadScreen'</span>);
+0036 hedit=findobj(figA,<span class="string">'Tag'</span>,<span class="string">'File1Edit'</span>);
+0037 label=get(hedit,<span class="string">'String'</span>);
+0038 [pname,label,ext]=fileparts(label);
+0039 label=sprintf(<span class="string">'Analysis of %s%s'</span>,label,ext);
+0040 haxes=findobj(fig,<span class="string">'Tag'</span>,<span class="string">'ResultPlot'</span>);
+0041 title(haxes,label,<span class="string">'Interpreter'</span>,<span class="string">'none'</span>);
+0042 
+0043 figure(fig);
+0044 
+0045 <span class="comment">%%%%%%%%%%%%%%</span>
+0046 <span class="comment">% create GUI %</span>
+0047 <span class="comment">%%%%%%%%%%%%%%</span>
+0048 <a name="_sub1" href="#_subfunctions" class="code">function fig=createGUI(varargin)</a>
+0049 
+0050 <span class="comment">% probe primary monitor size</span>
+0051 monpos=get(0,<span class="string">'MonitorPositions'</span>);
+0052 monpos=monpos(1,:);
+0053 monLx=monpos(3)+monpos(1)-1;
+0054 monLy=monpos(4)+monpos(2)-1;
+0055 
+0056 <span class="comment">% create figure</span>
+0057 name=<a href="aboutTHRIVE.html" class="code" title="function varargout=aboutTHRIVE(varargin)">aboutTHRIVE</a>(<span class="string">'name'</span>);
+0058 fig=<a href="MinimalFigure.html" class="code" title="function varargout=MinimalFigure(varargin)">MinimalFigure</a>(<span class="string">'Visible'</span>,<span class="string">'off'</span>,<span class="string">'units'</span>,<span class="string">'pixels'</span>,<span class="keyword">...</span>
+0059     <span class="string">'NumberTitle'</span>,<span class="string">'off'</span>,<span class="string">'Name'</span>,name,<span class="string">'IntegerHandle'</span>,<span class="string">'off'</span>,<span class="keyword">...</span>
+0060     varargin{:});
+0061 [h,pos]=<a href="textlabel.html" class="code" title="function [h,pos]=textlabel(parent,pos,string,varargin)">textlabel</a>(fig,[0 0],repmat(<span class="string">'M'</span>,[1 80]));
+0062 delete(h);
+0063 data.Lx=pos(3);
+0064 data.Ly=0.80*monLy;
+0065 x0=(monLx-data.Lx)/2;
+0066 y0=(monLy-data.Ly)/2;
+0067 set(fig,<span class="string">'Position'</span>,[x0 y0 data.Lx data.Ly]);
+0068 
+0069 data.ymargin=0.5*pos(4);
+0070 data.xmargin=data.ymargin;
+0071 data.ygap=data.ymargin/4;
+0072 
+0073 <span class="comment">% create uimenus</span>
+0074 hm=uimenu(fig,<span class="string">'Label'</span>,<span class="string">'Program'</span>);
+0075 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Start over'</span>,<span class="keyword">...</span>
+0076     <span class="string">'Tag'</span>,<span class="string">'StartOver'</span>,<span class="string">'Callback'</span>,@<a href="StartOver.html" class="code" title="function StartOver(src,varargin)">StartOver</a>);
+0077 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Exit'</span>,<span class="string">'Separator'</span>,<span class="string">'on'</span>,<span class="string">'Callback'</span>,<span class="string">'close(gcbf)'</span>);
+0078 
+0079 hm=uimenu(fig,<span class="string">'Label'</span>,<span class="string">'Interferometer type'</span>,<span class="string">'Tag'</span>,<span class="string">'InterferometerMenu'</span>);
+0080 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Displacement'</span>,<span class="string">'Checked'</span>,<span class="string">'on'</span>,<span class="keyword">...</span>
+0081     <span class="string">'Tag'</span>,<span class="string">'displacement'</span>,<span class="string">'Callback'</span>,@<a href="#_sub3" class="code" title="subfunction InterferometerType(src,varargin)">InterferometerType</a>);
+0082 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Velocity'</span>,<span class="keyword">...</span>
+0083     <span class="string">'Tag'</span>,<span class="string">'velocity'</span>,<span class="string">'Callback'</span>,@<a href="#_sub3" class="code" title="subfunction InterferometerType(src,varargin)">InterferometerType</a>);
+0084 <span class="comment">%uimenu(hm,'Label','Differential displacement','Tag','difference',...</span>
+0085 <span class="comment">%    'Enable','off');</span>
+0086 
+0087 hm=uimenu(fig,<span class="string">'Label'</span>,<span class="string">'Export options'</span>,<span class="string">'Tag'</span>,<span class="string">'ExportOptionsMenu'</span>);
+0088 <span class="comment">%uimenu(hm,'Label','Fringe history (t f)');</span>
+0089 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Quadrature signals (t Dx Dy RV)'</span>,<span class="keyword">...</span>
+0090     <span class="string">'Tag'</span>,<span class="string">'quadrature'</span>,<span class="string">'Callback'</span>,@<a href="#_sub4" class="code" title="subfunction ExportOptions(src,varargin)">ExportOptions</a>);
+0091 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Position history (t x)'</span>,<span class="keyword">...</span>
+0092     <span class="string">'Tag'</span>,<span class="string">'position'</span>,<span class="string">'Callback'</span>,@<a href="#_sub4" class="code" title="subfunction ExportOptions(src,varargin)">ExportOptions</a>);
+0093 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Velocity history (t v)'</span>,<span class="keyword">...</span>
+0094     <span class="string">'Tag'</span>,<span class="string">'velocity'</span>,<span class="string">'Callback'</span>,@<a href="#_sub4" class="code" title="subfunction ExportOptions(src,varargin)">ExportOptions</a>);
+0095 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Acceleration history (t a)'</span>,<span class="keyword">...</span>
+0096     <span class="string">'Tag'</span>,<span class="string">'acceleration'</span>,<span class="string">'Callback'</span>,@<a href="#_sub4" class="code" title="subfunction ExportOptions(src,varargin)">ExportOptions</a>);
+0097 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Velocity/position history (t v x)'</span>,<span class="keyword">...</span>
+0098     <span class="string">'Tag'</span>,<span class="string">'velocity+position'</span>,<span class="string">'Callback'</span>,@<a href="#_sub4" class="code" title="subfunction ExportOptions(src,varargin)">ExportOptions</a>,<span class="keyword">...</span>
+0099     <span class="string">'Checked'</span>,<span class="string">'on'</span>);
+0100 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Full history (t Dx Dy RV v x a)'</span>,<span class="keyword">...</span>
+0101     <span class="string">'Tag'</span>,<span class="string">'full'</span>,<span class="string">'Callback'</span>,@<a href="#_sub4" class="code" title="subfunction ExportOptions(src,varargin)">ExportOptions</a>);
+0102 
+0103 hm=uimenu(fig,<span class="string">'Label'</span>,<span class="string">'Help'</span>);
+0104 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'About THRIVE'</span>,<span class="string">'Callback'</span>,{@<a href="aboutTHRIVE.html" class="code" title="function varargout=aboutTHRIVE(varargin)">aboutTHRIVE</a>,fig});
+0105 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Viewing/exporting results'</span>,<span class="string">'Callback'</span>,@<a href="HelpWindow.html" class="code" title="function HelpWindow(src,varargin)">HelpWindow</a>);
+0106 
+0107 <span class="comment">% create control panel</span>
+0108 hpanel(1)=<a href="custom_uipanel.html" class="code" title="function h=custom_uipanel(varargin)">custom_uipanel</a>(<span class="string">'Parent'</span>,fig,<span class="string">'Tag'</span>,<span class="string">'ControlPanel'</span>);
+0109 filename0=repmat(<span class="string">'M'</span>,[1 50]);
+0110 number0=<span class="string">' +0.00000E+00 '</span>;
+0111 
+0112 pos(1)=data.xmargin;
+0113 pos(2)=0;
+0114 <span class="comment">%tooltip='Displacement/velocity per fringe, depending on interferometer configuration';</span>
+0115 tooltip=<span class="string">'Displacement/velocity per fringe'</span>;
+0116 [h,pos]=<a href="textlabel.html" class="code" title="function [h,pos]=textlabel(parent,pos,string,varargin)">textlabel</a>(hpanel(1),pos,<span class="string">'Fringe constant='</span>,<span class="keyword">...</span>
+0117     <span class="string">'HorizontalAlignment'</span>,<span class="string">'right'</span>,<span class="string">'ToolTipString'</span>,tooltip);
+0118 pos(1)=pos(1)+pos(3);
+0119 DPF=(1550e-9)/2;
+0120 [h,pos]=<a href="editbox.html" class="code" title="function [h,pos]=editbox(parent,pos,string,varargin)">editbox</a>(hpanel(1),pos,number0,<span class="keyword">...</span>
+0121     <span class="string">'Tag'</span>,<span class="string">'FringeConstant'</span>,<span class="string">'Callback'</span>,@<a href="ReadEditBox.html" class="code" title="function data=ReadEditBox(src,varargin)">ReadEditBox</a>,<span class="keyword">...</span>
+0122     <span class="string">'String'</span>,DPF,<span class="string">'UserData'</span>,DPF,<span class="keyword">...</span>
+0123     <span class="string">'ToolTipString'</span>,<span class="string">'Use (1550E-9/2) [meters] for standard PDV'</span>);
+0124 pos(1)=pos(1)+pos(3)+5*data.xmargin;
+0125 [h,pos]=<a href="pushbutton.html" class="code" title="function [h,pos]=pushbutton(parent,pos,string,varargin)">pushbutton</a>(hpanel(1),pos,<span class="string">'  Update plot  '</span>,<span class="keyword">...</span>
+0126     <span class="string">'Callback'</span>,@<a href="#_sub5" class="code" title="subfunction GenerateResults(src,varargin)">GenerateResults</a>);
+0127 
+0128 pos(1)=data.xmargin;
+0129 pos(2)=pos(2)-data.ygap-pos(4);
+0130 [h,pos]=<a href="textlabel.html" class="code" title="function [h,pos]=textlabel(parent,pos,string,varargin)">textlabel</a>(hpanel(1),pos,<span class="string">'Fit order='</span>,<span class="keyword">...</span>
+0131     <span class="string">'ToolTipString'</span>,<span class="string">'Polynomial fit order (1=linear)'</span>);
+0132 pos(1)=pos(1)+pos(3);
+0133 [h,pos]=<a href="editbox.html" class="code" title="function [h,pos]=editbox(parent,pos,string,varargin)">editbox</a>(hpanel(1),pos,number0,<span class="keyword">...</span>
+0134     <span class="string">'String'</span>,<span class="string">''</span>,<span class="string">'Tag'</span>,<span class="string">'SGorder'</span>,<span class="keyword">...</span>
+0135     <span class="string">'Callback'</span>,@<a href="ReadEditBox.html" class="code" title="function data=ReadEditBox(src,varargin)">ReadEditBox</a>);
+0136 pos(1)=pos(1)+pos(3)+2*data.xmargin;
+0137 [h,pos]=<a href="textlabel.html" class="code" title="function [h,pos]=textlabel(parent,pos,string,varargin)">textlabel</a>(hpanel(1),pos,<span class="string">'# points='</span>,<span class="keyword">...</span>
+0138     <span class="string">'ToolTipString'</span>,<span class="string">'Number of points in polynomial fit'</span>);
+0139 pos(1)=pos(1)+pos(3);
+0140 [h,pos]=<a href="editbox.html" class="code" title="function [h,pos]=editbox(parent,pos,string,varargin)">editbox</a>(hpanel(1),pos,number0,<span class="keyword">...</span>
+0141     <span class="string">'String'</span>,<span class="string">''</span>,<span class="string">'Tag'</span>,<span class="string">'SGnumpoints'</span>,<span class="keyword">...</span>
+0142     <span class="string">'Callback'</span>,@<a href="ReadEditBox.html" class="code" title="function data=ReadEditBox(src,varargin)">ReadEditBox</a>);
+0143 pos(1)=pos(1)+pos(3)+2*data.xmargin;
+0144 [h,pos]=<a href="textlabel.html" class="code" title="function [h,pos]=textlabel(parent,pos,string,varargin)">textlabel</a>(hpanel(1),pos,<span class="string">'Window size='</span>,<span class="keyword">...</span>
+0145     <span class="string">'ToolTipString'</span>,<span class="string">'Smoothing window size in time units'</span>);
+0146 pos(1)=pos(1)+pos(3);
+0147 [h,pos]=<a href="textlabel.html" class="code" title="function [h,pos]=textlabel(parent,pos,string,varargin)">textlabel</a>(hpanel(1),pos,number0,<span class="keyword">...</span>
+0148     <span class="string">'String'</span>,<span class="string">''</span>,<span class="string">'Tag'</span>,<span class="string">'SGwindow'</span>,<span class="string">'HorizontalAlignment'</span>,<span class="string">'left'</span>);
+0149 
+0150 pos(1)=data.xmargin;
+0151 pos(2)=pos(2)-data.ygap-pos(4);
+0152 [h,pos]=<a href="pushbutton.html" class="code" title="function [h,pos]=pushbutton(parent,pos,string,varargin)">pushbutton</a>(hpanel(1),pos,<span class="string">' Export '</span>,<span class="keyword">...</span>
+0153     <span class="string">'Callback'</span>,@<a href="#_sub7" class="code" title="subfunction ExportData(src,varargin)">ExportData</a>);
+0154 pos(1)=pos(1)+pos(3);
+0155 [h,pos]=<a href="editbox.html" class="code" title="function [h,pos]=editbox(parent,pos,string,varargin)">editbox</a>(hpanel(1),pos,filename0,<span class="keyword">...</span>
+0156     <span class="string">'Tag'</span>,<span class="string">'ExportFileEdit'</span>,<span class="string">'HorizontalAlignment'</span>,<span class="string">'left'</span>,<span class="keyword">...</span>
+0157     <span class="string">'String'</span>,<span class="string">''</span>);
+0158 hedit=h;
+0159 pos(1)=pos(1)+pos(3);
+0160 [h,pos]=<a href="pushbutton.html" class="code" title="function [h,pos]=pushbutton(parent,pos,string,varargin)">pushbutton</a>(hpanel(1),pos,<span class="string">' select '</span>,<span class="keyword">...</span>
+0161     <span class="string">'Tag'</span>,<span class="string">'ExportFileSelect'</span>,<span class="string">'Callback'</span>,{@<a href="SelectFile.html" class="code" title="function SelectFile(src,eventdata,target,RWoption,FilterSpec,DialogTitle)">SelectFile</a>,hedit,<span class="string">'write'</span>});
+0162 
+0163 panelpos=get(hpanel(1),<span class="string">'Position'</span>);
+0164 offset=abs(pos(2));
+0165 panelpos(4)=pos(4)+offset+2*data.ymargin;
+0166 hc=get(hpanel(1),<span class="string">'Children'</span>);
+0167 right=0;
+0168 <span class="keyword">for</span> k=1:numel(hc)
+0169     pos=get(hc(k),<span class="string">'Position'</span>);
+0170     pos(2)=pos(2)+offset+data.ymargin;
+0171     set(hc(k),<span class="string">'Position'</span>,pos);
+0172     right=max([right pos(1)+pos(3)]);
+0173 <span class="keyword">end</span>
+0174 panelpos(3)=right+data.xmargin;
+0175 set(hpanel(1),<span class="string">'Position'</span>,panelpos,<span class="string">'UserData'</span>,data);
+0176 
+0177 <span class="comment">% create plot panel</span>
+0178 hpanel(2)=<a href="custom_uipanel.html" class="code" title="function h=custom_uipanel(varargin)">custom_uipanel</a>(<span class="string">'Parent'</span>,fig,<span class="string">'Tag'</span>,<span class="string">'PlotPanel'</span>);
+0179 set(hpanel(2),<span class="string">'BorderType'</span>,<span class="string">'line'</span>);
+0180 ha=axes(<span class="string">'Parent'</span>,hpanel(2),<span class="string">'Tag'</span>,<span class="string">'ResultPlot'</span>,<span class="keyword">...</span>
+0181     <span class="string">'Units'</span>,<span class="string">'normalized'</span>,<span class="string">'OuterPosition'</span>,[0 0 1 1],<span class="keyword">...</span>
+0182     <span class="string">'FontUnits'</span>,<span class="string">'points'</span>,<span class="string">'FontSize'</span>,14,<span class="keyword">...</span>
+0183     <span class="string">'Box'</span>,<span class="string">'on'</span>);
+0184 xlabel(<span class="string">'Time'</span>);
+0185 line(<span class="string">'Parent'</span>,ha,<span class="string">'Tag'</span>,<span class="string">'ResultLine'</span>);
+0186 
+0187 <span class="comment">%choice={'Fringe shift','Position','Velocity'};</span>
+0188 <span class="comment">%value=3; % % default to Velocity</span>
+0189 <span class="comment">%choice={'Fringe shift','Position','Velocity','Acceleration'};</span>
+0190 choice={<span class="string">'Fringe shift'</span>,<span class="string">'Return variation'</span>,<span class="string">'Position'</span>,<span class="string">'Velocity'</span>,<span class="string">'Acceleration'</span>};
+0191 value=3; <span class="comment">% default to Position</span>
+0192 <a href="popupmenu.html" class="code" title="function [h,pos]=popupmenu(parent,pos,string,varargin)">popupmenu</a>(hpanel(2),[],choice,<span class="keyword">...</span>
+0193     <span class="string">'Tag'</span>,<span class="string">'PlotSelect'</span>,<span class="string">'Callback'</span>,@GenerateQuadrature,<span class="keyword">...</span>
+0194     <span class="string">'Value'</span>,value,<span class="string">'Callback'</span>,@<a href="#_sub6" class="code" title="subfunction SelectVariable(src,varargin)">SelectVariable</a>);
+0195 
+0196 h=uicontrol(<span class="string">'Parent'</span>,hpanel(2),<span class="string">'Tag'</span>,<span class="string">'ClonePlot'</span>,<span class="keyword">...</span>
+0197     <span class="string">'String'</span>,<span class="string">' clone '</span>,<span class="string">'Callback'</span>,@<a href="ClonePlot.html" class="code" title="function ClonePlot(src,varargin)">ClonePlot</a>,<span class="string">'Units'</span>,<span class="string">'pixels'</span>,<span class="keyword">...</span>
+0198     <span class="string">'ToolTipString'</span>,<span class="string">'Clone plot to separate window'</span>);
+0199 extent=get(h,<span class="string">'Extent'</span>);
+0200 set(h,<span class="string">'Position'</span>,extent);
+0201 
+0202 <span class="comment">% create next/previous buttons</span>
+0203 h=<a href="custom_uicontrol.html" class="code" title="function [h,pos]=custom_uicontrol(varargin)">custom_uicontrol</a>(<span class="string">'Parent'</span>,fig,<span class="string">'Style'</span>,<span class="string">'pushbutton'</span>,<span class="keyword">...</span>
+0204     <span class="string">'Tag'</span>,<span class="string">'Previous'</span>,<span class="string">'String'</span>,<span class="string">' &lt; Previous '</span>,<span class="string">'Callback'</span>,@<a href="#_sub8" class="code" title="subfunction PreviousButton(src,varargin)">PreviousButton</a>);
+0205 pos=get(h,<span class="string">'Position'</span>);
+0206 h=<a href="custom_uicontrol.html" class="code" title="function [h,pos]=custom_uicontrol(varargin)">custom_uicontrol</a>(<span class="string">'Parent'</span>,fig,<span class="string">'Style'</span>,<span class="string">'pushbutton'</span>,<span class="keyword">...</span>
+0207     <span class="string">'Tag'</span>,<span class="string">'Next'</span>,<span class="string">'String'</span>,<span class="string">' Next &gt; '</span>,<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+0208 set(h,<span class="string">'Position'</span>,pos);
+0209 <a href="custom_uicontrol.html" class="code" title="function [h,pos]=custom_uicontrol(varargin)">custom_uicontrol</a>(<span class="string">'Parent'</span>,fig,<span class="string">'Style'</span>,<span class="string">'text'</span>,<span class="keyword">...</span>
+0210     <span class="string">'Tag'</span>,<span class="string">'GUIlabel'</span>,<span class="string">'String'</span>,<span class="string">'Results'</span>,<span class="string">'FontWeight'</span>,<span class="string">'bold'</span>,<span class="keyword">...</span>
+0211     <span class="string">'BackgroundColor'</span>,get(fig,<span class="string">'Color'</span>));
+0212 
+0213 <span class="comment">% final items</span>
+0214 set(fig,<span class="string">'ResizeFcn'</span>,@<a href="#_sub2" class="code" title="subfunction ResizeFcn(src,varargin)">ResizeFcn</a>);
+0215 <a href="NudgeTextBoxes.html" class="code" title="function NudgeTextBoxes(fig)">NudgeTextBoxes</a>(fig);
+0216 
+0217 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0218 <span class="comment">% figure resize function %</span>
+0219 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0220 <a name="_sub2" href="#_subfunctions" class="code">function ResizeFcn(src,varargin)</a>
+0221 
+0222 <span class="comment">% get handles and data</span>
+0223 fig=ancestor(src,<span class="string">'figure'</span>);
+0224 h=guihandles(fig);
+0225 data=get(h.ControlPanel,<span class="string">'UserData'</span>);
+0226 
+0227 <span class="comment">% enforce mininum dimensions</span>
+0228 units=get(fig,<span class="string">'Units'</span>);
+0229 set(fig,<span class="string">'Units'</span>,<span class="string">'pixels'</span>);
+0230 figpos=get(fig,<span class="string">'Position'</span>);
+0231 <span class="keyword">if</span> figpos(3)&lt;data.Lx
+0232     figpos(3)=data.Lx;
+0233 <span class="keyword">end</span>
+0234 <span class="keyword">if</span> figpos(4)&lt;data.Ly
+0235     dy=data.Ly-figpos(4);
+0236     figpos(2)=figpos(2)-dy;
+0237     figpos(4)=data.Ly;
+0238 <span class="keyword">end</span>
+0239 set(fig,<span class="string">'Position'</span>,figpos,<span class="string">'Units'</span>,units);
+0240 
+0241 <span class="comment">% position control panel</span>
+0242 pos=get(h.ControlPanel,<span class="string">'Position'</span>);
+0243 pos(1)=0;
+0244 pos(2)=figpos(4)-pos(4);
+0245 pos(3)=figpos(3);
+0246 set(h.ControlPanel,<span class="string">'Position'</span>,pos);
+0247 y2=pos(2);
+0248 
+0249 <span class="comment">% position next/previous buttons (fixed height)</span>
+0250 pos=get(h.Previous,<span class="string">'Position'</span>);
+0251 y0=pos(2);
+0252 pos(1)=2*data.xmargin;
+0253 pos(2)=data.ymargin;
+0254 set(h.Previous,<span class="string">'Position'</span>,pos);
+0255 left=pos(1)+pos(3);
+0256 
+0257 pos=get(h.Next,<span class="string">'Position'</span>);
+0258 pos(1)=figpos(3)-2*data.xmargin-pos(3);
+0259 pos(2)=data.ymargin;
+0260 set(h.Next,<span class="string">'Position'</span>,pos);
+0261 right=pos(1);
+0262 
+0263 <span class="comment">% position GUI label</span>
+0264 pos=get(h.GUIlabel,<span class="string">'Position'</span>);
+0265 pos(1)=left;
+0266 pos(2)=pos(2)-y0+data.ymargin;
+0267 pos(3)=right-left;
+0268 set(h.GUIlabel,<span class="string">'Position'</span>,pos);
+0269 y1=pos(2)+pos(4)+data.ymargin;
+0270 
+0271 <span class="comment">% position plot panel</span>
+0272 pos(1)=0;
+0273 pos(2)=y1;
+0274 pos(3)=figpos(3);
+0275 pos(4)=y2-y1;
+0276 set(h.PlotPanel,<span class="string">'Position'</span>,pos);
+0277 
+0278 <span class="comment">% position plot select popup</span>
+0279 panelpos=get(h.PlotPanel,<span class="string">'Position'</span>);
+0280 border=get(h.PlotPanel,<span class="string">'BorderWidth'</span>);
+0281 pos=get(h.PlotSelect,<span class="string">'Position'</span>);
+0282 pos(1)=border;
+0283 pos(2)=panelpos(4)-pos(4)-border;
+0284 set(h.PlotSelect,<span class="string">'Position'</span>,pos);
+0285 
+0286 <span class="comment">% position clone plot button</span>
+0287 panelpos=get(h.PlotPanel,<span class="string">'Position'</span>);
+0288 border=get(h.PlotPanel,<span class="string">'BorderWidth'</span>);
+0289 pos=get(h.ClonePlot,<span class="string">'Position'</span>);
+0290 pos(1)=panelpos(3)-pos(3)-border;
+0291 pos(2)=panelpos(4)-pos(4)-border;
+0292 set(h.ClonePlot,<span class="string">'Position'</span>,pos);
+0293 
+0294 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%</span>
+0295 <span class="comment">% interferometer type %</span>
+0296 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%</span>
+0297 <a name="_sub3" href="#_subfunctions" class="code">function InterferometerType(src,varargin)</a>
+0298 
+0299 menu=get(src,<span class="string">'parent'</span>);
+0300 items=get(menu,<span class="string">'Children'</span>);
+0301 set(items,<span class="string">'Checked'</span>,<span class="string">'off'</span>);
+0302 set(src,<span class="string">'Checked'</span>,<span class="string">'on'</span>);
+0303 
+0304 <a href="#_sub5" class="code" title="subfunction GenerateResults(src,varargin)">GenerateResults</a>(src,varargin{:});
+0305 
+0306 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0307 <span class="comment">% export options callback %</span>
+0308 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0309 <a name="_sub4" href="#_subfunctions" class="code">function ExportOptions(src,varargin)</a>
+0310 
+0311 menu=get(src,<span class="string">'parent'</span>);
+0312 items=get(menu,<span class="string">'Children'</span>);
+0313 set(items,<span class="string">'Checked'</span>,<span class="string">'off'</span>);
+0314 set(src,<span class="string">'Checked'</span>,<span class="string">'on'</span>);
+0315 
+0316 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0317 <span class="comment">% results generation callback %</span>
+0318 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0319 <a name="_sub5" href="#_subfunctions" class="code">function GenerateResults(src,varargin)</a>
+0320 
+0321 <span class="comment">% get handles</span>
+0322 fig=ancestor(src,<span class="string">'figure'</span>);
+0323 h=guihandles(fig); 
+0324 
+0325 <span class="comment">% extract information from current screen</span>
+0326 <span class="comment">%value=get(h.PlotSelect,'Value');</span>
+0327 <span class="comment">%string=get(h.PlotSelect,'String');</span>
+0328 <span class="comment">%switch string{value}</span>
+0329 <span class="comment">%    case 'Acceleration'</span>
+0330 <span class="comment">%        maxderiv=2;</span>
+0331 <span class="comment">%    otherwise</span>
+0332 <span class="comment">%        maxderiv=1;</span>
+0333 <span class="comment">%end</span>
+0334 
+0335 Kfringe=get(h.FringeConstant,<span class="string">'UserData'</span>);
+0336 p1=get(h.SGorder,<span class="string">'UserData'</span>);
+0337 <span class="keyword">if</span> isempty(p1)
+0338     p1=1;
+0339 <span class="keyword">end</span>
+0340 p2=get(h.SGnumpoints,<span class="string">'UserData'</span>);
+0341 <span class="keyword">if</span> isempty(p2)
+0342     p2=p1;
+0343 <span class="keyword">end</span>
+0344 SGparams=[p1 p2];
+0345 
+0346 <span class="comment">% interpret fringe shift</span>
+0347 data=get(h.PlotPanel,<span class="string">'UserData'</span>);
+0348 time=data.time;
+0349 T=(time(end)-time(1))/(numel(time)-1);
+0350 choice=findall(h.InterferometerMenu,<span class="string">'checked'</span>,<span class="string">'on'</span>);
+0351 <span class="keyword">switch</span> get(choice,<span class="string">'Tag'</span>)
+0352     <span class="keyword">case</span> <span class="string">'displacement'</span>        
+0353         data.position=Kfringe*data.fringe;
+0354         <span class="keyword">if</span> p1&lt;2 <span class="comment">% allow first order smoothing for backwards compatibility</span>
+0355             [data.position,data.velocity,SGparams]=<span class="keyword">...</span>
+0356                 <a href="SmoothDerivative.html" class="code" title="function varargout=SmoothDerivative(deriv,param,y,x)">SmoothDerivative</a>([0 1],SGparams,data.position,T);
+0357             data.acceleration=zeros(size(data.position));
+0358         <span class="keyword">else</span>
+0359             [data.position,data.velocity,data.acceleration,SGparams]=<span class="keyword">...</span>
+0360                 <a href="SmoothDerivative.html" class="code" title="function varargout=SmoothDerivative(deriv,param,y,x)">SmoothDerivative</a>([0 1 2],SGparams,data.position,T);
+0361         <span class="keyword">end</span>
+0362     <span class="keyword">case</span> <span class="string">'velocity'</span>
+0363         data.velocity=Kfringe*data.fringe;
+0364         [data.velocity,data.acceleration]=<span class="keyword">...</span>
+0365             <a href="SmoothDerivative.html" class="code" title="function varargout=SmoothDerivative(deriv,param,y,x)">SmoothDerivative</a>([0 1],SGparams,data.velocity,T);
+0366         index=isnan(data.velocity);
+0367         data.velocity(index)=0;
+0368         data.position=cumtrapz(data.velocity)*T;
+0369         data.velocity(index)=nan;
+0370     <span class="keyword">case</span> <span class="string">'difference'</span>
+0371         <span class="comment">% TBD</span>
+0372 <span class="keyword">end</span> 
+0373 
+0374 <span class="comment">% update figure</span>
+0375 set(h.SGorder,<span class="string">'UserData'</span>,SGparams(1),<span class="string">'String'</span>,num2str(SGparams(1)));
+0376 set(h.SGnumpoints,<span class="string">'UserData'</span>,SGparams(2),<span class="string">'String'</span>,num2str(SGparams(2)));
+0377 SGwindow=sprintf(<span class="string">'%.6g'</span>,SGparams(2)*T);
+0378 set(h.SGwindow,<span class="string">'String'</span>,SGwindow);
+0379 set(h.PlotPanel,<span class="string">'UserData'</span>,data);
+0380 <a href="#_sub6" class="code" title="subfunction SelectVariable(src,varargin)">SelectVariable</a>(fig);
+0381 
+0382 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0383 <span class="comment">% screen update callback %</span>
+0384 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0385 <a name="_sub6" href="#_subfunctions" class="code">function SelectVariable(src,varargin)</a>
+0386 
+0387 <span class="comment">% get handles</span>
+0388 fig=ancestor(src,<span class="string">'figure'</span>);
+0389 h=guihandles(fig);
+0390 data=get(h.PlotPanel,<span class="string">'UserData'</span>);
+0391 
+0392 value=get(h.PlotSelect,<span class="string">'Value'</span>);
+0393 string=get(h.PlotSelect,<span class="string">'String'</span>);
+0394 <span class="keyword">switch</span> string{value}
+0395     <span class="keyword">case</span> <span class="string">'Fringe shift'</span> 
+0396         set(h.ResultLine,<span class="string">'XData'</span>,data.time,<span class="string">'YData'</span>,data.fringe);
+0397     <span class="keyword">case</span> <span class="string">'Return variation'</span>
+0398         set(h.ResultLine,<span class="string">'XData'</span>,data.time,<span class="string">'YData'</span>,data.variation);
+0399     <span class="keyword">case</span> <span class="string">'Position'</span>
+0400         set(h.ResultLine,<span class="string">'XData'</span>,data.time,<span class="string">'YData'</span>,data.position);
+0401     <span class="keyword">case</span> <span class="string">'Velocity'</span>
+0402         set(h.ResultLine,<span class="string">'XData'</span>,data.time,<span class="string">'YData'</span>,data.velocity);
+0403     <span class="keyword">case</span> <span class="string">'Acceleration'</span>
+0404         p1=get(h.SGorder,<span class="string">'UserData'</span>);
+0405         <span class="keyword">if</span> p1&lt;2
+0406             message={};
+0407             message{end+1}=<span class="string">'The specified fit order is too low to calculate acceleration.'</span>;
+0408             message{end+1}=<span class="string">'Please select a fit order &gt;=2.'</span>;
+0409             warndlg(message,<span class="string">'Fit order warning'</span>,<span class="string">'modal'</span>);
+0410         <span class="keyword">end</span>
+0411         set(h.ResultLine,<span class="string">'XData'</span>,data.time,<span class="string">'YData'</span>,data.acceleration);
+0412 <span class="keyword">end</span>
+0413 set(h.ResultLine,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0414 ylabel(h.ResultPlot,string{value});
+0415 set(h.ResultPlot,<span class="string">'YLimMode'</span>,<span class="string">'auto'</span>);
+0416 
+0417 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%</span>
+0418 <span class="comment">% export data to file %</span>
+0419 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%</span>
+0420 <a name="_sub7" href="#_subfunctions" class="code">function ExportData(src,varargin)</a>
+0421 
+0422 <span class="comment">% get handles</span>
+0423 fig=ancestor(src,<span class="string">'figure'</span>);
+0424 h=guihandles(fig);
+0425 
+0426 <span class="comment">% generate export file name</span>
+0427 filename=get(h.ExportFileEdit,<span class="string">'String'</span>);
+0428 [pathname,filename,ext]=fileparts(filename);
+0429 <span class="keyword">if</span> isempty(filename) <span class="comment">% help user fill empty edit box</span>
+0430     [filename,pathname]=uiputfile(<span class="string">'*.*'</span>,<span class="string">'Specify export file'</span>);    
+0431     <span class="keyword">if</span> isnumeric(filename)
+0432         <span class="keyword">return</span>
+0433     <span class="keyword">end</span>
+0434     filename=fullfile(pathname,filename);
+0435     set(h.ExportFileEdit,<span class="string">'String'</span>,filename);
+0436 <span class="keyword">else</span> <span class="comment">% use</span>
+0437     <span class="keyword">if</span> isempty(pathname)
+0438         pathname=pwd;
+0439     <span class="keyword">end</span>
+0440     filename=fullfile(pathname,[filename ext]);
+0441 <span class="keyword">end</span>
+0442 hwait=waitbar(0,<span class="string">'Exporting data...please wait'</span>,<span class="string">'Name'</span>,<span class="string">'Exporting data'</span>,<span class="keyword">...</span>
+0443     <span class="string">'WindowStyle'</span>,<span class="string">'modal'</span>);
+0444 
+0445 <span class="comment">% access stored data, omitting nan entries</span>
+0446 data=get(h.PlotPanel,<span class="string">'UserData'</span>);
+0447 <span class="comment">%index=~isnan(data.time);</span>
+0448 <span class="comment">%index=~(isnan(data.time)|isnan(data.Dx));</span>
+0449 index=~isnan(data.position);
+0450 data.time=data.time(index);
+0451 data.Dx=data.Dx(index);
+0452 data.Dy=data.Dy(index);
+0453 data.variation=data.variation(index);
+0454 data.fringe=data.fringe(index);
+0455 data.position=data.position(index);
+0456 data.velocity=data.velocity(index);
+0457 data.acceleration=data.acceleration(index);
+0458 waitbar(1/4,hwait);
+0459 
+0460 <span class="comment">% isolate date for export</span>
+0461 choice=findall(h.ExportOptionsMenu,<span class="string">'Checked'</span>,<span class="string">'on'</span>);
+0462 <span class="keyword">switch</span> get(choice,<span class="string">'Tag'</span>) 
+0463     <span class="keyword">case</span> <span class="string">'quadrature'</span>
+0464         tempdata=transpose([data.time(:) data.Dx(:) data.Dy(:) data.variation(:)]);
+0465         label={<span class="string">'Time'</span>,<span class="string">'Dx'</span>,<span class="string">'Dy'</span>,<span class="string">'Return'</span>};
+0466     <span class="keyword">case</span> <span class="string">'position'</span>
+0467         tempdata=transpose([data.time(:) data.position(:)]);
+0468         label={<span class="string">'Time'</span>,<span class="string">'Position'</span>};
+0469     <span class="keyword">case</span> <span class="string">'velocity'</span>
+0470         tempdata=transpose([data.time(:) data.velocity(:)]);
+0471         label={<span class="string">'Time'</span>,<span class="string">'Velocity'</span>};
+0472     <span class="keyword">case</span> <span class="string">'acceleration'</span>
+0473         tempdata=transpose([data.time(:) data.acceleration(:)]);
+0474         label={<span class="string">'Time'</span>,<span class="string">'Accel.'</span>};
+0475     <span class="keyword">case</span> <span class="string">'velocity+position'</span>
+0476         tempdata=transpose([data.time(:) data.velocity(:) data.position(:)]);
+0477         label={<span class="string">'Time'</span>,<span class="string">'Velocity'</span>,<span class="string">'Position'</span>};
+0478     <span class="keyword">case</span> <span class="string">'full'</span>
+0479         tempdata=transpose(<span class="keyword">...</span>
+0480             [data.time(:) data.Dx(:) data.Dy(:) data.variation(:) data.velocity(:) data.position(:) data.acceleration(:)]);
+0481         label={<span class="string">'Time'</span>,<span class="string">'Dx'</span>,<span class="string">'Dy'</span>,<span class="string">'Return'</span>,<span class="string">'Velocity'</span>,<span class="string">'Position'</span>,<span class="string">'Accel.'</span>};
+0482 <span class="keyword">end</span>
+0483 waitbar(2/4,hwait);
+0484 
+0485 <span class="comment">% work out appropriate formats</span>
+0486 before=3;
+0487 gap=1;
+0488 <span class="keyword">if</span> ispc
+0489     after=5;
+0490 <span class="keyword">else</span>
+0491     after=4;
+0492 <span class="keyword">end</span>
+0493 extra=before+after+gap;
+0494 
+0495 dt=(data.time(end)-data.time(1))/(numel(data.time)-1);
+0496 NDtime=abs(floor(log10(dt/max(abs(data.time)))));
+0497 Wtime=NDtime+extra;
+0498 timeformat=sprintf(<span class="string">'%%+%d.%de'</span>,Wtime,NDtime);
+0499 
+0500 NDother=4;
+0501 Wother=NDother+extra;
+0502 otherformat=sprintf(<span class="string">'%%+%d.%de'</span>,Wother,NDother);
+0503 
+0504 <span class="comment">% write data to export file</span>
+0505 header{1}=sprintf(<span class="string">'THRIVE export (%s)'</span>,datestr(now));
+0506 Ncol=numel(label);
+0507 format=[sprintf(<span class="string">'%%%ds'</span>,Wtime) repmat(sprintf(<span class="string">'%%%ds'</span>,Wother),[1 Ncol-1])];
+0508 header{2}=sprintf(format,label{:});
+0509 format=[timeformat repmat(otherformat,[1 Ncol-1]) <span class="string">'\n'</span>];
+0510 
+0511 fid=fopen(filename,<span class="string">'wt'</span>);
+0512 fprintf(fid,<span class="string">'%s\n'</span>,header{:});
+0513 fprintf(fid,format,tempdata);
+0514 fclose(fid);
+0515 <span class="keyword">if</span> ishandle(hwait) <span class="comment">% user let the file load</span>
+0516     waitbar(1,hwait);
+0517     pause(0.25);
+0518     delete(hwait);
+0519 <span class="keyword">end</span>
+0520 
+0521 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0522 <span class="comment">% previous button callback %</span>
+0523 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0524 <a name="_sub8" href="#_subfunctions" class="code">function PreviousButton(src,varargin)</a>
+0525 
+0526 fig=ancestor(src,<span class="string">'figure'</span>);
+0527 <a href="QuadratureScreen.html" class="code" title="function fig=QuadratureScreen(oldfig)">QuadratureScreen</a>(fig);
+0528 set(fig,<span class="string">'Visible'</span>,<span class="string">'off'</span>);</pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

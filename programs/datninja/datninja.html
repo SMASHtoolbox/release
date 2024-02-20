@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of datninja</title>
+  <meta name="keywords" content="datninja">
+  <meta name="description" content="datninja('ImageFile',file);">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="index.html">datninja</a> &gt; datninja.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../index.html"><img alt="<" border="0" src="../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/datninja&nbsp;<img alt=">" border="0" src="../../../../right.png"></a></td></tr></table>-->
+
+<h1>datninja
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>datninja('ImageFile',file);</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function varargout=datninja(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> datninja('ImageFile',file);</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% datninja('ImageFile',file);</span>
+0002 <span class="comment">%</span>
+0003 <a name="_sub0" href="#_subfunctions" class="code">function varargout=datninja(varargin)</a>
+0004 
+0005 <span class="comment">% manage input</span>
+0006 ImageFile=<span class="string">''</span>;
+0007 FontSize=14;
+0008 assert(rem(nargin,2) == 0,<span class="string">'ERROR: unmatched name/value pair'</span>);
+0009 <span class="keyword">for</span> n=1:2:nargin
+0010     name=varargin{n};
+0011     assert(ischar(name),<span class="string">'ERROR: invalid option name'</span>);
+0012     value=varargin{n+1};
+0013     <span class="keyword">switch</span> lower(name)
+0014         <span class="keyword">case</span> <span class="string">'imagefile'</span>
+0015             assert(logical(exist(value,<span class="string">'file'</span>)),<span class="keyword">...</span>
+0016                 <span class="string">'ERROR: invalid image file'</span>);
+0017             ImageFile=value;
+0018         <span class="keyword">case</span> <span class="string">'fontsize'</span>
+0019             assert(isnumeric(value) &amp;&amp; isscalar(value) &amp;&amp; (value &gt; 0),<span class="keyword">...</span>
+0020                 <span class="string">'ERROR: invalid font size'</span>);
+0021             FontSize=value;
+0022         <span class="keyword">otherwise</span>
+0023             error(<span class="string">'ERROR: &quot;%s&quot; is not a valid option'</span>);
+0024     <span class="keyword">end</span>
+0025 <span class="keyword">end</span>
+0026 
+0027 <span class="comment">% create program</span>
+0028 db=createGUI(FontSize);
+0029 <span class="keyword">if</span> ~isempty(ImageFile)
+0030     <span class="keyword">try</span>
+0031         session=getappdata(db.Figure,<span class="string">'Session'</span>);
+0032         loadImage(session,ImageFile);
+0033         hImage=findobj(db.Figure,<span class="string">'Type'</span>,<span class="string">'image'</span>);
+0034         set(hImage,<span class="string">'CData'</span>,session.Image,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0035     <span class="keyword">catch</span> ME
+0036         throwAsCaller(ME);
+0037     <span class="keyword">end</span>
+0038 <span class="keyword">end</span>
+0039 
+0040 <span class="comment">% manage output</span>
+0041 <span class="keyword">if</span> isdeployed
+0042     varargout{1}=0;
+0043 <span class="keyword">end</span>
+0044 
+0045 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of readPFTNF3</title>
+  <meta name="keywords" content="readPFTNF3">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../../index.html">SMASHtoolbox</a> &gt; <a href="../../../index.html">+SMASH</a> &gt; <a href="../../index.html">+FileAccess</a> &gt; <a href="../index.html">@PFFfile</a> &gt; <a href="index.html">private</a> &gt; readPFTNF3.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../../index.html"><img alt="<" border="0" src="../../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+FileAccess/@PFFfile/private&nbsp;<img alt=">" border="0" src="../../../../../../right.png"></a></td></tr></table>-->
+
+<h1>readPFTNF3
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>function data=readPFTNF3(fid) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="ReadFloatArray.html" class="code" title="function result=ReadFloatArray(fid)">ReadFloatArray</a>	</li><li><a href="ReadLong.html" class="code" title="function result=ReadLong(fid,number)">ReadLong</a>	</li><li><a href="ReadString.html" class="code" title="function result=ReadString(fid)">ReadString</a>	</li><li><a href="ReadWord.html" class="code" title="function result=ReadWord(fid,number)">ReadWord</a>	</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function data=readPFTNF3(fid)</a>
+0002 
+0003 NBLKS=<a href="ReadWord.html" class="code" title="function result=ReadWord(fid,number)">ReadWord</a>(fid);
+0004 data=struct(<span class="string">'Format'</span>,<span class="string">'pff'</span>,<span class="string">'PFFdataset'</span>,<span class="string">'PFTNF3'</span>);
+0005 <span class="keyword">for</span> block=1:NBLKS
+0006     <span class="comment">% read data</span>
+0007     NX=<a href="ReadLong.html" class="code" title="function result=ReadLong(fid,number)">ReadLong</a>(fid);
+0008     NY=<a href="ReadLong.html" class="code" title="function result=ReadLong(fid,number)">ReadLong</a>(fid);
+0009     NZ=<a href="ReadLong.html" class="code" title="function result=ReadLong(fid,number)">ReadLong</a>(fid);
+0010     <a href="ReadWord.html" class="code" title="function result=ReadWord(fid,number)">ReadWord</a>(fid,5); <span class="comment">% skip ISPARE</span>
+0011     temp.X=<a href="ReadFloatArray.html" class="code" title="function result=ReadFloatArray(fid)">ReadFloatArray</a>(fid);
+0012     temp.X=reshape(temp.X,[1 NX]);
+0013     temp.Y=<a href="ReadFloatArray.html" class="code" title="function result=ReadFloatArray(fid)">ReadFloatArray</a>(fid);
+0014     temp.Y=reshape(temp.Y,[1 NY]);
+0015     temp.Z=<a href="ReadFloatArray.html" class="code" title="function result=ReadFloatArray(fid)">ReadFloatArray</a>(fid);
+0016     temp.Z=reshape(temp.Z,[1 NZ]);
+0017     temp.XLabel=<a href="ReadString.html" class="code" title="function result=ReadString(fid)">ReadString</a>(fid);
+0018     temp.YLabel=<a href="ReadString.html" class="code" title="function result=ReadString(fid)">ReadString</a>(fid);
+0019     temp.ZLabel=<a href="ReadString.html" class="code" title="function result=ReadString(fid)">ReadString</a>(fid);
+0020     temp.BLabel=<a href="ReadString.html" class="code" title="function result=ReadString(fid)">ReadString</a>(fid);
+0021     temp.Data=<a href="ReadFloatArray.html" class="code" title="function result=ReadFloatArray(fid)">ReadFloatArray</a>(fid);
+0022     temp.Data=reshape(temp.Data,[NY NX NZ]);
+0023     <span class="comment">% manage blocks</span>
+0024     name=fieldnames(temp);
+0025     <span class="keyword">for</span> k=1:numel(name)
+0026         <span class="keyword">if</span> NBLKS==1
+0027             data.(name{k})=temp.(name{k});
+0028         <span class="keyword">else</span>
+0029             data.(name{k}){block}=temp.(name{k});
+0030         <span class="keyword">end</span>
+0031     <span class="keyword">end</span>
+0032 <span class="keyword">end</span>
+0033 
+0034 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

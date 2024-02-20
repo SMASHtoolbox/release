@@ -1,0 +1,159 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of locate</title>
+  <meta name="keywords" content="locate">
+  <meta name="description" content="LOCATE Adjust Figure location">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="../../index.html">+SMASH</a> &gt; <a href="../index.html">+MUI</a> &gt; <a href="index.html">@Figure</a> &gt; locate.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+MUI/@Figure&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>locate
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>LOCATE Adjust Figure location</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function locate(object,location,reference) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> LOCATE Adjust Figure location
+
+ This method adjusts the location of a Figure with respect to the entire
+ screen:
+    &gt;&gt; locate(object,location);
+ or a reference figure.
+   &gt;&gt; locate(object,location,reference); % reference is a figure handle
+ Valid locations are 'center' [default], 'North', 'South', 'East',
+ 'West','NorthEast', 'NorthWest', 'SouthEast', and 'SoutWest'.  Outside
+ versions of the cardinal directions, such as 'WestOutside', are also
+ supported.
+
+ See also <a href="Figure.html" class="code" title="">Figure</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="export.html" class="code" title="function export(object,mode)">export</a>	</li><li><a href="manualscale.html" class="code" title="function manualscale(object,mode)">manualscale</a>	</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% LOCATE Adjust Figure location</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This method adjusts the location of a Figure with respect to the entire</span>
+0004 <span class="comment">% screen:</span>
+0005 <span class="comment">%    &gt;&gt; locate(object,location);</span>
+0006 <span class="comment">% or a reference figure.</span>
+0007 <span class="comment">%   &gt;&gt; locate(object,location,reference); % reference is a figure handle</span>
+0008 <span class="comment">% Valid locations are 'center' [default], 'North', 'South', 'East',</span>
+0009 <span class="comment">% 'West','NorthEast', 'NorthWest', 'SouthEast', and 'SoutWest'.  Outside</span>
+0010 <span class="comment">% versions of the cardinal directions, such as 'WestOutside', are also</span>
+0011 <span class="comment">% supported.</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">% See also Figure</span>
+0014 <span class="comment">%</span>
+0015 
+0016 <span class="comment">% created August 2, 2013 by Daniel Dolan (Sandia National Laboratories)</span>
+0017 <span class="comment">% updated October 7, 2013 by Daniel Dolan</span>
+0018 <span class="comment">%    -revised documentation</span>
+0019 <a name="_sub0" href="#_subfunctions" class="code">function locate(object,location,reference)</a>
+0020 
+0021 verify(object);
+0022 <span class="keyword">if</span> (nargin&lt;2) || isempty(location)
+0023     location=<span class="string">'center'</span>;
+0024 <span class="keyword">end</span>
+0025 <span class="keyword">if</span> (nargin&lt;3) || isempty(reference)
+0026     reference=0;
+0027 <span class="keyword">end</span>
+0028 <span class="keyword">if</span> ~ishandle(reference)
+0029     error(<span class="string">'ERROR: invalid reference figure handle'</span>);
+0030 <span class="keyword">elseif</span> reference==0 <span class="comment">% root objectect</span>
+0031     movegui(object.Handle,location);
+0032 <span class="keyword">else</span> <span class="comment">% another figure</span>
+0033     units=get(reference,<span class="string">'Units'</span>);
+0034     set(reference,<span class="string">'Units'</span>,<span class="string">'pixels'</span>);
+0035     ref=get(reference,<span class="string">'Position'</span>);
+0036     pos=get(object.Handle,<span class="string">'Position'</span>);
+0037     <span class="keyword">switch</span> lower(location)
+0038         <span class="keyword">case</span> <span class="string">'center'</span>
+0039             pos(1)=ref(1)+ref(3)/2-pos(3)/2;
+0040             pos(2)=ref(2)+ref(4)/2-pos(4)/2;
+0041         <span class="keyword">case</span> <span class="string">'north'</span>
+0042             pos(1)=ref(1)+ref(3)/2-pos(3)/2;
+0043             pos(2)=ref(2)+ref(4)-pos(4);
+0044         <span class="keyword">case</span> <span class="string">'northoutside'</span>
+0045             pos(1)=ref(1)+ref(3)/2-pos(3)/2;
+0046             pos(2)=ref(2)+ref(4);
+0047         <span class="keyword">case</span> <span class="string">'northeast'</span>
+0048             pos(1)=ref(1)+ref(3)-pos(3);
+0049             pos(2)=ref(2)+ref(4)-pos(4);
+0050         <span class="keyword">case</span> <span class="string">'northeastoutside'</span>
+0051             pos(1)=ref(1)+ref(3);
+0052             pos(2)=ref(2)+ref(4)-pos(4);
+0053         <span class="keyword">case</span> <span class="string">'east'</span>
+0054             pos(1)=ref(1)+ref(3)-pos(3);
+0055             pos(2)=ref(2)+ref(4)/2-pos(4)/2;
+0056         <span class="keyword">case</span> <span class="string">'eastoutside'</span>
+0057             pos(1)=ref(1)+ref(3);
+0058             pos(2)=ref(2)+ref(4)/2-pos(4)/2;
+0059         <span class="keyword">case</span> <span class="string">'southeast'</span>
+0060             pos(1)=ref(1)+ref(3)-pos(3);
+0061             pos(2)=ref(2);
+0062         <span class="keyword">case</span> <span class="string">'southeastoutside'</span>
+0063             pos(1)=ref(1)+ref(3);
+0064             pos(2)=ref(2);
+0065         <span class="keyword">case</span> <span class="string">'south'</span>
+0066             pos(1)=ref(1)+ref(3)/2-pos(3)/2;
+0067             pos(2)=ref(2);
+0068         <span class="keyword">case</span> <span class="string">'southoutside'</span>
+0069             pos(1)=ref(1)+ref(3)/2-pos(3)/2;
+0070             pos(2)=ref(2)-pos(4);
+0071         <span class="keyword">case</span> <span class="string">'southwest'</span>
+0072             pos(1)=ref(1);
+0073             pos(2)=ref(2);        
+0074         <span class="keyword">case</span> <span class="string">'southwestoutside'</span>
+0075             pos(1)=ref(1)-pos(3);
+0076             pos(2)=ref(2);  
+0077         <span class="keyword">case</span> <span class="string">'west'</span>
+0078             pos(1)=ref(1);
+0079             pos(2)=ref(2)+ref(4)/2-pos(4)/2;
+0080         <span class="keyword">case</span> <span class="string">'westoutside'</span>
+0081             pos(1)=ref(1)-pos(3);
+0082             pos(2)=ref(2)+ref(4)/2-pos(4)/2;
+0083         <span class="keyword">case</span> <span class="string">'northwest'</span>
+0084             pos(1)=ref(1);
+0085             pos(2)=ref(2)+ref(4)-pos(4);
+0086         <span class="keyword">case</span> <span class="string">'northwestoutside'</span>
+0087             pos(1)=ref(1)-pos(3);
+0088             pos(2)=ref(2)+ref(4)-pos(4);
+0089         <span class="keyword">otherwise</span>
+0090             fprintf(<span class="string">'''%s'' is not a valid location--using ''center'' instead\n'</span>,<span class="keyword">...</span>
+0091                 options.Location);
+0092             pos(1)=ref(1)+ref(3)/2-pos(3)/2;
+0093             pos(2)=ref(2)+ref(4)/2-pos(4)/2;
+0094     <span class="keyword">end</span>
+0095     set(object.Handle,<span class="string">'Position'</span>,pos);
+0096     movegui(object.Handle,<span class="string">'onscreen'</span>); <span class="comment">% make sure dialog appears on the screen</span>
+0097     set(reference,<span class="string">'Units'</span>,units);
+0098 <span class="keyword">end</span>
+0099 
+0100 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

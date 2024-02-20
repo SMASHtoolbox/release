@@ -1,0 +1,167 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of selectROI</title>
+  <meta name="keywords" content="selectROI">
+  <meta name="description" content="selectROI Select region of interest">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../index.html">SMASHtoolbox</a> &gt; <a href="../index.html">+SMASH</a> &gt; <a href="index.html">+ROI</a> &gt; selectROI.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../index.html"><img alt="<" border="0" src="../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+ROI&nbsp;<img alt=">" border="0" src="../../../../right.png"></a></td></tr></table>-->
+
+<h1>selectROI
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>selectROI Select region of interest</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function result=selectROI(type,target) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> selectROI Select region of interest
+
+ This function provides interactive region of interest selection.  A basic
+ call:
+   result=selectROI(); 
+ prompts the user to choose a region type and then make selections on the
+ current axes.
+
+ Region type and mode can be specified as the first input.
+    result=selectROI(type); % use default mode
+    result=selectROI({type mode}); % specify selection type mode
+
+ A second input, if present, specifies the target axes for interactive
+ selections.
+    result=selectROI(type,target);
+
+ See also SMASH.ROI</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function [type,mode]=chooseRegionType()</a></li><li><a href="#_sub2" class="code">function updateType(varargin)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% selectROI Select region of interest</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This function provides interactive region of interest selection.  A basic</span>
+0004 <span class="comment">% call:</span>
+0005 <span class="comment">%   result=selectROI();</span>
+0006 <span class="comment">% prompts the user to choose a region type and then make selections on the</span>
+0007 <span class="comment">% current axes.</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% Region type and mode can be specified as the first input.</span>
+0010 <span class="comment">%    result=selectROI(type); % use default mode</span>
+0011 <span class="comment">%    result=selectROI({type mode}); % specify selection type mode</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">% A second input, if present, specifies the target axes for interactive</span>
+0014 <span class="comment">% selections.</span>
+0015 <span class="comment">%    result=selectROI(type,target);</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">% See also SMASH.ROI</span>
+0018 <span class="comment">%</span>
+0019 
+0020 <span class="comment">%</span>
+0021 <span class="comment">% created March 2, 2018 by Daniel Dolan (Sandia National Laboratories)</span>
+0022 <span class="comment">%</span>
+0023 <a name="_sub0" href="#_subfunctions" class="code">function result=selectROI(type,target)</a>
+0024 
+0025 <span class="comment">% manage input</span>
+0026 <span class="keyword">if</span> (nargin &lt; 2) || isempty(target)
+0027     target=gca;
+0028 <span class="keyword">else</span>
+0029     assert(ishandle(target),<span class="string">'ERROR: invalid target axes'</span>);
+0030 <span class="keyword">end</span>
+0031 
+0032 <span class="keyword">if</span> nargin &lt; 1
+0033     [type,mode]=<a href="#_sub1" class="code" title="subfunction [type,mode]=chooseRegionType()">chooseRegionType</a>();    
+0034 <span class="keyword">elseif</span> ischar(type)
+0035     mode=<span class="string">''</span>;
+0036 <span class="keyword">elseif</span> iscellstr(type)
+0037     mode=type{2};
+0038     type=type{1};
+0039 <span class="keyword">else</span>
+0040     error(<span class="string">'ERROR: invalid ROI type'</span>);
+0041 <span class="keyword">end</span>
+0042 
+0043 <span class="comment">% select ROI</span>
+0044 <span class="keyword">try</span>
+0045     name=lower(type);
+0046     name(1)=upper(name(1));
+0047     result=packtools.call(name,mode);
+0048 <span class="keyword">catch</span>
+0049     error(<span class="string">'ERROR: invalid ROI type'</span>);
+0050 <span class="keyword">end</span>
+0051 result=select(result,target);
+0052 
+0053 <span class="keyword">end</span>
+0054 
+0055 <a name="_sub1" href="#_subfunctions" class="code">function [type,mode]=chooseRegionType()</a>
+0056 
+0057 box=SMASH.MUI.Dialog();
+0058 box.Hidden=true;
+0059 box.Name=<span class="string">'ROI type'</span>;
+0060 
+0061 RegionType={<span class="string">'Rectangle'</span> <span class="string">'Points'</span> <span class="string">'Curve'</span> <span class="string">'Slices'</span>};   
+0062 TypeList=addblock(box,<span class="string">'popup'</span>,<span class="string">'Region type: '</span>,RegionType);
+0063 set(TypeList(2),<span class="string">'Callback'</span>,@<a href="#_sub2" class="code" title="subfunction updateType(varargin)">updateType</a>)
+0064 ModeList=addblock(box,<span class="string">'popup'</span>,<span class="string">'Region mode: '</span>,{<span class="string">''</span>});
+0065 description=addblock(box,<span class="string">'medit'</span>,<span class="string">'Description:'</span>,40,5);
+0066 set(description(2),<span class="string">'Style'</span>,<span class="string">'text'</span>);
+0067 done=addblock(box,<span class="string">'button'</span>,<span class="string">' Done '</span>);
+0068 set(done,<span class="string">'Callback'</span>,<span class="string">'delete(gcbo)'</span>);
+0069 locate(box,<span class="string">'center'</span>);
+0070 <a href="#_sub2" class="code" title="subfunction updateType(varargin)">updateType</a>();
+0071 box.Hidden=false;
+0072 waitfor(done);
+0073 
+0074 <span class="keyword">if</span> ~ishandle(box.Handle)
+0075     <span class="keyword">return</span>
+0076 <span class="keyword">end</span>
+0077 value=probe(box);
+0078 delete(box);
+0079 
+0080 type=value{1};
+0081 mode=value{2};
+0082 
+0083     <a name="_sub2" href="#_subfunctions" class="code">function updateType(varargin)</a>
+0084         value=probe(box);
+0085         message={};
+0086         <span class="keyword">switch</span> lower(value{1})
+0087             <span class="keyword">case</span> <span class="string">'rectangle'</span>
+0088                 message{end+1}=<span class="string">'Finite, semi-infinite, or infinite rectangular regions'</span>;
+0089             <span class="keyword">case</span> <span class="string">'points'</span>
+0090                 message{end+1}=<span class="string">'Open, connected, closed, or convex group of points'</span>;
+0091             <span class="keyword">case</span> <span class="string">'curve'</span>
+0092                 message{end+1}=<span class="string">'Curve defined by sorted, connected points'</span>;
+0093                 message{end+1}=<span class="string">'   Single-valued functions y=f(x) or x=g(y)'</span>;
+0094             <span class="keyword">case</span> <span class="string">'slices'</span>
+0095                 message{end+1}=<span class="string">'Vertical or horizontal slices'</span>;           
+0096         <span class="keyword">end</span>
+0097         set(description(2),<span class="string">'String'</span>,message);
+0098         result=packtools.call(value{1});
+0099         set(ModeList(2),<span class="string">'Value'</span>,1,<span class="string">'String'</span>,result.ValidModes);        
+0100     <span class="keyword">end</span>
+0101 
+0102 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

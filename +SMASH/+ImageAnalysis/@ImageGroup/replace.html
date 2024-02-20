@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of replace</title>
+  <meta name="keywords" content="replace">
+  <meta name="description" content="REPLACE Replace data values in an object">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="../../index.html">+SMASH</a> &gt; <a href="../index.html">+ImageAnalysis</a> &gt; <a href="index.html">@ImageGroup</a> &gt; replace.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+ImageAnalysis/@ImageGroup&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>replace
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>REPLACE Replace data values in an object</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function object=replace(object,imageNumber,value,varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> REPLACE Replace data values in an object
+
+ This method replaces a rectangular region in one Image of an ImageGroup 
+ with a specified value.  The replacement value *must* be specified; the 
+ replacement region can be specified or selected interactively.
+
+ To replace values in a specific region:
+     &gt;&gt; object=replace(object,imageNumber,value,[xA xB],[yA yB]);
+ where xA, xB, yA, and yB are bounding grid values.  When no bounding
+ region is specified:
+     &gt;&gt; object=replace(object,imageNumber,value);
+ the user is prompted to select the region.
+
+ see also <a href="ImageGroup.html" class="code" title="">ImageGroup</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="replace.html" class="code" title="function object=replace(object,imageNumber,value,varargin)">replace</a>	REPLACE Replace data values in an object</li><li><a href="split.html" class="code" title="function varargout=split(object,imageNumbers)">split</a>	SPLIT Divide ImageGroup into Image objects</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="replace.html" class="code" title="function object=replace(object,imageNumber,value,varargin)">replace</a>	REPLACE Replace data values in an object</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% REPLACE Replace data values in an object</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This method replaces a rectangular region in one Image of an ImageGroup</span>
+0004 <span class="comment">% with a specified value.  The replacement value *must* be specified; the</span>
+0005 <span class="comment">% replacement region can be specified or selected interactively.</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% To replace values in a specific region:</span>
+0008 <span class="comment">%     &gt;&gt; object=replace(object,imageNumber,value,[xA xB],[yA yB]);</span>
+0009 <span class="comment">% where xA, xB, yA, and yB are bounding grid values.  When no bounding</span>
+0010 <span class="comment">% region is specified:</span>
+0011 <span class="comment">%     &gt;&gt; object=replace(object,imageNumber,value);</span>
+0012 <span class="comment">% the user is prompted to select the region.</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% see also ImageGroup</span>
+0015 
+0016 <span class="comment">% created January 29, 2016 by Sean Grant (Sandia National Laboratories/UT)</span>
+0017 
+0018 <a name="_sub0" href="#_subfunctions" class="code">function object=replace(object,imageNumber,value,varargin)</a>
+0019 
+0020 <span class="comment">% handle input</span>
+0021 assert(nargin&gt;=3,<span class="string">'Invalid number of inputs'</span>);
+0022 assert(rem(imageNumber,1)==0,<span class="string">'Image selection must be an integer'</span>);
+0023 
+0024 <span class="comment">% split up ImageGroup</span>
+0025 temp=cell(object.NumberImages,1);
+0026 
+0027 <span class="comment">% Perform function on each image individually</span>
+0028 [temp{:}]=<a href="split.html" class="code" title="function varargout=split(object,imageNumbers)">split</a>(object);
+0029 
+0030     temp{imageNumber}=<a href="replace.html" class="code" title="function object=replace(object,imageNumber,value,varargin)">replace</a>(temp{imageNumber},value,varargin{:});
+0031 
+0032 <span class="comment">% remake ImageGroup</span>
+0033 object=SMASH.ImageAnalysis.ImageGroup(temp{:});
+0034 
+0035 
+0036 <span class="keyword">end</span>
+0037</pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

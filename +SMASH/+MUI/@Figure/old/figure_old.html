@@ -1,0 +1,344 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of figure_old</title>
+  <meta name="keywords" content="figure_old">
+  <meta name="description" content="mui.figure : create a MUI figure">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../../index.html">SMASHtoolbox</a> &gt; <a href="../../../index.html">+SMASH</a> &gt; <a href="../../index.html">+MUI</a> &gt; <a href="../index.html">@Figure</a> &gt; <a href="index.html">old</a> &gt; figure_old.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../../index.html"><img alt="<" border="0" src="../../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+MUI/@Figure/old&nbsp;<img alt=">" border="0" src="../../../../../../right.png"></a></td></tr></table>-->
+
+<h1>figure_old
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>mui.figure : create a MUI figure</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>function varargout=figure(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> mui.figure : create a MUI figure</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="ROIstatistics.html" class="code" title="function ROIstatistics(varargin)">ROIstatistics</a>	ROIstatistics : activate region of interest statistics for a figure</li><li><a href="autoscale.html" class="code" title="function autoscale(fig,state)">autoscale</a>	handle input</li><li><a href="clone.html" class="code" title="function clone(varargin)">clone</a>	clone : selectively clone axes to its own figure</li><li><a href="manualscale.html" class="code" title="function manualscale(varargin)">manualscale</a>	manualscale : selective manual scaling for a figure</li><li><a href="overlay.html" class="code" title="function overlay(varargin)">overlay</a>	overlay : overlay data on an existing axes</li><li><a href="slice.html" class="code" title="function slice(fig,mode)">slice</a>	</li><li><a href="tightscale.html" class="code" title="function tightscale(varargin)">tightscale</a>	tightscale : selective tight scaling for a figure</li><li><a href="toggle.html" class="code" title="function toggle(object)">toggle</a>	</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function ButtonClick(src,varargin)</a></li><li><a href="#_sub2" class="code">function ToggleButton(src,varargin)</a></li><li><a href="#_sub3" class="code">function func=IsValidAxes(haxes)</a></li><li><a href="#_sub4" class="code">function func=ValidAxes(fig)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% mui.figure : create a MUI figure</span>
+0002 
+0003 <span class="comment">%% main function and support functions</span>
+0004 <a name="_sub0" href="#_subfunctions" class="code">function varargout=figure(varargin)</a>
+0005 
+0006 <span class="comment">% create figure</span>
+0007 fig=figure(varargin{:});
+0008 
+0009 <span class="comment">% create toolbar</span>
+0010 set(fig,<span class="string">'MenuBar'</span>,<span class="string">'none'</span>,<span class="string">'Toolbar'</span>,<span class="string">'none'</span>,<span class="string">'DockControls'</span>,<span class="string">'off'</span>);
+0011 
+0012 <span class="comment">% create the toolbar</span>
+0013 data.figset{1}=<span class="string">'Pointer'</span>;
+0014 data.figset{end+2}=<span class="string">'PointerShapeCData'</span>;
+0015 data.figset{end+2}=<span class="string">'PointerShapeHotSpot'</span>;
+0016 data.figset{end+2}=<span class="string">'WindowButtonDownFcn'</span>;
+0017 data.figset{end+2}=<span class="string">'WindowButtonMotionFcn'</span>;
+0018 data.figset{end+2}=<span class="string">'WindowButtonUpFcn'</span>;
+0019 N=numel(data.figset);
+0020 <span class="keyword">for</span> ii=1:2:N
+0021     data.figset{ii+1}=get(fig,data.figset{ii});
+0022 <span class="keyword">end</span>
+0023 
+0024 hb=uitoolbar(<span class="string">'Parent'</span>,fig,<span class="string">'Tag'</span>,<span class="string">'MinimalFigureToolbar'</span>,<span class="string">'UserData'</span>,data);
+0025 
+0026 uipushtool(<span class="string">'Parent'</span>,hb,<span class="string">'Tag'</span>,<span class="string">'directory'</span>,<span class="keyword">...</span>
+0027     <span class="string">'ToolTipString'</span>,<span class="string">'Set working directory'</span>,<span class="keyword">...</span>
+0028     <span class="string">'CData'</span>,local_graphic(<span class="string">'FolderIcon'</span>),<span class="string">'ClickedCallback'</span>,@<a href="#_sub1" class="code" title="subfunction ButtonClick(src,varargin)">ButtonClick</a>);
+0029 
+0030 uipushtool(<span class="string">'Parent'</span>,hb,<span class="string">'Tag'</span>,<span class="string">'save'</span>,<span class="string">'ToolTipString'</span>,<span class="string">'Save figure'</span>,<span class="keyword">...</span>
+0031     <span class="string">'Cdata'</span>,local_graphic(<span class="string">'SaveIcon'</span>),<span class="string">'ClickedCallback'</span>,@<a href="#_sub1" class="code" title="subfunction ButtonClick(src,varargin)">ButtonClick</a>);<span class="comment">%,'Visible','off');</span>
+0032 
+0033 uitoggletool(<span class="string">'Parent'</span>,hb,<span class="string">'Tag'</span>,<span class="string">'zoom'</span>,<span class="string">'ToolTipString'</span>,<span class="string">'Zoom'</span>,<span class="keyword">...</span>
+0034     <span class="string">'Cdata'</span>,local_graphic(<span class="string">'ZoomIcon'</span>),<span class="string">'Separator'</span>,<span class="string">'on'</span>,<span class="keyword">...</span>
+0035     <span class="string">'ClickedCallback'</span>,@<a href="#_sub2" class="code" title="subfunction ToggleButton(src,varargin)">ToggleButton</a>);
+0036 
+0037 uitoggletool(<span class="string">'Parent'</span>,hb,<span class="string">'Tag'</span>,<span class="string">'pan'</span>,<span class="string">'ToolTipString'</span>,<span class="string">'Pan'</span>,<span class="keyword">...</span>
+0038     <span class="string">'Cdata'</span>,local_graphic(<span class="string">'PanIcon'</span>),<span class="keyword">...</span>
+0039     <span class="string">'ClickedCallback'</span>,@<a href="#_sub2" class="code" title="subfunction ToggleButton(src,varargin)">ToggleButton</a>);
+0040 
+0041 data=[];
+0042 data.pointer=<span class="string">'crosshair'</span>;
+0043 data.hotspot=[8 8];
+0044 uitoggletool(<span class="string">'Parent'</span>,hb,<span class="string">'Tag'</span>,<span class="string">'autoscale'</span>,<span class="keyword">...</span>
+0045     <span class="string">'Cdata'</span>,local_graphic(<span class="string">'AutoScaleIcon'</span>),<span class="string">'Enable'</span>,<span class="string">'on'</span>,<span class="keyword">...</span>
+0046     <span class="string">'ClickedCallback'</span>,@<a href="#_sub2" class="code" title="subfunction ToggleButton(src,varargin)">ToggleButton</a>,<span class="keyword">...</span>
+0047     <span class="string">'UserData'</span>,data,<span class="string">'ToolTipString'</span>,<span class="string">'Auto scale axes'</span>);
+0048 
+0049 data=[];
+0050 data.hotspot=[8 8];
+0051 data.pointer=<span class="string">'crosshair'</span>;
+0052 uitoggletool(<span class="string">'Parent'</span>,hb,<span class="string">'Tag'</span>,<span class="string">'tightscale'</span>,<span class="keyword">...</span>
+0053     <span class="string">'Cdata'</span>,local_graphic(<span class="string">'TightScaleIcon'</span>),<span class="string">'Enable'</span>,<span class="string">'on'</span>,<span class="keyword">...</span>
+0054     <span class="string">'ClickedCallback'</span>,@<a href="#_sub2" class="code" title="subfunction ToggleButton(src,varargin)">ToggleButton</a>,<span class="keyword">...</span>
+0055     <span class="string">'UserData'</span>,data,<span class="string">'ToolTipString'</span>,<span class="string">'Tight scale axes'</span>);
+0056 
+0057 data=[];
+0058 data.pointer=<span class="string">'crosshair'</span>;
+0059 data.hotspot=[8 8];
+0060 uitoggletool(<span class="string">'Parent'</span>,hb,<span class="string">'Tag'</span>,<span class="string">'manualscale'</span>,<span class="keyword">...</span>
+0061     <span class="string">'Cdata'</span>,local_graphic(<span class="string">'ManualScaleIcon'</span>),<span class="string">'Enable'</span>,<span class="string">'on'</span>,<span class="keyword">...</span>
+0062     <span class="string">'ClickedCallback'</span>,@<a href="#_sub2" class="code" title="subfunction ToggleButton(src,varargin)">ToggleButton</a>,<span class="keyword">...</span>
+0063     <span class="string">'UserData'</span>,data,<span class="string">'ToolTipString'</span>,<span class="string">'Manual scale'</span>);
+0064 
+0065 uitoggletool(<span class="string">'Parent'</span>,hb,<span class="string">'Tag'</span>,<span class="string">'datacursor'</span>,<span class="string">'ToolTipString'</span>,<span class="string">'Data cursor'</span>,<span class="keyword">...</span>
+0066     <span class="string">'Cdata'</span>,local_graphic(<span class="string">'DatatipIcon'</span>),<span class="string">'Separator'</span>,<span class="string">'on'</span>,<span class="string">'Enable'</span>,<span class="string">'on'</span>,<span class="keyword">...</span>
+0067     <span class="string">'ClickedCallback'</span>,@<a href="#_sub2" class="code" title="subfunction ToggleButton(src,varargin)">ToggleButton</a>);
+0068 
+0069 data=[];
+0070 data.pointer=<span class="string">'crosshair'</span>;
+0071 uitoggletool(<span class="string">'Parent'</span>,hb,<span class="string">'Tag'</span>,<span class="string">'ROIstatistics'</span>,<span class="keyword">...</span>
+0072     <span class="string">'ToolTipString'</span>,<span class="string">'Region of interest (ROI) statistics'</span>,<span class="keyword">...</span>
+0073     <span class="string">'Cdata'</span>,local_graphic(<span class="string">'ROIicon'</span>),<span class="string">'Enable'</span>,<span class="string">'on'</span>,<span class="keyword">...</span>
+0074     <span class="string">'UserData'</span>,data,<span class="string">'ClickedCallback'</span>,@<a href="#_sub2" class="code" title="subfunction ToggleButton(src,varargin)">ToggleButton</a>);
+0075 
+0076 data=[];
+0077 data.pointer=<span class="string">'crosshair'</span>;
+0078 uitoggletool(<span class="string">'Parent'</span>,hb,<span class="string">'Tag'</span>,<span class="string">'overlay'</span>,<span class="keyword">...</span>
+0079     <span class="string">'ToolTipString'</span>,<span class="string">'Overlay (x,y) data'</span>,<span class="keyword">...</span>
+0080     <span class="string">'Cdata'</span>,local_graphic(<span class="string">'OverlayIcon'</span>),<span class="string">'Enable'</span>,<span class="string">'on'</span>,<span class="keyword">...</span>
+0081     <span class="string">'UserData'</span>,data,<span class="string">'ClickedCallback'</span>,@<a href="#_sub2" class="code" title="subfunction ToggleButton(src,varargin)">ToggleButton</a>);
+0082 
+0083 data=[];
+0084 data.pointer=<span class="string">'crosshair'</span>;
+0085 uitoggletool(<span class="string">'Parent'</span>,hb,<span class="string">'Tag'</span>,<span class="string">'clone'</span>,<span class="keyword">...</span>
+0086     <span class="string">'ToolTipString'</span>,<span class="string">'Clone axes'</span>,<span class="keyword">...</span>
+0087     <span class="string">'Cdata'</span>,local_graphic(<span class="string">'CloneIcon'</span>),<span class="string">'Enable'</span>,<span class="string">'on'</span>,<span class="keyword">...</span>
+0088     <span class="string">'UserData'</span>,data,<span class="string">'ClickedCallback'</span>,@<a href="#_sub2" class="code" title="subfunction ToggleButton(src,varargin)">ToggleButton</a>);
+0089 
+0090 data=[];
+0091 data.pointer=<span class="string">'crosshair'</span>;
+0092 uitoggletool(<span class="string">'Parent'</span>,hb,<span class="string">'Tag'</span>,<span class="string">'slice'</span>,<span class="keyword">...</span>
+0093     <span class="string">'ToolTipString'</span>,<span class="string">'Slice image'</span>,<span class="keyword">...</span>
+0094     <span class="string">'Cdata'</span>,local_graphic(<span class="string">'SliceIcon'</span>),<span class="string">'Enable'</span>,<span class="string">'on'</span>,<span class="keyword">...</span>
+0095     <span class="string">'UserData'</span>,data,<span class="string">'ClickedCallback'</span>,@<a href="#_sub2" class="code" title="subfunction ToggleButton(src,varargin)">ToggleButton</a>);
+0096 
+0097 uipushtool(<span class="string">'Parent'</span>,hb,<span class="string">'Tag'</span>,<span class="string">'help'</span>,<span class="string">'ToolTipString'</span>,<span class="string">'Toolbar help'</span>,<span class="keyword">...</span>
+0098     <span class="string">'Cdata'</span>,local_graphic(<span class="string">'HelpIcon'</span>),<span class="string">'Separator'</span>,<span class="string">'on'</span>,<span class="string">'Enable'</span>,<span class="string">'on'</span>,<span class="keyword">...</span>
+0099     <span class="string">'ClickedCallback'</span>,@<a href="#_sub1" class="code" title="subfunction ButtonClick(src,varargin)">ButtonClick</a>);
+0100 
+0101 
+0102 
+0103 <span class="comment">% output control</span>
+0104 <span class="keyword">if</span> nargout&gt;=1
+0105     varargout{1}=fig;
+0106 <span class="keyword">end</span>
+0107 
+0108 <span class="keyword">end</span>
+0109 
+0110 <span class="comment">%% toolbar button callback and suport functions</span>
+0111 <a name="_sub1" href="#_subfunctions" class="code">function ButtonClick(src,varargin)</a>
+0112 
+0113 tag=get(src,<span class="string">'Tag'</span>);
+0114 <span class="keyword">switch</span> tag
+0115     <span class="keyword">case</span> <span class="string">'directory'</span>
+0116         dirname=uigetdir(pwd,<span class="string">'Select working diretory'</span>);
+0117         <span class="keyword">if</span> isnumeric(dirname) <span class="comment">% user pressed cancel</span>
+0118             <span class="keyword">return</span>
+0119         <span class="keyword">else</span>
+0120             cd(dirname);
+0121         <span class="keyword">end</span>
+0122     <span class="keyword">case</span> <span class="string">'save'</span>
+0123         <span class="comment">% make a temporary figure</span>
+0124         mainfig=ancestor(src,<span class="string">'figure'</span>);
+0125         set(mainfig,<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+0126         tempfig=copyobj(mainfig,0);
+0127         <span class="comment">% remove all uicontrols/uimenus from temp figure</span>
+0128         h=findall(tempfig,<span class="string">'Type'</span>,<span class="string">'uicontrol'</span>);
+0129         delete(h);
+0130         h=findall(tempfig,<span class="string">'Type'</span>,<span class="string">'uimenu'</span>,<span class="string">'-or'</span>,<span class="string">'Type'</span>,<span class="string">'uicontextmenu'</span>);
+0131         delete(h);
+0132         h=findall(tempfig,<span class="string">'Type'</span>,<span class="string">'uitoolbar'</span>);
+0133         delete(h);
+0134         <span class="comment">% restore default behavior to temp figure</span>
+0135         set(tempfig,<span class="string">'ResizeFcn'</span>,<span class="string">''</span>,<span class="string">'WindowButtonDownFcn'</span>,<span class="string">''</span>,<span class="keyword">...</span>
+0136             <span class="string">'WindowButtonMotionFcn'</span>,<span class="string">''</span>,<span class="string">'WindowButtonUpFcn'</span>,<span class="string">''</span>,<span class="keyword">...</span>
+0137             <span class="string">'KeyPressFcn'</span>,<span class="string">''</span>,<span class="string">'ButtonDownFcn'</span>,<span class="string">''</span>,<span class="keyword">...</span>
+0138             <span class="string">'CloseRequestFcn'</span>,<span class="string">'closereq'</span>,<span class="string">'HandleVisibility'</span>,<span class="string">'on'</span>,<span class="keyword">...</span>
+0139             <span class="string">'MenuBar'</span>,<span class="string">'figure'</span>,<span class="string">'Toolbar'</span>,<span class="string">'figure'</span>,<span class="string">'Pointer'</span>,<span class="string">'default'</span>);
+0140         <span class="comment">% save temporary figure, then delete it</span>
+0141         name=sprintf(<span class="string">'Saved figure (%s)'</span>,datestr(now));
+0142         set(tempfig,<span class="string">'Name'</span>,name);
+0143         set(tempfig,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0144         filemenufcn(tempfig,<span class="string">'FileSaveAs'</span>);
+0145         delete(tempfig);
+0146         set(mainfig,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0147     <span class="keyword">case</span> <span class="string">'help'</span>
+0148         object=mui.dialog(<span class="string">'Name'</span>,<span class="string">'Toolbar operations'</span>);
+0149         object.hide;
+0150         <span class="comment">% create message</span>
+0151         indent=repmat(<span class="string">' '</span>,[1 5]);
+0152         indent=[indent <span class="string">'-'</span>];
+0153         message={};
+0154         message{end+1}=<span class="string">'Toolbar operations'</span>;
+0155         message{end+1}=<span class="string">' '</span>;
+0156         message{end+1}=<span class="string">'1. Set working directory'</span>;
+0157         message{end+1}=[indent <span class="keyword">...</span>
+0158             <span class="string">'Change the current directory using a dialog box.'</span>];
+0159         message{end+1}=<span class="string">'2. Save figure'</span>;
+0160         message{end+1}=[indent<span class="keyword">...</span>
+0161             <span class="string">'Save figure as a MATLAB *.fig file or a graphic file (pdf, jpg, etc.).'</span>];
+0162         message{end+1}=<span class="string">'3. Zoom'</span>;
+0163         message{end+1}=[indent <span class="string">'Zoom in with mouse click or click and drag.'</span>];
+0164         message{end+1}=[indent <span class="string">'Zoom out with shift-click; double-click to restore original view.'</span>];
+0165         message{end+1}=[indent <span class="string">'Press right mouse button (control-click) for additional options.'</span>];
+0166         message{end+1}=<span class="string">'4. Pan'</span>;
+0167         message{end+1}=[indent <span class="string">'Click and drag to pan over an axes; double-click to restore original view.'</span>];
+0168         message{end+1}=[indent <span class="string">'Press right mouse button (control-click) for additional options.'</span>];
+0169         message{end+1}=<span class="string">'5. Auto scale'</span>;
+0170         message{end+1}=[indent <span class="string">'Click on axes to set nice limits.'</span>];
+0171         message{end+1}=[indent <span class="string">'Shift-click to auto scale all figure axes.'</span>];
+0172         message{end+1}=<span class="string">'6. Tight scale'</span>;
+0173         message{end+1}=[indent <span class="string">'Click on axes to set tight limit'</span>];
+0174         message{end+1}=[indent <span class="string">'Shift-click to tight scale all figure axes.'</span>];
+0175         message{end+1}=<span class="string">'7. Manual scale '</span>;
+0176         message{end+1}=[indent <span class="string">'Click on axes to manually set limits.'</span>];
+0177         message{end+1}=<span class="string">'8. Data cursor'</span>;
+0178         message{end+1}=[indent <span class="string">'Click on data to display (x,y,z) coordinates.'</span>];
+0179         message{end+1}=[indent <span class="string">'Press right mouse button (control-click) for additional options.'</span>];
+0180         message{end+1}=<span class="string">'9. Region of interest (ROI) statistics '</span>;
+0181         message{end+1}=[indent <span class="string">'Click and drag to specify a region of interest.'</span>];
+0182         message{end+1}=[indent <span class="string">'Local statistics in this region will be displayed.'</span>];
+0183         message{end+1}=<span class="string">'10. Overlay (x,y) data '</span>;
+0184         message{end+1}=[indent <span class="string">'Click on axes to overlay (x,y) data from a file.'</span>];
+0185         message{end+1}=[indent <span class="string">'Right-click overlays to make adjustments.'</span>];
+0186         message{end+1}=<span class="string">'11. Clone axes  '</span>;
+0187         message{end+1}=[indent <span class="string">'Click on axes to clone to another figure.'</span>];
+0188         message{end+1}=<span class="string">'12. Slice image  '</span>;
+0189         message{end+1}=[indent <span class="string">'Click on image to generate horizontal and vertical slice plots. '</span>];
+0190         h=object.text(message);
+0191         extent=get(h,<span class="string">'Extent'</span>);
+0192         pos=get(object.Handle,<span class="string">'Position'</span>);
+0193         pos(3)=extent(3);
+0194         set(object.Handle,<span class="string">'Position'</span>,pos);
+0195         object.show;
+0196         object.lock
+0197 <span class="keyword">end</span>
+0198 
+0199 <span class="keyword">end</span>
+0200 
+0201 
+0202 <span class="comment">%% toggle callback anad support functions</span>
+0203 <a name="_sub2" href="#_subfunctions" class="code">function ToggleButton(src,varargin)</a>
+0204 
+0205 <span class="comment">% get handles</span>
+0206 parent=get(src,<span class="string">'Parent'</span>);
+0207 fig=ancestor(src,<span class="string">'figure'</span>);
+0208 figure(fig)
+0209 
+0210 <span class="comment">% restore figure to default state</span>
+0211 zoom(fig,<span class="string">'off'</span>);
+0212 pan(fig,<span class="string">'off'</span>);
+0213 datacursormode(fig,<span class="string">'off'</span>);
+0214 <a href="autoscale.html" class="code" title="function autoscale(fig,state)">autoscale</a>(fig,<span class="string">'off'</span>);
+0215 <a href="tightscale.html" class="code" title="function tightscale(varargin)">tightscale</a>(fig,<span class="string">'off'</span>);
+0216 <a href="manualscale.html" class="code" title="function manualscale(varargin)">manualscale</a>(fig,<span class="string">'off'</span>);
+0217 <a href="ROIstatistics.html" class="code" title="function ROIstatistics(varargin)">ROIstatistics</a>(fig,<span class="string">'off'</span>);
+0218 <a href="overlay.html" class="code" title="function overlay(varargin)">overlay</a>(fig,<span class="string">'off'</span>);
+0219 <a href="clone.html" class="code" title="function clone(varargin)">clone</a>(fig,<span class="string">'off'</span>);
+0220 <a href="slice.html" class="code" title="function slice(fig,mode)">slice</a>(fig,<span class="string">'off'</span>);
+0221 
+0222 <span class="comment">% check toggle state</span>
+0223 state=get(src,<span class="string">'State'</span>);
+0224 <span class="keyword">if</span> strcmp(state,<span class="string">'on'</span>)
+0225     <span class="comment">% turn off other toggle switchs</span>
+0226     <a href="toggle.html" class="code" title="function toggle(object)">toggle</a>=findobj(parent,<span class="string">'Type'</span>,<span class="string">'uitoggletool'</span>);
+0227     ii=(<a href="toggle.html" class="code" title="function toggle(object)">toggle</a>~=src);
+0228     set(<a href="toggle.html" class="code" title="function toggle(object)">toggle</a>(ii),<span class="string">'State'</span>,<span class="string">'off'</span>);
+0229 <span class="keyword">else</span>
+0230     <span class="keyword">return</span> <span class="comment">% nothing left to do</span>
+0231 <span class="keyword">end</span>
+0232 
+0233 <span class="comment">% make sure at least one axes exists</span>
+0234 haxes=<a href="#_sub4" class="code" title="subfunction func=ValidAxes(fig)">ValidAxes</a>(fig);
+0235 <span class="keyword">if</span> numel(haxes)==0
+0236     set(src,<span class="string">'State'</span>,<span class="string">'off'</span>);
+0237     <span class="keyword">return</span>
+0238 <span class="keyword">end</span>
+0239 
+0240 <span class="comment">% execute specific toggle actions</span>
+0241 tag=get(src,<span class="string">'Tag'</span>);
+0242 <span class="keyword">switch</span> tag
+0243     <span class="keyword">case</span> <span class="string">'zoom'</span>
+0244         zoom(fig,<span class="string">'on'</span>);
+0245     <span class="keyword">case</span> <span class="string">'pan'</span>
+0246         pan(fig,<span class="string">'on'</span>);
+0247     <span class="keyword">case</span> <span class="string">'autoscale'</span>
+0248         <a href="autoscale.html" class="code" title="function autoscale(fig,state)">autoscale</a>(fig,<span class="string">'on'</span>);
+0249     <span class="keyword">case</span> <span class="string">'tightscale'</span>
+0250         <a href="tightscale.html" class="code" title="function tightscale(varargin)">tightscale</a>(fig,<span class="string">'on'</span>);
+0251     <span class="keyword">case</span> <span class="string">'manualscale'</span>
+0252         <a href="manualscale.html" class="code" title="function manualscale(varargin)">manualscale</a>(fig,<span class="string">'on'</span>);
+0253     <span class="keyword">case</span> <span class="string">'datacursor'</span>
+0254         dcm_obj=datacursormode(fig);
+0255         set(dcm_obj,<span class="string">'Enable'</span>,<span class="string">'on'</span>,<span class="string">'UpdateFcn'</span>,@datacursor_text)
+0256     <span class="keyword">case</span> <span class="string">'ROIstatistics'</span>
+0257         <a href="ROIstatistics.html" class="code" title="function ROIstatistics(varargin)">ROIstatistics</a>(fig,<span class="string">'on'</span>);
+0258     <span class="keyword">case</span> <span class="string">'overlay'</span>
+0259         <a href="overlay.html" class="code" title="function overlay(varargin)">overlay</a>(fig,<span class="string">'on'</span>);
+0260     <span class="keyword">case</span> <span class="string">'clone'</span>
+0261         <a href="clone.html" class="code" title="function clone(varargin)">clone</a>(fig,<span class="string">'on'</span>);
+0262     <span class="keyword">case</span> <span class="string">'slice'</span>
+0263         <a href="slice.html" class="code" title="function slice(fig,mode)">slice</a>(fig,<span class="string">'on'</span>);
+0264 <span class="keyword">end</span>
+0265 
+0266 <span class="keyword">end</span>
+0267 
+0268 <a name="_sub3" href="#_subfunctions" class="code">function func=IsValidAxes(haxes)</a>
+0269 
+0270 func=false;
+0271 type=get(haxes,<span class="string">'Type'</span>);
+0272 tag=get(haxes,<span class="string">'Tag'</span>);
+0273 <span class="keyword">if</span> ~strcmp(type,<span class="string">'axes'</span>)
+0274     <span class="keyword">return</span>
+0275 <span class="keyword">elseif</span> strcmp(tag,<span class="string">'legend'</span>) || strcmp(tag,<span class="string">'colorbar'</span>)
+0276     <span class="keyword">return</span>
+0277 <span class="keyword">else</span>
+0278     func=true;
+0279 <span class="keyword">end</span>
+0280 
+0281 <span class="keyword">end</span>
+0282 
+0283 <a name="_sub4" href="#_subfunctions" class="code">function func=ValidAxes(fig)</a>
+0284 
+0285 haxes=findobj(fig,<span class="string">'Type'</span>,<span class="string">'axes'</span>);
+0286 N=numel(haxes);
+0287 func=[];
+0288 <span class="keyword">for</span> ii=1:N
+0289     <span class="keyword">if</span> <a href="#_sub3" class="code" title="subfunction func=IsValidAxes(haxes)">IsValidAxes</a>(haxes(ii))
+0290         func(end+1)=haxes(ii);
+0291     <span class="keyword">end</span>
+0292 <span class="keyword">end</span>
+0293 
+0294 <span class="keyword">end</span>
+0295</pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

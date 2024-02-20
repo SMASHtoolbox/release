@@ -1,0 +1,292 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of convertLUNA_GUI</title>
+  <meta name="keywords" content="convertLUNA_GUI">
+  <meta name="description" content="determine if GUI already exists">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">convertLUNA</a> &gt; <a href="index.html">private</a> &gt; convertLUNA_GUI.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/convertLUNA/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>convertLUNA_GUI
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>determine if GUI already exists</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function convertLUNA_GUI() </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> determine if GUI already exists</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function selectSource(varargin)</a></li><li><a href="#_sub2" class="code">function refreshFiles(varargin)</a></li><li><a href="#_sub3" class="code">function modifyCurrent(varargin)</a></li><li><a href="#_sub4" class="code">function done(varargin)</a></li><li><a href="#_sub5" class="code">function modifyAll(varargin)</a></li><li><a href="#_sub6" class="code">function done(varargin)</a></li><li><a href="#_sub7" class="code">function viewCurrent(varargin)</a></li><li><a href="#_sub8" class="code">function refreshTarget(varargin)</a></li><li><a href="#_sub9" class="code">function selectTarget(varargin)</a></li><li><a href="#_sub10" class="code">function convertFiles(varargin)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function convertLUNA_GUI()</a>
+0002 
+0003 <span class="comment">% determine if GUI already exists</span>
+0004 fig=findobj(0,<span class="string">'Type'</span>,<span class="string">'figure'</span>,<span class="string">'Tag'</span>,<span class="string">'convertLUNA_GUI'</span>);
+0005 <span class="keyword">if</span> ishandle(fig);
+0006     figure(fig);
+0007     <span class="keyword">return</span>
+0008 <span class="keyword">end</span>
+0009 
+0010 <span class="comment">% internal settings</span>
+0011 setting=struct();
+0012 setting.Source=<span class="string">''</span>;
+0013 setting.NumberFiles=[];
+0014 setting.FileList={};
+0015 setting.TimeStep={};
+0016 setting.TimeRange={};
+0017 setting.Target=<span class="string">''</span>;
+0018 
+0019 <span class="comment">% create GUI</span>
+0020 main=SMASH.MUI.Dialog;
+0021 main.Hidden=true;
+0022 main.Name=<span class="string">'Convert LUNA scans'</span>;
+0023 set(main.Handle,<span class="string">'Tag'</span>,<span class="string">'convertLUNA_GUI'</span>);
+0024 
+0025 dummy=<span class="string">'refresh'</span>;
+0026 minwidth=40;
+0027 
+0028 hSource=addblock(main,<span class="string">'edit_button'</span>,{<span class="string">'Source directory:'</span>,dummy},minwidth);
+0029 set(hSource(2),<span class="string">'Callback'</span>,@<a href="#_sub2" class="code" title="subfunction refreshFiles(varargin)">refreshFiles</a>);
+0030 set(hSource(end),<span class="string">'String'</span>,<span class="string">'Select'</span>,<span class="string">'Callback'</span>,@<a href="#_sub1" class="code" title="subfunction selectSource(varargin)">selectSource</a>);
+0031     <a name="_sub1" href="#_subfunctions" class="code">function selectSource(varargin)</a>
+0032         source=uigetdir(pwd,<span class="string">'Select source directory'</span>);
+0033         <span class="keyword">if</span> isnumeric(source)
+0034             <span class="keyword">return</span>
+0035         <span class="keyword">end</span>
+0036         set(hSource(2),<span class="string">'String'</span>,source);
+0037         <a href="#_sub2" class="code" title="subfunction refreshFiles(varargin)">refreshFiles</a>;
+0038     <span class="keyword">end</span>
+0039 
+0040 hFile=addblock(main,<span class="string">'popup_button'</span>,{<span class="string">'Source files:'</span>,dummy},{<span class="string">'(empty)'</span>},minwidth);
+0041 set(hFile(end),<span class="string">'String'</span>,<span class="string">'Refresh'</span>,<span class="string">'Callback'</span>,@<a href="#_sub2" class="code" title="subfunction refreshFiles(varargin)">refreshFiles</a>);
+0042     <a name="_sub2" href="#_subfunctions" class="code">function refreshFiles(varargin)</a>
+0043         source=get(hSource(2),<span class="string">'String'</span>);
+0044         <span class="keyword">if</span> isempty(source)
+0045             <span class="keyword">return</span>;
+0046         <span class="keyword">end</span>
+0047         file=dir(fullfile(source,<span class="string">'*.obr'</span>));
+0048         <span class="keyword">if</span> isempty(file)
+0049             set(hFile(1),<span class="string">'String'</span>,<span class="string">'Source files:'</span>);
+0050             set(hFile(2),<span class="string">'String'</span>,<span class="string">'(empty)'</span>);
+0051             setting.FileList={};
+0052             setting.Source=<span class="string">''</span>;
+0053         <span class="keyword">else</span>
+0054             N=numel(file);
+0055             setting.FileList=cell(1,N);
+0056             <span class="keyword">for</span> n=1:N
+0057                 setting.FileList{n}=file(n).name;
+0058             <span class="keyword">end</span>
+0059             set(hFile(1),<span class="string">'String'</span>,sprintf(<span class="string">'Source files (%d found):'</span>,N));
+0060             set(hFile(2),<span class="string">'String'</span>,setting.FileList);
+0061             setting.Source=source;
+0062             setting.TimeStep=repmat({[]},[1 N]);
+0063             setting.TimeRange=repmat({[]},[1 N]);
+0064             setting.NumberFiles=N;
+0065         <span class="keyword">end</span>
+0066     <span class="keyword">end</span>
+0067 
+0068 h=addblock(main,<span class="string">'button'</span>,{<span class="string">'Modify current'</span>,<span class="string">'Modify all'</span>,<span class="string">'View current'</span>});
+0069 set(h(1),<span class="string">'Callback'</span>,@<a href="#_sub3" class="code" title="subfunction modifyCurrent(varargin)">modifyCurrent</a>);
+0070     <a name="_sub3" href="#_subfunctions" class="code">function modifyCurrent(varargin)</a>
+0071         <span class="keyword">if</span> isempty(setting.Source)
+0072             <span class="keyword">return</span>
+0073         <span class="keyword">end</span>
+0074         current=get(hFile(2),<span class="string">'Value'</span>);
+0075         sub=SMASH.MUI.Dialog;
+0076         sub.Hidden=true;
+0077         sub.Name=<span class="string">'Modify settings'</span>;
+0078         h=addblock(sub,<span class="string">'edit'</span>,<span class="string">'Current file:'</span>,<span class="keyword">...</span>
+0079             numel(setting.FileList{current}));
+0080         set(h(1),<span class="string">'FontWeight'</span>,<span class="string">'bold'</span>);
+0081         set(h(end),<span class="string">'Style'</span>,<span class="string">'text'</span>,<span class="string">'String'</span>,setting.FileList{current});
+0082         parent=get(h(end),<span class="string">'Parent'</span>);
+0083         set(h(end),<span class="string">'BackgroundColor'</span>,get(parent,<span class="string">'Color'</span>));
+0084         hStep=addblock(sub,<span class="string">'edit'</span>,<span class="string">'Time step (ns):'</span>,20);
+0085         set(hStep(1),<span class="string">'FontWeight'</span>,<span class="string">'bold'</span>);
+0086         set(hStep(2),<span class="string">'String'</span>,sprintf(<span class="string">'%.4f'</span>,setting.TimeStep{current}));
+0087         hRange=addblock(sub,<span class="string">'edit'</span>,<span class="string">'Time range (ns):'</span>,20);
+0088         set(hRange(1),<span class="string">'FontWeight'</span>,<span class="string">'bold'</span>);
+0089         set(hRange(2),<span class="string">'String'</span>,sprintf(<span class="string">'%.4f '</span>,setting.TimeRange{current}));
+0090         h=addblock(sub,<span class="string">'button'</span>,{<span class="string">'Done'</span>});
+0091         set(h(1),<span class="string">'Callback'</span>,@<a href="#_sub4  6" class="code" title="subfunction done(varargin)function done(varargin)">done</a>)
+0092         <a name="_sub4" href="#_subfunctions" class="code">function done(varargin)</a>
+0093             entry=probe(sub);
+0094             temp=sscanf(entry{1},<span class="string">'%g'</span>,1);
+0095             <span class="keyword">if</span> numel(temp)==1
+0096                 entry{1}=temp;
+0097             <span class="keyword">elseif</span> isempty(sscanf(<span class="string">'%s'</span>,entry{1}))
+0098                 entry{1}=[];
+0099             <span class="keyword">else</span>
+0100                 set(hStep(2),<span class="string">'String'</span>,<span class="string">''</span>);
+0101                 <span class="keyword">return</span>
+0102             <span class="keyword">end</span>
+0103             temp=sscanf(entry{2},<span class="string">'%g'</span>,2);
+0104             <span class="keyword">if</span> numel(temp)==2
+0105                 entry{2}=temp;
+0106             <span class="keyword">elseif</span> isempty(sscanf(<span class="string">'%s'</span>,entry{2}));
+0107                 entry{2}=[];
+0108             <span class="keyword">else</span>
+0109                 set(hRange(2),<span class="string">'String'</span>,<span class="string">''</span>);
+0110                 <span class="keyword">return</span>
+0111             <span class="keyword">end</span>
+0112             setting.TimeStep{current}=entry{1};
+0113             setting.TimeRange{current}=entry{2};
+0114             delete(sub);
+0115         <span class="keyword">end</span>
+0116         h=findobj(sub.Handle,<span class="string">'Type'</span>,<span class="string">'Text'</span>);
+0117         set(h,<span class="string">'FontWeight'</span>,<span class="string">'bold'</span>);
+0118         locate(sub,<span class="string">'center'</span>,main.Handle);
+0119         sub.Hidden=false;
+0120         uiwait(sub.Handle);
+0121     <span class="keyword">end</span>
+0122 set(h(2),<span class="string">'Callback'</span>,@<a href="#_sub5" class="code" title="subfunction modifyAll(varargin)">modifyAll</a>);
+0123     <a name="_sub5" href="#_subfunctions" class="code">function modifyAll(varargin)</a>
+0124         <span class="keyword">if</span> isempty(setting.Source)
+0125             <span class="keyword">return</span>
+0126         <span class="keyword">end</span>
+0127         sub=SMASH.MUI.Dialog;
+0128         sub.Hidden=true;
+0129         sub.Name=<span class="string">'Modify all settings'</span>;
+0130         hStep=addblock(sub,<span class="string">'edit'</span>,<span class="string">'Time step (ns):'</span>,20);
+0131         set(hStep(1),<span class="string">'FontWeight'</span>,<span class="string">'bold'</span>);
+0132         hRange=addblock(sub,<span class="string">'edit'</span>,<span class="string">'Time range (ns):'</span>,20);
+0133         set(hRange(1),<span class="string">'FontWeight'</span>,<span class="string">'bold'</span>);
+0134         h=addblock(sub,<span class="string">'button'</span>,{<span class="string">'Done'</span>});
+0135         set(h(1),<span class="string">'Callback'</span>,@<a href="#_sub4  6" class="code" title="subfunction done(varargin)function done(varargin)">done</a>)
+0136         <a name="_sub6" href="#_subfunctions" class="code">function done(varargin)</a>
+0137             entry=probe(sub);
+0138             temp=sscanf(entry{1},<span class="string">'%g'</span>,1);
+0139             <span class="keyword">if</span> numel(temp)==1
+0140                 entry{1}=temp;
+0141             <span class="keyword">elseif</span> isempty(sscanf(<span class="string">'%s'</span>,entry{1}))
+0142                 entry{1}=[];
+0143             <span class="keyword">else</span>
+0144                 set(hStep(2),<span class="string">'String'</span>,<span class="string">''</span>);
+0145                 <span class="keyword">return</span>
+0146             <span class="keyword">end</span>
+0147             temp=sscanf(entry{2},<span class="string">'%g'</span>,2);
+0148             <span class="keyword">if</span> numel(temp)==2
+0149                 entry{2}=temp;
+0150             <span class="keyword">elseif</span> isempty(sscanf(<span class="string">'%s'</span>,entry{2}));
+0151                 entry{2}=[];
+0152             <span class="keyword">else</span>
+0153                 set(hRange(2),<span class="string">'String'</span>,<span class="string">''</span>);
+0154                 <span class="keyword">return</span>
+0155             <span class="keyword">end</span>
+0156             <span class="keyword">for</span> k=1:setting.NumberFiles
+0157                 setting.TimeStep{k}=entry{1};
+0158                 setting.TimeRange{k}=entry{2};
+0159             <span class="keyword">end</span>
+0160             delete(sub);
+0161         <span class="keyword">end</span>
+0162         h=findobj(sub.Handle,<span class="string">'Type'</span>,<span class="string">'Text'</span>);
+0163         set(h,<span class="string">'FontWeight'</span>,<span class="string">'bold'</span>);
+0164         locate(sub,<span class="string">'center'</span>,main.Handle);
+0165         sub.Hidden=false;
+0166         uiwait(sub.Handle);
+0167     <span class="keyword">end</span>
+0168 set(h(3),<span class="string">'Callback'</span>,@<a href="#_sub7" class="code" title="subfunction viewCurrent(varargin)">viewCurrent</a>);
+0169     <a name="_sub7" href="#_subfunctions" class="code">function viewCurrent(varargin)</a>
+0170         <span class="keyword">if</span> isempty(setting.Source)
+0171             <span class="keyword">return</span>
+0172         <span class="keyword">end</span>
+0173         current=get(hFile(2),<span class="string">'Value'</span>);
+0174         target=fullfile(setting.Source,setting.FileList{current});
+0175         object=SMASH.FileAccess.LUNA(target);
+0176         step=setting.TimeStep{current};
+0177         range=setting.TimeRange{current};
+0178         <span class="keyword">if</span> isempty(step) &amp;&amp; isempty(range)
+0179             <span class="comment">% do nothing</span>
+0180         <span class="keyword">else</span>
+0181             object=modify(object,step,range);
+0182         <span class="keyword">end</span>
+0183         view(object);
+0184     <span class="keyword">end</span>
+0185 
+0186 hTarget=addblock(main,<span class="string">'edit_button'</span>,{<span class="string">'Target file:'</span>,dummy},minwidth);
+0187 set(hTarget(2),<span class="string">'Callback'</span>,@<a href="#_sub8" class="code" title="subfunction refreshTarget(varargin)">refreshTarget</a>);
+0188     <a name="_sub8" href="#_subfunctions" class="code">function refreshTarget(varargin)</a>
+0189         setting.Target=get(hTarget(2),<span class="string">'String'</span>);
+0190         [pathname,filename,extension]=fileparts(setting.Target);
+0191         <span class="keyword">if</span> ~strcmpi(extension,<span class="string">'.sda'</span>)
+0192             extension=[extension <span class="string">'.sda'</span>];
+0193         <span class="keyword">end</span>
+0194         setting.Target=fullfile(pathname,[filename extension]);
+0195         set(hTarget(2),<span class="string">'String'</span>,setting.Target);
+0196         set(hTarget(end),<span class="string">'String'</span>,<span class="string">'Select'</span>,<span class="string">'Callback'</span>,@<a href="#_sub9" class="code" title="subfunction selectTarget(varargin)">selectTarget</a>);
+0197     <span class="keyword">end</span>
+0198 set(hTarget(3),<span class="string">'Callback'</span>,@<a href="#_sub9" class="code" title="subfunction selectTarget(varargin)">selectTarget</a>);
+0199     <a name="_sub9" href="#_subfunctions" class="code">function selectTarget(varargin)</a>
+0200         filespec={<span class="string">'*.sda;*.SDA'</span>,<span class="string">'Sandia Data Archive files'</span>};
+0201         [filename,pathname]=uiputfile(filespec,<span class="string">'Select target file'</span>);
+0202         <span class="keyword">if</span> isnumeric(filename)
+0203             <span class="keyword">return</span>
+0204         <span class="keyword">end</span>
+0205         [~,filename,extension]=fileparts(filename);
+0206         <span class="keyword">if</span> ~strcmpi(extension,<span class="string">'.sda'</span>)
+0207             extension=<span class="string">'.sda'</span>;
+0208         <span class="keyword">end</span>
+0209         setting.Target=fullfile(pathname,[filename extension]);
+0210         set(hTarget(2),<span class="string">'String'</span>,setting.Target);
+0211     <span class="keyword">end</span>
+0212 
+0213 h=addblock(main,<span class="string">'button'</span>,{<span class="string">'Convert'</span>,<span class="string">'Done'</span>});
+0214 set(h(1),<span class="string">'Callback'</span>,@<a href="#_sub10" class="code" title="subfunction convertFiles(varargin)">convertFiles</a>)
+0215     <a name="_sub10" href="#_subfunctions" class="code">function convertFiles(varargin)</a>
+0216         <span class="keyword">if</span> isempty(setting.Source)
+0217             errordlg(<span class="string">'No source directory specified'</span>,<span class="string">'No source'</span>,<span class="string">'modal'</span>);
+0218             <span class="keyword">return</span>
+0219         <span class="keyword">elseif</span> isempty(setting.Target)
+0220             errordlg(<span class="string">'No target file specified'</span>,<span class="string">'No target'</span>,<span class="string">'modal'</span>);
+0221             <span class="keyword">return</span>
+0222         <span class="keyword">end</span>
+0223         convertLUNA(setting.Source,setting.Target,<span class="keyword">...</span>
+0224             setting.TimeStep,setting.TimeRange);
+0225     <span class="keyword">end</span>
+0226 set(h(2),<span class="string">'Callback'</span>,<span class="string">'close(gcbf)'</span>);
+0227 
+0228 <span class="comment">% apply callback</span>
+0229 <span class="comment">%convertLUNA(source,target,step,range)</span>
+0230 
+0231 <span class="comment">% format tweaks</span>
+0232 h=findobj(main.Handle,<span class="string">'Style'</span>,<span class="string">'text'</span>);
+0233 set(h,<span class="string">'FontWeight'</span>,<span class="string">'bold'</span>);
+0234 
+0235 <span class="comment">%h=findobj(main.Handle,'Style','edit');</span>
+0236 <span class="comment">%set(h,'HorizontalAlignment','right');</span>
+0237 
+0238 <span class="comment">% make dialog visible</span>
+0239 locate(main,<span class="string">'center'</span>);
+0240 main.Hidden=false;
+0241 set(main.Handle,<span class="string">'HandleVisibility'</span>,<span class="string">'callback'</span>);
+0242 
+0243 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

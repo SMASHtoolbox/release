@@ -1,0 +1,177 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of FFToptions</title>
+  <meta name="keywords" content="FFToptions">
+  <meta name="description" content="This class manages FFT options in various parts of the SMASH package">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="../../index.html">+SMASH</a> &gt; <a href="../index.html">+General</a> &gt; <a href="index.html">@FFToptions</a> &gt; FFToptions.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+General/@FFToptions&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>FFToptions
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>This class manages FFT options in various parts of the SMASH package</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> This class manages FFT options in various parts of the SMASH package
+
+ See also SMASH.General</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="FFToptions.html" class="code" title="">FFToptions</a>	This class manages FFT options in various parts of the SMASH package</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="FFToptions.html" class="code" title="">FFToptions</a>	This class manages FFT options in various parts of the SMASH package</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function object=FFToptions(varargin)</a></li><li><a href="#_sub2" class="code">function object=restore(data)</a></li><li><a href="#_sub3" class="code">function object=set.Window(object,value)</a></li><li><a href="#_sub4" class="code">function object=set.NumberFrequencies(object,value)</a></li><li><a href="#_sub5" class="code">function object=set.RemoveDC(object,value)</a></li><li><a href="#_sub6" class="code">function object=set.FrequencyDomain(object,value)</a></li><li><a href="#_sub7" class="code">function object=set.SpectrumType(object,value)</a></li><li><a href="#_sub8" class="code">function object=set.Normalization(object,value)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% This class manages FFT options in various parts of the SMASH package</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% See also SMASH.General</span>
+0004 <span class="comment">%</span>
+0005 
+0006 <span class="comment">%</span>
+0007 <span class="comment">% created December 12, 2014 by Daniel Dolan (Sandia National Laboratories)</span>
+0008 <span class="comment">%</span>
+0009 classdef <a href="FFToptions.html" class="code" title="">FFToptions</a>
+0010     <span class="comment">%%</span>
+0011     properties
+0012         Window = <span class="string">'hann'</span> <span class="comment">% Digital window function (name, name/parameter, or array)</span>
+0013         NumberFrequencies = 1000 <span class="comment">% Mininum number of frequency values (integer)</span>
+0014         RemoveDC = true; <span class="comment">% Remove DC component (true or false)</span>
+0015         FrequencyDomain = <span class="string">'positive'</span> <span class="comment">% Frequency domain ('positive', 'negative', 'all'?)</span>
+0016         SpectrumType = <span class="string">'power'</span> <span class="comment">% Spectrum type ('power', 'complex')</span>
+0017     <span class="keyword">end</span>
+0018     properties (Hidden=true)
+0019         Normalization = <span class="string">'parseval'</span> <span class="comment">% Spectal normalization ('parseval','none');</span>
+0020     <span class="keyword">end</span>
+0021     <span class="comment">%% hidden methods</span>
+0022     methods (Hidden=true)
+0023         <a name="_sub0" href="#_subfunctions" class="code">function object=FFToptions(varargin)            </a>
+0024             <span class="comment">% handle input</span>
+0025             assert(rem(nargin,2)==0,<span class="string">'ERROR: unmatched name/value pair'</span>);
+0026             <span class="keyword">for</span> n=1:2:nargin
+0027                 name=varargin{n};
+0028                 assert(isprop(object,name),<span class="string">'ERROR: invalid name'</span>);
+0029                 object.(name)=varargin{n+1};
+0030             <span class="keyword">end</span>
+0031         <span class="keyword">end</span>
+0032     <span class="keyword">end</span>
+0033 <span class="comment">%% static methods</span>
+0034     methods (Static=true,Hidden=true)
+0035         <a name="_sub1" href="#_subfunctions" class="code">function object=restore(data)</a>
+0036             object=SMASH.General.FFToptions();
+0037             name=fieldnames(data);
+0038             <span class="keyword">for</span> k=1:numel(name)
+0039                 <span class="keyword">if</span> isprop(object,name{k})
+0040                     object.(name{k})=data.(name{k});
+0041                 <span class="keyword">end</span>
+0042             <span class="keyword">end</span>
+0043         <span class="keyword">end</span>
+0044     <span class="keyword">end</span>
+0045     <span class="comment">%% property setters</span>
+0046     methods
+0047         <a name="_sub2" href="#_subfunctions" class="code">function object=set.Window(object,value)</a>
+0048             <span class="keyword">if</span> isempty(value)
+0049                 value=<span class="string">'gaussian'</span>;
+0050             <span class="keyword">end</span>
+0051             <span class="keyword">if</span> ischar(value)
+0052                 <span class="keyword">switch</span> lower(value)
+0053                     <span class="keyword">case</span> {<span class="string">'boxcar'</span>,<span class="string">'hann'</span>,<span class="string">'hamming'</span>,<span class="string">'gaussian'</span>}
+0054                         object.Window=value;
+0055                     <span class="keyword">otherwise</span>
+0056                         error(<span class="string">'ERROR: invalid Window name'</span>);
+0057                 <span class="keyword">end</span>
+0058             <span class="keyword">elseif</span> iscell(value)
+0059                 <span class="keyword">if</span> strcmpi(value{1},<span class="string">'gaussian'</span>) &amp;&amp; isnumeric(value{2})
+0060                     object.Window=value;
+0061                 <span class="keyword">else</span>
+0062                     error(<span class="string">'ERROR: invalid Window name/parameter(s)'</span>);
+0063                 <span class="keyword">end</span>
+0064             <span class="keyword">elseif</span> isnumeric(value)
+0065                 object.Window=value;
+0066             <span class="keyword">else</span>
+0067                 error(<span class="string">'ERROR: invalid Window setting'</span>);
+0068             <span class="keyword">end</span>
+0069         <span class="keyword">end</span>
+0070         <a name="_sub3" href="#_subfunctions" class="code">function object=set.NumberFrequencies(object,value)</a>
+0071             <span class="keyword">if</span> isempty(value)
+0072                 value=1000;
+0073             <span class="keyword">end</span>
+0074             assert(isnumeric(value),<span class="keyword">...</span>
+0075                 <span class="string">'ERROR: invalid NumberFrequencies value'</span>);            
+0076             <span class="keyword">if</span> numel(value)==1
+0077                 value(2)=inf;
+0078             <span class="keyword">end</span>    
+0079             assert(numel(value)==2,<span class="keyword">...</span>
+0080                 <span class="string">'ERROR: invalid NumberFrequencies value'</span>);
+0081             test(1)=SMASH.General.testNumber(value(1),<span class="string">'integer'</span>);
+0082             test(2)=SMASH.General.testNumber(value(2),<span class="string">'integer'</span>) | isinf(value(2));
+0083             test(3)=all(value&gt;0);
+0084             test(4)=value(2)&gt;value(1);
+0085             assert(all(test),<span class="string">'ERROR: invalid NumberFrequencies value'</span>);
+0086             object.NumberFrequencies=value;
+0087         <span class="keyword">end</span>
+0088         <a name="_sub4" href="#_subfunctions" class="code">function object=set.RemoveDC(object,value)</a>
+0089             <span class="keyword">if</span> isempty(value)
+0090                 value=true;
+0091             <span class="keyword">end</span>
+0092             assert(islogical(value),<span class="string">'ERROR: invalid RemoveDC value'</span>);
+0093             object.RemoveDC=value;
+0094         <span class="keyword">end</span>        
+0095         <a name="_sub5" href="#_subfunctions" class="code">function object=set.FrequencyDomain(object,value)</a>
+0096             assert(ischar(value),<span class="string">'ERROR: invalid FrequencyDomain value'</span>);
+0097             value=lower(value);
+0098             <span class="keyword">switch</span> value
+0099                 <span class="keyword">case</span> {<span class="string">'positive'</span>,<span class="string">'negative'</span>,<span class="string">'all'</span>,<span class="string">'full'</span>}
+0100                     object.FrequencyDomain=value;
+0101                 <span class="keyword">otherwise</span>
+0102                     error(<span class="string">'ERROR: invalid FrequencyDomain value'</span>);
+0103             <span class="keyword">end</span>
+0104         <span class="keyword">end</span>
+0105         <a name="_sub6" href="#_subfunctions" class="code">function object=set.SpectrumType(object,value)</a>
+0106             assert(ischar(value),<span class="string">'ERROR: invalid SpectrumType value'</span>);
+0107             value=lower(value);
+0108             <span class="keyword">switch</span> value
+0109                 <span class="keyword">case</span> {<span class="string">'power'</span>,<span class="string">'complex'</span>}
+0110                     object.SpectrumType=value;
+0111                 <span class="keyword">otherwise</span>
+0112                     error(<span class="string">'ERROR: invalid SpectrumType value'</span>);
+0113             <span class="keyword">end</span>
+0114         <span class="keyword">end</span>
+0115         <a name="_sub7" href="#_subfunctions" class="code">function object=set.Normalization(object,value)</a>
+0116             assert(ischar(value),<span class="string">'ERROR: invalid Normalization value'</span>);
+0117             value=lower(value);
+0118             <span class="keyword">switch</span> value
+0119                 <span class="keyword">case</span> {<span class="string">'parseval'</span> <span class="string">'none'</span>}
+0120                     object.Normalization=value;
+0121                 <span class="keyword">otherwise</span>
+0122                     error(<span class="string">'ERROR: invalid Normalization value'</span>);
+0123             <span class="keyword">end</span>
+0124         <span class="keyword">end</span>
+0125     <span class="keyword">end</span>
+0126 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

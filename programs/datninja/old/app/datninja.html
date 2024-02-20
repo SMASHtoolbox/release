@@ -1,0 +1,1130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of datninja</title>
+  <meta name="keywords" content="datninja">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../../index.html">datninja</a> &gt; <a href="../index.html">old</a> &gt; <a href="index.html">app</a> &gt; datninja.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../../index.html"><img alt="<" border="0" src="../../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/datninja/old/app&nbsp;<img alt=">" border="0" src="../../../../../../right.png"></a></td></tr></table>-->
+
+<h1>datninja
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="datninja.html" class="code" title="">datninja</a>	</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="datninja.html" class="code" title="">datninja</a>	</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function chooseMarkerSize(app,value)</a></li><li><a href="#_sub2" class="code">function state=PointReady(app)</a></li><li><a href="#_sub3" class="code">function updatePoints(app,data)</a></li><li><a href="#_sub4" class="code">function updateImage(app)</a></li><li><a href="#_sub5" class="code">function startupFcn(app)</a></li><li><a href="#_sub6" class="code">function LoadGraphicSelected(app, event)</a></li><li><a href="#_sub7" class="code">function UIFigureKeyPress(app, event)</a></li><li><a href="#_sub8" class="code">function UIFigureWindowButtonDown(app, event)</a></li><li><a href="#_sub9" class="code">function StartOverMenuSelected(app, event)</a></li><li><a href="#_sub10" class="code">function ReferenceColorSelected(app, event)</a></li><li><a href="#_sub11" class="code">function Marker5Selected(app, event)</a></li><li><a href="#_sub12" class="code">function Marker10Selected(app, event)</a></li><li><a href="#_sub13" class="code">function Marker15Selected(app, event)</a></li><li><a href="#_sub14" class="code">function Marker20Selected(app, event)</a></li><li><a href="#_sub15" class="code">function Marker25Selected(app, event)</a></li><li><a href="#_sub16" class="code">function mEditValueChanged(app, event)</a></li><li><a href="#_sub17" class="code">function nEditValueChanged(app, event)</a></li><li><a href="#_sub18" class="code">function xEditValueChanged(app, event)</a></li><li><a href="#_sub19" class="code">function yEditValueChanged(app, event)</a></li><li><a href="#_sub20" class="code">function DataColorSelected(app, event)</a></li><li><a href="#_sub21" class="code">function StorePointPushed(app, event)</a></li><li><a href="#_sub22" class="code">function MovePointPushed(app, event)</a></li><li><a href="#_sub23" class="code">function StoredListChanged(app, event)</a></li><li><a href="#_sub24" class="code">function RemovePointPushed(app, event)</a></li><li><a href="#_sub25" class="code">function PromotePointPushed(app, event)</a></li><li><a href="#_sub26" class="code">function DemotePointPushed(app, event)</a></li><li><a href="#_sub27" class="code">function LeftMenuSelected(app, event)</a></li><li><a href="#_sub28" class="code">function RightMenuSelected(app, event)</a></li><li><a href="#_sub29" class="code">function VerticalMenuSelected(app, event)</a></li><li><a href="#_sub30" class="code">function HorizontalMenuSelected(app, event)</a></li><li><a href="#_sub31" class="code">function SelectionModePanelSelectionChanged(app, event)</a></li><li><a href="#_sub32" class="code">function LogNoneSelected(app, event)</a></li><li><a href="#_sub33" class="code">function LogHorizontalMenuSelected(app, event)</a></li><li><a href="#_sub34" class="code">function LogVerticalMenuSelected(app, event)</a></li><li><a href="#_sub35" class="code">function LogBothMenuSelected(app, event)</a></li><li><a href="#_sub36" class="code">function ExportDataMenuSelected(app, event)</a></li><li><a href="#_sub37" class="code">function SaveCurrentMenuSelected(app, event)</a></li><li><a href="#_sub38" class="code">function LoadPreviousMenuSelected(app, event)</a></li><li><a href="#_sub39" class="code">function Marker50MenuSelected(app, event)</a></li><li><a href="#_sub40" class="code">function Marker100MenuSelected(app, event)</a></li><li><a href="#_sub41" class="code">function createComponents(app)</a></li><li><a href="#_sub42" class="code">function app = datninja</a></li><li><a href="#_sub43" class="code">function delete(app)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 
+0002 classdef <a href="datninja.html" class="code" title="">datninja</a> &lt; matlab.apps.AppBase
+0003 
+0004     <span class="comment">% Properties that correspond to app components</span>
+0005     properties (Access = public)
+0006         UIFigure                 matlab.ui.Figure
+0007         SessionMenu              matlab.ui.container.Menu
+0008         StartOver                matlab.ui.container.Menu
+0009         LoadPrevious             matlab.ui.container.Menu
+0010         SaveCurrent              matlab.ui.container.Menu
+0011         ExportData               matlab.ui.container.Menu
+0012         ImageMenu                matlab.ui.container.Menu
+0013         LoadGraphicMenu          matlab.ui.container.Menu
+0014         RotateMenu               matlab.ui.container.Menu
+0015         LeftMenu                 matlab.ui.container.Menu
+0016         RightMenu                matlab.ui.container.Menu
+0017         FlipMenu                 matlab.ui.container.Menu
+0018         VerticalMenu             matlab.ui.container.Menu
+0019         HorizontalMenu           matlab.ui.container.Menu
+0020         LogScalingMenu           matlab.ui.container.Menu
+0021         LogNone                  matlab.ui.container.Menu
+0022         LogHorizontal            matlab.ui.container.Menu
+0023         LogVertical              matlab.ui.container.Menu
+0024         LogBoth                  matlab.ui.container.Menu
+0025         MarkerMenu               matlab.ui.container.Menu
+0026         SizeMenu                 matlab.ui.container.Menu
+0027         Marker5                  matlab.ui.container.Menu
+0028         Marker10                 matlab.ui.container.Menu
+0029         Marker15                 matlab.ui.container.Menu
+0030         Marker20                 matlab.ui.container.Menu
+0031         Marker25                 matlab.ui.container.Menu
+0032         Marker50                 matlab.ui.container.Menu
+0033         Marker100                matlab.ui.container.Menu
+0034         ColorMenu                matlab.ui.container.Menu
+0035         ReferenceColor           matlab.ui.container.Menu
+0036         DataColor                matlab.ui.container.Menu
+0037         CurrentPanel             matlab.ui.container.Panel
+0038         yLabel                   matlab.ui.control.Label
+0039         yEdit                    matlab.ui.control.EditField
+0040         mLabel                   matlab.ui.control.Label
+0041         mEdit                    matlab.ui.control.EditField
+0042         nLabel                   matlab.ui.control.Label
+0043         nEdit                    matlab.ui.control.EditField
+0044         xLabel                   matlab.ui.control.Label
+0045         xEdit                    matlab.ui.control.EditField
+0046         StorePoint               matlab.ui.control.Button
+0047         StoredPanel              matlab.ui.container.Panel
+0048         StoredList               matlab.ui.control.ListBox
+0049         MovePoint                matlab.ui.control.Button
+0050         RemovePoint              matlab.ui.control.Button
+0051         PromotePoint             matlab.ui.control.Button
+0052         DemotePoint              matlab.ui.control.Button
+0053         SelectionModePanel       matlab.ui.container.ButtonGroup
+0054         ReferenceButton          matlab.ui.control.RadioButton
+0055         DataButton               matlab.ui.control.RadioButton
+0056         Axes                     matlab.ui.control.UIAxes
+0057         UsekeyboardarrowtoLabel  matlab.ui.control.Label
+0058     <span class="keyword">end</span>
+0059 
+0060     
+0061     properties (Access = private)
+0062         Image <span class="comment">% Plot image</span>
+0063         CurrentGraphic <span class="comment">% Current graphic handle</span>
+0064         ReferenceGraphic <span class="comment">% Reference graphic handle</span>
+0065         DataGraphic <span class="comment">% Data graphic handle</span>
+0066         Margin=13 <span class="comment">% Graphic margin (pixels)</span>
+0067         MinSize <span class="comment">% Minimum figure size (pixels)</span>
+0068         PixelFormat=<span class="string">'%.2f'</span> <span class="comment">% Description</span>
+0069         XDataFormat=<span class="string">'%#+.3g'</span> <span class="comment">% Description</span>
+0070         YDataFormat=<span class="string">'%#+.3g'</span> <span class="comment">% Description</span>
+0071         SessionObject <span class="comment">% Description</span>
+0072     <span class="keyword">end</span>
+0073     
+0074     methods (Access=private)
+0075         <a name="_sub0" href="#_subfunctions" class="code">function chooseMarkerSize(app,value)</a>
+0076             set([app.CurrentGraphic app.ReferenceGraphic app.DataGraphic],<span class="keyword">...</span>
+0077                 <span class="string">'MarkerSize'</span>,value);
+0078             hc=app.SizeMenu.Children;
+0079             set(hc,<span class="string">'Checked'</span>,<span class="string">'off'</span>);
+0080         <span class="keyword">end</span>
+0081         <a name="_sub1" href="#_subfunctions" class="code">function state=PointReady(app)</a>
+0082             <span class="keyword">persistent</span> empty
+0083             <span class="keyword">if</span> isempty(empty)
+0084                 empty=false(1,4);
+0085             <span class="keyword">end</span>
+0086             empty(1)=isempty(app.mEdit.Value);
+0087             empty(2)=isempty(app.nEdit.Value);
+0088             empty(3)=isempty(app.xEdit.Value);
+0089             empty(4)=isempty(app.yEdit.Value);
+0090             <span class="keyword">if</span> any(empty)
+0091                 state=false;
+0092             <span class="keyword">else</span>
+0093                 state=true;
+0094             <span class="keyword">end</span>
+0095         <span class="keyword">end</span>
+0096         <a name="_sub2" href="#_subfunctions" class="code">function updatePoints(app,data)</a>
+0097             app.StoredList.UserData=data;
+0098             <span class="keyword">if</span> app.ReferenceButton.Value
+0099                 app.SessionObject.ReferenceTable=data;
+0100                 set(app.ReferenceGraphic,<span class="string">'XData'</span>,data(:,1),<span class="string">'YData'</span>,data(:,2));
+0101                 <span class="keyword">try</span>
+0102                     analyzeReference(app.SessionObject)
+0103                     app.DataButton.Enable=<span class="string">'on'</span>;
+0104                 <span class="keyword">catch</span>
+0105                     app.DataButton.Enable=<span class="string">'off'</span>;
+0106                 <span class="keyword">end</span>
+0107             <span class="keyword">elseif</span> app.DataButton.Value
+0108                 app.SessionObject.DataTable=data;
+0109                 <span class="keyword">try</span>
+0110                     analyzeData(app.SessionObject);
+0111                 <span class="keyword">catch</span>
+0112                 <span class="keyword">end</span>
+0113                 set(app.DataGraphic,<span class="string">'XData'</span>,data(:,1),<span class="string">'YData'</span>,data(:,2));
+0114             <span class="keyword">end</span>
+0115         <span class="keyword">end</span>
+0116         <a name="_sub3" href="#_subfunctions" class="code">function updateImage(app)</a>
+0117             app.Image.CData=app.SessionObject.Image;
+0118             <span class="keyword">if</span> isempty(app.SessionObject.ColorMap)
+0119                 colormap(app.Axes,gray());
+0120             <span class="keyword">else</span>
+0121                 colormap(app.Axes,app.SessionObject.ColorMap);
+0122             <span class="keyword">end</span>
+0123             axis(app.Axes,<span class="string">'auto'</span>);
+0124             figure(app.UIFigure);
+0125         <span class="keyword">end</span>
+0126     <span class="keyword">end</span>
+0127     
+0128 
+0129     methods (Access = private)
+0130 
+0131         <span class="comment">% Code that executes after component creation</span>
+0132         <a name="_sub4" href="#_subfunctions" class="code">function startupFcn(app)</a>
+0133             app.UIFigure.Visible=<span class="string">'off'</span>;
+0134             app.Axes.YDir=<span class="string">'reverse'</span>;
+0135             app.Axes.Color=app.Axes.Parent.Color;
+0136             app.Image=image(app.Axes,<span class="string">'CData'</span>,[],<span class="string">'Tag'</span>,<span class="string">'SourceImage'</span>);
+0137             app.CurrentGraphic=line(app.Axes,<span class="string">'XData'</span>,1,<span class="string">'YData'</span>,1,<span class="string">'Color'</span>,<span class="string">'r'</span>,<span class="keyword">...</span>
+0138                 <span class="string">'Marker'</span>,<span class="string">'x'</span>,<span class="string">'LineStyle'</span>,<span class="string">'none'</span>,<span class="string">'Tag'</span>,<span class="string">'CurrentPoint'</span>);
+0139             app.ReferenceGraphic=line(app.Axes,<span class="string">'XData'</span>,[],<span class="string">'YData'</span>,[],<span class="string">'Color'</span>,<span class="string">'r'</span>,<span class="keyword">...</span>
+0140                 <span class="string">'Marker'</span>,<span class="string">'sq'</span>,<span class="string">'LineStyle'</span>,<span class="string">'none'</span>,<span class="string">'Tag'</span>,<span class="string">'ReferencePoint'</span>);
+0141             app.DataGraphic=line(app.Axes,<span class="string">'XData'</span>,[],<span class="string">'YData'</span>,[],<span class="string">'Color'</span>,<span class="string">'b'</span>,<span class="keyword">...</span>
+0142                 <span class="string">'Marker'</span>,<span class="string">'sq'</span>,<span class="string">'LineStyle'</span>,<span class="string">'none'</span>,<span class="string">'Tag'</span>,<span class="string">'DataPoint'</span>);
+0143             set([app.CurrentGraphic app.ReferenceGraphic app.DataGraphic],<span class="keyword">...</span>
+0144                 <span class="string">'MarkerSize'</span>,10);
+0145             set(app.Marker10,<span class="string">'Checked'</span>,<span class="string">'on'</span>);
+0146             app.StoredList.UserData=nan(0,4);
+0147             <span class="comment">%</span>
+0148             temp=[<span class="keyword">...</span>
+0149                 app.mLabel app.mEdit app.nLabel app.nEdit<span class="keyword">...</span>
+0150                 app.xLabel app.xEdit app.yLabel app.yEdit<span class="keyword">...</span>
+0151                 app.StorePoint];
+0152             app.CurrentPanel.Children=temp(end:-1:1);
+0153             app.mEdit.UserData=<span class="string">'1.00'</span>;
+0154             app.nEdit.UserData=<span class="string">'1.00'</span>;
+0155             set([app.Axes.XLabel app.Axes.YLabel],<span class="string">'FontAngle'</span>,<span class="string">'italic'</span>);
+0156             <span class="comment">%</span>
+0157             movegui(app.UIFigure,<span class="string">'center'</span>);
+0158             figure(app.UIFigure);
+0159             app.MinSize=app.UIFigure.Position(3:4);
+0160             <span class="comment">%</span>
+0161             app.SessionObject=datninja.Session();
+0162         <span class="keyword">end</span>
+0163 
+0164         <span class="comment">% Menu selected function: LoadGraphicMenu</span>
+0165         <a name="_sub5" href="#_subfunctions" class="code">function LoadGraphicSelected(app, event)</a>
+0166             <span class="keyword">if</span> ~isdeployed
+0167                 app.UIFigure.Visible=<span class="string">'off'</span>;
+0168             <span class="keyword">end</span>
+0169             <span class="keyword">try</span>
+0170                 loadImage(app.SessionObject);
+0171             <span class="keyword">catch</span>
+0172                 <span class="keyword">return</span>
+0173             <span class="keyword">end</span>
+0174             <a href="#_sub4" class="code" title="subfunction updateImage(app)">updateImage</a>(app)
+0175         <span class="keyword">end</span>
+0176 
+0177         <span class="comment">% Key press function: UIFigure</span>
+0178         <a name="_sub6" href="#_subfunctions" class="code">function UIFigureKeyPress(app, event)</a>
+0179             modifier=event.Modifier;
+0180             <span class="keyword">switch</span> numel(modifier)
+0181                 <span class="keyword">case</span> 0
+0182                     <span class="comment">% keep going</span>
+0183                 <span class="keyword">case</span> 1
+0184                     <span class="keyword">if</span> strcmpi(modifier,<span class="string">'alt'</span>) || strcmpi(modifier,<span class="string">'control'</span>)
+0185                         <span class="keyword">return</span>
+0186                     <span class="keyword">end</span>
+0187                 <span class="keyword">otherwise</span>
+0188                     <span class="keyword">return</span>
+0189             <span class="keyword">end</span>
+0190             key = event.Key;
+0191             <span class="keyword">if</span> ~ischar(key)
+0192                 <span class="keyword">return</span>
+0193             <span class="keyword">end</span>
+0194             PanFactor=0.10;
+0195             ZoomFactor=2.00;
+0196             <span class="keyword">switch</span> lower(key)
+0197                 <span class="keyword">case</span> <span class="string">'s'</span>
+0198                     <span class="keyword">if</span> strcmpi(modifier,<span class="string">'shift'</span>)
+0199                         
+0200                     <span class="keyword">else</span>
+0201                         <a href="#_sub21" class="code" title="subfunction StorePointPushed(app, event)">StorePointPushed</a>(app,[])
+0202                     <span class="keyword">end</span>
+0203                 <span class="keyword">case</span> <span class="string">'a'</span>
+0204                     axis(app.Axes,<span class="string">'auto'</span>);
+0205                 <span class="keyword">case</span> <span class="string">'t'</span>
+0206                     axis(app.Axes,<span class="string">'tight'</span>);
+0207                     <span class="keyword">return</span>
+0208                 <span class="keyword">case</span> <span class="string">'leftarrow'</span>
+0209                     bound=app.Axes.XLim;
+0210                     width=bound(2)-bound(1);
+0211                     <span class="keyword">if</span> strcmpi(modifier,<span class="string">'shift'</span>)
+0212                         center=(bound(1)+bound(2))/2;
+0213                         bound=center+width*ZoomFactor.*[-0.5 0.5];
+0214                     <span class="keyword">else</span>
+0215                         bound=bound-width*PanFactor;
+0216                     <span class="keyword">end</span>
+0217                     app.Axes.XLim=bound;
+0218                 <span class="keyword">case</span> <span class="string">'rightarrow'</span>
+0219                     bound=app.Axes.XLim;
+0220                     width=bound(2)-bound(1);
+0221                     <span class="keyword">if</span> strcmpi(modifier,<span class="string">'shift'</span>)
+0222                         center=(bound(1)+bound(2))/2;
+0223                         bound=center+width/ZoomFactor.*[-0.5 0.5];
+0224                     <span class="keyword">else</span>
+0225                         bound=bound+width*PanFactor;
+0226                     <span class="keyword">end</span>
+0227                     app.Axes.XLim=bound;
+0228                 <span class="keyword">case</span> <span class="string">'downarrow'</span>
+0229                     bound=app.Axes.YLim;
+0230                     width=bound(2)-bound(1);
+0231                     <span class="keyword">if</span> strcmpi(modifier,<span class="string">'shift'</span>)
+0232                         center=(bound(1)+bound(2))/2;
+0233                         bound=center+width*ZoomFactor.*[-0.5 0.5];
+0234                     <span class="keyword">elseif</span> strcmpi(app.Axes.YDir,<span class="string">'normal'</span>)
+0235                         bound=bound-width*PanFactor;
+0236                     <span class="keyword">else</span>
+0237                         bound=bound+width*PanFactor;
+0238                     <span class="keyword">end</span>
+0239                     app.Axes.YLim=bound;
+0240                 <span class="keyword">case</span> <span class="string">'uparrow'</span>
+0241                     bound=app.Axes.YLim;
+0242                     width=bound(2)-bound(1);
+0243                     <span class="keyword">if</span> strcmpi(modifier,<span class="string">'shift'</span>)
+0244                         center=(bound(1)+bound(2))/2;
+0245                         bound=center+width/ZoomFactor.*[-0.5 0.5];
+0246                     <span class="keyword">elseif</span> strcmpi(app.Axes.YDir,<span class="string">'normal'</span>)
+0247                         bound=bound+width*PanFactor;
+0248                     <span class="keyword">else</span>
+0249                         bound=bound-width*PanFactor;
+0250                     <span class="keyword">end</span>
+0251                     app.Axes.YLim=bound;
+0252             <span class="keyword">end</span>
+0253             
+0254         <span class="keyword">end</span>
+0255 
+0256         <span class="comment">% Window button down function: UIFigure</span>
+0257         <a name="_sub7" href="#_subfunctions" class="code">function UIFigureWindowButtonDown(app, event)</a>
+0258             MousePos=app.UIFigure.CurrentPoint;
+0259             AxesPos=app.Axes.InnerPosition;
+0260             <span class="comment">% make sure click falls inside axes</span>
+0261             <span class="keyword">if</span> (MousePos(1) &lt; AxesPos(1)) || (MousePos(1) &gt; AxesPos(1)+AxesPos(3))
+0262                 <span class="keyword">return</span>
+0263             <span class="keyword">elseif</span> (MousePos(2) &lt; AxesPos(2)) || (MousePos(2) &gt; AxesPos(2)+AxesPos(4))
+0264                 <span class="keyword">return</span>
+0265             <span class="keyword">end</span>
+0266             <span class="comment">% convert screen location to image coordinates</span>
+0267             m=(MousePos(1)-AxesPos(1))/AxesPos(3);
+0268             n=(MousePos(2)-AxesPos(2))/AxesPos(4);
+0269             <span class="comment">%disp([m n]);</span>
+0270             bound=app.Axes.XLim;
+0271             m=bound(1)+m*(bound(2)-bound(1));
+0272             bound=app.Axes.YLim;
+0273             <span class="keyword">if</span> strcmpi(app.Axes.YDir,<span class="string">'normal'</span>)
+0274                 n=bound(1)+n*(bound(2)-bound(1));
+0275             <span class="keyword">else</span>
+0276                 n=bound(2)-n*(bound(2)-bound(1));
+0277             <span class="keyword">end</span>
+0278             <span class="comment">% round pixel coordinates to format resolution</span>
+0279             m=sscanf(sprintf(app.PixelFormat,m),<span class="string">'%g'</span>);
+0280             n=sscanf(sprintf(app.PixelFormat,n),<span class="string">'%g'</span>);
+0281             <span class="comment">%</span>
+0282             app.mEdit.Value=sprintf(app.PixelFormat,m);
+0283             app.mEdit.UserData=app.mEdit.Value;
+0284             app.nEdit.Value=sprintf(app.PixelFormat,n);
+0285             app.nEdit.UserData=app.nEdit.Value;
+0286             <span class="comment">% update graphics</span>
+0287             set(app.CurrentGraphic,<span class="string">'XData'</span>,m,<span class="string">'YData'</span>,n,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0288             <span class="keyword">if</span> app.ReferenceButton.Value
+0289                 app.CurrentGraphic.Color=app.ReferenceButton.FontColor;
+0290             <span class="keyword">elseif</span> app.DataButton.Value
+0291                 app.CurrentGraphic.Color=app.DataButton.FontColor;
+0292                 temp=[1 m n]*app.SessionObject.ParameterMatrix;
+0293                 <span class="keyword">switch</span> app.SessionObject.LogScaling
+0294                     <span class="keyword">case</span> <span class="string">'horizontal'</span>
+0295                         temp(:,1)=10.^temp(:,1);
+0296                     <span class="keyword">case</span> <span class="string">'vertical'</span>
+0297                         temp(:,2)=10.^temp(:,2);
+0298                     <span class="keyword">case</span> <span class="string">'both'</span>
+0299                         temp=10.^temp;
+0300                 <span class="keyword">end</span>
+0301                 app.xEdit.Value=sprintf(app.XDataFormat,temp(1));
+0302                 app.xEdit.UserData=app.xEdit.Value;
+0303                 app.yEdit.Value=sprintf(app.YDataFormat,temp(2));
+0304                 app.yEdit.UserData=app.yEdit.Value;
+0305             <span class="keyword">end</span>
+0306         <span class="keyword">end</span>
+0307 
+0308         <span class="comment">% Menu selected function: StartOver</span>
+0309         <a name="_sub8" href="#_subfunctions" class="code">function StartOverMenuSelected(app, event)</a>
+0310             name=class(app);
+0311             <a href="#_sub43" class="code" title="subfunction delete(app)">delete</a>(app);
+0312             feval(name);
+0313         <span class="keyword">end</span>
+0314 
+0315         <span class="comment">% Menu selected function: ReferenceColor</span>
+0316         <a name="_sub9" href="#_subfunctions" class="code">function ReferenceColorSelected(app, event)</a>
+0317             choice=uisetcolor();
+0318             <span class="keyword">if</span> isscalar(choice)
+0319                 <span class="keyword">return</span>
+0320             <span class="keyword">end</span>
+0321             app.ReferenceButton.FontColor=choice;
+0322             app.ReferenceGraphic.Color=choice;
+0323             <span class="keyword">if</span> app.ReferenceButton.Value
+0324                 app.CurrentGraphic.Color=choice;
+0325                 app.StoredList.FontColor=choice;
+0326             <span class="keyword">end</span>
+0327             figure(app.UIFigure);
+0328         <span class="keyword">end</span>
+0329 
+0330         <span class="comment">% Menu selected function: Marker5</span>
+0331         <a name="_sub10" href="#_subfunctions" class="code">function Marker5Selected(app, event)</a>
+0332             app.chooseMarkerSize(5);
+0333             app.Marker5.Checked=<span class="string">'on'</span>;
+0334         <span class="keyword">end</span>
+0335 
+0336         <span class="comment">% Menu selected function: Marker10</span>
+0337         <a name="_sub11" href="#_subfunctions" class="code">function Marker10Selected(app, event)</a>
+0338             app.chooseMarkerSize(10);
+0339             app.Marker10.Checked=<span class="string">'on'</span>;
+0340         <span class="keyword">end</span>
+0341 
+0342         <span class="comment">% Menu selected function: Marker15</span>
+0343         <a name="_sub12" href="#_subfunctions" class="code">function Marker15Selected(app, event)</a>
+0344             app.chooseMarkerSize(15);
+0345             app.Marker15.Checked=<span class="string">'on'</span>;
+0346         <span class="keyword">end</span>
+0347 
+0348         <span class="comment">% Menu selected function: Marker20</span>
+0349         <a name="_sub13" href="#_subfunctions" class="code">function Marker20Selected(app, event)</a>
+0350             app.chooseMarkerSize(20);
+0351             app.Marker20.Checked=<span class="string">'on'</span>;
+0352         <span class="keyword">end</span>
+0353 
+0354         <span class="comment">% Menu selected function: Marker25</span>
+0355         <a name="_sub14" href="#_subfunctions" class="code">function Marker25Selected(app, event)</a>
+0356             app.chooseMarkerSize(25);
+0357             app.Marker25.Checked=<span class="string">'on'</span>;
+0358         <span class="keyword">end</span>
+0359 
+0360         <span class="comment">% Value changed function: mEdit</span>
+0361         <a name="_sub15" href="#_subfunctions" class="code">function mEditValueChanged(app, event)</a>
+0362             value = sscanf(app.mEdit.Value,<span class="string">'%g'</span>,1);
+0363             <span class="keyword">if</span> isempty(value)
+0364                 app.mEdit.Value=app.mEdit.UserData;
+0365             <span class="keyword">else</span>
+0366                 app.mEdit.Value=sprintf(app.PixelFormat,value);
+0367                 app.mEdit.UserData=app.mEdit.Value;
+0368                 app.CurrentGraphic.XData=value;
+0369             <span class="keyword">end</span>
+0370             app.CurrentGraphic.Visible=<span class="string">'on'</span>;
+0371             <span class="keyword">if</span> app.DataButton.Value
+0372                 
+0373             <span class="keyword">end</span>
+0374         <span class="keyword">end</span>
+0375 
+0376         <span class="comment">% Value changed function: nEdit</span>
+0377         <a name="_sub16" href="#_subfunctions" class="code">function nEditValueChanged(app, event)</a>
+0378             value = sscanf(app.nEdit.Value,<span class="string">'%g'</span>,1);
+0379             <span class="keyword">if</span> isempty(value)
+0380                 app.nEdit.Value=app.nEdit.UserData;
+0381             <span class="keyword">else</span>
+0382                 app.nEdit.Value=sprintf(app.PixelFormat,value);
+0383                 app.nEdit.UserData=app.nEdit.Value;
+0384                 app.CurrentGraphic.YData=value;
+0385             <span class="keyword">end</span>
+0386             app.CurrentGraphic.Visible=<span class="string">'on'</span>;
+0387         <span class="keyword">end</span>
+0388 
+0389         <span class="comment">% Value changed function: xEdit</span>
+0390         <a name="_sub17" href="#_subfunctions" class="code">function xEditValueChanged(app, event)</a>
+0391             <span class="keyword">if</span> isempty(app.xEdit.UserData)
+0392                 app.xEdit.UserData=<span class="string">''</span>;
+0393             <span class="keyword">end</span>
+0394             [value,app.XDataFormat]=parseData(app.xEdit.Value,app.XDataFormat);
+0395             <span class="keyword">if</span> isempty(value) || isinf(value) || isnan(value)
+0396                 app.xEdit.Value=app.xEdit.UserData;
+0397             <span class="keyword">else</span>
+0398                 app.xEdit.Value=sprintf(app.XDataFormat,value);
+0399                 app.xEdit.UserData=app.xEdit.Value;
+0400             <span class="keyword">end</span>
+0401         <span class="keyword">end</span>
+0402 
+0403         <span class="comment">% Value changed function: yEdit</span>
+0404         <a name="_sub18" href="#_subfunctions" class="code">function yEditValueChanged(app, event)</a>
+0405             <span class="keyword">if</span> isempty(app.yEdit.UserData)
+0406                 app.yEdit.UserData=<span class="string">''</span>;
+0407             <span class="keyword">end</span>
+0408             [value,app.YDataFormat]=parseData(app.yEdit.Value,app.YDataFormat);
+0409             <span class="keyword">if</span> isempty(value) || isinf(value) || isnan(value)
+0410                 app.yEdit.Value=app.yEdit.UserData;
+0411             <span class="keyword">else</span>
+0412                 app.yEdit.Value=sprintf(app.YDataFormat,value);
+0413                 app.yEdit.UserData=app.yEdit.Value;
+0414             <span class="keyword">end</span>
+0415         <span class="keyword">end</span>
+0416 
+0417         <span class="comment">% Menu selected function: DataColor</span>
+0418         <a name="_sub19" href="#_subfunctions" class="code">function DataColorSelected(app, event)</a>
+0419             choice=uisetcolor();
+0420             <span class="keyword">if</span> isscalar(choice)
+0421                 <span class="keyword">return</span>
+0422             <span class="keyword">end</span>
+0423             app.DataButton.FontColor=choice;
+0424             app.DataGraphic.Color=choice;
+0425             <span class="keyword">if</span> app.DataButton.Value
+0426                 app.CurrentGraphic.Color=choice;
+0427                 app.StoredList.FontColor=choice;
+0428             <span class="keyword">end</span>
+0429             figure(app.UIFigure);
+0430         <span class="keyword">end</span>
+0431 
+0432         <span class="comment">% Button pushed function: StorePoint</span>
+0433         <a name="_sub20" href="#_subfunctions" class="code">function StorePointPushed(app, event)</a>
+0434             <span class="keyword">if</span> ~<a href="#_sub2" class="code" title="subfunction state=PointReady(app)">PointReady</a>(app)
+0435                 <span class="keyword">return</span>
+0436             <span class="keyword">end</span>
+0437             <span class="comment">% grab current point</span>
+0438             data=app.StoredList.UserData;
+0439             <span class="keyword">if</span> strcmpi(app.StoredList.Enable,<span class="string">'on'</span>)
+0440                 list=app.StoredList.Items;
+0441             <span class="keyword">else</span>
+0442                 list={};
+0443                 app.StoredList.Enable=<span class="string">'on'</span>;
+0444             <span class="keyword">end</span>
+0445             index=numel(list)+1;
+0446             list{index}=sprintf(<span class="string">'Point %d'</span>,index);
+0447             app.StoredList.Items=list;
+0448             pause(0.1); <span class="comment">% let figure catch up with list update</span>
+0449             app.StoredList.Value=list{end};
+0450             scroll(app.StoredList,<span class="string">'bottom'</span>);
+0451             data(index,4)=sscanf(app.yEdit.Value,<span class="string">'%g'</span>,1);
+0452             data(index,3)=sscanf(app.xEdit.Value,<span class="string">'%g'</span>,1);
+0453             data(index,2)=sscanf(app.nEdit.Value,<span class="string">'%g'</span>,1);
+0454             data(index,1)=sscanf(app.mEdit.Value,<span class="string">'%g'</span>,1);
+0455             <a href="#_sub3" class="code" title="subfunction updatePoints(app,data)">updatePoints</a>(app,data);
+0456         <span class="keyword">end</span>
+0457 
+0458         <span class="comment">% Button pushed function: MovePoint</span>
+0459         <a name="_sub21" href="#_subfunctions" class="code">function MovePointPushed(app, event)</a>
+0460             <span class="keyword">if</span> ~<a href="#_sub2" class="code" title="subfunction state=PointReady(app)">PointReady</a>(app) || strcmp(app.StoredList.Enable,<span class="string">'off'</span>)
+0461                 <span class="keyword">return</span>
+0462             <span class="keyword">end</span>
+0463             <span class="comment">% update selection to match current point</span>
+0464             value = app.StoredList.Value;
+0465             index=sscanf(value,<span class="string">'Point %d'</span>);
+0466             data=app.StoredList.UserData;
+0467             data(index,4)=sscanf(app.yEdit.Value,<span class="string">'%g'</span>,1);
+0468             data(index,3)=sscanf(app.xEdit.Value,<span class="string">'%g'</span>,1);
+0469             data(index,2)=sscanf(app.nEdit.Value,<span class="string">'%g'</span>,1);
+0470             data(index,1)=sscanf(app.mEdit.Value,<span class="string">'%g'</span>,1);
+0471             app.StoredList.UserData=data;
+0472             <a href="#_sub3" class="code" title="subfunction updatePoints(app,data)">updatePoints</a>(app,data);
+0473         <span class="keyword">end</span>
+0474 
+0475         <span class="comment">% Value changed function: StoredList</span>
+0476         <a name="_sub22" href="#_subfunctions" class="code">function StoredListChanged(app, event)</a>
+0477             value = app.StoredList.Value;
+0478             index=sscanf(value,<span class="string">'Point %d'</span>);
+0479             data=app.StoredList.UserData(index,:);
+0480             set(app.CurrentGraphic,<span class="string">'XData'</span>,data(1),<span class="string">'YData'</span>,data(2));
+0481             temp=sprintf(app.PixelFormat,data(1));
+0482             set(app.mEdit,<span class="string">'Value'</span>,temp,<span class="string">'UserData'</span>,temp);
+0483             temp=sprintf(app.PixelFormat,data(2));
+0484             set(app.nEdit,<span class="string">'Value'</span>,temp,<span class="string">'UserData'</span>,temp);
+0485             temp=sprintf(app.XDataFormat,data(3));
+0486             set(app.xEdit,<span class="string">'Value'</span>,temp,<span class="string">'UserData'</span>,temp);
+0487             temp=sprintf(app.YDataFormat,data(4));
+0488             set(app.yEdit,<span class="string">'Value'</span>,temp,<span class="string">'UserData'</span>,temp);
+0489         <span class="keyword">end</span>
+0490 
+0491         <span class="comment">% Button pushed function: RemovePoint</span>
+0492         <a name="_sub23" href="#_subfunctions" class="code">function RemovePointPushed(app, event)</a>
+0493             <span class="keyword">if</span> strcmp(app.StoredList.Enable,<span class="string">'off'</span>)
+0494                 <span class="keyword">return</span>
+0495             <span class="keyword">end</span>
+0496             list=app.StoredList.Items;
+0497             value=app.StoredList.Value;
+0498             index=sscanf(value,<span class="string">'Point %d'</span>);
+0499             keep=[1:(index-1) (index+1):numel(list)];
+0500             data=app.StoredList.UserData;
+0501             <span class="keyword">if</span> isempty(keep)
+0502                 set(app.StoredList,<span class="string">'Items'</span>,{<span class="string">'(none)'</span>},<span class="string">'Value'</span>,<span class="string">'(none)'</span>,<span class="string">'Enable'</span>,<span class="string">'off'</span>)
+0503                 data=nan(0,4);
+0504             <span class="keyword">else</span>
+0505                 list=cell(size(keep));
+0506                 <span class="keyword">for</span> k=1:numel(keep)
+0507                     list{k}=sprintf(<span class="string">'Point %d'</span>,k);
+0508                 <span class="keyword">end</span>
+0509                 app.StoredList.Items=list;
+0510                 app.StoredList.Value=sprintf(<span class="string">'Point %d'</span>,max(index-1,1));
+0511                 data=data(keep,:);
+0512             <span class="keyword">end</span>
+0513             <a href="#_sub3" class="code" title="subfunction updatePoints(app,data)">updatePoints</a>(app,data);
+0514         <span class="keyword">end</span>
+0515 
+0516         <span class="comment">% Button pushed function: PromotePoint</span>
+0517         <a name="_sub24" href="#_subfunctions" class="code">function PromotePointPushed(app, event)</a>
+0518             <span class="keyword">if</span> strcmp(app.StoredList.Enable,<span class="string">'off'</span>)
+0519                 <span class="keyword">return</span>
+0520             <span class="keyword">end</span>
+0521             list=app.StoredList.Items;
+0522             <span class="keyword">if</span> numel(list) == 1
+0523                 <span class="keyword">return</span>
+0524             <span class="keyword">end</span>
+0525             value=app.StoredList.Value;
+0526             index=sscanf(value,<span class="string">'Point %d'</span>);
+0527             <span class="keyword">if</span> index == 1
+0528                 <span class="keyword">return</span>
+0529             <span class="keyword">end</span>
+0530             data=app.StoredList.UserData;
+0531             data([index-1 index],:)=data([index index-1],:);
+0532             <a href="#_sub3" class="code" title="subfunction updatePoints(app,data)">updatePoints</a>(app,data);
+0533             temp=sprintf(<span class="string">'Point %d'</span>,index-1);
+0534             app.StoredList.Value=temp;
+0535             scroll(app.StoredList,temp);
+0536         <span class="keyword">end</span>
+0537 
+0538         <span class="comment">% Button pushed function: DemotePoint</span>
+0539         <a name="_sub25" href="#_subfunctions" class="code">function DemotePointPushed(app, event)</a>
+0540             <span class="keyword">if</span> strcmp(app.StoredList.Enable,<span class="string">'off'</span>)
+0541                 <span class="keyword">return</span>
+0542             <span class="keyword">end</span>
+0543             list=app.StoredList.Items;
+0544             <span class="keyword">if</span> numel(list) == 1
+0545                 <span class="keyword">return</span>
+0546             <span class="keyword">end</span>
+0547             value=app.StoredList.Value;
+0548             index=sscanf(value,<span class="string">'Point %d'</span>);
+0549             <span class="keyword">if</span> index == numel(list)
+0550                 <span class="keyword">return</span>
+0551             <span class="keyword">end</span>
+0552             data=app.StoredList.UserData;
+0553             data([index+1 index],:)=data([index index+1],:);
+0554             <a href="#_sub3" class="code" title="subfunction updatePoints(app,data)">updatePoints</a>(app,data);
+0555             temp=sprintf(<span class="string">'Point %d'</span>,index+1);
+0556             app.StoredList.Value=temp;
+0557             scroll(app.StoredList,temp);
+0558         <span class="keyword">end</span>
+0559 
+0560         <span class="comment">% Menu selected function: LeftMenu</span>
+0561         <a name="_sub26" href="#_subfunctions" class="code">function LeftMenuSelected(app, event)</a>
+0562             rotateImage(app.SessionObject,<span class="string">'left'</span>);
+0563             <a href="#_sub4" class="code" title="subfunction updateImage(app)">updateImage</a>(app);
+0564         <span class="keyword">end</span>
+0565 
+0566         <span class="comment">% Menu selected function: RightMenu</span>
+0567         <a name="_sub27" href="#_subfunctions" class="code">function RightMenuSelected(app, event)</a>
+0568             
+0569             rotateImage(app.SessionObject,<span class="string">'right'</span>);
+0570             <a href="#_sub4" class="code" title="subfunction updateImage(app)">updateImage</a>(app);
+0571         <span class="keyword">end</span>
+0572 
+0573         <span class="comment">% Menu selected function: VerticalMenu</span>
+0574         <a name="_sub28" href="#_subfunctions" class="code">function VerticalMenuSelected(app, event)</a>
+0575             flipImage(app.SessionObject,<span class="string">'vertical'</span>);
+0576             <a href="#_sub4" class="code" title="subfunction updateImage(app)">updateImage</a>(app);
+0577         <span class="keyword">end</span>
+0578 
+0579         <span class="comment">% Menu selected function: HorizontalMenu</span>
+0580         <a name="_sub29" href="#_subfunctions" class="code">function HorizontalMenuSelected(app, event)</a>
+0581             flipImage(app.SessionObject,<span class="string">'horizontal'</span>);
+0582             <a href="#_sub4" class="code" title="subfunction updateImage(app)">updateImage</a>(app);
+0583         <span class="keyword">end</span>
+0584 
+0585         <span class="comment">% Selection changed function: SelectionModePanel</span>
+0586         <a name="_sub30" href="#_subfunctions" class="code">function SelectionModePanelSelectionChanged(app, event)</a>
+0587             <span class="keyword">if</span> app.ReferenceButton.Value
+0588                 app.ReferenceGraphic.Visible=<span class="string">'on'</span>;
+0589                 app.DataGraphic.Visible=<span class="string">'off'</span>;
+0590                 app.CurrentGraphic.Color=app.ReferenceGraphic.Color;
+0591                 app.StoredList.UserData=app.SessionObject.ReferenceTable;
+0592                 app.StoredList.FontColor=app.ReferenceGraphic.Color;
+0593                 M=size(app.SessionObject.ReferenceTable,1);
+0594                 app.mEdit.Enable=<span class="string">'on'</span>;
+0595                 app.nEdit.Enable=<span class="string">'on'</span>;
+0596                 app.xEdit.Enable=<span class="string">'on'</span>;
+0597                 app.yEdit.Enable=<span class="string">'on'</span>;
+0598             <span class="keyword">elseif</span> app.DataButton.Value
+0599                 analyzeData(app.SessionObject);
+0600                 app.ReferenceGraphic.Visible=<span class="string">'off'</span>;
+0601                 app.DataGraphic.Visible=<span class="string">'on'</span>;
+0602                 app.CurrentGraphic.Color=app.DataGraphic.Color;
+0603                 app.StoredList.UserData=app.SessionObject.DataTable;
+0604                 app.StoredList.FontColor=app.DataGraphic.Color;
+0605                 M=size(app.SessionObject.DataTable,1);
+0606                 app.mEdit.Enable=<span class="string">'off'</span>;
+0607                 app.nEdit.Enable=<span class="string">'off'</span>;
+0608                 app.xEdit.Enable=<span class="string">'off'</span>;
+0609                 app.yEdit.Enable=<span class="string">'off'</span>;
+0610             <span class="keyword">end</span>
+0611             <span class="keyword">if</span> M == 0
+0612                 set(app.StoredList,<span class="string">'Items'</span>,{<span class="string">'(none)'</span>},<span class="string">'Value'</span>,<span class="string">'(none)'</span>,<span class="string">'Enable'</span>,<span class="string">'off'</span>);
+0613             <span class="keyword">else</span>
+0614                 list=cell(M,1);
+0615                 <span class="keyword">for</span> m=1:M
+0616                     list{m}=sprintf(<span class="string">'Point %d'</span>,m);
+0617                 <span class="keyword">end</span>
+0618                 set(app.StoredList,<span class="string">'Items'</span>,list,<span class="string">'Value'</span>,<span class="string">'Point 1'</span>,<span class="string">'Enable'</span>,<span class="string">'on'</span>);
+0619             <span class="keyword">end</span>
+0620         <span class="keyword">end</span>
+0621 
+0622         <span class="comment">% Menu selected function: LogNone</span>
+0623         <a name="_sub31" href="#_subfunctions" class="code">function LogNoneSelected(app, event)</a>
+0624             app.SessionObject.LogScaling=<span class="string">'none'</span>;
+0625             set(app.LogScalingMenu.Children,<span class="string">'Checked'</span>,<span class="string">'off'</span>);
+0626             set(app.LogNone,<span class="string">'Checked'</span>,<span class="string">'on'</span>);
+0627             <span class="keyword">try</span>
+0628                 analyzeReference(app.SessionObject);
+0629                 analyzeData(app.SessionObject);
+0630             <span class="keyword">catch</span>
+0631             <span class="keyword">end</span>
+0632         <span class="keyword">end</span>
+0633 
+0634         <span class="comment">% Menu selected function: LogHorizontal</span>
+0635         <a name="_sub32" href="#_subfunctions" class="code">function LogHorizontalMenuSelected(app, event)</a>
+0636             app.SessionObject.LogScaling=<span class="string">'horizontal'</span>;
+0637             set(app.LogScalingMenu.Children,<span class="string">'Checked'</span>,<span class="string">'off'</span>);
+0638             set(app.LogHorizontal,<span class="string">'Checked'</span>,<span class="string">'on'</span>);
+0639             <span class="keyword">try</span>
+0640                 analyzeReference(app.SessionObject);
+0641                 analyzeData(app.SessionObject);
+0642             <span class="keyword">catch</span>
+0643             <span class="keyword">end</span>
+0644         <span class="keyword">end</span>
+0645 
+0646         <span class="comment">% Menu selected function: LogVertical</span>
+0647         <a name="_sub33" href="#_subfunctions" class="code">function LogVerticalMenuSelected(app, event)</a>
+0648             app.SessionObject.LogScaling=<span class="string">'vertical'</span>;
+0649             set(app.LogScalingMenu.Children,<span class="string">'Checked'</span>,<span class="string">'off'</span>);
+0650             set(app.LogVertical,<span class="string">'Checked'</span>,<span class="string">'on'</span>);
+0651             <span class="keyword">try</span>
+0652                 analyzeReference(app.SessionObject);
+0653                 analyzeData(app.SessionObject);
+0654             <span class="keyword">catch</span>
+0655             <span class="keyword">end</span>
+0656         <span class="keyword">end</span>
+0657 
+0658         <span class="comment">% Menu selected function: LogBoth</span>
+0659         <a name="_sub34" href="#_subfunctions" class="code">function LogBothMenuSelected(app, event)</a>
+0660             app.SessionObject.LogScaling=<span class="string">'both'</span>;
+0661             set(app.LogScalingMenu.Children,<span class="string">'Checked'</span>,<span class="string">'off'</span>);
+0662             set(app.LogBoth,<span class="string">'Checked'</span>,<span class="string">'on'</span>);
+0663             <span class="keyword">try</span>
+0664                 analyzeReference(app.SessionObject);
+0665                 analyzeData(app.SessionObject);
+0666             <span class="keyword">catch</span>
+0667             <span class="keyword">end</span>
+0668         <span class="keyword">end</span>
+0669 
+0670         <span class="comment">% Menu selected function: ExportData</span>
+0671         <a name="_sub35" href="#_subfunctions" class="code">function ExportDataMenuSelected(app, event)</a>
+0672             export(app.SessionObject,<span class="string">''</span>,[app.XDataFormat <span class="string">' '</span> app.YDataFormat]);
+0673             figure(app.UIFigure);
+0674         <span class="keyword">end</span>
+0675 
+0676         <span class="comment">% Menu selected function: SaveCurrent</span>
+0677         <a name="_sub36" href="#_subfunctions" class="code">function SaveCurrentMenuSelected(app, event)</a>
+0678             store(app.SessionObject);
+0679             figure(app.UIFigure);
+0680         <span class="keyword">end</span>
+0681 
+0682         <span class="comment">% Menu selected function: LoadPrevious</span>
+0683         <a name="_sub37" href="#_subfunctions" class="code">function LoadPreviousMenuSelected(app, event)</a>
+0684             
+0685             [file,location]=uigetfile({<span class="string">'*.sda'</span> <span class="string">'Sandia Data Archive (*.sda) files'</span>},<span class="keyword">...</span>
+0686                 <span class="string">'Select session file'</span>);
+0687             <span class="keyword">if</span> isnumeric(file)
+0688                 <span class="keyword">return</span>
+0689             <span class="keyword">end</span>
+0690             file=fullfile(location,file);
+0691             app.SessionObject=SMASH.FileAccess.readFile(file,<span class="string">'sda'</span>,<span class="string">'datninja session'</span>);
+0692             <a href="#_sub4" class="code" title="subfunction updateImage(app)">updateImage</a>(app);
+0693             <span class="comment">% update reference and data graphics</span>
+0694             <span class="keyword">if</span> app.ReferenceButton.Value                
+0695                 <a href="#_sub3" class="code" title="subfunction updatePoints(app,data)">updatePoints</a>(app,app.SessionObject.ReferenceTable);
+0696                 app.ReferenceButton.Value=0;
+0697                 app.DataButton.Value=1;
+0698                 <a href="#_sub3" class="code" title="subfunction updatePoints(app,data)">updatePoints</a>(app,app.SessionObject.DataTable);
+0699                 app.DataGraphic.Visible=<span class="string">'off'</span>;
+0700                 app.ReferenceButton.Value=1;
+0701                 app.DataButton.Value=0;
+0702             <span class="keyword">elseif</span> app.DataButton.Value
+0703                 <a href="#_sub3" class="code" title="subfunction updatePoints(app,data)">updatePoints</a>(app,app.SessionObject.DataTable);
+0704                 app.ReferenceButton.Value=1;
+0705                 app.DataButton.Value=0;
+0706                 <a href="#_sub3" class="code" title="subfunction updatePoints(app,data)">updatePoints</a>(app,app.SessionObject.ReferenceTable);
+0707                 app.ReferenceGraphic.Visible=<span class="string">'off'</span>;
+0708                 app.ReferenceButton.Value=0;
+0709                 app.DataButton.Value=1;
+0710             <span class="keyword">end</span>
+0711             <a href="#_sub31" class="code" title="subfunction SelectionModePanelSelectionChanged(app, event)">SelectionModePanelSelectionChanged</a>(app);
+0712         <span class="keyword">end</span>
+0713 
+0714         <span class="comment">% Menu selected function: Marker50</span>
+0715         <a name="_sub38" href="#_subfunctions" class="code">function Marker50MenuSelected(app, event)</a>
+0716             app.chooseMarkerSize(50);
+0717             app.Marker50.Checked=<span class="string">'on'</span>;
+0718         <span class="keyword">end</span>
+0719 
+0720         <span class="comment">% Menu selected function: Marker100</span>
+0721         <a name="_sub39" href="#_subfunctions" class="code">function Marker100MenuSelected(app, event)</a>
+0722             app.chooseMarkerSize(100);
+0723             app.Marker100.Checked=<span class="string">'on'</span>;
+0724         <span class="keyword">end</span>
+0725     <span class="keyword">end</span>
+0726 
+0727     <span class="comment">% App initialization and construction</span>
+0728     methods (Access = private)
+0729 
+0730         <span class="comment">% Create UIFigure and components</span>
+0731         <a name="_sub40" href="#_subfunctions" class="code">function createComponents(app)</a>
+0732 
+0733             <span class="comment">% Create UIFigure</span>
+0734             app.UIFigure = uifigure;
+0735             app.UIFigure.Position = [100 100 800 600];
+0736             app.UIFigure.Name = <span class="string">'datninja'</span>;
+0737             app.UIFigure.WindowButtonDownFcn = createCallbackFcn(app, @<a href="#_sub8" class="code" title="subfunction UIFigureWindowButtonDown(app, event)">UIFigureWindowButtonDown</a>, true);
+0738             app.UIFigure.KeyPressFcn = createCallbackFcn(app, @<a href="#_sub7" class="code" title="subfunction UIFigureKeyPress(app, event)">UIFigureKeyPress</a>, true);
+0739 
+0740             <span class="comment">% Create SessionMenu</span>
+0741             app.SessionMenu = uimenu(app.UIFigure);
+0742             app.SessionMenu.Text = <span class="string">'Session'</span>;
+0743 
+0744             <span class="comment">% Create StartOver</span>
+0745             app.StartOver = uimenu(app.SessionMenu);
+0746             app.StartOver.MenuSelectedFcn = createCallbackFcn(app, @<a href="#_sub9" class="code" title="subfunction StartOverMenuSelected(app, event)">StartOverMenuSelected</a>, true);
+0747             app.StartOver.Text = <span class="string">'Start over'</span>;
+0748 
+0749             <span class="comment">% Create LoadPrevious</span>
+0750             app.LoadPrevious = uimenu(app.SessionMenu);
+0751             app.LoadPrevious.MenuSelectedFcn = createCallbackFcn(app, @<a href="#_sub38" class="code" title="subfunction LoadPreviousMenuSelected(app, event)">LoadPreviousMenuSelected</a>, true);
+0752             app.LoadPrevious.Separator = <span class="string">'on'</span>;
+0753             app.LoadPrevious.Text = <span class="string">'Load previous'</span>;
+0754 
+0755             <span class="comment">% Create SaveCurrent</span>
+0756             app.SaveCurrent = uimenu(app.SessionMenu);
+0757             app.SaveCurrent.MenuSelectedFcn = createCallbackFcn(app, @<a href="#_sub37" class="code" title="subfunction SaveCurrentMenuSelected(app, event)">SaveCurrentMenuSelected</a>, true);
+0758             app.SaveCurrent.Text = <span class="string">'Save current'</span>;
+0759 
+0760             <span class="comment">% Create ExportData</span>
+0761             app.ExportData = uimenu(app.SessionMenu);
+0762             app.ExportData.MenuSelectedFcn = createCallbackFcn(app, @<a href="#_sub36" class="code" title="subfunction ExportDataMenuSelected(app, event)">ExportDataMenuSelected</a>, true);
+0763             app.ExportData.Separator = <span class="string">'on'</span>;
+0764             app.ExportData.Text = <span class="string">'Export data'</span>;
+0765 
+0766             <span class="comment">% Create ImageMenu</span>
+0767             app.ImageMenu = uimenu(app.UIFigure);
+0768             app.ImageMenu.Text = <span class="string">'Image'</span>;
+0769 
+0770             <span class="comment">% Create LoadGraphicMenu</span>
+0771             app.LoadGraphicMenu = uimenu(app.ImageMenu);
+0772             app.LoadGraphicMenu.MenuSelectedFcn = createCallbackFcn(app, @<a href="#_sub6" class="code" title="subfunction LoadGraphicSelected(app, event)">LoadGraphicSelected</a>, true);
+0773             app.LoadGraphicMenu.Text = <span class="string">'Load file'</span>;
+0774 
+0775             <span class="comment">% Create RotateMenu</span>
+0776             app.RotateMenu = uimenu(app.ImageMenu);
+0777             app.RotateMenu.Separator = <span class="string">'on'</span>;
+0778             app.RotateMenu.Text = <span class="string">'Rotate'</span>;
+0779 
+0780             <span class="comment">% Create LeftMenu</span>
+0781             app.LeftMenu = uimenu(app.RotateMenu);
+0782             app.LeftMenu.MenuSelectedFcn = createCallbackFcn(app, @<a href="#_sub27" class="code" title="subfunction LeftMenuSelected(app, event)">LeftMenuSelected</a>, true);
+0783             app.LeftMenu.Text = <span class="string">'Left'</span>;
+0784 
+0785             <span class="comment">% Create RightMenu</span>
+0786             app.RightMenu = uimenu(app.RotateMenu);
+0787             app.RightMenu.MenuSelectedFcn = createCallbackFcn(app, @<a href="#_sub28" class="code" title="subfunction RightMenuSelected(app, event)">RightMenuSelected</a>, true);
+0788             app.RightMenu.Text = <span class="string">'Right'</span>;
+0789 
+0790             <span class="comment">% Create FlipMenu</span>
+0791             app.FlipMenu = uimenu(app.ImageMenu);
+0792             app.FlipMenu.Text = <span class="string">'Flip'</span>;
+0793 
+0794             <span class="comment">% Create VerticalMenu</span>
+0795             app.VerticalMenu = uimenu(app.FlipMenu);
+0796             app.VerticalMenu.MenuSelectedFcn = createCallbackFcn(app, @<a href="#_sub29" class="code" title="subfunction VerticalMenuSelected(app, event)">VerticalMenuSelected</a>, true);
+0797             app.VerticalMenu.Text = <span class="string">'Vertical'</span>;
+0798 
+0799             <span class="comment">% Create HorizontalMenu</span>
+0800             app.HorizontalMenu = uimenu(app.FlipMenu);
+0801             app.HorizontalMenu.MenuSelectedFcn = createCallbackFcn(app, @<a href="#_sub30" class="code" title="subfunction HorizontalMenuSelected(app, event)">HorizontalMenuSelected</a>, true);
+0802             app.HorizontalMenu.Text = <span class="string">'Horizontal'</span>;
+0803 
+0804             <span class="comment">% Create LogScalingMenu</span>
+0805             app.LogScalingMenu = uimenu(app.ImageMenu);
+0806             app.LogScalingMenu.Text = <span class="string">'Log scaling'</span>;
+0807 
+0808             <span class="comment">% Create LogNone</span>
+0809             app.LogNone = uimenu(app.LogScalingMenu);
+0810             app.LogNone.MenuSelectedFcn = createCallbackFcn(app, @<a href="#_sub32" class="code" title="subfunction LogNoneSelected(app, event)">LogNoneSelected</a>, true);
+0811             app.LogNone.Checked = <span class="string">'on'</span>;
+0812             app.LogNone.Text = <span class="string">'None'</span>;
+0813 
+0814             <span class="comment">% Create LogHorizontal</span>
+0815             app.LogHorizontal = uimenu(app.LogScalingMenu);
+0816             app.LogHorizontal.MenuSelectedFcn = createCallbackFcn(app, @<a href="#_sub33" class="code" title="subfunction LogHorizontalMenuSelected(app, event)">LogHorizontalMenuSelected</a>, true);
+0817             app.LogHorizontal.Text = <span class="string">'Horizontal'</span>;
+0818 
+0819             <span class="comment">% Create LogVertical</span>
+0820             app.LogVertical = uimenu(app.LogScalingMenu);
+0821             app.LogVertical.MenuSelectedFcn = createCallbackFcn(app, @<a href="#_sub34" class="code" title="subfunction LogVerticalMenuSelected(app, event)">LogVerticalMenuSelected</a>, true);
+0822             app.LogVertical.Text = <span class="string">'Vertical'</span>;
+0823 
+0824             <span class="comment">% Create LogBoth</span>
+0825             app.LogBoth = uimenu(app.LogScalingMenu);
+0826             app.LogBoth.MenuSelectedFcn = createCallbackFcn(app, @<a href="#_sub35" class="code" title="subfunction LogBothMenuSelected(app, event)">LogBothMenuSelected</a>, true);
+0827             app.LogBoth.Text = <span class="string">'Both'</span>;
+0828 
+0829             <span class="comment">% Create MarkerMenu</span>
+0830             app.MarkerMenu = uimenu(app.UIFigure);
+0831             app.MarkerMenu.Text = <span class="string">'Marker'</span>;
+0832 
+0833             <span class="comment">% Create SizeMenu</span>
+0834             app.SizeMenu = uimenu(app.MarkerMenu);
+0835             app.SizeMenu.Text = <span class="string">'Size'</span>;
+0836 
+0837             <span class="comment">% Create Marker5</span>
+0838             app.Marker5 = uimenu(app.SizeMenu);
+0839             app.Marker5.MenuSelectedFcn = createCallbackFcn(app, @<a href="#_sub11" class="code" title="subfunction Marker5Selected(app, event)">Marker5Selected</a>, true);
+0840             app.Marker5.Text = <span class="string">'5 points'</span>;
+0841 
+0842             <span class="comment">% Create Marker10</span>
+0843             app.Marker10 = uimenu(app.SizeMenu);
+0844             app.Marker10.MenuSelectedFcn = createCallbackFcn(app, @<a href="#_sub12" class="code" title="subfunction Marker10Selected(app, event)">Marker10Selected</a>, true);
+0845             app.Marker10.Text = <span class="string">'10 points'</span>;
+0846 
+0847             <span class="comment">% Create Marker15</span>
+0848             app.Marker15 = uimenu(app.SizeMenu);
+0849             app.Marker15.MenuSelectedFcn = createCallbackFcn(app, @<a href="#_sub13" class="code" title="subfunction Marker15Selected(app, event)">Marker15Selected</a>, true);
+0850             app.Marker15.Text = <span class="string">'15 points'</span>;
+0851 
+0852             <span class="comment">% Create Marker20</span>
+0853             app.Marker20 = uimenu(app.SizeMenu);
+0854             app.Marker20.MenuSelectedFcn = createCallbackFcn(app, @<a href="#_sub14" class="code" title="subfunction Marker20Selected(app, event)">Marker20Selected</a>, true);
+0855             app.Marker20.Text = <span class="string">'20 points'</span>;
+0856 
+0857             <span class="comment">% Create Marker25</span>
+0858             app.Marker25 = uimenu(app.SizeMenu);
+0859             app.Marker25.MenuSelectedFcn = createCallbackFcn(app, @<a href="#_sub15" class="code" title="subfunction Marker25Selected(app, event)">Marker25Selected</a>, true);
+0860             app.Marker25.Text = <span class="string">'25 points'</span>;
+0861 
+0862             <span class="comment">% Create Marker50</span>
+0863             app.Marker50 = uimenu(app.SizeMenu);
+0864             app.Marker50.MenuSelectedFcn = createCallbackFcn(app, @<a href="#_sub39" class="code" title="subfunction Marker50MenuSelected(app, event)">Marker50MenuSelected</a>, true);
+0865             app.Marker50.Text = <span class="string">'50 points'</span>;
+0866 
+0867             <span class="comment">% Create Marker100</span>
+0868             app.Marker100 = uimenu(app.SizeMenu);
+0869             app.Marker100.MenuSelectedFcn = createCallbackFcn(app, @<a href="#_sub40" class="code" title="subfunction Marker100MenuSelected(app, event)">Marker100MenuSelected</a>, true);
+0870             app.Marker100.Text = <span class="string">'100 points'</span>;
+0871 
+0872             <span class="comment">% Create ColorMenu</span>
+0873             app.ColorMenu = uimenu(app.MarkerMenu);
+0874             app.ColorMenu.Text = <span class="string">'Color'</span>;
+0875 
+0876             <span class="comment">% Create ReferenceColor</span>
+0877             app.ReferenceColor = uimenu(app.ColorMenu);
+0878             app.ReferenceColor.MenuSelectedFcn = createCallbackFcn(app, @<a href="#_sub10" class="code" title="subfunction ReferenceColorSelected(app, event)">ReferenceColorSelected</a>, true);
+0879             app.ReferenceColor.Text = <span class="string">'Reference'</span>;
+0880 
+0881             <span class="comment">% Create DataColor</span>
+0882             app.DataColor = uimenu(app.ColorMenu);
+0883             app.DataColor.MenuSelectedFcn = createCallbackFcn(app, @<a href="#_sub20" class="code" title="subfunction DataColorSelected(app, event)">DataColorSelected</a>, true);
+0884             app.DataColor.Text = <span class="string">'Data'</span>;
+0885 
+0886             <span class="comment">% Create CurrentPanel</span>
+0887             app.CurrentPanel = uipanel(app.UIFigure);
+0888             app.CurrentPanel.Title = <span class="string">'Current location :'</span>;
+0889             app.CurrentPanel.FontWeight = <span class="string">'bold'</span>;
+0890             app.CurrentPanel.FontSize = 14;
+0891             app.CurrentPanel.Position = [12 346 169 165];
+0892 
+0893             <span class="comment">% Create yLabel</span>
+0894             app.yLabel = uilabel(app.CurrentPanel);
+0895             app.yLabel.HorizontalAlignment = <span class="string">'right'</span>;
+0896             app.yLabel.FontSize = 14;
+0897             app.yLabel.FontAngle = <span class="string">'italic'</span>;
+0898             app.yLabel.Position = [1 35 25 22];
+0899             app.yLabel.Text = <span class="string">'y='</span>;
+0900 
+0901             <span class="comment">% Create yEdit</span>
+0902             app.yEdit = uieditfield(app.CurrentPanel, <span class="string">'text'</span>);
+0903             app.yEdit.ValueChangedFcn = createCallbackFcn(app, @<a href="#_sub19" class="code" title="subfunction yEditValueChanged(app, event)">yEditValueChanged</a>, true);
+0904             app.yEdit.FontSize = 14;
+0905             app.yEdit.Tooltip = {<span class="string">'Vertical data value'</span>};
+0906             app.yEdit.Position = [33 35 112 22];
+0907             app.yEdit.Value = <span class="string">'+0.000'</span>;
+0908 
+0909             <span class="comment">% Create mLabel</span>
+0910             app.mLabel = uilabel(app.CurrentPanel);
+0911             app.mLabel.HorizontalAlignment = <span class="string">'right'</span>;
+0912             app.mLabel.FontSize = 14;
+0913             app.mLabel.FontAngle = <span class="string">'italic'</span>;
+0914             app.mLabel.Position = [1 109 26 22];
+0915             app.mLabel.Text = <span class="string">'m='</span>;
+0916 
+0917             <span class="comment">% Create mEdit</span>
+0918             app.mEdit = uieditfield(app.CurrentPanel, <span class="string">'text'</span>);
+0919             app.mEdit.ValueChangedFcn = createCallbackFcn(app, @<a href="#_sub16" class="code" title="subfunction mEditValueChanged(app, event)">mEditValueChanged</a>, true);
+0920             app.mEdit.FontSize = 14;
+0921             app.mEdit.Tooltip = {<span class="string">'Horizontal pixel value'</span>};
+0922             app.mEdit.Position = [33 109 112 22];
+0923             app.mEdit.Value = <span class="string">'1.00'</span>;
+0924 
+0925             <span class="comment">% Create nLabel</span>
+0926             app.nLabel = uilabel(app.CurrentPanel);
+0927             app.nLabel.HorizontalAlignment = <span class="string">'right'</span>;
+0928             app.nLabel.FontSize = 14;
+0929             app.nLabel.FontAngle = <span class="string">'italic'</span>;
+0930             app.nLabel.Position = [1 85 25 22];
+0931             app.nLabel.Text = <span class="string">'n='</span>;
+0932 
+0933             <span class="comment">% Create nEdit</span>
+0934             app.nEdit = uieditfield(app.CurrentPanel, <span class="string">'text'</span>);
+0935             app.nEdit.ValueChangedFcn = createCallbackFcn(app, @<a href="#_sub17" class="code" title="subfunction nEditValueChanged(app, event)">nEditValueChanged</a>, true);
+0936             app.nEdit.FontSize = 14;
+0937             app.nEdit.Tooltip = {<span class="string">'Vertical pixel value'</span>};
+0938             app.nEdit.Position = [33 85 112 22];
+0939             app.nEdit.Value = <span class="string">'1.00'</span>;
+0940 
+0941             <span class="comment">% Create xLabel</span>
+0942             app.xLabel = uilabel(app.CurrentPanel);
+0943             app.xLabel.HorizontalAlignment = <span class="string">'right'</span>;
+0944             app.xLabel.FontSize = 14;
+0945             app.xLabel.FontAngle = <span class="string">'italic'</span>;
+0946             app.xLabel.Position = [1 59 25 22];
+0947             app.xLabel.Text = <span class="string">'x='</span>;
+0948 
+0949             <span class="comment">% Create xEdit</span>
+0950             app.xEdit = uieditfield(app.CurrentPanel, <span class="string">'text'</span>);
+0951             app.xEdit.ValueChangedFcn = createCallbackFcn(app, @<a href="#_sub18" class="code" title="subfunction xEditValueChanged(app, event)">xEditValueChanged</a>, true);
+0952             app.xEdit.FontSize = 14;
+0953             app.xEdit.Tooltip = {<span class="string">'Horizontal data value'</span>};
+0954             app.xEdit.Position = [33 59 112 22];
+0955             app.xEdit.Value = <span class="string">'+0.000'</span>;
+0956 
+0957             <span class="comment">% Create StorePoint</span>
+0958             app.StorePoint = uibutton(app.CurrentPanel, <span class="string">'push'</span>);
+0959             app.StorePoint.ButtonPushedFcn = createCallbackFcn(app, @<a href="#_sub21" class="code" title="subfunction StorePointPushed(app, event)">StorePointPushed</a>, true);
+0960             app.StorePoint.FontSize = 14;
+0961             app.StorePoint.Tooltip = {<span class="string">'Store current point as a new selection (same as pressing &quot;s&quot; key)'</span>};
+0962             app.StorePoint.Position = [33 8 110 24];
+0963             app.StorePoint.Text = <span class="string">'Store point'</span>;
+0964 
+0965             <span class="comment">% Create StoredPanel</span>
+0966             app.StoredPanel = uipanel(app.UIFigure);
+0967             app.StoredPanel.Title = <span class="string">'Stored points:'</span>;
+0968             app.StoredPanel.FontWeight = <span class="string">'bold'</span>;
+0969             app.StoredPanel.FontSize = 14;
+0970             app.StoredPanel.Position = [13 18 168 317];
+0971 
+0972             <span class="comment">% Create StoredList</span>
+0973             app.StoredList = uilistbox(app.StoredPanel);
+0974             app.StoredList.Items = {<span class="string">'(none)'</span>};
+0975             app.StoredList.ValueChangedFcn = createCallbackFcn(app, @<a href="#_sub23" class="code" title="subfunction StoredListChanged(app, event)">StoredListChanged</a>, true);
+0976             app.StoredList.Enable = <span class="string">'off'</span>;
+0977             app.StoredList.FontColor = [1 0 0];
+0978             app.StoredList.Position = [3 13 77 272];
+0979             app.StoredList.Value = {};
+0980 
+0981             <span class="comment">% Create MovePoint</span>
+0982             app.MovePoint = uibutton(app.StoredPanel, <span class="string">'push'</span>);
+0983             app.MovePoint.ButtonPushedFcn = createCallbackFcn(app, @<a href="#_sub22" class="code" title="subfunction MovePointPushed(app, event)">MovePointPushed</a>, true);
+0984             app.MovePoint.FontSize = 14;
+0985             app.MovePoint.Tooltip = {<span class="string">'Move selection to current location'</span>};
+0986             app.MovePoint.Position = [89 261 65 24];
+0987             app.MovePoint.Text = <span class="string">'Move'</span>;
+0988 
+0989             <span class="comment">% Create RemovePoint</span>
+0990             app.RemovePoint = uibutton(app.StoredPanel, <span class="string">'push'</span>);
+0991             app.RemovePoint.ButtonPushedFcn = createCallbackFcn(app, @<a href="#_sub24" class="code" title="subfunction RemovePointPushed(app, event)">RemovePointPushed</a>, true);
+0992             app.RemovePoint.FontSize = 14;
+0993             app.RemovePoint.Tooltip = {<span class="string">'Remove selection'</span>};
+0994             app.RemovePoint.Position = [89 226 65 24];
+0995             app.RemovePoint.Text = <span class="string">'Remove'</span>;
+0996 
+0997             <span class="comment">% Create PromotePoint</span>
+0998             app.PromotePoint = uibutton(app.StoredPanel, <span class="string">'push'</span>);
+0999             app.PromotePoint.ButtonPushedFcn = createCallbackFcn(app, @<a href="#_sub25" class="code" title="subfunction PromotePointPushed(app, event)">PromotePointPushed</a>, true);
+1000             app.PromotePoint.FontSize = 14;
+1001             app.PromotePoint.Tooltip = {<span class="string">'Shift selection upward'</span>};
+1002             app.PromotePoint.Position = [89 146 65 24];
+1003             app.PromotePoint.Text = <span class="string">'Promote'</span>;
+1004 
+1005             <span class="comment">% Create DemotePoint</span>
+1006             app.DemotePoint = uibutton(app.StoredPanel, <span class="string">'push'</span>);
+1007             app.DemotePoint.ButtonPushedFcn = createCallbackFcn(app, @<a href="#_sub26" class="code" title="subfunction DemotePointPushed(app, event)">DemotePointPushed</a>, true);
+1008             app.DemotePoint.FontSize = 14;
+1009             app.DemotePoint.Tooltip = {<span class="string">'Shift selection downward'</span>};
+1010             app.DemotePoint.Position = [89 114 65 24];
+1011             app.DemotePoint.Text = <span class="string">'Demote'</span>;
+1012 
+1013             <span class="comment">% Create SelectionModePanel</span>
+1014             app.SelectionModePanel = uibuttongroup(app.UIFigure);
+1015             app.SelectionModePanel.SelectionChangedFcn = createCallbackFcn(app, @<a href="#_sub31" class="code" title="subfunction SelectionModePanelSelectionChanged(app, event)">SelectionModePanelSelectionChanged</a>, true);
+1016             app.SelectionModePanel.Title = <span class="string">'Selection mode:'</span>;
+1017             app.SelectionModePanel.FontWeight = <span class="string">'bold'</span>;
+1018             app.SelectionModePanel.FontSize = 14;
+1019             app.SelectionModePanel.Position = [12 520 169 71];
+1020 
+1021             <span class="comment">% Create ReferenceButton</span>
+1022             app.ReferenceButton = uiradiobutton(app.SelectionModePanel);
+1023             app.ReferenceButton.Text = <span class="string">'Reference'</span>;
+1024             app.ReferenceButton.FontSize = 14;
+1025             app.ReferenceButton.FontColor = [1 0 0];
+1026             app.ReferenceButton.Position = [11 22 86 22];
+1027             app.ReferenceButton.Value = true;
+1028 
+1029             <span class="comment">% Create DataButton</span>
+1030             app.DataButton = uiradiobutton(app.SelectionModePanel);
+1031             app.DataButton.Enable = <span class="string">'off'</span>;
+1032             app.DataButton.Text = <span class="string">'Data'</span>;
+1033             app.DataButton.FontSize = 14;
+1034             app.DataButton.FontColor = [0 0 1];
+1035             app.DataButton.Position = [11 0 51 22];
+1036 
+1037             <span class="comment">% Create Axes</span>
+1038             app.Axes = uiaxes(app.UIFigure);
+1039             title(app.Axes, <span class="string">''</span>)
+1040             xlabel(app.Axes, <span class="string">''</span>)
+1041             ylabel(app.Axes, <span class="string">''</span>)
+1042             app.Axes.Box = <span class="string">'on'</span>;
+1043             app.Axes.BoxStyle = <span class="string">'full'</span>;
+1044             app.Axes.YAxisLocation = <span class="string">'right'</span>;
+1045             app.Axes.Position = [196 24 593 510];
+1046 
+1047             <span class="comment">% Create UsekeyboardarrowtoLabel</span>
+1048             app.UsekeyboardarrowtoLabel = uilabel(app.UIFigure);
+1049             app.UsekeyboardarrowtoLabel.FontSize = 14;
+1050             app.UsekeyboardarrowtoLabel.Position = [322 543 342 48];
+1051             app.UsekeyboardarrowtoLabel.Text = {<span class="string">'Press arrow key for pan and shift-arrow key for zoom'</span>; <span class="string">'Press ''a'' for auto scaling and ''t'' for tight scaling'</span>; <span class="string">'Press ''s'' to store current location'</span>};
+1052         <span class="keyword">end</span>
+1053     <span class="keyword">end</span>
+1054 
+1055     methods (Access = public)
+1056 
+1057         <span class="comment">% Construct app</span>
+1058         <a name="_sub41" href="#_subfunctions" class="code">function app = datninja</a>
+1059 
+1060             <span class="comment">% Create and configure components</span>
+1061             <a href="#_sub41" class="code" title="subfunction createComponents(app)">createComponents</a>(app)
+1062 
+1063             <span class="comment">% Register the app with App Designer</span>
+1064             registerApp(app, app.UIFigure)
+1065 
+1066             <span class="comment">% Execute the startup function</span>
+1067             runStartupFcn(app, @<a href="#_sub5" class="code" title="subfunction startupFcn(app)">startupFcn</a>)
+1068 
+1069             <span class="keyword">if</span> nargout == 0
+1070                 clear app
+1071             <span class="keyword">end</span>
+1072         <span class="keyword">end</span>
+1073 
+1074         <span class="comment">% Code that executes before app deletion</span>
+1075         <a name="_sub42" href="#_subfunctions" class="code">function delete(app)</a>
+1076 
+1077             <span class="comment">% Delete UIFigure when app is deleted</span>
+1078             <a href="#_sub43" class="code" title="subfunction delete(app)">delete</a>(app.UIFigure)
+1079         <span class="keyword">end</span>
+1080     <span class="keyword">end</span>
+1081 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

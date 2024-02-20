@@ -1,0 +1,175 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of refresh</title>
+  <meta name="keywords" content="refresh">
+  <meta name="description" content="refresh Refresh interface">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="../../index.html">+SMASH</a> &gt; <a href="../index.html">+MUI</a> &gt; <a href="index.html">@BasicGUI</a> &gt; refresh.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+MUI/@BasicGUI&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>refresh
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>refresh Refresh interface</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function refresh(object,choice) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> refresh Refresh interface
+
+ This method refreshes an interface, updating the object and display as
+ necesary.  Calling the method:
+    refresh(object);
+ does several things.
+    -Axes and button handles are verified.
+    -Buttons are positioned on the screen
+    -Graphic and button panels are resized to match the current button
+    state.
+ This method should be called whenever axes/button objects are removed
+ from the interface.  
+
+ See also <a href="BasicGUI.html" class="code" title="">BasicGUI</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="resize.html" class="code" title="function resize(object,fig,varargin)">resize</a>	determine new position</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="addAxes.html" class="code" title="function varargout=addAxes(object,position)">addAxes</a>	addAxes Add axes to the interface</li><li><a href="addButton.html" class="code" title="function varargout=addButton(object,label)">addButton</a>	addButton Add button to the interface</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% refresh Refresh interface</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This method refreshes an interface, updating the object and display as</span>
+0004 <span class="comment">% necesary.  Calling the method:</span>
+0005 <span class="comment">%    refresh(object);</span>
+0006 <span class="comment">% does several things.</span>
+0007 <span class="comment">%    -Axes and button handles are verified.</span>
+0008 <span class="comment">%    -Buttons are positioned on the screen</span>
+0009 <span class="comment">%    -Graphic and button panels are resized to match the current button</span>
+0010 <span class="comment">%    state.</span>
+0011 <span class="comment">% This method should be called whenever axes/button objects are removed</span>
+0012 <span class="comment">% from the interface.</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% See also BasicGUI</span>
+0015 <span class="comment">%</span>
+0016 
+0017 <span class="comment">%</span>
+0018 <span class="comment">% created December 2, 2015 by Daniel Dolan (Sandia National Laboratories)</span>
+0019 <span class="comment">%</span>
+0020 <a name="_sub0" href="#_subfunctions" class="code">function refresh(object,choice)</a>
+0021 
+0022 <span class="comment">% manage input</span>
+0023 refreshAxes=false;
+0024 refreshButton=false;
+0025 <span class="keyword">if</span> (nargin&lt;2) || isempty(choice)
+0026     choice=<span class="string">'all'</span>;
+0027 <span class="keyword">end</span>
+0028 assert(ischar(choice),<span class="string">'ERROR: invalid refresh choice'</span>);
+0029 <span class="keyword">switch</span> lower(choice)
+0030     <span class="keyword">case</span> <span class="string">'axes'</span>
+0031         refreshAxes=true;
+0032     <span class="keyword">case</span> <span class="string">'button'</span>
+0033         refreshButton=true;
+0034     <span class="keyword">case</span> <span class="string">'all'</span>
+0035         refreshAxes=true;
+0036         refreshButton=true;
+0037     <span class="keyword">otherwise</span>
+0038         error(<span class="string">'ERROR: invalid refresh choice'</span>);
+0039 <span class="keyword">end</span>
+0040 
+0041 <span class="comment">% axes objects</span>
+0042 <span class="keyword">if</span> refreshAxes
+0043     keep=false(size(object.AxesObject));
+0044     N=numel(keep);
+0045     <span class="keyword">for</span> n=1:N
+0046         <span class="keyword">if</span> ishandle(object.AxesObject(n))
+0047             keep(n)=true;
+0048         <span class="keyword">end</span>
+0049     <span class="keyword">end</span>
+0050     object.AxesObject=object.AxesObject(keep);
+0051 <span class="keyword">end</span>
+0052 
+0053 <span class="comment">% button objects and panel</span>
+0054 <span class="keyword">if</span> refreshButton
+0055     <span class="comment">%</span>
+0056     keep=false(size(object.ButtonObject));
+0057     N=numel(keep);
+0058     <span class="keyword">for</span> n=1:N
+0059         <span class="keyword">if</span> ishandle(object.ButtonObject(n))
+0060             keep(n)=true;
+0061         <span class="keyword">end</span>
+0062     <span class="keyword">end</span>
+0063     object.ButtonObject=object.ButtonObject(keep);
+0064     
+0065     <span class="keyword">if</span> any(keep)
+0066         set(object.ButtonPanel,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0067     <span class="keyword">else</span>
+0068         set(object.ButtonPanel,<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+0069     <span class="keyword">end</span>
+0070     N=sum(keep);
+0071     <span class="comment">%</span>
+0072     object.BPwidth=0;
+0073     object.BPheight=0;
+0074     x0=object.BPmargin;
+0075     y0=object.BPmargin;
+0076     <span class="keyword">for</span> n=1:N
+0077         position=get(object.ButtonObject(n),<span class="string">'Position'</span>);
+0078         position(1)=x0;
+0079         position(2)=y0;
+0080         set(object.ButtonObject(n),<span class="string">'Position'</span>,position);
+0081         x0=position(1)+position(3)+object.BPmargin;
+0082         object.BPwidth=x0;
+0083         object.BPheight=max(object.BPheight,position(4));
+0084     <span class="keyword">end</span>
+0085     <span class="keyword">if</span> N&gt;0
+0086         object.BPheight=object.BPheight+2*object.BPmargin;
+0087     <span class="keyword">end</span>
+0088     <span class="comment">%</span>
+0089     <span class="keyword">if</span> object.BPheight&gt;0
+0090         <span class="comment">%</span>
+0091         set(object.ButtonPanel,<span class="string">'Units'</span>,<span class="string">'pixels'</span>);
+0092         position=get(object.ButtonPanel,<span class="string">'Position'</span>);
+0093         position(4)=object.BPheight;
+0094         set(object.ButtonPanel,<span class="string">'Position'</span>,position);
+0095         <span class="comment">%</span>
+0096         set(object.ButtonPanel,<span class="string">'Units'</span>,<span class="string">'normalized'</span>);
+0097         position=get(object.ButtonPanel,<span class="string">'Position'</span>);
+0098         position(3)=1;
+0099         set(object.ButtonPanel,<span class="string">'Position'</span>,position);
+0100         <span class="comment">%</span>
+0101         position(2)=position(4);
+0102         position(4)=1-position(2);
+0103         set(object.AxesPanel,<span class="string">'Position'</span>,position);
+0104         <span class="comment">%</span>
+0105         set(object.ButtonPanel,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0106     <span class="keyword">else</span>
+0107         set(object.AxesPanel,<span class="string">'Position'</span>,[0 0 1 1]);
+0108         set(object.ButtonPanel,<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+0109     <span class="keyword">end</span>
+0110 <span class="keyword">end</span>
+0111 
+0112 <span class="comment">% update GUI size</span>
+0113 <a href="resize.html" class="code" title="function resize(object,fig,varargin)">resize</a>(object,object.Figure.Handle)
+0114 
+0115 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

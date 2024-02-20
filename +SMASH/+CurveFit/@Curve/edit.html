@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of edit</title>
+  <meta name="keywords" content="edit">
+  <meta name="description" content="edit Edit basis">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="../../index.html">+SMASH</a> &gt; <a href="../index.html">+CurveFit</a> &gt; <a href="index.html">@Curve</a> &gt; edit.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+CurveFit/@Curve&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>edit
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>edit Edit basis</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function object=edit(object,index,varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> edit Edit basis
+
+ This method edits an basis for a Curve object.  Basis are are referenced
+ by the order in which they were added.
+     &gt;&gt; object=edit(object,index,name1,value1,...);
+ Name/value pairs indicate the requested changes.  Valid names are
+ 'function', 'parameter', 'upper', 'lower', 'scale', and 'fixscale'; for more
+ information about each name, see the add method.
+
+ Modifications to basis parameters and bounds are always allowed, but the
+ number of parameters cannot be modified!  If the number of parameters
+ must be changed (basis function modification, mistakes when the basis was
+ added, etc.), then the basis must be removed and the added again.
+
+ See also <a href="Curve.html" class="code" title="">Curve</a>, <a href="add.html" class="code" title="function object=add(object,basis,parameter,varargin)">add</a>, <a href="remove.html" class="code" title="function object=remove(object,index)">remove</a>, <a href="summarize.html" class="code" title="function varargout=summarize(object,index)">summarize</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="analyze.html" class="code" title="function [report,reject]=analyze(object,iterations)">analyze</a>	analyze Analyze parameter uncertainty</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% edit Edit basis</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This method edits an basis for a Curve object.  Basis are are referenced</span>
+0004 <span class="comment">% by the order in which they were added.</span>
+0005 <span class="comment">%     &gt;&gt; object=edit(object,index,name1,value1,...);</span>
+0006 <span class="comment">% Name/value pairs indicate the requested changes.  Valid names are</span>
+0007 <span class="comment">% 'function', 'parameter', 'upper', 'lower', 'scale', and 'fixscale'; for more</span>
+0008 <span class="comment">% information about each name, see the add method.</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% Modifications to basis parameters and bounds are always allowed, but the</span>
+0011 <span class="comment">% number of parameters cannot be modified!  If the number of parameters</span>
+0012 <span class="comment">% must be changed (basis function modification, mistakes when the basis was</span>
+0013 <span class="comment">% added, etc.), then the basis must be removed and the added again.</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% See also Curve, add, remove, summarize</span>
+0016 <span class="comment">%</span>
+0017 
+0018 <span class="comment">%</span>
+0019 <span class="comment">% created November 30, 2014 by Daniel Dolan (Sandia National Laboratories)</span>
+0020 <span class="comment">%</span>
+0021 <a name="_sub0" href="#_subfunctions" class="code">function object=edit(object,index,varargin)</a>
+0022 
+0023 <span class="comment">% handle input</span>
+0024 assert(nargin&gt;2,<span class="string">'ERROR: insufficient input'</span>);
+0025 assert(isscalar(index),<span class="string">'ERROR: invalid index'</span>);
+0026 M=numel(object.Basis);
+0027 valid=1:M;
+0028 assert(any(index==valid),<span class="string">'ERROR: invalid index'</span>);
+0029 
+0030 Narg=numel(varargin);
+0031 assert(rem(Narg,2)==0,<span class="string">'ERROR: unmatched name/value pair'</span>);
+0032 Nparam=numel(object.Parameter{index});
+0033 <span class="keyword">for</span> n=1:2:Narg
+0034     name=varargin{n};
+0035     assert(ischar(name),<span class="string">'ERROR: invalid name'</span>);
+0036     value=varargin{n+1};
+0037     <span class="keyword">switch</span> lower(name)                   
+0038         <span class="keyword">case</span> <span class="string">'function'</span>
+0039             <span class="keyword">if</span> ischar(value)
+0040                 value=str2func(value);                
+0041             <span class="keyword">end</span>
+0042             assert(isa(value,<span class="string">'function_handle'</span>),<span class="keyword">...</span>
+0043                 <span class="string">'ERROR: invalid basis function'</span>);
+0044             object.Basis{index}=value;
+0045         <span class="keyword">case</span> <span class="string">'parameter'</span>
+0046             assert(isnumeric(value),<span class="string">'ERROR: invalid parameter array'</span>);            
+0047             <span class="keyword">if</span> numel(value)~=Nparam               
+0048                 Nparam=numel(value);
+0049                 temp=+inf(2,Nparam);
+0050                 temp(1,:)=-temp(1,:);
+0051                 object.Bound{index}=temp;
+0052             <span class="keyword">end</span>
+0053             object.Parameter{index}=value;
+0054         <span class="keyword">case</span> <span class="string">'lower'</span>
+0055             assert(isnumeric(value),<span class="string">'ERROR: invalid lower bound array'</span>);  
+0056             assert(Nparam==numel(value),<span class="string">'ERROR: incompatible array size'</span>);
+0057             object.Bound{index}(1,:)=value;
+0058         <span class="keyword">case</span> <span class="string">'upper'</span>
+0059             assert(isnumeric(value),<span class="string">'ERROR: invalid upper bound array'</span>);
+0060             assert(Nparam==numel(value),<span class="string">'ERROR: incompatible array size'</span>);
+0061             object.Bound{index}(2,:)=value;
+0062         <span class="keyword">case</span> <span class="string">'scale'</span>
+0063              assert(isnumeric(value) &amp; isscalar(value),<span class="string">'ERROR: invalid scale'</span>); 
+0064              object.Scale{index}=value;
+0065         <span class="keyword">case</span> <span class="string">'fixscale'</span>
+0066             assert(islogical(value) &amp; isscalar(value),<span class="string">'ERROR: invalid FixScale value'</span>);
+0067             object.FixScale{index}=value;
+0068         <span class="keyword">otherwise</span>
+0069             error(<span class="string">'ERROR: &quot;%s&quot; is an invalid name'</span>);
+0070     <span class="keyword">end</span>
+0071 <span class="keyword">end</span>
+0072 
+0073 object.FitComplete=false;
+0074 
+0075 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

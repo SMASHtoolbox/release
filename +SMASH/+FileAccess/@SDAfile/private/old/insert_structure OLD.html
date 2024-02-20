@@ -1,0 +1,83 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of insert_structure OLD</title>
+  <meta name="keywords" content="insert_structure OLD">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../../../index.html">SMASHtoolbox</a> &gt; <a href="../../../../index.html">+SMASH</a> &gt; <a href="../../../index.html">+FileAccess</a> &gt; <a href="../../index.html">@SDAfile</a> &gt; <a href="../index.html">private</a> &gt; <a href="index.html">old</a> &gt; insert_structure OLD.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../../../index.html"><img alt="<" border="0" src="../../../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+FileAccess/@SDAfile/private/old&nbsp;<img alt=">" border="0" src="../../../../../../../right.png"></a></td></tr></table>-->
+
+<h1>insert_structure OLD
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../../../up.png"></a></h2>
+<div class="box"><strong>function insert_structure(archive,setname,data,deflate) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function insert_structure(archive,setname,data,deflate)</a>
+0002 
+0003 file=archive.ArchiveFile;
+0004 
+0005 <span class="keyword">for</span> m=1:numel(data)
+0006     name=fieldnames(data(m));
+0007     <span class="keyword">for</span> k=1:numel(name)
+0008         value=data(m).(name{k});
+0009         local=[setname <span class="string">'/'</span> sprintf(<span class="string">'element %d'</span>,m) <span class="string">'/'</span> name{k}];
+0010         <span class="keyword">if</span> isnumeric(value)
+0011             insert_numeric(archive,local,value,deflate);
+0012         <span class="keyword">elseif</span> islogical(value)
+0013             insert_logical(archive,local,value,deflate);
+0014         <span class="keyword">elseif</span> ischar(value)
+0015             insert_character(archive,local,value,deflate);
+0016         <span class="keyword">elseif</span> isa(value,<span class="string">'function_handle'</span>)
+0017             insert_function(archive,local,value,deflate);
+0018         <span class="keyword">elseif</span> isstruct(value)
+0019             insert_structure(archive,local,value,deflate);
+0020         <span class="keyword">elseif</span> iscell(value)
+0021             insert_cell(archive,local,value,deflate);
+0022         <span class="keyword">elseif</span> isobject(value)
+0023             ObjectClass=class(value);
+0024             value=object2structure(value);
+0025             insert_structure(archive,local,value,deflate);
+0026             h5writeatt(archive.ArchiveFile,local,<span class="string">'Class'</span>,ObjectClass);
+0027             h5writeatt(archive.ArchiveFile,local,<span class="string">'RecordType'</span>,<span class="string">'object'</span>);
+0028         <span class="keyword">end</span>
+0029     <span class="keyword">end</span>
+0030     h5writeatt(file,setname,<span class="string">'RecordType'</span>,<span class="string">'structure'</span>);
+0031     h5writeatt(file,setname,<span class="string">'RecordSize'</span>,size(data));
+0032     h5writeatt(file,setname,<span class="string">'Empty'</span>,<span class="string">'no'</span>);    
+0033     h5writeatt(file,setname,<span class="string">'Fields'</span>,sprintf(<span class="string">'%s '</span>,name{:}));    
+0034 <span class="keyword">end</span>
+0035 
+0036 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

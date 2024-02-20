@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of write</title>
+  <meta name="keywords" content="write">
+  <meta name="description" content="write Write to database file">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="../../index.html">+SMASH</a> &gt; <a href="../index.html">+FileAccess</a> &gt; <a href="index.html">@SimpleDatabase</a> &gt; write.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+FileAccess/@SimpleDatabase&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>write
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>write Write to database file</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function write(object,data) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> write Write to database file
+
+ This method writes a structure array to the database file.  
+    &gt;&gt; write(object,data);
+ All existing information in this file is overwritten!  To preserve
+ existing database records, use the &quot;add&quot; method.
+
+ See also <a href="SimpleDatabase.html" class="code" title="">SimpleDatabase</a>, <a href="add.html" class="code" title="function add(object,record)">add</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="add.html" class="code" title="function add(object,record)">add</a>	add Add to the database file</li><li><a href="remove.html" class="code" title="function remove(object,varargin)">remove</a>	remove Remove record(s) from the database file</li><li><a href="sort.html" class="code" title="function sort(object,name,direction)">sort</a>	sort Sort database records</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% write Write to database file</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This method writes a structure array to the database file.</span>
+0004 <span class="comment">%    &gt;&gt; write(object,data);</span>
+0005 <span class="comment">% All existing information in this file is overwritten!  To preserve</span>
+0006 <span class="comment">% existing database records, use the &quot;add&quot; method.</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% See also SimpleDatabase, add</span>
+0009 <span class="comment">%</span>
+0010 
+0011 <span class="comment">%</span>
+0012 <span class="comment">% created May 30, 2014 by Daniel Dolan (Sandia National Laboratories)</span>
+0013 <span class="comment">%</span>
+0014 <a name="_sub0" href="#_subfunctions" class="code">function write(object,data)</a>
+0015 
+0016 <span class="comment">% verify data</span>
+0017 assert(isstruct(data),<span class="string">'ERROR: invalid data type'</span>);
+0018 Nrecords=numel(data);
+0019 name=fields(data);
+0020 
+0021 Nfields=numel(name);
+0022 width=max(cellfun(@numel,name));
+0023 format=sprintf(<span class="string">'%%%ds: '</span>,width);
+0024 label=cell(Nfields,1);
+0025 <span class="keyword">for</span> n=1:Nfields
+0026     label{n}=sprintf(format,name{n});
+0027 <span class="keyword">end</span>
+0028 
+0029 <span class="comment">% open file and write data</span>
+0030 fid=fopen(object.Filename,<span class="string">'w'</span>);
+0031 assert(fid&gt;2,<span class="string">'ERROR: unable to write database file'</span>);
+0032 
+0033 [~,shortname,ext]=fileparts(object.Filename);
+0034 fprintf(fid,<span class="string">'# SimpleDatabase file: %s\n'</span>,[shortname ext]);
+0035 fprintf(fid,<span class="string">'# File updated : %s\n'</span>,datestr(now));
+0036 fprintf(fid,<span class="string">'# Number of records: %d\n'</span>,Nrecords);
+0037 fprintf(fid,<span class="string">'# Number of fields: %d\n'</span>,Nfields);
+0038 <span class="keyword">for</span> n=1:Nfields
+0039     fprintf(fid,<span class="string">'#\t %s '</span>,label{n});
+0040     temp=data(1).(name{n});
+0041     <span class="keyword">if</span> ischar(temp)
+0042         fprintf(fid,<span class="string">'character'</span>);
+0043     <span class="keyword">elseif</span> islogical(temp)
+0044         fprintf(fid,<span class="string">'logical'</span>);
+0045     <span class="keyword">elseif</span> isnumeric(temp)
+0046         fprintf(fid,<span class="string">'numeric'</span>);
+0047     <span class="keyword">else</span>
+0048         error(<span class="string">'ERROR: unsupported data type detected'</span>);
+0049     <span class="keyword">end</span>
+0050     fprintf(fid,<span class="string">'\n'</span>);
+0051 <span class="keyword">end</span>
+0052 fprintf(fid,<span class="string">'\n'</span>);
+0053 
+0054 <span class="keyword">for</span> m=1:Nrecords
+0055     <span class="comment">% calculate widths...</span>
+0056     <span class="keyword">for</span> n=1:Nfields        
+0057         temp=data(m).(name{n});
+0058         <span class="keyword">if</span> isnumeric(temp)
+0059             format=object.NumericFormat;
+0060         <span class="keyword">elseif</span> islogical(temp)
+0061             format=<span class="string">'%d '</span>;
+0062         <span class="keyword">elseif</span> ischar(temp)
+0063             format=<span class="string">'%s'</span>;
+0064         <span class="keyword">else</span>
+0065             error(<span class="string">'ERROR: invalid value type'</span>);
+0066         <span class="keyword">end</span>
+0067         temp=strtrim(sprintf(format,temp));
+0068         fprintf(fid,<span class="string">'%s%s\n'</span>,label{n},temp);
+0069     <span class="keyword">end</span>
+0070     <span class="keyword">if</span> m&lt;Nrecords
+0071         fprintf(fid,<span class="string">'\n'</span>);
+0072     <span class="keyword">end</span>
+0073 <span class="keyword">end</span>
+0074 
+0075 <span class="comment">% close file</span>
+0076 fclose(fid);
+0077 
+0078 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

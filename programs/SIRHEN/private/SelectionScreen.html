@@ -1,0 +1,803 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of SelectionScreen</title>
+  <meta name="keywords" content="SelectionScreen">
+  <meta name="description" content="allocate mising input">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">SIRHEN</a> &gt; <a href="index.html">private</a> &gt; SelectionScreen.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/SIRHEN/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>SelectionScreen
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>allocate mising input</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function fig=SelectionScreen(prevfig) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> allocate mising input</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="AbsoluteFileName.html" class="code" title="function func=AbsoluteFileName(filename,sourcepath)">AbsoluteFileName</a>	AbsoluteFileName : determine absolute path of a file</li><li><a href="AnalysisScreen.html" class="code" title="function fig=AnalysisScreen(prevfig)">AnalysisScreen</a>	allocate mising input</li><li><a href="ColumnReader.html" class="code" title="function [data,header,filename]=ColumnReader(filename,delim,mincolumn)">ColumnReader</a>	ColumnReader : extract column data from a file</li><li><a href="DisplayOptions.html" class="code" title="function DisplayOptions(varargin)">DisplayOptions</a>	handle input</li><li><a href="GeneralOptions.html" class="code" title="function GeneralOptions(varargin)">GeneralOptions</a>	handle input</li><li><a href="HelpWindow.html" class="code" title="function HelpWindow(src,varargin)">HelpWindow</a>	get handles</li><li><a href="STFTOptions.html" class="code" title="function STFTOptions(varargin)">STFTOptions</a>	handle input</li><li><a href="StartOver.html" class="code" title="function StartOver(src,varargin)">StartOver</a>	</li><li><a href="about_SIRHEN.html" class="code" title="function varargout=about_SIRHEN(src,varargin)">about_SIRHEN</a>	</li><li><a href="datadlg.html" class="code" title="function answer=datadlg(name,label,default,button,options)">datadlg</a>	datadlg: create a data dialog box</li><li><a href="digread.html" class="code" title="function [signal,time,info]=digread(filename)">digread</a>	digread : Read DIG binary files</li><li><a href="estimate_noise.html" class="code" title="function value=estimate_noise(signal)">estimate_noise</a>	estimate_noise : estimate Gaussian noise fraction in a harmonic signal</li><li><a href="findpeak.html" class="code" title="function result=findpeak(x,y,options)">findpeak</a>	findpeak : determine the position, width, and strength of a peak</li><li><a href="screen.html" class="code" title="function [fig,button,haxes,hp]=screen(varargin)">screen</a>	probe primary monitor size</li><li><a href="set_colormap.html" class="code" title="function set_colormap(haxes,map,invertmap)">set_colormap</a>	</li><li><a href="stft.html" class="code" title="function [output,tout,frequency,options]=stft(signal,time,options,localfunc,updatefunc)">stft</a>	stft : short time Fourier transform  analysis</li><li><a href="trcread.html" class="code" title="function varargout=trcread(filename)">trcread</a>	TRCREAD Read LeCroy binary data files</li><li><a href="wfmread.html" class="code" title="function [y,t,info,iover,iunder]=wfmread(filename)">wfmread</a>	wfmread : Read Tektronix binary data files</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="AnalysisScreen.html" class="code" title="function fig=AnalysisScreen(prevfig)">AnalysisScreen</a>	allocate mising input</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function fig=createGUI(varargin)</a></li><li><a href="#_sub2" class="code">function LoadSignal(varargin)</a></li><li><a href="#_sub3" class="code">function updateGUI(fig)</a></li><li><a href="#_sub4" class="code">function ShiftSignal(varargin)</a></li><li><a href="#_sub5" class="code">function SelectReference(varargin)</a></li><li><a href="#_sub6" class="code">function SelectExperiment(varargin)</a></li><li><a href="#_sub7" class="code">function EstimateNoise(varargin)</a></li><li><a href="#_sub8" class="code">function RemoveBaseline(~,~,fig)</a></li><li><a href="#_sub9" class="code">function StartBaselineRegion(varargin)</a></li><li><a href="#_sub10" class="code">function StopBaselineRegion(varargin)</a></li><li><a href="#_sub11" class="code">function NextButton(varargin)</a></li><li><a href="#_sub12" class="code">function defaultOK(varargin)</a></li><li><a href="#_sub13" class="code">function defaultCancel(varargin)</a></li><li><a href="#_sub14" class="code">function UseMouse(varargin)</a></li><li><a href="#_sub15" class="code">function RestoreSession(varargin)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function fig=SelectionScreen(prevfig)</a>
+0002 
+0003 <span class="comment">% allocate mising input</span>
+0004 <span class="keyword">if</span> nargin&lt;1
+0005     prevfig=[];
+0006 <span class="keyword">end</span>
+0007 
+0008 <span class="comment">% create figure (if necessary)</span>
+0009 tag=<span class="string">'SIRHEN_SelectionScreen'</span>;
+0010 fig=findall(0,<span class="string">'Type'</span>,<span class="string">'figure'</span>,<span class="string">'Tag'</span>,tag);
+0011 <span class="keyword">if</span> isempty(fig)
+0012     name=<span class="string">'SIRHEN: Sandia InfraRed HEtrodyne aNalysis'</span>;
+0013     fig=<a href="#_sub1" class="code" title="subfunction fig=createGUI(varargin)">createGUI</a>(<span class="string">'Tag'</span>,tag,<span class="string">'Name'</span>,name);
+0014 <span class="keyword">end</span>
+0015 
+0016 <span class="comment">% transition to current figure</span>
+0017 <span class="keyword">if</span> ishandle(prevfig)   
+0018     set(prevfig,<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+0019     units=get(prevfig,<span class="string">'Units'</span>);
+0020     pos=get(prevfig,<span class="string">'Position'</span>);
+0021     data=get(prevfig,<span class="string">'UserData'</span>);
+0022     set(fig,<span class="string">'Units'</span>,units,<span class="string">'Position'</span>,pos,<span class="string">'UserData'</span>,data);
+0023     <a href="#_sub3" class="code" title="subfunction updateGUI(fig)">updateGUI</a>(fig);    
+0024 <span class="keyword">end</span>
+0025 
+0026 <span class="keyword">end</span>
+0027 
+0028 <a name="_sub1" href="#_subfunctions" class="code">function fig=createGUI(varargin)</a>
+0029 
+0030 screenname=<span class="string">'Selection Screen'</span>;
+0031 <span class="comment">% create screen with default analysis options</span>
+0032 [fig,button,haxes,hp]=<a href="screen.html" class="code" title="function [fig,button,haxes,hp]=screen(varargin)">screen</a>(<span class="string">'Visible'</span>,<span class="string">'off'</span>,varargin{:});
+0033 data=struct(<span class="keyword">...</span>
+0034     <span class="string">'inputfile'</span>,<span class="string">''</span>,<span class="string">'name'</span>,<span class="string">''</span>,<span class="keyword">...</span>
+0035     <span class="string">'reference'</span>,[-inf -inf],<span class="string">'experiment'</span>,[-inf inf],<span class="keyword">...</span>
+0036     <span class="string">'ref_frequency'</span>,0,<span class="string">'time_shift'</span>,0,<span class="string">'frange'</span>,[-inf +inf],<span class="string">'fwidth'</span>,inf,<span class="keyword">...</span>
+0037     <span class="string">'flimitpoints'</span>,[],<span class="string">'tlimitpoints'</span>,[],<span class="keyword">...</span>
+0038     <span class="string">'duration'</span>,nan,<span class="string">'skip'</span>,nan,<span class="string">'method'</span>,<span class="string">'robust'</span>,<span class="string">'overlap'</span>,0,<span class="keyword">...</span>
+0039     <span class="string">'wavelength'</span>,1550e-9,<span class="string">'removeDC'</span>,false,<span class="string">'vscale'</span>,1,<span class="keyword">...</span>
+0040     <span class="string">'Nduration'</span>,1024,<span class="string">'Nfreq'</span>,[1024 1024],<span class="string">'window'</span>,<span class="string">'hamming'</span>,<span class="keyword">...</span>
+0041     <span class="string">'normalization'</span>,<span class="string">'global'</span>,<span class="string">'scaling'</span>,<span class="string">'log'</span>,<span class="keyword">...</span>
+0042     <span class="string">'clim'</span>,[-60 0],<span class="string">'map'</span>,<span class="string">'jet'</span>,<span class="string">'invertmap'</span>,<span class="string">'no'</span>,<span class="keyword">...</span>
+0043     <span class="string">'PDVtype'</span>,<span class="string">'standard'</span>,<span class="string">'vlevel'</span>,0);
+0044 set(fig,<span class="string">'UserData'</span>,data);
+0045 
+0046 set(hp,<span class="string">'Title'</span>,screenname,<span class="string">'TitlePosition'</span>,<span class="string">'centertop'</span>);
+0047 <span class="comment">% create menus</span>
+0048 hm=uimenu(fig,<span class="string">'Label'</span>,<span class="string">'Program'</span>);
+0049 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Restore session'</span>,<span class="string">'Callback'</span>,{@<a href="#_sub15" class="code" title="subfunction RestoreSession(varargin)">RestoreSession</a>,fig});
+0050 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Start over'</span>,<span class="string">'Separator'</span>,<span class="string">'off'</span>,<span class="string">'Callback'</span>,@<a href="StartOver.html" class="code" title="function StartOver(src,varargin)">StartOver</a>);
+0051 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Exit'</span>,<span class="string">'Separator'</span>,<span class="string">'on'</span>,<span class="string">'Callback'</span>,<span class="string">'close(gcbf)'</span>);
+0052 
+0053 hm=uimenu(fig,<span class="string">'Label'</span>,<span class="string">'Data'</span>);
+0054 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Load signal'</span>,<span class="string">'Callback'</span>,{@<a href="#_sub2" class="code" title="subfunction LoadSignal(varargin)">LoadSignal</a>,fig});
+0055 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Shift signal'</span>,<span class="string">'Callback'</span>,{@<a href="#_sub4" class="code" title="subfunction ShiftSignal(varargin)">ShiftSignal</a>,fig});
+0056 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Reference region'</span>,<span class="string">'Callback'</span>,{@<a href="#_sub5" class="code" title="subfunction SelectReference(varargin)">SelectReference</a>,fig},<span class="keyword">...</span>
+0057     <span class="string">'Separator'</span>,<span class="string">'on'</span>);
+0058 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Experiment region'</span>,<span class="string">'Callback'</span>,{@<a href="#_sub6" class="code" title="subfunction SelectExperiment(varargin)">SelectExperiment</a>,fig});
+0059 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Estimate noise fraction'</span>,<span class="keyword">...</span>
+0060     <span class="string">'Callback'</span>,{@<a href="#_sub7" class="code" title="subfunction EstimateNoise(varargin)">EstimateNoise</a>,fig},<span class="string">'Separator'</span>,<span class="string">'on'</span>);
+0061 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Remove extended baseline'</span>,<span class="keyword">...</span>
+0062     <span class="string">'Callback'</span>,{@<a href="#_sub8" class="code" title="subfunction RemoveBaseline(~,~,fig)">RemoveBaseline</a>,fig});
+0063 
+0064 hm=uimenu(fig,<span class="string">'Label'</span>,<span class="string">'Options'</span>);
+0065 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'General'</span>,<span class="string">'Callback'</span>,{@<a href="GeneralOptions.html" class="code" title="function GeneralOptions(varargin)">GeneralOptions</a>,fig,@<a href="#_sub3" class="code" title="subfunction updateGUI(fig)">updateGUI</a>});
+0066 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'STFT'</span>,<span class="string">'Callback'</span>,{@<a href="STFTOptions.html" class="code" title="function STFTOptions(varargin)">STFTOptions</a>,fig,@<a href="#_sub3" class="code" title="subfunction updateGUI(fig)">updateGUI</a>});
+0067 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Display'</span>,<span class="string">'Callback'</span>,{@<a href="DisplayOptions.html" class="code" title="function DisplayOptions(varargin)">DisplayOptions</a>,fig,@<a href="#_sub3" class="code" title="subfunction updateGUI(fig)">updateGUI</a>});
+0068 
+0069 hm=uimenu(<span class="string">'Label'</span>,<span class="string">'Help'</span>);
+0070 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Program overview'</span>,<span class="string">'Callback'</span>,@<a href="HelpWindow.html" class="code" title="function HelpWindow(src,varargin)">HelpWindow</a>);
+0071 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'About SIRHEN'</span>,<span class="string">'Callback'</span>,@<a href="about_SIRHEN.html" class="code" title="function varargout=about_SIRHEN(src,varargin)">about_SIRHEN</a>);
+0072 
+0073 <span class="comment">% customize axes</span>
+0074 set(haxes(1),<span class="string">'Tag'</span>,<span class="string">'SignalAxes'</span>);
+0075 hc=colorbar(<span class="string">'peer'</span>,haxes(1));
+0076 set(hc,<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+0077 xlabel(haxes(1),<span class="string">'Time'</span>);
+0078 ylabel(haxes(1),<span class="string">'Signal'</span>);
+0079 line(<span class="string">'Parent'</span>,haxes(1),<span class="string">'Color'</span>,<span class="string">'b'</span>,<span class="keyword">...</span>
+0080     <span class="string">'Tag'</span>,<span class="string">'SignalLine'</span>,<span class="string">'Visible'</span>,<span class="string">'off'</span>,<span class="keyword">...</span>
+0081     <span class="string">'XData'</span>,[],<span class="string">'YData'</span>,[]);
+0082 line(<span class="string">'Parent'</span>,haxes(1),<span class="string">'Color'</span>,<span class="string">'r'</span>,<span class="string">'LineStyle'</span>,<span class="string">'--'</span>,<span class="keyword">...</span>
+0083     <span class="string">'Tag'</span>,<span class="string">'ReferenceBound1a'</span>,<span class="string">'Visible'</span>,<span class="string">'off'</span>,<span class="keyword">...</span>
+0084     <span class="string">'XData'</span>,[],<span class="string">'YData'</span>,[]);
+0085 line(<span class="string">'Parent'</span>,haxes(1),<span class="string">'Color'</span>,<span class="string">'r'</span>,<span class="string">'LineStyle'</span>,<span class="string">'--'</span>,<span class="keyword">...</span>
+0086     <span class="string">'Tag'</span>,<span class="string">'ReferenceBound2a'</span>,<span class="string">'Visible'</span>,<span class="string">'off'</span>,<span class="keyword">...</span>
+0087     <span class="string">'XData'</span>,[],<span class="string">'YData'</span>,[]);
+0088 line(<span class="string">'Parent'</span>,haxes(1),<span class="string">'Color'</span>,<span class="string">'r'</span>,<span class="string">'LineStyle'</span>,<span class="string">'-'</span>,<span class="keyword">...</span>
+0089     <span class="string">'Tag'</span>,<span class="string">'ExperimentBound1a'</span>,<span class="string">'Visible'</span>,<span class="string">'off'</span>,<span class="keyword">...</span>
+0090     <span class="string">'XData'</span>,[],<span class="string">'YData'</span>,[]);
+0091 line(<span class="string">'Parent'</span>,haxes(1),<span class="string">'Color'</span>,<span class="string">'r'</span>,<span class="string">'LineStyle'</span>,<span class="string">'-'</span>,<span class="keyword">...</span>
+0092     <span class="string">'Tag'</span>,<span class="string">'ExperimentBound2a'</span>,<span class="string">'Visible'</span>,<span class="string">'off'</span>,<span class="keyword">...</span>
+0093     <span class="string">'XData'</span>,[],<span class="string">'YData'</span>,[]);
+0094 
+0095 set(haxes(2),<span class="string">'Tag'</span>,<span class="string">'STFTAxes'</span>,<span class="string">'YDir'</span>,<span class="string">'normal'</span>);
+0096 hc=colorbar(<span class="string">'peer'</span>,haxes(2));
+0097 set(hc,<span class="string">'UIContextMenu'</span>,[]);
+0098 hc_new=uicontextmenu();
+0099 hm_new=uimenu(hc_new,<span class="string">'Label'</span>,<span class="string">'Display'</span>);
+0100 set(hm_new,<span class="string">'Callback'</span>,{@<a href="DisplayOptions.html" class="code" title="function DisplayOptions(varargin)">DisplayOptions</a>,fig,@<a href="#_sub3" class="code" title="subfunction updateGUI(fig)">updateGUI</a>});
+0101 set(hc,<span class="string">'UIContextMenu'</span>,hc_new); 
+0102 ylabel(haxes(2),<span class="string">'Frequency'</span>);
+0103 xlabel(haxes(2),<span class="string">'Time'</span>);
+0104 image(<span class="string">'Parent'</span>,haxes(2),<span class="string">'Tag'</span>,<span class="string">'STFTImage'</span>,<span class="keyword">...</span>
+0105     <span class="string">'XData'</span>,[],<span class="string">'YData'</span>,[],<span class="string">'CData'</span>,[],<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+0106 line(<span class="string">'Parent'</span>,haxes(2),<span class="string">'Color'</span>,<span class="string">'r'</span>,<span class="string">'LineStyle'</span>,<span class="string">'--'</span>,<span class="keyword">...</span>
+0107     <span class="string">'Tag'</span>,<span class="string">'ReferenceBound1b'</span>,<span class="string">'Visible'</span>,<span class="string">'off'</span>,<span class="keyword">...</span>
+0108     <span class="string">'XData'</span>,[],<span class="string">'YData'</span>,[]);
+0109 line(<span class="string">'Parent'</span>,haxes(2),<span class="string">'Color'</span>,<span class="string">'r'</span>,<span class="string">'LineStyle'</span>,<span class="string">'--'</span>,<span class="keyword">...</span>
+0110     <span class="string">'Tag'</span>,<span class="string">'ReferenceBound2b'</span>,<span class="string">'Visible'</span>,<span class="string">'off'</span>,<span class="keyword">...</span>
+0111     <span class="string">'XData'</span>,[],<span class="string">'YData'</span>,[]);
+0112 line(<span class="string">'Parent'</span>,haxes(2),<span class="string">'Color'</span>,<span class="string">'r'</span>,<span class="string">'LineStyle'</span>,<span class="string">'-'</span>,<span class="keyword">...</span>
+0113     <span class="string">'Tag'</span>,<span class="string">'ExperimentBound1b'</span>,<span class="string">'Visible'</span>,<span class="string">'off'</span>,<span class="keyword">...</span>
+0114     <span class="string">'XData'</span>,[],<span class="string">'YData'</span>,[]);
+0115 line(<span class="string">'Parent'</span>,haxes(2),<span class="string">'Color'</span>,<span class="string">'r'</span>,<span class="string">'LineStyle'</span>,<span class="string">'-'</span>,<span class="keyword">...</span>
+0116     <span class="string">'Tag'</span>,<span class="string">'ExperimentBound2b'</span>,<span class="string">'Visible'</span>,<span class="string">'off'</span>,<span class="keyword">...</span>
+0117     <span class="string">'XData'</span>,[],<span class="string">'YData'</span>,[]);
+0118 
+0119 linkaxes(haxes,<span class="string">'x'</span>);
+0120 
+0121 <span class="comment">% customize buttons</span>
+0122 set(button(1),<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+0123 set(button(2),<span class="string">'Callback'</span>,{@<a href="#_sub11" class="code" title="subfunction NextButton(varargin)">NextButton</a>,fig});
+0124 
+0125 
+0126 <span class="keyword">end</span>
+0127 
+0128 <a name="_sub2" href="#_subfunctions" class="code">function LoadSignal(varargin)</a>
+0129 
+0130 fig=varargin{3};
+0131 data=get(fig,<span class="string">'UserData'</span>);
+0132 <span class="keyword">if</span> isempty(data.inputfile)
+0133     pathname=<span class="string">'.'</span>;
+0134 <span class="keyword">else</span>
+0135     [pathname,filename]=fileparts(data.inputfile);
+0136 <span class="keyword">end</span>
+0137 
+0138 <span class="keyword">if</span> (nargin&lt;4) || strcmp(varargin{4},<span class="string">'prompt'</span>) <span class="comment">% prompt user for file name</span>
+0139     filter={};
+0140     filter{end+1,1}=<span class="string">'*.txt;*.TXT;*.dat;*.DAT;*.csv;*.CSV;*.wfm;*.WFM;*.dig;*.DIG;*.h5;*.H5;*.trc;*.TRC'</span>;
+0141     filter{<span class="keyword">end</span>,2}=<span class="string">'Supported file types'</span>;
+0142     filter{end+1,1}=<span class="string">'*.txt;*.TXT;*.dat;*.DAT;*.csv;*.CSV;'</span>;
+0143     filter{<span class="keyword">end</span>,2}=<span class="string">'Text files (*.txt, *.dat, *.csv)'</span>;
+0144     filter{end+1,1}=<span class="string">'*.wfm;*.WFM;'</span>;
+0145     filter{<span class="keyword">end</span>,2}=<span class="string">'Tektronix binary files (*.wfm)'</span>;
+0146     filter{end+1,1}=<span class="string">'*.dig;*.DIG'</span>;
+0147     filter{<span class="keyword">end</span>,2}=<span class="string">'NTS binary files (*.dig)'</span>;
+0148     filter{end+1,1}=<span class="string">'*.h5;*.H5'</span>;
+0149     filter{<span class="keyword">end</span>,2}=<span class="string">'Agilent binary files (*.h5)'</span>;
+0150     filter{end+1,1}=<span class="string">'*.trc;*.TRC'</span>;
+0151     filter{<span class="keyword">end</span>,2}=<span class="string">'LeCroy binary files (*.trc)'</span>;
+0152     filter{end+1,1}=<span class="string">'*.*'</span>;
+0153     filter{<span class="keyword">end</span>,2}=<span class="string">'All files (*.*)'</span>;
+0154     [filename,pathname]=uigetfile(filter,<span class="string">'Select signal file'</span>,pathname);
+0155     <span class="keyword">if</span> isnumeric(filename)
+0156         <span class="keyword">return</span>
+0157     <span class="keyword">end</span>
+0158     data.name=filename;
+0159     data.inputfile=fullfile(pathname,filename);
+0160 <span class="keyword">else</span>
+0161     [pathname,filename,ext]=fileparts(data.inputfile);
+0162     data.name=[filename ext];
+0163 <span class="keyword">end</span>
+0164 
+0165 <span class="comment">% load signal from file</span>
+0166 [pname,fname,ext]=fileparts(data.name);
+0167 <span class="keyword">try</span>
+0168     <span class="keyword">switch</span> lower(ext)
+0169         <span class="keyword">case</span> <span class="string">'.wfm'</span>
+0170             [signal,time]=<a href="wfmread.html" class="code" title="function [y,t,info,iover,iunder]=wfmread(filename)">wfmread</a>(data.inputfile);
+0171         <span class="keyword">case</span> <span class="string">'.dig'</span>
+0172             [signal,time]=<a href="digread.html" class="code" title="function [signal,time,info]=digread(filename)">digread</a>(data.inputfile);
+0173         <span class="keyword">case</span> <span class="string">'.h5'</span>
+0174             <span class="comment">%[signal,time]=agilent_h5read(data.inputfile,'gui');</span>
+0175             temp=SMASH.FileAccess.readFile(data.inputfile,<span class="string">'agilent'</span>);
+0176             time=temp.Time;
+0177             signal=temp.Signal;
+0178         <span class="keyword">case</span> <span class="string">'.trc'</span>
+0179             [signal,time]=<a href="trcread.html" class="code" title="function varargout=trcread(filename)">trcread</a>(data.inputfile);
+0180         <span class="keyword">otherwise</span>
+0181             temp=<a href="ColumnReader.html" class="code" title="function [data,header,filename]=ColumnReader(filename,delim,mincolumn)">ColumnReader</a>(data.inputfile,[],2);
+0182             time=temp(:,1);
+0183             signal=temp(:,2);
+0184     <span class="keyword">end</span>
+0185 <span class="keyword">catch</span>
+0186     errordlg(<span class="string">'Unable to read signal file'</span>,<span class="string">'File error'</span>);
+0187     <span class="keyword">return</span>
+0188 <span class="keyword">end</span>
+0189 drop=isnan(signal) | isinf(signal);
+0190 <span class="keyword">if</span> any(drop)
+0191     message{1}=<span class="string">'Signal contains NaN (Not a Number) and/or Inf (infinite) values'</span>;
+0192     message{2}=<span class="string">'Correction will be attempted, but there may be artifacts'</span>;
+0193     h=warndlg(message,<span class="string">'NaN/Inf values found'</span>);
+0194     waitfor(h);
+0195     <span class="comment">%signal(drop)=(max(signal(~drop))+min(signal(~drop)))/2;</span>
+0196     index=1:numel(signal);
+0197     index=index(drop);
+0198     <span class="keyword">for</span> k=1:numel(index)
+0199         <span class="keyword">if</span> index(k)==1
+0200             value=mean(signal(~drop));
+0201         <span class="keyword">else</span>
+0202             value=signal(index(k)-1);
+0203         <span class="keyword">end</span>
+0204         signal(index(k))=value;
+0205     <span class="keyword">end</span>
+0206 <span class="keyword">end</span>
+0207 temp=struct(<span class="string">'time'</span>,time+data.time_shift,<span class="string">'signal'</span>,signal);
+0208 set(data.handle{1}.SignalLine,<span class="string">'UserData'</span>,temp);
+0209 
+0210 data.update.signal=true;
+0211 data.update.fullSTFT=true;
+0212 data.update.ref_frequency=true;
+0213 data.update.experimentSTFT=true;
+0214 data.update.history=true;
+0215 data.update.experimentVariable=true;
+0216 set(fig,<span class="string">'UserData'</span>,data);
+0217 <a href="#_sub3" class="code" title="subfunction updateGUI(fig)">updateGUI</a>(fig);
+0218 
+0219 <span class="keyword">end</span>
+0220 
+0221 <a name="_sub3" href="#_subfunctions" class="code">function updateGUI(fig)</a>
+0222 
+0223 <span class="comment">% extract admin data</span>
+0224 data=get(fig,<span class="string">'UserData'</span>);
+0225 update=data.update;
+0226 h=data.handle{1};
+0227 
+0228 <span class="comment">% update signal</span>
+0229 <span class="keyword">if</span> update.signal
+0230     update.signal=false;
+0231     temp=get(h.SignalLine,<span class="string">'UserData'</span>);
+0232     set(h.SignalLine,<span class="string">'XData'</span>,temp.time,<span class="string">'YData'</span>,temp.signal,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0233     axis(h.SignalAxes,<span class="string">'tight'</span>);
+0234     label=sprintf(<span class="string">'Signal data for %s'</span>,data.name);
+0235     title(h.SignalAxes,label,<span class="string">'Interpreter'</span>,<span class="string">'none'</span>);
+0236 <span class="keyword">end</span>
+0237 
+0238 <span class="comment">% update STFT image</span>
+0239 <span class="keyword">if</span> update.fullSTFT   
+0240     update.fullSTFT=false;    
+0241     time=get(h.SignalLine,<span class="string">'XData'</span>);
+0242     signal=get(h.SignalLine,<span class="string">'YData'</span>);
+0243     options=struct(<span class="string">'Nduration'</span>,data.Nduration,<span class="keyword">...</span>
+0244         <span class="string">'Nfreq'</span>,data.Nfreq(1),<span class="string">'overlap'</span>,data.overlap,<span class="string">'removeDC'</span>,data.removeDC,<span class="keyword">...</span>
+0245         <span class="string">'window'</span>,data.window,<span class="string">'normalization'</span>,data.normalization);
+0246     [cdata,time,frequency]=<a href="stft.html" class="code" title="function [output,tout,frequency,options]=stft(signal,time,options,localfunc,updatefunc)">stft</a>(signal,time,options);
+0247     set(h.STFTImage,<span class="string">'XData'</span>,time,<span class="string">'YData'</span>,frequency,<span class="keyword">...</span>
+0248         <span class="string">'UserData'</span>,cdata,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0249     <span class="keyword">if</span> strcmp(data.scaling,<span class="string">'log'</span>)
+0250         set(h.STFTImage,<span class="string">'CData'</span>,10*log10(cdata));
+0251     <span class="keyword">else</span>
+0252         set(h.STFTImage,<span class="string">'CData'</span>,cdata);
+0253     <span class="keyword">end</span>        
+0254     axis(h.STFTAxes,<span class="string">'tight'</span>);
+0255     label=sprintf(<span class="string">'Full STFT image for %s'</span>,data.name);
+0256     title(h.STFTAxes,label,<span class="string">'Interpreter'</span>,<span class="string">'none'</span>);
+0257 <span class="keyword">else</span>
+0258     cdata=get(h.STFTImage,<span class="string">'UserData'</span>);
+0259 <span class="keyword">end</span>
+0260 
+0261 <span class="comment">% update display</span>
+0262 <span class="keyword">if</span> isempty(cdata)
+0263     label=<span class="string">''</span>;
+0264 <span class="keyword">elseif</span> strcmp(data.scaling,<span class="string">'log'</span>)
+0265     set(h.STFTImage,<span class="string">'CData'</span>,10*log10(cdata));
+0266     label=<span class="string">'Intensity (dB)'</span>;
+0267 <span class="keyword">else</span>
+0268     set(h.STFTImage,<span class="string">'CData'</span>,cdata);
+0269     label=<span class="string">'Intensity'</span>;
+0270 <span class="keyword">end</span>
+0271 set(h.STFTImage,<span class="string">'CDataMapping'</span>,<span class="string">'scaled'</span>);
+0272 set(h.STFTAxes,<span class="string">'CLim'</span>,data.clim);
+0273 <span class="keyword">for</span> n=1:numel(h.Colorbar)
+0274     ylabel(h.Colorbar(n),label);
+0275 <span class="keyword">end</span>
+0276 <a href="set_colormap.html" class="code" title="function set_colormap(haxes,map,invertmap)">set_colormap</a>(h.STFTAxes,data.map,data.invertmap);
+0277 
+0278 <span class="comment">% pass data structure to all figures</span>
+0279 data.update=update;
+0280 set(fig,<span class="string">'UserData'</span>,data);
+0281 figure(fig);
+0282 
+0283 <span class="keyword">end</span>
+0284 
+0285 <a name="_sub4" href="#_subfunctions" class="code">function ShiftSignal(varargin)</a>
+0286 
+0287 fig=varargin{3};
+0288 <span class="comment">%h=guihandles(fig);</span>
+0289 data=get(fig,<span class="string">'UserData'</span>);
+0290 h=data.handle{1};
+0291 
+0292 visible=get(h.SignalLine,<span class="string">'Visible'</span>);
+0293 <span class="keyword">if</span> strcmp(visible,<span class="string">'off'</span>)
+0294     warndlg(<span class="string">'No signal data loaded'</span>,<span class="string">'No data'</span>);
+0295     <span class="keyword">return</span>
+0296 <span class="keyword">end</span>
+0297 
+0298 time_shift_old=data.time_shift;
+0299 reference_reset=data.reference-time_shift_old;
+0300 experiment_reset=data.experiment-time_shift_old;
+0301 temp=get(h.SignalLine,<span class="string">'UserData'</span>);
+0302 temp.time=temp.time-time_shift_old;
+0303 set(h.SignalLine,<span class="string">'UserData'</span>,temp);
+0304 
+0305 label={<span class="string">'Shift time:'</span>};
+0306 default={time_shift_old};
+0307 options.root = fig;
+0308 options.location=<span class="string">'center'</span>;
+0309 button = [];
+0310 answer=<a href="datadlg.html" class="code" title="function answer=datadlg(name,label,default,button,options)">datadlg</a>(<span class="string">'Reference duration'</span>,label,default,button,options);
+0311 value1=sscanf(answer{1},<span class="string">'%g'</span>,1);
+0312 <span class="keyword">if</span> isempty(value1)
+0313     <span class="keyword">return</span>
+0314 <span class="keyword">end</span>
+0315 time_shift = value1;
+0316 
+0317 data=get(fig,<span class="string">'UserData'</span>);
+0318 
+0319 data.reference=reference_reset + time_shift;
+0320 data.experiment=experiment_reset + time_shift;
+0321 data.time_shift=time_shift;
+0322 temp=get(h.SignalLine,<span class="string">'UserData'</span>);
+0323 temp.time=temp.time + time_shift;
+0324 set(h.SignalLine,<span class="string">'UserData'</span>,temp);
+0325 set(h.SignalLine,<span class="string">'Xdata'</span>,temp.time,<span class="string">'YData'</span>,temp.signal,<span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0326 
+0327 <span class="keyword">if</span> time_shift~=time_shift_old
+0328     data.update.signal=true;
+0329     data.update.fullSTFT=true;
+0330     data.update.ref_frequency=true;
+0331     data.update.experimentSTFT=true;
+0332     data.update.history=true;
+0333 <span class="keyword">end</span>
+0334 set(fig,<span class="string">'UserData'</span>,data);
+0335 
+0336 <a href="#_sub3" class="code" title="subfunction updateGUI(fig)">updateGUI</a>(fig);
+0337 
+0338 <span class="comment">% update signal plot</span>
+0339 temp=get(h.SignalLine,<span class="string">'YData'</span>);
+0340 <span class="keyword">if</span> isempty(temp)
+0341     <span class="keyword">return</span>
+0342 <span class="keyword">end</span>
+0343 yb=[min(temp) max(temp)];
+0344 set(h.ReferenceBound1a,<span class="string">'XData'</span>,repmat(data.reference(1),[1 2]),<span class="string">'YData'</span>,yb,<span class="keyword">...</span>
+0345     <span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0346 set(h.ReferenceBound2a,<span class="string">'XData'</span>,repmat(data.reference(2),[1 2]),<span class="string">'YData'</span>,yb,<span class="keyword">...</span>
+0347     <span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0348 set(h.ExperimentBound1a,<span class="string">'XData'</span>,repmat(data.experiment(1),[1 2]),<span class="string">'YData'</span>,yb,<span class="keyword">...</span>
+0349     <span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0350 set(h.ExperimentBound2a,<span class="string">'XData'</span>,repmat(data.experiment(2),[1 2]),<span class="string">'YData'</span>,yb,<span class="keyword">...</span>
+0351     <span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0352 
+0353 <span class="comment">% update STFT image</span>
+0354 temp=get(h.STFTImage,<span class="string">'YData'</span>);
+0355 yb=[min(temp) max(temp)];
+0356 set(h.ReferenceBound1b,<span class="string">'XData'</span>,repmat(data.reference(1),[1 2]),<span class="string">'YData'</span>,yb,<span class="keyword">...</span>
+0357     <span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0358 set(h.ReferenceBound2b,<span class="string">'XData'</span>,repmat(data.reference(2),[1 2]),<span class="string">'YData'</span>,yb,<span class="keyword">...</span>
+0359     <span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0360 set(h.ExperimentBound1b,<span class="string">'XData'</span>,repmat(data.experiment(1),[1 2]),<span class="string">'YData'</span>,yb,<span class="keyword">...</span>
+0361     <span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0362 set(h.ExperimentBound2b,<span class="string">'XData'</span>,repmat(data.experiment(2),[1 2]),<span class="string">'YData'</span>,yb,<span class="keyword">...</span>
+0363     <span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0364 
+0365 <span class="keyword">end</span>
+0366 
+0367 <a name="_sub5" href="#_subfunctions" class="code">function SelectReference(varargin)</a>
+0368 
+0369 fig=varargin{3};
+0370 <span class="comment">%h=guihandles(fig);</span>
+0371 data=get(fig,<span class="string">'UserData'</span>);
+0372 h=data.handle{1};
+0373 
+0374 visible=get(h.SignalLine,<span class="string">'Visible'</span>);
+0375 <span class="keyword">if</span> strcmp(visible,<span class="string">'off'</span>)
+0376     warndlg(<span class="string">'No signal data loaded'</span>,<span class="string">'No data'</span>);
+0377     <span class="keyword">return</span>
+0378 <span class="keyword">end</span>
+0379 
+0380 <span class="keyword">if</span> nargin&lt;4
+0381     label={<span class="string">'Reference begin:'</span>,<span class="string">'Reference end:'</span>};
+0382     default={data.reference(1), data.reference(2)};
+0383     button(1).label=<span class="string">'OK'</span>;
+0384     button(1).callback=@<a href="#_sub12" class="code" title="subfunction defaultOK(varargin)">defaultOK</a>;
+0385     button(2).label=<span class="string">'Cancel'</span>;
+0386     button(2).callback=@<a href="#_sub13" class="code" title="subfunction defaultCancel(varargin)">defaultCancel</a>;
+0387     button(3).label=<span class="string">'Use Mouse'</span>;
+0388     button(3).callback=@<a href="#_sub14" class="code" title="subfunction UseMouse(varargin)">UseMouse</a>;
+0389     options.root = fig;
+0390     options.location=<span class="string">'center'</span>;
+0391     answer=<a href="datadlg.html" class="code" title="function answer=datadlg(name,label,default,button,options)">datadlg</a>(<span class="string">'Reference duration'</span>,label,default,button,options);
+0392     <span class="keyword">if</span> isempty(answer)
+0393         <span class="keyword">return</span>
+0394     <span class="keyword">elseif</span> isnan(str2double(answer))
+0395         w = waitforbuttonpress;
+0396         pos=get(h.SignalAxes,<span class="string">'CurrentPoint'</span>);
+0397         t1 = pos(2,1);
+0398         w = waitforbuttonpress;
+0399         pos=get(h.SignalAxes,<span class="string">'CurrentPoint'</span>);
+0400         t2 = pos(2,1);
+0401         tstart=min(t1,t2);
+0402         tend=max(t1,t2);
+0403         default={num2str(tstart),num2str(tend)};
+0404         button = [];
+0405         answer=<a href="datadlg.html" class="code" title="function answer=datadlg(name,label,default,button,options)">datadlg</a>(<span class="string">'Reference duration'</span>,label,default,button,options);
+0406     <span class="keyword">end</span>
+0407     
+0408     value1=sscanf(answer{1},<span class="string">'%g'</span>,1);
+0409     value2=sscanf(answer{2},<span class="string">'%g'</span>,2);
+0410     <span class="keyword">if</span> isempty(value1) || isempty(value2)
+0411         <a href="#_sub5" class="code" title="subfunction SelectReference(varargin)">SelectReference</a>([],[],fig);
+0412         <span class="keyword">return</span>
+0413     <span class="keyword">end</span>
+0414     data.reference=sort([value1 value2]);
+0415     set(fig,<span class="string">'UserData'</span>,data);
+0416 <span class="keyword">end</span>
+0417 
+0418 <span class="comment">% update signal plot</span>
+0419 temp=get(h.SignalLine,<span class="string">'YData'</span>);
+0420 <span class="keyword">if</span> isempty(temp)
+0421     <span class="keyword">return</span>
+0422 <span class="keyword">end</span>
+0423 yb=[min(temp) max(temp)];
+0424 set(h.ReferenceBound1a,<span class="string">'XData'</span>,repmat(data.reference(1),[1 2]),<span class="string">'YData'</span>,yb,<span class="keyword">...</span>
+0425     <span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0426 set(h.ReferenceBound2a,<span class="string">'XData'</span>,repmat(data.reference(2),[1 2]),<span class="string">'YData'</span>,yb,<span class="keyword">...</span>
+0427     <span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0428 
+0429 <span class="comment">% update STFT image</span>
+0430 temp=get(h.STFTImage,<span class="string">'YData'</span>);
+0431 yb=[min(temp) max(temp)];
+0432 set(h.ReferenceBound1b,<span class="string">'XData'</span>,repmat(data.reference(1),[1 2]),<span class="string">'YData'</span>,yb,<span class="keyword">...</span>
+0433     <span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0434 set(h.ReferenceBound2b,<span class="string">'XData'</span>,repmat(data.reference(2),[1 2]),<span class="string">'YData'</span>,yb,<span class="keyword">...</span>
+0435     <span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0436 
+0437 data.update.ref_frequency=true;
+0438 set(fig,<span class="string">'UserData'</span>,data);
+0439 figure(fig);
+0440 
+0441 <span class="keyword">end</span>
+0442 
+0443 <a name="_sub6" href="#_subfunctions" class="code">function SelectExperiment(varargin)</a>
+0444 
+0445 fig=varargin{3};
+0446 <span class="comment">%h=guihandles(fig);</span>
+0447 data=get(fig,<span class="string">'UserData'</span>);
+0448 h=data.handle{1};
+0449 
+0450 visible=get(h.SignalLine,<span class="string">'Visible'</span>);
+0451 <span class="keyword">if</span> strcmp(visible,<span class="string">'off'</span>)
+0452     warndlg(<span class="string">'No signal data loaded'</span>,<span class="string">'No data'</span>);
+0453     <span class="keyword">return</span>
+0454 <span class="keyword">end</span>
+0455 
+0456 <span class="keyword">if</span> nargin&lt;4
+0457     label={<span class="string">'Experiment begin:'</span>,<span class="string">'Experiment end:'</span>};
+0458     default={data.experiment(1), data.experiment(2)};
+0459     button(1).label=<span class="string">'OK'</span>;
+0460     button(1).callback=@<a href="#_sub12" class="code" title="subfunction defaultOK(varargin)">defaultOK</a>;
+0461     button(2).label=<span class="string">'Cancel'</span>;
+0462     button(2).callback=@<a href="#_sub13" class="code" title="subfunction defaultCancel(varargin)">defaultCancel</a>;
+0463     button(3).label=<span class="string">'Use Mouse'</span>;
+0464     button(3).callback=@<a href="#_sub14" class="code" title="subfunction UseMouse(varargin)">UseMouse</a>;
+0465     options.root = fig;
+0466     options.location=<span class="string">'center'</span>;
+0467     answer=<a href="datadlg.html" class="code" title="function answer=datadlg(name,label,default,button,options)">datadlg</a>(<span class="string">'Experiment duration'</span>,label,default,button,options);
+0468     <span class="keyword">if</span> isempty(answer)
+0469         <span class="keyword">return</span>
+0470     <span class="keyword">elseif</span> isnan(str2double(answer))
+0471         w = waitforbuttonpress;
+0472         pos=get(h.SignalAxes,<span class="string">'CurrentPoint'</span>);
+0473         t1 = pos(2,1);
+0474         w = waitforbuttonpress;
+0475         pos=get(h.SignalAxes,<span class="string">'CurrentPoint'</span>);
+0476         t2 = pos(2,1);
+0477         tstart=min(t1,t2);
+0478         tend=max(t1,t2);
+0479         default={num2str(tstart),num2str(tend)};
+0480         button = [];
+0481         answer=<a href="datadlg.html" class="code" title="function answer=datadlg(name,label,default,button,options)">datadlg</a>(<span class="string">'Experiment duration'</span>,label,default,button,options);
+0482     <span class="keyword">end</span>
+0483     value1=sscanf(answer{1},<span class="string">'%g'</span>,1);
+0484     value2=sscanf(answer{2},<span class="string">'%g'</span>,2);
+0485     <span class="keyword">if</span> isempty(value1) || isempty(value2)
+0486         <a href="#_sub6" class="code" title="subfunction SelectExperiment(varargin)">SelectExperiment</a>([],[],fig);
+0487         <span class="keyword">return</span>
+0488     <span class="keyword">end</span>
+0489     data.experiment=sort([value1 value2]);
+0490     data.update.experimentSTFT=true;
+0491     data.update.history=true;
+0492     set(fig,<span class="string">'UserData'</span>,data);
+0493 <span class="keyword">end</span>
+0494 
+0495 <span class="comment">% update signal plot</span>
+0496 temp=get(h.SignalLine,<span class="string">'YData'</span>);
+0497 <span class="keyword">if</span> isempty(temp)
+0498     <span class="keyword">return</span>
+0499 <span class="keyword">end</span>
+0500 yb=[min(temp) max(temp)];
+0501 set(h.ExperimentBound1a,<span class="string">'XData'</span>,repmat(data.experiment(1),[1 2]),<span class="string">'YData'</span>,yb,<span class="keyword">...</span>
+0502     <span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0503 set(h.ExperimentBound2a,<span class="string">'XData'</span>,repmat(data.experiment(2),[1 2]),<span class="string">'YData'</span>,yb,<span class="keyword">...</span>
+0504     <span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0505 
+0506 <span class="comment">% update STFT image</span>
+0507 temp=get(h.STFTImage,<span class="string">'YData'</span>);
+0508 yb=[min(temp) max(temp)];
+0509 set(h.ExperimentBound1b,<span class="string">'XData'</span>,repmat(data.experiment(1),[1 2]),<span class="string">'YData'</span>,yb,<span class="keyword">...</span>
+0510     <span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0511 set(h.ExperimentBound2b,<span class="string">'XData'</span>,repmat(data.experiment(2),[1 2]),<span class="string">'YData'</span>,yb,<span class="keyword">...</span>
+0512     <span class="string">'Visible'</span>,<span class="string">'on'</span>);
+0513 
+0514 figure(fig);
+0515 
+0516 <span class="keyword">end</span>
+0517 
+0518 <a name="_sub7" href="#_subfunctions" class="code">function EstimateNoise(varargin)</a>
+0519 
+0520 fig=varargin{3};
+0521 data=get(fig,<span class="string">'UserData'</span>);
+0522 <span class="keyword">if</span> isempty(data.inputfile)
+0523     errordlg(<span class="string">'No signal loaded!'</span>,<span class="string">'No signal'</span>);
+0524     <span class="keyword">return</span>
+0525 <span class="keyword">elseif</span> all(isinf(data.reference))
+0526     errordlg(<span class="string">'No reference region defined'</span>,<span class="string">'No reference region'</span>);
+0527     <span class="keyword">return</span>
+0528 <span class="keyword">end</span>
+0529 
+0530 h=data.handle{1};
+0531 time=get(h.SignalLine,<span class="string">'XData'</span>);
+0532 index=(time&gt;data.reference(1)) &amp; (time&lt;data.reference(2));
+0533 <span class="keyword">if</span> sum(index)==0
+0534     errordlg(<span class="string">'No signal in reference region'</span>,<span class="string">'No signal'</span>);
+0535     <span class="keyword">return</span>
+0536 <span class="keyword">end</span>
+0537 signal=get(h.SignalLine,<span class="string">'YData'</span>);
+0538 noise=<a href="estimate_noise.html" class="code" title="function value=estimate_noise(signal)">estimate_noise</a>(signal(index));
+0539 <span class="keyword">if</span> isnan(noise)
+0540     <span class="keyword">return</span>
+0541 <span class="keyword">end</span>
+0542 noise=[min(noise) max(noise)];
+0543 <span class="comment">%noise=noise*100; % convert to percent</span>
+0544 <span class="comment">%if mean(noise)&lt;1</span>
+0545 <span class="comment">%    format='%.2f';</span>
+0546 <span class="comment">%elseif mean(noise)&lt;10</span>
+0547 <span class="comment">%    format='%.1f';</span>
+0548 <span class="comment">%else</span>
+0549 <span class="comment">%    format='%.0f';</span>
+0550 <span class="comment">%end</span>
+0551 <span class="comment">%format=['Estimated noise fraction: ' format '%% to ' format '%%'];</span>
+0552 <span class="comment">%format=['Estimated noise fraction: ' format '%%'];</span>
+0553 message{1}=sprintf(<span class="string">'Estimated noise fraction: %.2g%% to %.2g%%'</span>,100*noise);
+0554 msgbox(message,<span class="string">'Noise estimate'</span>);
+0555 
+0556 <span class="keyword">end</span>
+0557 
+0558 <a name="_sub8" href="#_subfunctions" class="code">function RemoveBaseline(~,~,fig)</a>
+0559 
+0560 hr=msgbox(<span class="string">'Select baseline region on the STFT image'</span>,<span class="string">'Select region'</span>,<span class="string">'modal'</span>);
+0561 uiwait(hr);
+0562 figure(fig);
+0563 
+0564 target=findobj(fig,<span class="string">'Tag'</span>,<span class="string">'STFTImage'</span>);
+0565 haxes=ancestor(target,<span class="string">'axes'</span>);
+0566 start=[];
+0567 hr=[];
+0568 set(target,<span class="string">'ButtonDownFcn'</span>,@<a href="#_sub9" class="code" title="subfunction StartBaselineRegion(varargin)">StartBaselineRegion</a>)
+0569     <a name="_sub9" href="#_subfunctions" class="code">function StartBaselineRegion(varargin)</a>
+0570         start=get(haxes,<span class="string">'CurrentPoint'</span>);
+0571         start=start(1,1:2);
+0572         set(target,<span class="string">'ButtonDownFcn'</span>,[]);
+0573         set(fig,<span class="string">'WindowButtonUpFcn'</span>,@<a href="#_sub10" class="code" title="subfunction StopBaselineRegion(varargin)">StopBaselineRegion</a>);
+0574         rbbox;
+0575     <span class="keyword">end</span>
+0576     <a name="_sub10" href="#_subfunctions" class="code">function StopBaselineRegion(varargin)</a>
+0577         <span class="comment">% finish marking region</span>
+0578         stop=get(haxes,<span class="string">'CurrentPoint'</span>);
+0579         stop=stop(1,1:2);
+0580         set(fig,<span class="string">'WindowButtonUpFcn'</span>,[]);
+0581         <span class="keyword">if</span> any(start==stop)
+0582             <span class="keyword">return</span>
+0583         <span class="keyword">end</span>
+0584         tlim=sort([start(1) stop(1)]);
+0585         flim=sort([start(2) stop(2)]);
+0586         hr=rectangle(<span class="string">'Parent'</span>,haxes,<span class="string">'Position'</span>,[tlim(1) flim(1) diff(tlim) diff(flim)],<span class="keyword">...</span>
+0587             <span class="string">'EdgeColor'</span>,<span class="string">'m'</span>,<span class="string">'Tag'</span>,<span class="string">'ExtendedBaselineRegion'</span>);
+0588         <span class="comment">% calculate power spectrum</span>
+0589         hl=findobj(fig,<span class="string">'Tag'</span>,<span class="string">'SignalLine'</span>);
+0590         time=get(hl,<span class="string">'XData'</span>);
+0591         signal=get(hl,<span class="string">'YData'</span>);
+0592         keep=(time&gt;=tlim(1)) &amp; (time&lt;=tlim(2));
+0593         t=time(keep);
+0594         s=signal(keep);
+0595         data=get(fig,<span class="string">'UserData'</span>);
+0596         options.Nduration=1;
+0597         options.Nfreq=data.Nfreq;
+0598         options.window=data.window;        
+0599         [power,~,frequency]=<a href="stft.html" class="code" title="function [output,tout,frequency,options]=stft(signal,time,options,localfunc,updatefunc)">stft</a>(s-mean(s),t,options);
+0600         <span class="comment">% estimate f0</span>
+0601         keep=(frequency&gt;=flim(1)) &amp; (frequency&lt;=flim(2));
+0602         frequency=frequency(keep);
+0603         power=power(keep);
+0604         [value,index]=max(power);
+0605         threshold=0.50*value;
+0606         left=index-find(power(index-1:-1:1)&lt;threshold,1,<span class="string">'first'</span>);
+0607         right=index+find(power(index+1:end)&lt;threshold,1,<span class="string">'first'</span>);
+0608         frequency=frequency(left:right);
+0609         power=power(left:right);
+0610         power=power/trapz(frequency,power);
+0611         f0=trapz(frequency,frequency.*power);
+0612         <span class="comment">% estimate phases</span>
+0613         Q=[cos(2*pi*f0*t(:)) sin(2*pi*f0*t(:))];
+0614         param=Q\s(:);
+0615         <span class="comment">% remove baseline</span>
+0616         baseline=param(1)*cos(2*pi*f0*time)+param(2)*sin(2*pi*f0*time);
+0617         signal=signal-baseline;
+0618         set(hl,<span class="string">'YData'</span>,signal);
+0619         <span class="comment">%data.update.signal=true;</span>
+0620         data.update.fullSTFT=true;
+0621         set(fig,<span class="string">'UserData'</span>,data);
+0622         <a href="#_sub3" class="code" title="subfunction updateGUI(fig)">updateGUI</a>(fig);
+0623         delete(hr);
+0624     <span class="keyword">end</span>
+0625 
+0626 <span class="keyword">end</span>
+0627 
+0628 <a name="_sub11" href="#_subfunctions" class="code">function NextButton(varargin)</a>
+0629 
+0630 fig=varargin{3};
+0631 <span class="comment">%h=guihandles(fig);</span>
+0632 data=get(fig,<span class="string">'UserData'</span>);
+0633 h=data.handle{1};
+0634 
+0635 visible=get(h.SignalLine,<span class="string">'Visible'</span>);
+0636 <span class="keyword">if</span> strcmp(visible,<span class="string">'off'</span>)
+0637     warndlg(<span class="string">'No signal data loaded'</span>,<span class="string">'No data'</span>);
+0638     <span class="keyword">return</span>
+0639 <span class="keyword">end</span>
+0640 
+0641 time=get(h.SignalLine,<span class="string">'XData'</span>);
+0642 keep=(time&gt;=data.reference(1)) &amp; (time&lt;=data.reference(2));
+0643 <span class="keyword">if</span> sum(keep)==0 <span class="comment">% no reference data</span>
+0644     data.ref_frequency=0;
+0645 <span class="keyword">elseif</span> data.update.ref_frequency
+0646     data.update.ref_frequency=false;
+0647     signal=get(h.SignalLine,<span class="string">'YData'</span>);
+0648     N=sum(keep);
+0649     N2=max([N/2 1e6]); <span class="comment">% 1 ppm frequency bins</span>
+0650     N2=pow2(nextpow2(N2));
+0651     options=struct(<span class="string">'Nduration'</span>,1,<span class="string">'removeDC'</span>,data.removeDC,<span class="string">'Nfreq'</span>,N2);
+0652     [intensity,tout,frequency,options]=<a href="stft.html" class="code" title="function [output,tout,frequency,options]=stft(signal,time,options,localfunc,updatefunc)">stft</a>(signal(keep),time(keep),options);
+0653     local=struct(<span class="string">'method'</span>,<span class="string">'centroid'</span>);
+0654     result=<a href="findpeak.html" class="code" title="function result=findpeak(x,y,options)">findpeak</a>(frequency,intensity,local);
+0655     data.ref_frequency=result(1);
+0656 <span class="keyword">end</span>
+0657 
+0658 set(fig,<span class="string">'UserData'</span>,data);
+0659 
+0660 <a href="AnalysisScreen.html" class="code" title="function fig=AnalysisScreen(prevfig)">AnalysisScreen</a>(fig);
+0661 
+0662 <span class="keyword">end</span>
+0663 
+0664 <a name="_sub12" href="#_subfunctions" class="code">function defaultOK(varargin)</a>
+0665 fig=gcbf;
+0666 uiresume(fig);
+0667 data=get(fig,<span class="string">'UserData'</span>);
+0668 data.current=cell(size(data.edit));
+0669 <span class="keyword">for</span> n=1:numel(data.edit)
+0670     temp=get(data.edit(n),<span class="string">'String'</span>);
+0671     <span class="comment">%data.current{n}=sscanf(temp,'%s');</span>
+0672     data.current{n}=temp;
+0673 <span class="keyword">end</span>
+0674 set(fig,<span class="string">'UserData'</span>,data);
+0675 <span class="keyword">end</span>
+0676 
+0677 <a name="_sub13" href="#_subfunctions" class="code">function defaultCancel(varargin)</a>
+0678 fig=gcbf;
+0679 uiresume(fig);
+0680 data=get(fig,<span class="string">'UserData'</span>);
+0681 data.current={};
+0682 set(fig,<span class="string">'UserData'</span>,data);
+0683 <span class="keyword">end</span>
+0684 
+0685 <a name="_sub14" href="#_subfunctions" class="code">function UseMouse(varargin)</a>
+0686 fig=gcbf;
+0687 uiresume(fig);
+0688 data=get(fig,<span class="string">'UserData'</span>);
+0689 data.current={NaN};
+0690 set(fig,<span class="string">'UserData'</span>,data);
+0691 <span class="keyword">end</span>
+0692 
+0693 <a name="_sub15" href="#_subfunctions" class="code">function RestoreSession(varargin)</a>
+0694 
+0695 message{1}=<span class="string">'Load previous session?'</span>;
+0696 message{2}=<span class="string">'Current data and settings will be cleared'</span>;
+0697 answer=questdlg(message,<span class="string">'Load session?'</span>,<span class="string">'No'</span>);
+0698 <span class="keyword">if</span> strcmpi(answer,<span class="string">'yes'</span>)
+0699     <span class="comment">% do nothing</span>
+0700 <span class="keyword">else</span>
+0701     <span class="keyword">return</span>
+0702 <span class="keyword">end</span>
+0703 
+0704 fig=varargin{3};
+0705 data=get(fig,<span class="string">'UserData'</span>);
+0706 
+0707 <span class="comment">% read previous settings from file</span>
+0708 [filename,pathname]=uigetfile(<span class="string">'*.*'</span>,<span class="string">'Select export file'</span>);
+0709 <span class="keyword">if</span> isnumeric(filename)
+0710     <span class="keyword">return</span>
+0711 <span class="keyword">end</span>
+0712 
+0713 filename=fullfile(pathname,filename);
+0714 [junk,header]=<a href="ColumnReader.html" class="code" title="function [data,header,filename]=ColumnReader(filename,delim,mincolumn)">ColumnReader</a>(filename);
+0715 <span class="keyword">for</span> k=1:numel(header)
+0716     sep=find(header{k}==<span class="string">'='</span>,1);
+0717     <span class="keyword">if</span> isempty(sep)
+0718         <span class="keyword">continue</span>
+0719     <span class="keyword">end</span>
+0720     name=sscanf(header{k}(1:sep-1),<span class="string">'%s'</span>,1);
+0721     value=header{k}(sep+1:end);
+0722     [result,count,errmsg,next]=sscanf(value,<span class="string">'%g'</span>);
+0723     <span class="keyword">if</span> next&gt;numel(value)
+0724         value=result;
+0725     <span class="keyword">elseif</span> strcmp(name,<span class="string">'inputfile'</span>)
+0726         value=strtrim(value);   
+0727         value=<a href="AbsoluteFileName.html" class="code" title="function func=AbsoluteFileName(filename,sourcepath)">AbsoluteFileName</a>(value,pathname);
+0728     <span class="keyword">else</span>
+0729         value=sscanf(value,<span class="string">'%s'</span>);
+0730         <span class="keyword">if</span> strcmpi(value,<span class="string">'yes'</span>)
+0731             value=true;
+0732         <span class="keyword">elseif</span> strcmpi(value,<span class="string">'no'</span>)
+0733             value=false;
+0734         <span class="keyword">end</span>
+0735     <span class="keyword">end</span>
+0736     <span class="keyword">if</span> isfield(data,name)
+0737         data.(name)=value;
+0738     <span class="keyword">end</span>
+0739     
+0740 <span class="keyword">end</span>
+0741 
+0742 
+0743 <span class="comment">% update the program</span>
+0744 data.update.signal=true;
+0745 data.update.fullSTFT=true;
+0746 data.update.ref_frequency=true;
+0747 data.update.experimentSTFT=true;
+0748 data.update.history=true;
+0749 set(fig,<span class="string">'UserData'</span>,data);
+0750 <a href="#_sub2" class="code" title="subfunction LoadSignal(varargin)">LoadSignal</a>([],[],fig,<span class="string">'silent'</span>);
+0751 <a href="#_sub5" class="code" title="subfunction SelectReference(varargin)">SelectReference</a>([],[],fig,<span class="string">'silent'</span>);
+0752 <a href="#_sub6" class="code" title="subfunction SelectExperiment(varargin)">SelectExperiment</a>([],[],fig,<span class="string">'silent'</span>);
+0753 
+0754 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

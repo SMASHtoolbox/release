@@ -1,0 +1,153 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of convertData</title>
+  <meta name="keywords" content="convertData">
+  <meta name="description" content="UNDER CONSTRUCTION">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="../../index.html">+SMASH</a> &gt; <a href="../index.html">+SignalAnalysis</a> &gt; <a href="index.html">@LongSignal</a> &gt; convertData.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+SignalAnalysis/@LongSignal&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>convertData
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>UNDER CONSTRUCTION</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function convertData(file,format,record,varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> UNDER CONSTRUCTION
+ convertData Convert data file
+
+ This *static* method converts a data file to a binary format for use
+ with the LongSignal class.
+    LongSignal.convertData(name,format,record);</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="LongSignal.html" class="code" title="">LongSignal</a>	UNDER CONTRUCTION</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% UNDER CONSTRUCTION</span>
+0002 <span class="comment">% convertData Convert data file</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% This *static* method converts a data file to a binary format for use</span>
+0005 <span class="comment">% with the LongSignal class.</span>
+0006 <span class="comment">%    LongSignal.convertData(name,format,record);</span>
+0007 
+0008 
+0009 <a name="_sub0" href="#_subfunctions" class="code">function convertData(file,format,record,varargin)</a>
+0010 
+0011 <span class="comment">% manage input</span>
+0012 <span class="keyword">if</span> (nargin &lt; 1) || isempty(file)
+0013     [file,location]=uigetfile(<span class="string">'*.*'</span>,<span class="string">'Select data file'</span>);
+0014     <span class="keyword">if</span> isenumeric(file)
+0015         <span class="keyword">return</span>
+0016     <span class="keyword">end</span>
+0017     file=fullfile(location,file);
+0018 <span class="keyword">else</span>
+0019     assert(ischar(file),<span class="string">'ERROR: invalid data file name'</span>);
+0020     assert(logical(exist(file,<span class="string">'file'</span>)),<span class="string">'ERROR: data file not found'</span>);
+0021 <span class="keyword">end</span>
+0022 
+0023 <span class="keyword">if</span> (nargin &lt; 2) || isempty(format)
+0024     <span class="keyword">try</span>
+0025         format=SMASH.FileAccess.determineFormat(file);
+0026     <span class="keyword">catch</span>
+0027         <span class="keyword">return</span>
+0028     <span class="keyword">end</span>
+0029 <span class="keyword">else</span>
+0030     assert(ischar(format),<span class="string">'ERROR: invalid file format'</span>);
+0031     match=false;
+0032     list=SMASH.FileAccess.SupportedFormats();
+0033     <span class="keyword">for</span> k=1:numel(list)
+0034         <span class="keyword">if</span> strcmpi(format,list{k})
+0035             match=true;
+0036             <span class="keyword">break</span>
+0037         <span class="keyword">end</span>
+0038     <span class="keyword">end</span>
+0039     assert(match,<span class="string">'ERROR: unsupported file format'</span>);
+0040 <span class="keyword">end</span>
+0041 
+0042 <span class="keyword">if</span> nargin &lt; 3
+0043     record=[];
+0044 <span class="keyword">end</span>
+0045 
+0046 <span class="comment">% manage options</span>
+0047 Narg=numel(varargin);
+0048 assert(rem(Narg,2) == 0,<span class="string">'ERROR: unmatched name/value pair'</span>);
+0049 option.Chunk=200000;
+0050 option.Deflate=5;
+0051 <span class="keyword">for</span> n=1:2:Narg
+0052     name=varargin{n};
+0053     assert(ischar(name),<span class="string">'ERROR: invalid option name'</span>);
+0054     value=varargin{n+1};
+0055     <span class="keyword">switch</span> lower(name)
+0056         <span class="keyword">case</span> <span class="string">'chunk'</span>
+0057             assert(SMASH.General.testNumber(value,<span class="string">'integer'</span>,<span class="string">'positive'</span>,<span class="string">'notzero'</span>),<span class="keyword">...</span>
+0058                 <span class="string">'ERROR: invalid chunk value'</span>);
+0059             option.Chunk=value;
+0060         <span class="keyword">case</span> <span class="string">'deflate'</span>
+0061             allowed=0:9;
+0062             assert(isnumeric(value) &amp;&amp; isscalar(value) &amp;&amp; any(value == allowed),<span class="keyword">...</span>
+0063                 <span class="string">'ERROR: invalid deflate value'</span>);
+0064             option.Deflate=value;
+0065         <span class="keyword">otherwise</span>
+0066             error(<span class="string">'ERROR: &quot;%s&quot; is not a valid option'</span>);
+0067     <span class="keyword">end</span>
+0068 <span class="keyword">end</span>
+0069 
+0070 <span class="comment">% generate unique conversion file</span>
+0071 [~,short]=fileparts(file);
+0072 index=1;
+0073 <span class="keyword">while</span> true
+0074     target=sprintf(<span class="string">'%s_conversion%d.h5'</span>,short,index);
+0075     <span class="keyword">if</span> exist(target,<span class="string">'file'</span>)
+0076         index=index+1;
+0077         <span class="keyword">continue</span>
+0078     <span class="keyword">else</span>
+0079         <span class="keyword">break</span>
+0080     <span class="keyword">end</span>
+0081 <span class="keyword">end</span>
+0082 
+0083 fid=fopen(target,<span class="string">'w'</span>);
+0084 fclose(fid);
+0085 h5writeatt(target,<span class="string">'/'</span>,<span class="string">'Description'</span>,<span class="string">'/Signal contains data channels (columns) on a uniformly spaced grid.'</span>);
+0086 
+0087 <span class="comment">% convert data</span>
+0088 <span class="keyword">switch</span> lower(format)
+0089     <span class="keyword">case</span> {<span class="string">'agilent'</span> <span class="string">'keysight'</span>}
+0090         convertKeysight(file,record,target,option);
+0091     <span class="comment">%case 'tektronix'</span>
+0092         
+0093     <span class="comment">%case 'lecroy'</span>
+0094         
+0095     <span class="comment">%case 'column'</span>
+0096         
+0097     <span class="keyword">otherwise</span>
+0098         error(<span class="string">'ERROR: ''%s'' format not currently supported'</span>,format);        
+0099 <span class="keyword">end</span>
+0100 
+0101 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,615 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of select</title>
+  <meta name="keywords" content="select">
+  <meta name="description" content="select Interactively select points for a BoundingCurve">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../../index.html">SMASHtoolbox</a> &gt; <a href="../../../index.html">+SMASH</a> &gt; <a href="../../index.html">+ROI</a> &gt; <a href="#">old</a> &gt; <a href="index.html">@BoundingCurve</a> &gt; select.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../../index.html"><img alt="<" border="0" src="../../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+ROI/old/@BoundingCurve&nbsp;<img alt=">" border="0" src="../../../../../../right.png"></a></td></tr></table>-->
+
+<h1>select
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>select Interactively select points for a BoundingCurve</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>function varargout=select(object,target,varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> select Interactively select points for a BoundingCurve
+
+ This method provides interactive selection of bounding curve points.
+ Point selection is controlled with a dialog box and a target axes.
+ Clicking on the axes adds the current point to the BoundingCurve object;
+ shift-clicking on the axes removes the nearest point and control-clicking
+ displays the dialog box.  Bounding points are displayed as a table in the
+ dialog box, and edits to this table can be applied to change the point
+ locations and local widths.
+
+ Standard use of this method is:
+     &gt;&gt; object=select(object,target);
+ where &quot;target&quot; is an axes handle.  If no target axes is specified, the
+ current axes is used.  The target axes and dialog box are displayed for
+ the user, and MATLAB waits until the user presses the &quot;OK&quot; or &quot;Cancel&quot;
+ button to resume normal executation.
+
+ Passing an apply function function handle:
+     &gt;&gt; [dlg,callback]=select(object,target,'ApplyFunction',myfunc);
+ changes the selection dilaog box.
+     -The dialog box has buttons &quot;OK&quot;, &quot;Apply&quot;, and &quot;Close&quot;
+     -Program execution is not suspended
+     -Outputs &quot;dlg&quot; and &quot;callback&quot; are returned immediately.  The first
+     output is a MUI.Dialog object, which can be used to probe the state
+     of the dialog box.  The second output is a structure containing
+     callbacks that mimic &quot;Apply&quot; and &quot;Close&quot; button presses.
+ Pressing the &quot;Apply&quot; button executes the apply function handle using the
+ current BoundCurve object as the sole input, i.e. &quot;myfunc(object)&quot;.
+ Pressing the &quot;Close&quot; button closes the dialog box without executing the
+ apply function.  Pressing the &quot;Done&quot; button is equivalent to &quot;Apply&quot;
+ followed by &quot;Close&quot;. 
+
+ By default, this method draws the curve selection (points and envelope)
+ when the dialog box is created and deletes the selection with the box is
+ closed.  To use an existing selection, the hggroup (generated with the
+ &quot;view&quot; method) can be passed as an additional input.
+     &gt;&gt; hg=view(object):
+     &gt;&gt; [...]=select(...,'GroupHandle',hg); 
+ Another option prevents the selection from being deleted.
+    &gt;&gt; [...]=select(...,'DeleteOnClose',false);
+ These options are provided for graphical interface development in
+ conjunction with the apply function.
+
+ See also <a href="BoundingCurve.html" class="code" title="">BoundingCurve</a>, <a href="define.html" class="code" title="function object=define(object,data)">define</a>, <a href="insert.html" class="code" title="function object=insert(object,data)">insert</a>, <a href="remove.html" class="code" title="function remove(object,varargin)">remove</a>, <a href="view.html" class="code" title="function varargout=view(object,target)">view</a>, SMASH.MUI.Dialog</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="define.html" class="code" title="function object=define(object,data)">define</a>	define Manually define bound points</li><li><a href="insert.html" class="code" title="function object=insert(object,data)">insert</a>	insert Manually insert Bounding Curve points</li><li><a href="view.html" class="code" title="function varargout=view(object,target)">view</a>	view Display a BoundingCurve</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function addRow(varargin)</a></li><li><a href="#_sub2" class="code">function removeRow(varargin)</a></li><li><a href="#_sub3" class="code">function changeLabel(~,~,db)</a></li><li><a href="#_sub4" class="code">function useMouse(~,~,db)</a></li><li><a href="#_sub5" class="code">function useTable(~,~,db)</a></li><li><a href="#_sub6" class="code">function showPlot(~,~,db)</a></li><li><a href="#_sub7" class="code">function updateWidth(~,~,db)</a></li><li><a href="#_sub8" class="code">function useWidth(~,~,db)</a></li><li><a href="#_sub9" class="code">function okCallback1(~,~,db)</a></li><li><a href="#_sub10" class="code">function cancelCallback(~,~,db)</a></li><li><a href="#_sub11" class="code">function okCallback2(~,~,db)</a></li><li><a href="#_sub12" class="code">function applyCallback(~,~,db)</a></li><li><a href="#_sub13" class="code">function closeCallback(~,~,db)</a></li><li><a href="#_sub14" class="code">function makeBold(target)</a></li><li><a href="#_sub15" class="code">function object2table(object,table)</a></li><li><a href="#_sub16" class="code">function object2plots(object,points,envelope)</a></li><li><a href="#_sub17" class="code">function object2width(object,dw)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% select Interactively select points for a BoundingCurve</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This method provides interactive selection of bounding curve points.</span>
+0004 <span class="comment">% Point selection is controlled with a dialog box and a target axes.</span>
+0005 <span class="comment">% Clicking on the axes adds the current point to the BoundingCurve object;</span>
+0006 <span class="comment">% shift-clicking on the axes removes the nearest point and control-clicking</span>
+0007 <span class="comment">% displays the dialog box.  Bounding points are displayed as a table in the</span>
+0008 <span class="comment">% dialog box, and edits to this table can be applied to change the point</span>
+0009 <span class="comment">% locations and local widths.</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% Standard use of this method is:</span>
+0012 <span class="comment">%     &gt;&gt; object=select(object,target);</span>
+0013 <span class="comment">% where &quot;target&quot; is an axes handle.  If no target axes is specified, the</span>
+0014 <span class="comment">% current axes is used.  The target axes and dialog box are displayed for</span>
+0015 <span class="comment">% the user, and MATLAB waits until the user presses the &quot;OK&quot; or &quot;Cancel&quot;</span>
+0016 <span class="comment">% button to resume normal executation.</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% Passing an apply function function handle:</span>
+0019 <span class="comment">%     &gt;&gt; [dlg,callback]=select(object,target,'ApplyFunction',myfunc);</span>
+0020 <span class="comment">% changes the selection dilaog box.</span>
+0021 <span class="comment">%     -The dialog box has buttons &quot;OK&quot;, &quot;Apply&quot;, and &quot;Close&quot;</span>
+0022 <span class="comment">%     -Program execution is not suspended</span>
+0023 <span class="comment">%     -Outputs &quot;dlg&quot; and &quot;callback&quot; are returned immediately.  The first</span>
+0024 <span class="comment">%     output is a MUI.Dialog object, which can be used to probe the state</span>
+0025 <span class="comment">%     of the dialog box.  The second output is a structure containing</span>
+0026 <span class="comment">%     callbacks that mimic &quot;Apply&quot; and &quot;Close&quot; button presses.</span>
+0027 <span class="comment">% Pressing the &quot;Apply&quot; button executes the apply function handle using the</span>
+0028 <span class="comment">% current BoundCurve object as the sole input, i.e. &quot;myfunc(object)&quot;.</span>
+0029 <span class="comment">% Pressing the &quot;Close&quot; button closes the dialog box without executing the</span>
+0030 <span class="comment">% apply function.  Pressing the &quot;Done&quot; button is equivalent to &quot;Apply&quot;</span>
+0031 <span class="comment">% followed by &quot;Close&quot;.</span>
+0032 <span class="comment">%</span>
+0033 <span class="comment">% By default, this method draws the curve selection (points and envelope)</span>
+0034 <span class="comment">% when the dialog box is created and deletes the selection with the box is</span>
+0035 <span class="comment">% closed.  To use an existing selection, the hggroup (generated with the</span>
+0036 <span class="comment">% &quot;view&quot; method) can be passed as an additional input.</span>
+0037 <span class="comment">%     &gt;&gt; hg=view(object):</span>
+0038 <span class="comment">%     &gt;&gt; [...]=select(...,'GroupHandle',hg);</span>
+0039 <span class="comment">% Another option prevents the selection from being deleted.</span>
+0040 <span class="comment">%    &gt;&gt; [...]=select(...,'DeleteOnClose',false);</span>
+0041 <span class="comment">% These options are provided for graphical interface development in</span>
+0042 <span class="comment">% conjunction with the apply function.</span>
+0043 <span class="comment">%</span>
+0044 <span class="comment">% See also BoundingCurve, define, insert, remove, view, SMASH.MUI.Dialog</span>
+0045 <span class="comment">%</span>
+0046 
+0047 <span class="comment">%</span>
+0048 <span class="comment">% created November 18, 2014 by Daniel Dolan (Sandia National Laboratories)</span>
+0049 <span class="comment">% revised December 5, 2014 by Daniel Dolan</span>
+0050 <span class="comment">%   -revised advanced operations for GUI development</span>
+0051 <span class="comment">%</span>
+0052 <span class="comment">%%</span>
+0053 <a name="_sub0" href="#_subfunctions" class="code">function varargout=select(object,target,varargin)</a>
+0054 
+0055 <span class="comment">% manage input</span>
+0056 <span class="keyword">if</span> (nargin&lt;2) || isempty(target)
+0057     target=gca;
+0058 <span class="keyword">end</span>
+0059 assert(ishandle(target(1)),<span class="string">'ERROR: invalid target axes'</span>);
+0060 <span class="keyword">if</span> numel(target)&gt;1
+0061     SourceFigure=target(2);
+0062     target=target(1);
+0063 <span class="keyword">else</span>
+0064     SourceFigure=[];
+0065 <span class="keyword">end</span>
+0066 fig=ancestor(target,<span class="string">'figure'</span>);
+0067 
+0068 Narg=numel(varargin);
+0069 assert(rem(Narg,2)==0,<span class="string">'ERROR: unmatched name/value pair'</span>);
+0070 advanced=struct(<span class="string">'ApplyFunction'</span>,[],<span class="string">'DeleteOnClose'</span>,true,<span class="keyword">...</span>
+0071     <span class="string">'GroupHandle'</span>,[]);
+0072 <span class="keyword">for</span> n=1:2:Narg
+0073     name=varargin{n};
+0074     assert(ischar(name),<span class="string">'ERROR: invalid name'</span>);
+0075     <span class="keyword">if</span> isfield(advanced,name)
+0076         advanced.(name)=varargin{n+1};
+0077     <span class="keyword">else</span>
+0078         error(<span class="string">'ERROR: invalid name'</span>);
+0079     <span class="keyword">end</span>    
+0080 <span class="keyword">end</span>
+0081 
+0082 <span class="keyword">if</span> ischar(advanced.ApplyFunction)
+0083     advanced.ApplyFunction=str2func(advanced.ApplyFunction);
+0084 <span class="keyword">end</span>
+0085 assert(isempty(advanced.ApplyFunction)<span class="keyword">...</span>
+0086     | isa(advanced.ApplyFunction,<span class="string">'function_handle'</span>),<span class="keyword">...</span>
+0087     <span class="string">'ERROR: invalid AppyFunction'</span>);
+0088 ApplyFunction=advanced.ApplyFunction;
+0089 
+0090 assert(islogical(advanced.DeleteOnClose),<span class="keyword">...</span>
+0091     <span class="string">'ERROR: DeleteOnClose must be logical'</span>);
+0092 DeleteOnClose=advanced.DeleteOnClose;
+0093 
+0094 <span class="keyword">if</span> isempty(advanced.GroupHandle)
+0095     advanced.GroupHandle=<a href="view.html" class="code" title="function varargout=view(object,target)">view</a>(object,target(1));
+0096 <span class="keyword">end</span>
+0097 points=getappdata(advanced.GroupHandle,<span class="string">'Points'</span>);
+0098 envelope=getappdata(advanced.GroupHandle,<span class="string">'Envelope'</span>);
+0099 
+0100 <span class="comment">% create dialog</span>
+0101 dlg=SMASH.MUI.Dialog;
+0102 dlg.Hidden=true;
+0103 dlg.Name=<span class="string">'Boundary select'</span>;
+0104 setappdata(dlg.Handle,<span class="string">'PreviousObject'</span>,object);
+0105 
+0106 <span class="keyword">if</span> isempty(object.DefaultWidth)
+0107     <span class="keyword">switch</span> object.Direction
+0108         <span class="keyword">case</span> <span class="string">'horizontal'</span>
+0109             object.DefaultWidth=0.10*diff(ylim(target));
+0110         <span class="keyword">case</span> <span class="string">'vertical'</span>
+0111             object.DefaultWidth=0.10*diff(xlim(target));
+0112     <span class="keyword">end</span>
+0113 <span class="keyword">end</span>
+0114 figure(fig);
+0115 setappdata(dlg.Handle,<span class="string">'CurrentObject'</span>,object);
+0116 setappdata(dlg.Handle,<span class="string">'TargetAxes'</span>,target);
+0117 setappdata(dlg.Handle,<span class="string">'Points'</span>,points);
+0118 setappdata(dlg.Handle,<span class="string">'Envelope'</span>,envelope);
+0119 setappdata(dlg.Handle,<span class="string">'TargetFigure'</span>,fig);
+0120 setappdata(dlg.Handle,<span class="string">'PreviousWindowButtonUpFcn'</span>,<span class="keyword">...</span>
+0121     get(fig,<span class="string">'WindowButtonUpFcn'</span>));
+0122 setappdata(dlg.Handle,<span class="string">'PreviousCloseFcn'</span>,<span class="keyword">...</span>
+0123     get(fig,<span class="string">'CloseRequestFcn'</span>));
+0124 setappdata(dlg.Handle,<span class="string">'ApplyFunction'</span>,ApplyFunction);
+0125 setappdata(dlg.Handle,<span class="string">'DeleteOnClose'</span>,DeleteOnClose);
+0126 
+0127 addblock(dlg,<span class="string">'text'</span>,<span class="string">'BoundingCurve selection'</span>);
+0128 label=sprintf(<span class="string">'Direction: %s'</span>,object.Direction);
+0129 addblock(dlg,<span class="string">'text'</span>,label);
+0130 <span class="comment">%addblock(dlg,'text',' ');</span>
+0131 
+0132 h=addblock(dlg,<span class="string">'edit'</span>,<span class="string">'Label:'</span>,20);
+0133 setappdata(dlg.Handle,<span class="string">'Label'</span>,h(2));
+0134 <a href="#_sub14" class="code" title="subfunction makeBold(target)">makeBold</a>(h(1));
+0135 set(h(end),<span class="string">'String'</span>,object.Label,<span class="string">'Callback'</span>,{@<a href="#_sub3" class="code" title="subfunction changeLabel(~,~,db)">changeLabel</a>,dlg.Handle});
+0136 
+0137 <span class="comment">%h=addblock(dlg,'medit','Data table: [x y width]',45,10);</span>
+0138 <span class="comment">%setappdata(dlg.Handle,'Table',h(end));</span>
+0139 <span class="comment">%makeBold(h(1));</span>
+0140 <span class="comment">%set(h(end),'FontName',get(0,'FixedWidthFontName'));</span>
+0141 <span class="comment">%zoom(fig,'on');zoom(fig,'off'); % reset figure toggle state</span>
+0142 <span class="comment">%set(fig,'WindowButtonUpFcn',{@useMouse,dlg.Handle});</span>
+0143 <span class="comment">%object2table(object,h(end));</span>
+0144 
+0145 hTable=addblock(dlg,<span class="string">'table'</span>,object.ColumnLabel,15,10);
+0146 setappdata(dlg.Handle,<span class="string">'Table'</span>,hTable(end));
+0147 <a href="#_sub14" class="code" title="subfunction makeBold(target)">makeBold</a>(hTable(1:end-1));
+0148 zoom(fig,<span class="string">'on'</span>);zoom(fig,<span class="string">'off'</span>); <span class="comment">% reset figure toggle state</span>
+0149 set(fig,<span class="string">'WindowButtonUpFcn'</span>,{@<a href="#_sub4" class="code" title="subfunction useMouse(~,~,db)">useMouse</a>,dlg.Handle});
+0150 <a href="#_sub15" class="code" title="subfunction object2table(object,table)">object2table</a>(object,hTable(end));
+0151 
+0152 h=addblock(dlg,<span class="string">'button'</span>,{<span class="string">'Add row'</span> <span class="string">'Remove row(s)'</span>});
+0153 set(h(1),<span class="string">'Callback'</span>,@<a href="#_sub1" class="code" title="subfunction addRow(varargin)">addRow</a>)
+0154     <a name="_sub1" href="#_subfunctions" class="code">function addRow(varargin)</a>
+0155         current=getappdata(hTable(end),<span class="string">'CurrentCell'</span>);        
+0156         <span class="keyword">if</span> isempty(current)
+0157             last=getappdata(hTable(end),<span class="string">'LastRow'</span>);
+0158             <span class="keyword">if</span> isempty(last)
+0159                 row=1;
+0160             <span class="keyword">else</span>
+0161                 row=last;
+0162             <span class="keyword">end</span>
+0163         <span class="keyword">else</span>
+0164             row=current(1);           
+0165             setappdata(hTable(end),<span class="string">'LastRow'</span>,row);
+0166         <span class="keyword">end</span>
+0167         data=get(hTable(end),<span class="string">'Data'</span>);
+0168         N=size(data,1);
+0169         <span class="keyword">for</span> m=(N+1):-1:(row+1)
+0170             <span class="keyword">for</span> col=1:3
+0171                 data{m,col}=data{m-1,col};
+0172             <span class="keyword">end</span>
+0173         <span class="keyword">end</span>
+0174         <span class="keyword">for</span> col=1:3
+0175             data{row,col}=<span class="string">''</span>;
+0176         <span class="keyword">end</span>                
+0177         set(hTable(end),<span class="string">'Data'</span>,data);        
+0178     <span class="keyword">end</span>
+0179 set(h(2),<span class="string">'Callback'</span>,@<a href="#_sub2" class="code" title="subfunction removeRow(varargin)">removeRow</a>)
+0180     <a name="_sub2" href="#_subfunctions" class="code">function removeRow(varargin)</a>
+0181         current=getappdata(hTable(end),<span class="string">'CurrentCell'</span>);
+0182         <span class="keyword">if</span> isempty(current)
+0183             <span class="keyword">return</span>
+0184         <span class="keyword">end</span>
+0185         row=unique(current(:,1));        
+0186         data=get(hTable(end),<span class="string">'Data'</span>);
+0187         N=size(data,1);
+0188         keep=true(N,1);
+0189         <span class="keyword">for</span> nn=1:N
+0190             <span class="keyword">if</span> any(nn==row)
+0191                 keep(nn)=false;
+0192             <span class="keyword">end</span>
+0193         <span class="keyword">end</span>
+0194         data=data(keep,:); 
+0195         set(hTable(end),<span class="string">'Data'</span>,data);
+0196     <span class="keyword">end</span>
+0197 
+0198 h=addblock(dlg,<span class="string">'button'</span>,{<span class="string">'Use table'</span>,<span class="string">'Show plot'</span>});
+0199 set(h(1),<span class="string">'Callback'</span>,{@<a href="#_sub5" class="code" title="subfunction useTable(~,~,db)">useTable</a>,dlg.Handle});
+0200 set(h(2),<span class="string">'Callback'</span>,{@<a href="#_sub6" class="code" title="subfunction showPlot(~,~,db)">showPlot</a>,dlg.Handle});
+0201 addblock(dlg,<span class="string">'text'</span>,<span class="string">'Standard click on plot adds a new point'</span>);
+0202 addblock(dlg,<span class="string">'text'</span>,<span class="string">'Shift-click on plot removes nearest point'</span>);
+0203 addblock(dlg,<span class="string">'text'</span>,<span class="string">'Control-click on plot returns to this dialog'</span>);
+0204 
+0205 h=addblock(dlg,<span class="string">'edit_button'</span>,{<span class="string">'Default width:'</span>,<span class="string">'Set all to default'</span>});
+0206 setappdata(dlg.Handle,<span class="string">'DefaultWidth'</span>,h(2));
+0207 <a href="#_sub14" class="code" title="subfunction makeBold(target)">makeBold</a>(h(1));
+0208 set(h(2),<span class="string">'HorizontalAlignment'</span>,<span class="string">'center'</span>,<span class="string">'Callback'</span>,{@<a href="#_sub7" class="code" title="subfunction updateWidth(~,~,db)">updateWidth</a>,dlg.Handle});
+0209 set(h(3),<span class="string">'Callback'</span>,{@<a href="#_sub8" class="code" title="subfunction useWidth(~,~,db)">useWidth</a>,dlg.Handle})
+0210 <a href="#_sub17" class="code" title="subfunction object2width(object,dw)">object2width</a>(object,h(2));
+0211 
+0212 h=addblock(dlg,<span class="string">'button'</span>,{<span class="string">'Cancel'</span>,<span class="string">'Cancel'</span>,<span class="string">'Cancel'</span>});
+0213 <span class="keyword">if</span> isempty(ApplyFunction)
+0214     set(h(1),<span class="string">'String'</span>,<span class="string">'OK'</span>,<span class="string">'Callback'</span>,{@<a href="#_sub9" class="code" title="subfunction okCallback1(~,~,db)">okCallback1</a>,dlg.Handle});
+0215     set(h(2),<span class="string">'String'</span>,<span class="string">'Cancel'</span>,<span class="string">'Callback'</span>,{@<a href="#_sub10" class="code" title="subfunction cancelCallback(~,~,db)">cancelCallback</a>,dlg.Handle});
+0216     set(h(3),<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+0217 <span class="keyword">else</span>
+0218     set(h(1),<span class="string">'String'</span>,<span class="string">'OK'</span>,<span class="string">'Callback'</span>,{@<a href="#_sub11" class="code" title="subfunction okCallback2(~,~,db)">okCallback2</a>,dlg.Handle});
+0219     set(h(2),<span class="string">'String'</span>,<span class="string">'Apply'</span>,<span class="string">'Callback'</span>,{@<a href="#_sub12" class="code" title="subfunction applyCallback(~,~,db)">applyCallback</a>,dlg.Handle});
+0220     set(h(3),<span class="string">'String'</span>,<span class="string">'Close'</span>,<span class="string">'Callback'</span>,{@<a href="#_sub13" class="code" title="subfunction closeCallback(~,~,db)">closeCallback</a>,dlg.Handle});
+0221 <span class="keyword">end</span>
+0222 ok=h(1);
+0223 setappdata(dlg.Handle,<span class="string">'okButton'</span>,ok);
+0224 
+0225 locate(dlg,<span class="string">'center'</span>,fig);
+0226 dlg.Hidden=false;
+0227 set(dlg.Handle,<span class="string">'HandleVisibility'</span>,<span class="string">'callback'</span>,<span class="string">'CloseRequestFcn'</span>,<span class="string">''</span>);
+0228 
+0229 <span class="comment">% manage termination</span>
+0230 set(fig,<span class="string">'CloseRequestFcn'</span>,<span class="string">''</span>);
+0231 <span class="keyword">if</span> isempty(ApplyFunction)
+0232     waitfor(ok);
+0233     varargout{1}=getappdata(dlg.Handle,<span class="string">'CurrentObject'</span>);
+0234     <span class="keyword">try</span>
+0235         set(fig,<span class="string">'WindowButtonUpFcn'</span>,<span class="keyword">...</span>
+0236             getappdata(dlg.Handle,<span class="string">'PreviousWindowButtonUpFcn'</span>));
+0237         set(fig,<span class="string">'CloseRequestFcn'</span>,<span class="keyword">...</span>
+0238             getappdata(dlg.Handle,<span class="string">'PreviousCloseFcn'</span>));
+0239             delete(points);
+0240             delete(envelope);
+0241     <span class="keyword">catch</span>
+0242         <span class="comment">% do nothing</span>
+0243     <span class="keyword">end</span>
+0244     delete(dlg);
+0245 <span class="keyword">else</span>    
+0246     varargout{1}=dlg;
+0247     callback.Apply=@() <a href="#_sub12" class="code" title="subfunction applyCallback(~,~,db)">applyCallback</a>([],[],dlg.Handle);
+0248     callback.Close=@() <a href="#_sub13" class="code" title="subfunction closeCallback(~,~,db)">closeCallback</a>([],[],dlg.Handle);
+0249     varargout{2}=callback;
+0250 <span class="keyword">end</span>
+0251 
+0252 <span class="keyword">if</span> ishandle(SourceFigure)
+0253     figure(SourceFigure);
+0254 <span class="keyword">end</span>
+0255 
+0256 <span class="keyword">end</span>
+0257 
+0258 <span class="comment">%% callbacks</span>
+0259 <span class="comment">% &quot;db&quot; is the dialog box handle</span>
+0260 <a name="_sub3" href="#_subfunctions" class="code">function changeLabel(~,~,db)</a>
+0261 
+0262 object=getappdata(db,<span class="string">'CurrentObject'</span>);
+0263 l=getappdata(db,<span class="string">'Label'</span>);
+0264 object.Label=get(l,<span class="string">'String'</span>);
+0265 setappdata(db,<span class="string">'CurrentObject'</span>,object);
+0266 
+0267 <span class="keyword">end</span>
+0268 
+0269 <a name="_sub4" href="#_subfunctions" class="code">function useMouse(~,~,db)</a>
+0270 
+0271 target=getappdata(db,<span class="string">'TargetAxes'</span>);
+0272 fig=getappdata(db,<span class="string">'TargetFigure'</span>);
+0273 object=getappdata(db,<span class="string">'CurrentObject'</span>);
+0274 table=getappdata(db,<span class="string">'Table'</span>);
+0275 points=getappdata(db,<span class="string">'Points'</span>);
+0276 envelope=getappdata(db,<span class="string">'Envelope'</span>);
+0277 
+0278 current=get(target,<span class="string">'CurrentPoint'</span>);
+0279 current=current(1,1:2);
+0280 <span class="keyword">switch</span> lower(get(fig,<span class="string">'SelectionType'</span>))
+0281     <span class="keyword">case</span> <span class="string">'normal'</span>
+0282         current(3)=object.DefaultWidth;
+0283         object=<a href="insert.html" class="code" title="function object=insert(object,data)">insert</a>(object,current);
+0284         <a href="#_sub15" class="code" title="subfunction object2table(object,table)">object2table</a>(object,table);
+0285         <a href="#_sub16" class="code" title="subfunction object2plots(object,points,envelope)">object2plots</a>(object,points,envelope);
+0286     <span class="keyword">case</span> <span class="string">'extend'</span>
+0287         data=object.Data;
+0288         Lx=diff(xlim(target));
+0289         Ly=diff(ylim(target));
+0290         L2=((data(:,1)-current(1))/Lx).^2+((data(:,2)-current(2))/Ly).^2; <span class="comment">% normalized square distance</span>
+0291         [~,index]=min(L2);
+0292         keep=[1:(index-1) (index+1):numel(L2)];
+0293         object.Data=data(keep,:);
+0294         <a href="#_sub15" class="code" title="subfunction object2table(object,table)">object2table</a>(object,table);
+0295         <a href="#_sub16" class="code" title="subfunction object2plots(object,points,envelope)">object2plots</a>(object,points,envelope);
+0296     <span class="keyword">case</span> <span class="string">'alt'</span>
+0297         figure(db);
+0298 <span class="keyword">end</span>
+0299 
+0300 setappdata(db,<span class="string">'CurrentObject'</span>,object);
+0301 
+0302 <span class="keyword">end</span>
+0303 
+0304 <a name="_sub5" href="#_subfunctions" class="code">function useTable(~,~,db)</a>
+0305 
+0306 object=getappdata(db,<span class="string">'CurrentObject'</span>);
+0307 table=getappdata(db,<span class="string">'Table'</span>);
+0308 points=getappdata(db,<span class="string">'Points'</span>);
+0309 envelope=getappdata(db,<span class="string">'Envelope'</span>);
+0310 
+0311 entry=get(table,<span class="string">'Data'</span>);
+0312 data=nan(size(entry));
+0313 <span class="keyword">for</span> m=1:size(data,1)
+0314     <span class="keyword">for</span> n=1:3
+0315         temp=sscanf(entry{m,n},<span class="string">'%g'</span>);
+0316         <span class="keyword">if</span> isempty(temp)
+0317             <span class="keyword">if</span> n==3
+0318                 data(m,n)=object.DefaultWidth;
+0319             <span class="keyword">else</span>
+0320                 <span class="keyword">continue</span>
+0321             <span class="keyword">end</span>
+0322         <span class="keyword">else</span>
+0323             data(m,n)=temp;
+0324         <span class="keyword">end</span>
+0325     <span class="keyword">end</span>
+0326 <span class="keyword">end</span>
+0327 keep=~any(isnan(data),2);
+0328 data=data(keep,:);
+0329 
+0330 <span class="comment">% entry=get(table,'String');</span>
+0331 <span class="comment">% N=size(entry,1);</span>
+0332 <span class="comment">% data=nan(N,3);</span>
+0333 <span class="comment">% for n=1:N</span>
+0334 <span class="comment">%     try</span>
+0335 <span class="comment">%         [value,count]=sscanf(entry(n,:),'%g',3);</span>
+0336 <span class="comment">%         if count==3</span>
+0337 <span class="comment">%             data(n,:)=transpose(value);</span>
+0338 <span class="comment">%         end</span>
+0339 <span class="comment">%     catch</span>
+0340 <span class="comment">%         % do nothing</span>
+0341 <span class="comment">%     end</span>
+0342 <span class="comment">% end</span>
+0343 <span class="comment">%keep=~isnan(data(:,1));</span>
+0344 <span class="comment">%data=data(keep,:);</span>
+0345 object=<a href="define.html" class="code" title="function object=define(object,data)">define</a>(object,data);
+0346 <a href="#_sub15" class="code" title="subfunction object2table(object,table)">object2table</a>(object,table(end));
+0347 <a href="#_sub16" class="code" title="subfunction object2plots(object,points,envelope)">object2plots</a>(object,points,envelope);
+0348 
+0349 setappdata(db,<span class="string">'CurrentObject'</span>,object);
+0350 
+0351 <span class="keyword">end</span>
+0352 
+0353 <a name="_sub6" href="#_subfunctions" class="code">function showPlot(~,~,db)</a>
+0354 
+0355 fig=getappdata(db,<span class="string">'TargetFigure'</span>);
+0356 figure(fig);
+0357 
+0358 <span class="keyword">end</span>
+0359 
+0360 
+0361 <a name="_sub7" href="#_subfunctions" class="code">function updateWidth(~,~,db)</a>
+0362 
+0363 object=getappdata(db,<span class="string">'CurrentObject'</span>);
+0364 dw=getappdata(db,<span class="string">'DefaultWidth'</span>);
+0365 
+0366 [value,count]=sscanf(get(dw,<span class="string">'String'</span>),<span class="string">'%g'</span>);
+0367 <span class="keyword">if</span> (count~=1) || (value&lt;0)
+0368     value=object.DefaultWidth;
+0369 <span class="keyword">end</span>
+0370 object.DefaultWidth=value;
+0371 <a href="#_sub17" class="code" title="subfunction object2width(object,dw)">object2width</a>(object,dw);
+0372 
+0373 setappdata(db,<span class="string">'CurrentObject'</span>,object);
+0374 
+0375 <span class="keyword">end</span>
+0376 
+0377 <a name="_sub8" href="#_subfunctions" class="code">function useWidth(~,~,db)</a>
+0378 
+0379 object=getappdata(db,<span class="string">'CurrentObject'</span>);
+0380 table=getappdata(db,<span class="string">'Table'</span>);
+0381 points=getappdata(db,<span class="string">'Points'</span>);
+0382 envelope=getappdata(db,<span class="string">'Envelope'</span>);
+0383 dw=getappdata(db,<span class="string">'DefaultWidth'</span>);
+0384 
+0385 [value,count]=sscanf(get(dw,<span class="string">'String'</span>),<span class="string">'%g'</span>);
+0386 <span class="keyword">if</span> (count~=1) || (value&lt;0)
+0387     value=object.DefaultWidth;
+0388 <span class="keyword">end</span>
+0389 object.DefaultWidth=value;
+0390 <a href="#_sub17" class="code" title="subfunction object2width(object,dw)">object2width</a>(object,dw);
+0391 object.Data(:,3)=value;
+0392 <a href="#_sub15" class="code" title="subfunction object2table(object,table)">object2table</a>(object,table(end));
+0393 <a href="#_sub16" class="code" title="subfunction object2plots(object,points,envelope)">object2plots</a>(object,points,envelope);
+0394 
+0395 setappdata(db,<span class="string">'CurrentObject'</span>,object);
+0396 
+0397 <span class="keyword">end</span>
+0398 
+0399 <a name="_sub9" href="#_subfunctions" class="code">function okCallback1(~,~,db)</a>
+0400 
+0401 ok=getappdata(db,<span class="string">'okButton'</span>);
+0402 delete(ok);
+0403 
+0404 <span class="keyword">end</span>
+0405 
+0406 <a name="_sub10" href="#_subfunctions" class="code">function cancelCallback(~,~,db)</a>
+0407 
+0408 setappdata(db,<span class="string">'CurrentObject'</span>,getappdata(db,<span class="string">'PreviousObject'</span>));
+0409 ok=getappdata(db,<span class="string">'okButton'</span>);
+0410 delete(ok);
+0411 
+0412 <span class="keyword">end</span>
+0413 
+0414 <a name="_sub11" href="#_subfunctions" class="code">function okCallback2(~,~,db)</a>
+0415 
+0416 <a href="#_sub12" class="code" title="subfunction applyCallback(~,~,db)">applyCallback</a>([],[],db);
+0417 <a href="#_sub13" class="code" title="subfunction closeCallback(~,~,db)">closeCallback</a>([],[],db);
+0418 
+0419 <span class="keyword">end</span>
+0420 
+0421 <a name="_sub12" href="#_subfunctions" class="code">function applyCallback(~,~,db)</a>
+0422 
+0423 ApplyFunction=getappdata(db,<span class="string">'ApplyFunction'</span>);
+0424 object=getappdata(db,<span class="string">'CurrentObject'</span>);
+0425 feval(ApplyFunction,object);
+0426 
+0427 <span class="keyword">end</span>
+0428 
+0429 <a name="_sub13" href="#_subfunctions" class="code">function closeCallback(~,~,db)</a>
+0430 
+0431 fig=getappdata(db,<span class="string">'TargetFigure'</span>);
+0432 points=getappdata(db,<span class="string">'Points'</span>);
+0433 envelope=getappdata(db,<span class="string">'Envelope'</span>);
+0434 DeleteOnClose=getappdata(db,<span class="string">'DeleteOnClose'</span>);
+0435 <span class="keyword">try</span>
+0436     set(fig,<span class="string">'WindowButtonUpFcn'</span>,<span class="keyword">...</span>
+0437         getappdata(db,<span class="string">'PreviousWindowButtonUpFcn'</span>));
+0438     set(fig,<span class="string">'CloseRequestFcn'</span>,<span class="keyword">...</span>
+0439         getappdata(db,<span class="string">'PreviousCloseFcn'</span>));
+0440     <span class="keyword">if</span> DeleteOnClose
+0441         delete(points);
+0442         delete(envelope);
+0443     <span class="keyword">end</span>
+0444 <span class="keyword">catch</span>
+0445     <span class="comment">% do nothing</span>
+0446 <span class="keyword">end</span>
+0447 delete(db);
+0448 
+0449 <span class="keyword">end</span>
+0450 
+0451 <span class="comment">%% helper functions</span>
+0452 <a name="_sub14" href="#_subfunctions" class="code">function makeBold(target)</a>
+0453 
+0454 <span class="keyword">if</span> isempty(target)
+0455     <span class="keyword">return</span>
+0456 <span class="keyword">end</span>
+0457 
+0458 <span class="keyword">while</span> numel(target)&gt;1
+0459     <a href="#_sub14" class="code" title="subfunction makeBold(target)">makeBold</a>(target(1));
+0460     target=target(2:end);
+0461 <span class="keyword">end</span>
+0462 
+0463 set(target,<span class="string">'FontWeight'</span>,<span class="string">'bold'</span>);
+0464 extent=get(target,<span class="string">'Extent'</span>);
+0465 position=get(target,<span class="string">'Position'</span>);
+0466 position(3)=extent(3);
+0467 set(target,<span class="string">'Position'</span>,position);
+0468 
+0469 <span class="keyword">end</span>
+0470 
+0471 <a name="_sub15" href="#_subfunctions" class="code">function object2table(object,table)</a>
+0472 
+0473 <span class="comment">% x/y may be positive or negative, width is always positive</span>
+0474 data=object.Data;
+0475 <span class="keyword">if</span> isempty(data)
+0476     <span class="comment">% do nothing</span>
+0477 <span class="keyword">elseif</span> strcmp(object.Direction,<span class="string">'horizontal'</span>);
+0478     data=sortrows(data,1);
+0479 <span class="keyword">elseif</span> strcmp(object.Direction,<span class="string">'vertical'</span>);
+0480     data=sortrows(data,2);
+0481 <span class="keyword">end</span>
+0482 <span class="comment">%data=sprintf('%+15.6g %+15.6g %15.6g\n',transpose(data));</span>
+0483 
+0484 temp=cell(size(data));
+0485 <span class="keyword">for</span> m=1:size(temp,1)
+0486     temp{m,1}=sprintf(<span class="string">'%+.6g'</span>,data(m,1));
+0487     temp{m,2}=sprintf(<span class="string">'%+.6g'</span>,data(m,2));
+0488     temp{m,3}=sprintf(<span class="string">'%.6g'</span>,data(m,3));
+0489 <span class="keyword">end</span>
+0490 
+0491 <span class="comment">%set(table(end),'String',data);</span>
+0492 set(table(end),<span class="string">'Data'</span>,temp,<span class="string">'ColumnFormat'</span>,{<span class="string">'char'</span> <span class="string">'char'</span> <span class="string">'char'</span>});
+0493 
+0494 <span class="keyword">end</span>
+0495 
+0496 <a name="_sub16" href="#_subfunctions" class="code">function object2plots(object,points,envelope)</a>
+0497 
+0498 x=object.Data(:,1);
+0499 y=object.Data(:,2);
+0500 width=object.Data(:,3);
+0501 
+0502 set(points,<span class="string">'XData'</span>,x,<span class="string">'YData'</span>,y);
+0503 <span class="keyword">switch</span> object.Direction
+0504     <span class="keyword">case</span> <span class="string">'horizontal'</span>
+0505         y=[y+width; y(end:-1:1)-width(end:-1:1)];
+0506         x=[x;       x(end:-1:1)];
+0507         <span class="keyword">if</span> numel(x)&gt;0
+0508             x(end+1)=x(1);
+0509             y(end+1)=y(1);
+0510         <span class="keyword">end</span>
+0511     <span class="keyword">case</span> <span class="string">'vertical'</span>
+0512         <span class="comment">% UNDER CONSTRUCTION</span>
+0513 <span class="keyword">end</span>
+0514 set(envelope,<span class="string">'XData'</span>,x,<span class="string">'YData'</span>,y);
+0515 
+0516 <span class="keyword">end</span>
+0517 
+0518 <a name="_sub17" href="#_subfunctions" class="code">function object2width(object,dw)</a>
+0519 
+0520 value=sprintf(<span class="string">'%13.6g'</span>,object.DefaultWidth);
+0521 set(dw,<span class="string">'String'</span>,strtrim(value));
+0522 
+0523 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

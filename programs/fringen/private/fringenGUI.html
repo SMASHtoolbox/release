@@ -1,0 +1,395 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of fringenGUI</title>
+  <meta name="keywords" content="fringenGUI">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">fringen</a> &gt; <a href="index.html">private</a> &gt; fringenGUI.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/fringen/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>fringenGUI
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function fringenGUI(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="HelpWindow.html" class="code" title="function HelpWindow(src,varargin)">HelpWindow</a>	get handles</li><li><a href="MinimalFigure.html" class="code" title="function varargout=MinimalFigure(varargin)">MinimalFigure</a>	MinimalFigure: create a minimalistic figure useful for GUIs</li><li><a href="PDVparamsGUI.html" class="code" title="function PDVparamsGUI(rootfig)">PDVparamsGUI</a>	</li><li><a href="VISARparamsGUI.html" class="code" title="function VISARparamsGUI(rootfig)">VISARparamsGUI</a>	</li><li><a href="about_fringen.html" class="code" title="function varargout=about_fringen(src,varargin)">about_fringen</a>	</li><li><a href="export_signals.html" class="code" title="function data=export_signals(data)">export_signals</a>	determine output file</li><li><a href="fringenGUI.html" class="code" title="function fringenGUI(varargin)">fringenGUI</a>	</li><li><a href="import_data.html" class="code" title="function data=import_data(data)">import_data</a>	read data from file</li><li><a href="make_signals.html" class="code" title="function data=make_signals(data)">make_signals</a>	</li><li><a href="mangle_signals.html" class="code" title="function data=mangle_signals(data)">mangle_signals</a>	apply default parameters where necessary</li><li><a href="updateGUI.html" class="code" title="function updateGUI(fig)">updateGUI</a>	</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="fringenGUI.html" class="code" title="function fringenGUI(varargin)">fringenGUI</a>	</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function LoadData(src,varargin)</a></li><li><a href="#_sub2" class="code">function ExportResults(src,varargin)</a></li><li><a href="#_sub3" class="code">function StartOver(varargin)</a></li><li><a href="#_sub4" class="code">function ExitProgram(varargin)</a></li><li><a href="#_sub5" class="code">function SelectMode(src,varargin)</a></li><li><a href="#_sub6" class="code">function ParamsGUI(src,varargin)</a></li><li><a href="#_sub7" class="code">function SelectCoupling(src,varargin)</a></li><li><a href="#_sub8" class="code">function SelectImpulse(src,varargin)</a></li><li><a href="#_sub9" class="code">function RemoveImpulse(src,varargin)</a></li><li><a href="#_sub10" class="code">function SetNoise(src,varargin)</a></li><li><a href="#_sub11" class="code">function SetDigitizer(src,varargin)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function fringenGUI(varargin)</a>
+0002 
+0003 tag=<span class="string">'fringen_GUI'</span>;
+0004 fig=findall(0,<span class="string">'Tag'</span>,tag);
+0005 <span class="keyword">if</span> ishandle(fig)
+0006     figure(fig);
+0007     <span class="keyword">return</span>
+0008 <span class="keyword">end</span>
+0009 <span class="comment">% create GUI</span>
+0010 fig=<a href="MinimalFigure.html" class="code" title="function varargout=MinimalFigure(varargin)">MinimalFigure</a>(<span class="keyword">...</span>
+0011     <span class="string">'Tag'</span>,tag,<span class="keyword">...</span>
+0012     <span class="string">'Name'</span>,<span class="string">'fringen: Fringe generator for VISAR and PDV'</span>,<span class="keyword">...</span>
+0013     <span class="string">'NumberTitle'</span>,<span class="string">'off'</span>,<span class="string">'IntegerHandle'</span>,<span class="string">'off'</span>,<span class="keyword">...</span>
+0014     <span class="string">'Units'</span>,<span class="string">'normalized'</span>,<span class="string">'Position'</span>,[0.10 0.10 0.80 0.80],<span class="keyword">...</span>
+0015     <span class="string">'CloseRequestFcn'</span>,@<a href="#_sub4" class="code" title="subfunction ExitProgram(varargin)">ExitProgram</a>);
+0016 
+0017 <span class="comment">% create uimenus</span>
+0018 hm=uimenu(<span class="string">'Label'</span>,<span class="string">'Program'</span>);
+0019 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Load data'</span>,<span class="string">'Callback'</span>,@<a href="#_sub1" class="code" title="subfunction LoadData(src,varargin)">LoadData</a>);
+0020 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Export results'</span>,<span class="string">'Callback'</span>,@<a href="#_sub2" class="code" title="subfunction ExportResults(src,varargin)">ExportResults</a>,<span class="keyword">...</span>
+0021     <span class="string">'Enable'</span>,<span class="string">'off'</span>);
+0022 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Start over'</span>,<span class="string">'Separator'</span>,<span class="string">'on'</span>,<span class="keyword">...</span>
+0023     <span class="string">'Callback'</span>,@<a href="#_sub3" class="code" title="subfunction StartOver(varargin)">StartOver</a>);
+0024 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Exit'</span>,<span class="string">'Separator'</span>,<span class="string">'on'</span>,<span class="keyword">...</span>
+0025     <span class="string">'Callback'</span>,@<a href="#_sub4" class="code" title="subfunction ExitProgram(varargin)">ExitProgram</a>);
+0026 
+0027 hm=uimenu(<span class="string">'Label'</span>,<span class="string">'Interferometer'</span>);
+0028 hsub=uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Mode'</span>,<span class="string">'Tag'</span>,<span class="string">'InterferometerMode'</span>);
+0029 uimenu(hsub,<span class="string">'Label'</span>,<span class="string">'VISAR'</span>,<span class="string">'Callback'</span>,@<a href="#_sub5" class="code" title="subfunction SelectMode(src,varargin)">SelectMode</a>,<span class="keyword">...</span>
+0030     <span class="string">'Checked'</span>,<span class="string">'on'</span>);
+0031 uimenu(hsub,<span class="string">'Label'</span>,<span class="string">'PDV'</span>,<span class="string">'Callback'</span>,@<a href="#_sub5" class="code" title="subfunction SelectMode(src,varargin)">SelectMode</a>);
+0032 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Parameters'</span>,<span class="string">'Callback'</span>,@<a href="#_sub6" class="code" title="subfunction ParamsGUI(src,varargin)">ParamsGUI</a>,<span class="string">'Enable'</span>,<span class="string">'off'</span>);
+0033 
+0034 hm=uimenu(<span class="string">'Label'</span>,<span class="string">'Signal'</span>);
+0035 hsub=uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Coupling'</span>,<span class="string">'Enable'</span>,<span class="string">'off'</span>);
+0036 uimenu(hsub,<span class="string">'Label'</span>,<span class="string">'DC'</span>,<span class="string">'Callback'</span>,@<a href="#_sub7" class="code" title="subfunction SelectCoupling(src,varargin)">SelectCoupling</a>,<span class="keyword">...</span>
+0037     <span class="string">'Checked'</span>,<span class="string">'on'</span>,<span class="string">'Enable'</span>,<span class="string">'off'</span>);
+0038 uimenu(hsub,<span class="string">'Label'</span>,<span class="string">'AC'</span>,<span class="string">'Callback'</span>,@<a href="#_sub7" class="code" title="subfunction SelectCoupling(src,varargin)">SelectCoupling</a>,<span class="keyword">...</span>
+0039     <span class="string">'Enable'</span>,<span class="string">'off'</span>);
+0040 hsub=uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Impulse response'</span>,<span class="string">'Enable'</span>,<span class="string">'off'</span>);
+0041 uimenu(hsub,<span class="string">'Label'</span>,<span class="string">'Select data file'</span>,<span class="string">'Callback'</span>,@<a href="#_sub8" class="code" title="subfunction SelectImpulse(src,varargin)">SelectImpulse</a>);
+0042 uimenu(hsub,<span class="string">'Label'</span>,<span class="string">'Remove impulse response'</span>,<span class="string">'Callback'</span>,@<a href="#_sub9" class="code" title="subfunction RemoveImpulse(src,varargin)">RemoveImpulse</a>);
+0043 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Noise parameters'</span>,<span class="string">'Callback'</span>,@<a href="#_sub10" class="code" title="subfunction SetNoise(src,varargin)">SetNoise</a>,<span class="keyword">...</span>
+0044     <span class="string">'Enable'</span>,<span class="string">'off'</span>);
+0045 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Digitizer parameters'</span>,<span class="string">'Callback'</span>,@<a href="#_sub11" class="code" title="subfunction SetDigitizer(src,varargin)">SetDigitizer</a>,<span class="keyword">...</span>
+0046     <span class="string">'Enable'</span>,<span class="string">'off'</span>);
+0047 
+0048 hm=uimenu(<span class="string">'Label'</span>,<span class="string">'Help'</span>);
+0049 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'Program overview'</span>,<span class="string">'Callback'</span>,@<a href="HelpWindow.html" class="code" title="function HelpWindow(src,varargin)">HelpWindow</a>);
+0050 uimenu(hm,<span class="string">'Label'</span>,<span class="string">'About fringen'</span>,<span class="string">'Callback'</span>,@<a href="about_fringen.html" class="code" title="function varargout=about_fringen(src,varargin)">about_fringen</a>);
+0051 
+0052 <span class="comment">% create axes</span>
+0053 k=1;
+0054 ha(k)=subplot(2,2,1);
+0055 set(ha(k),<span class="string">'Tag'</span>,<span class="string">'VelocityPlot'</span>,<span class="keyword">...</span>
+0056     <span class="string">'FontUnits'</span>,<span class="string">'points'</span>,<span class="string">'FontSize'</span>,12);
+0057 xlabel(ha(k),<span class="string">'Time'</span>);
+0058 ylabel(ha(k),<span class="string">'Velocity'</span>);
+0059 line(<span class="string">'Parent'</span>,ha(k),<span class="string">'Tag'</span>,<span class="string">'VelocityHistory'</span>,<span class="keyword">...</span>
+0060     <span class="string">'Color'</span>,[0 0 0],<span class="string">'Visible'</span>,<span class="string">'off'</span>)
+0061 
+0062 k=2;
+0063 ha(k)=subplot(2,2,3);
+0064 set(ha(k),<span class="string">'Tag'</span>,<span class="string">'IntensityPlot'</span>,<span class="keyword">...</span>
+0065     <span class="string">'FontUnits'</span>,<span class="string">'points'</span>,<span class="string">'FontSize'</span>,12);
+0066 xlabel(ha(k),<span class="string">'Time'</span>);
+0067 ylabel(ha(k),<span class="string">'Intensity'</span>);
+0068 line(<span class="string">'Parent'</span>,ha(k),<span class="string">'Tag'</span>,<span class="string">'CoherentHistory'</span>,<span class="keyword">...</span>
+0069     <span class="string">'Color'</span>,[0 0 1],<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+0070 line(<span class="string">'Parent'</span>,ha(k),<span class="string">'Tag'</span>,<span class="string">'EmissionHistory'</span>,<span class="keyword">...</span>
+0071     <span class="string">'Color'</span>,[0 0.75 0],<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+0072 line(<span class="string">'Parent'</span>,ha(k),<span class="string">'Tag'</span>,<span class="string">'ReferenceHistory'</span>,<span class="keyword">...</span>
+0073     <span class="string">'Color'</span>,[1 0 0],<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+0074 
+0075 k=3;
+0076 ha(k)=subplot(2,2,[2 4]);
+0077 set(ha(k),<span class="string">'Tag'</span>,<span class="string">'SignalPlot'</span>,<span class="keyword">...</span>
+0078     <span class="string">'FontUnits'</span>,<span class="string">'points'</span>,<span class="string">'FontSize'</span>,12);
+0079 xlabel(ha(k),<span class="string">'Time'</span>);
+0080 ylabel(ha(k),<span class="string">'Signal'</span>);
+0081 Ncolor=6;
+0082 color=zeros(Ncolor,3);
+0083 color(1,3)=1; <span class="comment">% blue</span>
+0084 color(2,2)=0.75; <span class="comment">% green</span>
+0085 color(3,1)=1; <span class="comment">% red</span>
+0086 color(4,2:3)=1; <span class="comment">% cyan</span>
+0087 color(5,[1 3])=1; <span class="comment">% magenta</span>
+0088 color(6,[1 2])=0.98; <span class="comment">% yellow</span>
+0089 <span class="keyword">for</span> n=1:Ncolor
+0090     tag=sprintf(<span class="string">'SignalHistory%d'</span>,n);
+0091     line(<span class="string">'Parent'</span>,ha(k),<span class="string">'Tag'</span>,tag,<span class="string">'Color'</span>,color(n,:),<span class="string">'Visible'</span>,<span class="string">'off'</span>);
+0092 <span class="keyword">end</span>
+0093 
+0094 set(ha,<span class="string">'Box'</span>,<span class="string">'on'</span>);
+0095 linkaxes(ha,<span class="string">'x'</span>);
+0096 
+0097 set(fig,<span class="string">'HandleVisibility'</span>,<span class="string">'callback'</span>);
+0098 
+0099 <span class="comment">%%%%%%%%%%%%%</span>
+0100 <span class="comment">% callbacks %</span>
+0101 <span class="comment">%%%%%%%%%%%%%</span>
+0102 <a name="_sub1" href="#_subfunctions" class="code">function LoadData(src,varargin)</a>
+0103 
+0104 <span class="comment">% get figure data</span>
+0105 fig=ancestor(src,<span class="string">'figure'</span>);
+0106 data=get(fig,<span class="string">'UserData'</span>);
+0107 data.inputfile=<span class="string">''</span>;
+0108 data=<a href="import_data.html" class="code" title="function data=import_data(data)">import_data</a>(data);
+0109 <span class="keyword">if</span> isempty(data)
+0110     <span class="keyword">return</span>
+0111 <span class="keyword">end</span>
+0112 data=<a href="make_signals.html" class="code" title="function data=make_signals(data)">make_signals</a>(data);
+0113 data=<a href="mangle_signals.html" class="code" title="function data=mangle_signals(data)">mangle_signals</a>(data);
+0114 set(fig,<span class="string">'UserData'</span>,data);
+0115 <a href="updateGUI.html" class="code" title="function updateGUI(fig)">updateGUI</a>(fig);
+0116 
+0117 h=findobj(fig,<span class="string">'Enable'</span>,<span class="string">'off'</span>);
+0118 set(h,<span class="string">'Enable'</span>,<span class="string">'on'</span>);
+0119 
+0120 <span class="comment">% autoscale all axes</span>
+0121 ha=findobj(fig,<span class="string">'Type'</span>,<span class="string">'axes'</span>,<span class="string">'-not'</span>,<span class="string">'Tag'</span>,<span class="string">'legend'</span>);
+0122 <span class="keyword">for</span> n=1:numel(ha)
+0123     <span class="comment">%set(ha(n),'XLimMode','auto','YLimMode','auto');</span>
+0124     axis(ha(n),<span class="string">'tight'</span>);
+0125     yb=ylim(ha(n));
+0126     Ly=yb(2)-yb(1);
+0127     shift=Ly/20;
+0128     yb=yb+[-shift +shift];
+0129     ylim(ha(n),yb);
+0130     zoom(ha(n),<span class="string">'reset'</span>);   
+0131 <span class="keyword">end</span>
+0132 linkaxes(ha,<span class="string">'x'</span>);
+0133 
+0134 <a name="_sub2" href="#_subfunctions" class="code">function ExportResults(src,varargin)</a>
+0135 
+0136 <span class="comment">% get figure data</span>
+0137 fig=ancestor(src,<span class="string">'figure'</span>);
+0138 data=get(fig,<span class="string">'UserData'</span>);
+0139 
+0140 data.outputfile=<span class="string">''</span>;
+0141 <span class="keyword">if</span> isfield(data,<span class="string">'signal'</span>)
+0142     <span class="keyword">try</span>
+0143        <a href="export_signals.html" class="code" title="function data=export_signals(data)">export_signals</a>(data);
+0144     <span class="keyword">catch</span>
+0145         <span class="comment">% warning dialog</span>
+0146     <span class="keyword">end</span>
+0147 <span class="keyword">else</span>
+0148     <span class="comment">% no signals!</span>
+0149 <span class="keyword">end</span>
+0150 
+0151 <a name="_sub3" href="#_subfunctions" class="code">function StartOver(varargin)</a>
+0152 
+0153 message{1}=<span class="string">'Restart fringen program'</span>;
+0154 message{2}=<span class="string">'All data and settings will be cleared'</span>;
+0155 answer=questdlg(message,<span class="string">'Restart program?'</span>,<span class="string">'No'</span>);
+0156 <span class="keyword">if</span> strcmpi(answer,<span class="string">'yes'</span>)
+0157     fig=findall(0,<span class="string">'Type'</span>,<span class="string">'figure'</span>);
+0158     <span class="keyword">for</span> n=1:numel(fig)
+0159         tag=get(fig(n),<span class="string">'Tag'</span>);
+0160         <span class="keyword">if</span> strncmp(tag,<span class="string">'fringen'</span>,7)
+0161             delete(fig(n));
+0162         <span class="keyword">end</span>
+0163     <span class="keyword">end</span>
+0164 <span class="keyword">else</span>
+0165     <span class="keyword">return</span>
+0166 <span class="keyword">end</span>
+0167 <a href="fringenGUI.html" class="code" title="function fringenGUI(varargin)">fringenGUI</a>();
+0168 
+0169 <a name="_sub4" href="#_subfunctions" class="code">function ExitProgram(varargin)</a>
+0170 
+0171 answer=questdlg(<span class="string">'Exit fringen program?'</span>,<span class="string">'Exit program?'</span>,<span class="string">'No'</span>);
+0172 <span class="keyword">if</span> strcmpi(answer,<span class="string">'yes'</span>)
+0173     fig=findall(0,<span class="string">'Type'</span>,<span class="string">'figure'</span>);
+0174     <span class="keyword">for</span> n=1:numel(fig)
+0175         tag=get(fig(n),<span class="string">'Tag'</span>);
+0176         <span class="keyword">if</span> strncmp(tag,<span class="string">'fringen'</span>,7)
+0177             delete(fig(n));
+0178         <span class="keyword">end</span>
+0179     <span class="keyword">end</span>
+0180 <span class="keyword">else</span>
+0181     <span class="keyword">return</span>
+0182 <span class="keyword">end</span>
+0183 
+0184 <a name="_sub5" href="#_subfunctions" class="code">function SelectMode(src,varargin)</a>
+0185 
+0186 <span class="comment">% access figure data</span>
+0187 fig=ancestor(src,<span class="string">'figure'</span>);
+0188 data=get(fig,<span class="string">'UserData'</span>);
+0189 
+0190 <span class="comment">% update check mark</span>
+0191 label=get(src,<span class="string">'Label'</span>);
+0192 parent=get(src,<span class="string">'Parent'</span>);
+0193 children=get(parent,<span class="string">'Children'</span>);
+0194 set(children,<span class="string">'Checked'</span>,<span class="string">'off'</span>);
+0195 set(src,<span class="string">'Checked'</span>,<span class="string">'on'</span>);
+0196 
+0197 <span class="keyword">if</span> isfield(data,<span class="string">'mode'</span>) &amp;&amp; strcmpi(data.mode,label)
+0198     <span class="keyword">return</span> <span class="comment">% no change was made</span>
+0199 <span class="keyword">elseif</span> ~isfield(data,<span class="string">'inputfile'</span>)
+0200     <span class="keyword">return</span> <span class="comment">% no data loaded</span>
+0201 <span class="keyword">end</span>
+0202 
+0203 data.mode=label;
+0204 <span class="keyword">switch</span> data.mode
+0205     <span class="keyword">case</span> <span class="string">'VISAR'</span>
+0206         data.params.phase_shift=[0 180 90 270];
+0207     <span class="keyword">case</span> <span class="string">'PDV'</span>   
+0208         data.params.phase_shift=0;
+0209 <span class="keyword">end</span>
+0210 data=<a href="make_signals.html" class="code" title="function data=make_signals(data)">make_signals</a>(data);
+0211 data=<a href="mangle_signals.html" class="code" title="function data=mangle_signals(data)">mangle_signals</a>(data);
+0212 set(fig,<span class="string">'UserData'</span>,data);
+0213 <a href="updateGUI.html" class="code" title="function updateGUI(fig)">updateGUI</a>(fig);
+0214 
+0215 <a name="_sub6" href="#_subfunctions" class="code">function ParamsGUI(src,varargin)</a>
+0216 
+0217 fig=ancestor(src,<span class="string">'figure'</span>);
+0218 <span class="comment">%data=get(fig,'UserData');</span>
+0219 <span class="comment">%if ~isfield(data,'inputfile') || isempty(data.inputfile)</span>
+0220 <span class="comment">%    warndlg('Please load a data file before setting parameters',...</span>
+0221 <span class="comment">%        'No data loaded','modal');</span>
+0222 <span class="comment">%    return</span>
+0223 <span class="comment">%end</span>
+0224 
+0225 sub=findobj(fig,<span class="string">'Type'</span>,<span class="string">'uimenu'</span>,<span class="string">'Tag'</span>,<span class="string">'InterferometerMode'</span>);
+0226 choice=findobj(sub,<span class="string">'Checked'</span>,<span class="string">'on'</span>);
+0227 <span class="keyword">switch</span> get(choice,<span class="string">'Label'</span>)
+0228     <span class="keyword">case</span> <span class="string">'VISAR'</span>
+0229         <a href="VISARparamsGUI.html" class="code" title="function VISARparamsGUI(rootfig)">VISARparamsGUI</a>(fig);
+0230     <span class="keyword">case</span> <span class="string">'PDV'</span>
+0231         <a href="PDVparamsGUI.html" class="code" title="function PDVparamsGUI(rootfig)">PDVparamsGUI</a>(fig);
+0232 <span class="keyword">end</span>
+0233 
+0234 <a name="_sub7" href="#_subfunctions" class="code">function SelectCoupling(src,varargin)</a>
+0235 
+0236 <span class="comment">% access figure data</span>
+0237 fig=ancestor(src,<span class="string">'figure'</span>);
+0238 data=get(fig,<span class="string">'UserData'</span>);
+0239 
+0240 <span class="comment">% update check mark</span>
+0241 label=get(src,<span class="string">'Label'</span>);
+0242 parent=get(src,<span class="string">'Parent'</span>);
+0243 children=get(parent,<span class="string">'Children'</span>);
+0244 set(children,<span class="string">'Checked'</span>,<span class="string">'off'</span>);
+0245 set(src,<span class="string">'Checked'</span>,<span class="string">'on'</span>);
+0246 
+0247 <span class="comment">% apply new settings if change was made</span>
+0248 <span class="keyword">if</span> isfield(data.params,<span class="string">'coupling'</span>) &amp;&amp; strcmpi(data.params.coupling,label)
+0249     <span class="keyword">return</span> <span class="comment">% no change was made</span>
+0250 <span class="keyword">elseif</span> ~isfield(data,<span class="string">'inputfile'</span>);
+0251     <span class="keyword">return</span> <span class="comment">% no data loaded</span>
+0252 <span class="keyword">end</span>
+0253 data.params.coupling=label;
+0254 data=<a href="make_signals.html" class="code" title="function data=make_signals(data)">make_signals</a>(data);
+0255 data=<a href="mangle_signals.html" class="code" title="function data=mangle_signals(data)">mangle_signals</a>(data);
+0256 set(fig,<span class="string">'UserData'</span>,data);    
+0257 <a href="updateGUI.html" class="code" title="function updateGUI(fig)">updateGUI</a>(fig);
+0258 
+0259 <a name="_sub8" href="#_subfunctions" class="code">function SelectImpulse(src,varargin)</a>
+0260 
+0261 fig=ancestor(src,<span class="string">'figure'</span>);
+0262 data=get(fig,<span class="string">'UserData'</span>);
+0263 
+0264 <span class="keyword">if</span> ~isfield(data.params,<span class="string">'impulse_response'</span>)
+0265     data.params.impulse_response=<span class="string">''</span>;
+0266     default=pwd;
+0267 <span class="keyword">else</span>
+0268     default=data.params.impulse_response;
+0269 <span class="keyword">end</span>
+0270 [filename,pathname]=uigetfile(<span class="string">'*.*'</span>,<span class="string">'Select impulse response file'</span>,default);
+0271 <span class="keyword">if</span> isnumeric(filename)
+0272     <span class="keyword">return</span>
+0273 <span class="keyword">end</span>
+0274 data.params.impulse_response=fullfile(pathname,filename);
+0275 data=<a href="make_signals.html" class="code" title="function data=make_signals(data)">make_signals</a>(data);
+0276 data=<a href="mangle_signals.html" class="code" title="function data=mangle_signals(data)">mangle_signals</a>(data);
+0277 set(fig,<span class="string">'UserData'</span>,data);
+0278 <a href="updateGUI.html" class="code" title="function updateGUI(fig)">updateGUI</a>(fig);
+0279 
+0280 <a name="_sub9" href="#_subfunctions" class="code">function RemoveImpulse(src,varargin)</a>
+0281 
+0282 fig=ancestor(src,<span class="string">'figure'</span>);
+0283 data=get(fig,<span class="string">'UserData'</span>);
+0284 data.params.impulse_response=<span class="string">''</span>;
+0285 data=<a href="make_signals.html" class="code" title="function data=make_signals(data)">make_signals</a>(data);
+0286 data=<a href="mangle_signals.html" class="code" title="function data=mangle_signals(data)">mangle_signals</a>(data);
+0287 set(fig,<span class="string">'UserData'</span>,data);
+0288 <a href="updateGUI.html" class="code" title="function updateGUI(fig)">updateGUI</a>(fig);
+0289 
+0290 <a name="_sub10" href="#_subfunctions" class="code">function SetNoise(src,varargin)</a>
+0291 
+0292 fig=ancestor(src,<span class="string">'figure'</span>);
+0293 data=get(fig,<span class="string">'UserData'</span>);
+0294 <span class="comment">%if ~isfield(data,'inputfile') || isempty(data.inputfile)</span>
+0295 <span class="comment">%    warndlg('Please load a data file before setting parameters',...</span>
+0296 <span class="comment">%        'No data loaded','modal');</span>
+0297 <span class="comment">%    return</span>
+0298 <span class="comment">%end</span>
+0299 
+0300 <span class="keyword">if</span> ~isfield(data.params,<span class="string">'noise_frac'</span>) || isempty(data.params.noise_frac)
+0301     data.params.noise_frac=0;
+0302 <span class="keyword">end</span>
+0303 
+0304 label{1}=<span class="string">'Noise fraction:'</span>;
+0305 default{1}=sprintf(<span class="string">'%.6g'</span>,data.params.noise_frac);
+0306 
+0307 label{2}=<span class="string">'Noise seed:'</span>;
+0308 default{2}=sprintf(<span class="string">'%d'</span>,data.params.noise_seed);
+0309 
+0310 options.Interpreter=<span class="string">'tex'</span>;
+0311 answer=inputdlg(label,<span class="string">'Noise parameters'</span>,[1 40],default,options);
+0312 <span class="keyword">if</span> isempty(answer)
+0313     <span class="keyword">return</span>
+0314 <span class="keyword">end</span>
+0315 data.params.noise_frac=sscanf(answer{1},<span class="string">'%g'</span>,1);
+0316 data.params.noise_seed=sscanf(answer{2},<span class="string">'%d'</span>,1);
+0317 data=<a href="make_signals.html" class="code" title="function data=make_signals(data)">make_signals</a>(data);
+0318 data=<a href="mangle_signals.html" class="code" title="function data=mangle_signals(data)">mangle_signals</a>(data);
+0319 set(fig,<span class="string">'UserData'</span>,data);
+0320 <a href="updateGUI.html" class="code" title="function updateGUI(fig)">updateGUI</a>(fig);
+0321 
+0322 <a name="_sub11" href="#_subfunctions" class="code">function SetDigitizer(src,varargin)</a>
+0323 
+0324 fig=ancestor(src,<span class="string">'figure'</span>);
+0325 data=get(fig,<span class="string">'UserData'</span>);
+0326 <span class="comment">%if ~isfield(data,'inputfile') || isempty(data.inputfile)</span>
+0327 <span class="comment">%    warndlg('Please load a data file before setting parameters',...</span>
+0328 <span class="comment">%        'No data loaded','modal');</span>
+0329 <span class="comment">%    return</span>
+0330 <span class="comment">%end</span>
+0331 
+0332 <span class="keyword">if</span> ~isfield(data.params,<span class="string">'bit_range'</span>) || isempty(data.params.bit_range)
+0333     data.params.bit_range=8;
+0334 <span class="keyword">end</span>
+0335 
+0336 label{1}=<span class="string">'Bit range:'</span>;
+0337 default{1}=sprintf(<span class="string">'%.6g'</span>,data.params.bit_range);
+0338 answer=inputdlg(label,<span class="string">'Digitizer range'</span>,[1 40],default);
+0339 <span class="keyword">if</span> isempty(answer)
+0340     <span class="keyword">return</span>
+0341 <span class="keyword">end</span>
+0342 data.params.bit_range=sscanf(answer{1},<span class="string">'%g'</span>,1);
+0343 data=<a href="make_signals.html" class="code" title="function data=make_signals(data)">make_signals</a>(data);
+0344 data=<a href="mangle_signals.html" class="code" title="function data=mangle_signals(data)">mangle_signals</a>(data);
+0345 set(fig,<span class="string">'UserData'</span>,data);
+0346 <a href="updateGUI.html" class="code" title="function updateGUI(fig)">updateGUI</a>(fig);</pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

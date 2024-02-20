@@ -1,0 +1,210 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of calculateOffset</title>
+  <meta name="keywords" content="calculateOffset">
+  <meta name="description" content="calculateOffset Calculate offset frequency">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="../../index.html">+SMASH</a> &gt; <a href="../index.html">+Velocimetry</a> &gt; <a href="index.html">@PDV</a> &gt; calculateOffset.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+Velocimetry/@PDV&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>calculateOffset
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>calculateOffset Calculate offset frequency</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function object=calculateOffset(object,varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> calculateOffset Calculate offset frequency
+
+ This method calculates offset frequency for one or more PDV channels. The
+ frequency and time bounds used in the calculation may be explicitly
+ specified:
+    object=calculateOffset(object,'Frequency',[f1 f2],'Time',[t1 t2]);
+ Omitting one of these bounds causes the entire range to be used.
+ Omitting both bounds launches interactive selelction.
+    object=calculateOffset(object); % selection on a new figure 
+    object=calculateOffset(object,'Target,target); % selection on existing target axes
+
+ Multi-channel offsets are calculated sequentially by default.  Specific
+ channels may be analyzed:
+    object=calculateOffset(object,'Channel,index,...);
+ where index is one or more integer values.  A common frequency offset can
+ also be generated from analysis of the first channel.
+    object=calculateOffset(object,'Channel,'common',...);
+
+ See also <a href="PDV.html" class="code" title="">PDV</a>, <a href="generateSpectrogram.html" class="code" title="function object=generateSpectrogram(object)">generateSpectrogram</a>, <a href="view.html" class="code" title="function varargout=view(object,mode,target)">view</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="changeStatus.html" class="code" title="function object=changeStatus(object,new,varargin)">changeStatus</a>	manage input</li><li><a href="crop.html" class="code" title="function object=crop(object,bound)">crop</a>	crop Crop time range</li><li><a href="view.html" class="code" title="function varargout=view(object,mode,target)">view</a>	view View spectrograms, histories, or signals</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function findCenter(index)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% calculateOffset Calculate offset frequency</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This method calculates offset frequency for one or more PDV channels. The</span>
+0004 <span class="comment">% frequency and time bounds used in the calculation may be explicitly</span>
+0005 <span class="comment">% specified:</span>
+0006 <span class="comment">%    object=calculateOffset(object,'Frequency',[f1 f2],'Time',[t1 t2]);</span>
+0007 <span class="comment">% Omitting one of these bounds causes the entire range to be used.</span>
+0008 <span class="comment">% Omitting both bounds launches interactive selelction.</span>
+0009 <span class="comment">%    object=calculateOffset(object); % selection on a new figure</span>
+0010 <span class="comment">%    object=calculateOffset(object,'Target,target); % selection on existing target axes</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% Multi-channel offsets are calculated sequentially by default.  Specific</span>
+0013 <span class="comment">% channels may be analyzed:</span>
+0014 <span class="comment">%    object=calculateOffset(object,'Channel,index,...);</span>
+0015 <span class="comment">% where index is one or more integer values.  A common frequency offset can</span>
+0016 <span class="comment">% also be generated from analysis of the first channel.</span>
+0017 <span class="comment">%    object=calculateOffset(object,'Channel,'common',...);</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% See also PDV, generateSpectrogram, view</span>
+0020 <span class="comment">%</span>
+0021 
+0022 <span class="comment">%</span>
+0023 <span class="comment">% created February 8, 2018 by Daniel Dolan (Sandia National Laboratories</span>
+0024 <span class="comment">%</span>
+0025 <a name="_sub0" href="#_subfunctions" class="code">function object=calculateOffset(object,varargin)</a>
+0026 
+0027 <span class="comment">% manage input</span>
+0028 region=SMASH.ROI.Rectangle(<span class="string">'xy'</span>);
+0029 data=region.Data;
+0030 data(3:4)=[0 inf];
+0031 region=define(region,data);
+0032 
+0033 channel=1:object.NumberChannels;
+0034 GUI=true;
+0035 target=[];
+0036 ShareOffset=false;
+0037 
+0038 Narg=numel(varargin);
+0039 assert(rem(Narg,2)==0,<span class="string">'ERROR: unmatched name/value pair'</span>);
+0040 <span class="keyword">for</span> n=1:2:Narg
+0041     name=varargin{n};
+0042     assert(ischar(name),<span class="string">'ERROR: invalid option name'</span>);
+0043     value=varargin{n+1};
+0044     <span class="keyword">switch</span> lower(name)  
+0045         <span class="keyword">case</span> <span class="string">'time'</span>
+0046             <span class="keyword">try</span>
+0047                 data=region.Data;
+0048                 data(1:2)=value;
+0049                 region=define(region,data);
+0050             <span class="keyword">catch</span> ME
+0051                 throwAsCaller(ME);
+0052             <span class="keyword">end</span>
+0053             GUI=false;     
+0054         <span class="keyword">case</span> <span class="string">'frequency'</span>
+0055             <span class="keyword">try</span>
+0056                 data=region.Data;
+0057                 data(3:4)=value;
+0058                 region=define(region,data);
+0059             <span class="keyword">catch</span> ME
+0060                 throwAsCaller(ME);
+0061             <span class="keyword">end</span>
+0062             GUI=false;           
+0063         <span class="keyword">case</span> <span class="string">'channel'</span>
+0064             <span class="keyword">if</span> strcmpi(value,<span class="string">'all'</span>)
+0065                 channel=1:object.NumberChannels;
+0066             <span class="keyword">elseif</span> strcmpi(value,<span class="string">'common'</span>)
+0067                 channel=1;
+0068                 ShareOffset=true;
+0069             <span class="keyword">elseif</span> isnumeric(value)
+0070                 <span class="keyword">for</span> k=1:numel(value)
+0071                     assert(any(value(k) == channel),<span class="keyword">...</span>
+0072                         <span class="string">'ERROR: invalid channel number'</span>);
+0073                 <span class="keyword">end</span>
+0074                 channel=value;
+0075             <span class="keyword">else</span>
+0076                 error(<span class="string">'ERROR: invalid channel number'</span>);
+0077             <span class="keyword">end</span>
+0078         <span class="keyword">case</span> <span class="string">'target'</span>
+0079             assert(all(ishandle(target)),<span class="string">'ERROR: inavlid target axis'</span>);
+0080             target=value;
+0081         <span class="keyword">otherwise</span>
+0082             error(<span class="string">'ERROR: invalid option name'</span>);
+0083     <span class="keyword">end</span>
+0084 <span class="keyword">end</span>
+0085 
+0086 <span class="comment">% calculate offsets</span>
+0087 <span class="keyword">if</span> GUI    
+0088     <span class="keyword">for</span> k=channel
+0089         temp=object.PrivateSpectrogram{k};
+0090         <span class="keyword">if</span> ~object.ShowNegativeFrequencies
+0091             temp=<a href="crop.html" class="code" title="function object=crop(object,bound)">crop</a>(temp,[],[0 inf]);
+0092         <span class="keyword">end</span>
+0093         <span class="keyword">if</span> isempty(target)
+0094             target=<a href="view.html" class="code" title="function varargout=view(object,mode,target)">view</a>(temp); <span class="comment">% Image.view call</span>
+0095             target=target.axes;
+0096             NewFigure=true;            
+0097         <span class="keyword">else</span>
+0098             NewFigure=false;
+0099         <span class="keyword">end</span>
+0100         title(<span class="string">'Select offset'</span>);
+0101         ylabel(<span class="string">'Beat frequency'</span>,<span class="string">'FontWeight'</span>,<span class="string">'bold'</span>);
+0102         region.Name=sprintf(<span class="string">'Channel %d offset region'</span>,k);
+0103         <span class="keyword">if</span> isscalar(target)
+0104             region=select(region,target);
+0105         <span class="keyword">else</span>
+0106             region=select(region,target(k));
+0107         <span class="keyword">end</span>
+0108         <span class="keyword">if</span> NewFigure
+0109             fig=ancestor(target(1),<span class="string">'figure'</span>);
+0110             delete(fig);
+0111             target=[];
+0112         <span class="keyword">end</span>
+0113         <a href="#_sub1" class="code" title="subfunction findCenter(index)">findCenter</a>(k);
+0114     <span class="keyword">end</span>
+0115 <span class="keyword">else</span>
+0116     <span class="keyword">for</span> k=channel
+0117         <a href="#_sub1" class="code" title="subfunction findCenter(index)">findCenter</a>(k);
+0118     <span class="keyword">end</span>
+0119     
+0120 <span class="keyword">end</span>
+0121     <a name="_sub1" href="#_subfunctions" class="code">function findCenter(index)</a>
+0122         temp=object.Channel{index}.Measurement;
+0123         temp=<a href="crop.html" class="code" title="function object=crop(object,bound)">crop</a>(temp,region.Data(1:2));
+0124         assert(numel(temp.Data) &gt; 1,<span class="keyword">...</span>
+0125             <span class="string">'ERROR: no data inside time bounds'</span>);
+0126         option=object.FFToptions;
+0127         option.NumberFrequencies=[1000 inf];
+0128         temp=fft(temp,option);
+0129         temp=<a href="crop.html" class="code" title="function object=crop(object,bound)">crop</a>(temp,region.Data(3:4));
+0130         assert(numel(temp.Data) &gt; 1,<span class="keyword">...</span>
+0131             <span class="string">'ERROR: no data inside frequency bounds'</span>);
+0132         report=object.findPeak(temp);
+0133         object.OffsetFrequency(index)=report.Location;
+0134     <span class="keyword">end</span>
+0135 
+0136 <span class="keyword">if</span> ShareOffset
+0137    object.OffsetFrequency=repmat(object.OffsetFrequency(1),<span class="keyword">...</span>
+0138        size(object.Channel)); 
+0139 <span class="keyword">end</span>
+0140 
+0141 object=<a href="changeStatus.html" class="code" title="function object=changeStatus(object,new,varargin)">changeStatus</a>(object,<span class="string">'obsolete'</span>,<span class="string">'history'</span>);
+0142 
+0143 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

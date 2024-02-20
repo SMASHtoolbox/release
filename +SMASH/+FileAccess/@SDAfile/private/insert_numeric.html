@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of insert_numeric</title>
+  <meta name="keywords" content="insert_numeric">
+  <meta name="description" content="manage empty arrays">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../../index.html">SMASHtoolbox</a> &gt; <a href="../../../index.html">+SMASH</a> &gt; <a href="../../index.html">+FileAccess</a> &gt; <a href="../index.html">@SDAfile</a> &gt; <a href="index.html">private</a> &gt; insert_numeric.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../../index.html"><img alt="<" border="0" src="../../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+FileAccess/@SDAfile/private&nbsp;<img alt=">" border="0" src="../../../../../../right.png"></a></td></tr></table>-->
+
+<h1>insert_numeric
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>manage empty arrays</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>function insert_numeric(archive,setname,data,deflate) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> manage empty arrays</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="insert_numeric.html" class="code" title="function insert_numeric(archive,setname,data,deflate)">insert_numeric</a>	manage empty arrays</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="insert_cell.html" class="code" title="function insert_cell(archive,datasetname,data,deflate)">insert_cell</a>	</li><li><a href="insert_numeric.html" class="code" title="function insert_numeric(archive,setname,data,deflate)">insert_numeric</a>	manage empty arrays</li><li><a href="insert_structure.html" class="code" title="function insert_structure(archive,setname,data,deflate)">insert_structure</a>	</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function insert_numeric(archive,setname,data,deflate)</a>
+0002 
+0003 <span class="comment">% manage empty arrays</span>
+0004 file=archive.ArchiveFile;
+0005 empty=false;
+0006 <span class="keyword">if</span> isempty(data)
+0007     empty=true;
+0008     data=nan;
+0009 <span class="keyword">end</span>
+0010 
+0011 <span class="comment">% manage complex arrays</span>
+0012 <span class="keyword">if</span> ~isreal(data)
+0013     ArraySize=size(data);
+0014     data=[real(data(:)) imag(data(:))];
+0015     <a href="insert_numeric.html" class="code" title="function insert_numeric(archive,setname,data,deflate)">insert_numeric</a>(archive,setname,data,deflate);
+0016     h5writeatt(file,setname,<span class="string">'Complex'</span>,<span class="string">'yes'</span>);
+0017     h5writeatt(file,setname,<span class="string">'ArraySize'</span>,ArraySize);
+0018     <span class="keyword">return</span>
+0019 <span class="keyword">end</span>
+0020 
+0021 <span class="comment">% manage sparse arrays</span>
+0022 <span class="keyword">if</span> issparse(data)
+0023     [i,j,s]=find(data);
+0024     data=[i(:) j(:) s(:)];
+0025     <a href="insert_numeric.html" class="code" title="function insert_numeric(archive,setname,data,deflate)">insert_numeric</a>(archive,setname,data,deflate);
+0026     h5writeatt(file,setname,<span class="string">'Sparse'</span>,<span class="string">'yes'</span>);
+0027     <span class="keyword">return</span>
+0028 <span class="keyword">end</span>
+0029 
+0030 <span class="comment">% insert data</span>
+0031 chunksize=size(data);
+0032 datatype=class(data);
+0033 
+0034 datasize=inf(1,ndims(data));
+0035 start=ones(1,ndims(data));
+0036 count=size(data);
+0037 
+0038 h5create(file,setname,datasize,<span class="keyword">...</span>
+0039     <span class="string">'ChunkSize'</span>,chunksize,<span class="string">'Deflate'</span>,deflate,<span class="string">'DataType'</span>,datatype);
+0040 h5write(file,setname,data,start,count);
+0041 h5writeatt(file,setname,<span class="string">'RecordType'</span>,<span class="string">'numeric'</span>);
+0042 h5writeatt(file,setname,<span class="string">'Sparse'</span>,<span class="string">'no'</span>);
+0043 h5writeatt(file,setname,<span class="string">'Complex'</span>,<span class="string">'no'</span>);
+0044 
+0045 <span class="keyword">if</span> empty
+0046     h5writeatt(file,setname,<span class="string">'Empty'</span>,<span class="string">'yes'</span>);
+0047 <span class="keyword">else</span>
+0048     h5writeatt(file,setname,<span class="string">'Empty'</span>,<span class="string">'no'</span>);
+0049 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

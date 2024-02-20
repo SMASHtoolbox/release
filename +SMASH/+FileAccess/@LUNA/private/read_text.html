@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of read_text</title>
+  <meta name="keywords" content="read_text">
+  <meta name="description" content="read data file into structure">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../../index.html">SMASHtoolbox</a> &gt; <a href="../../../index.html">+SMASH</a> &gt; <a href="../../index.html">+FileAccess</a> &gt; <a href="../index.html">@LUNA</a> &gt; <a href="index.html">private</a> &gt; read_text.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../../index.html"><img alt="<" border="0" src="../../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+FileAccess/@LUNA/private&nbsp;<img alt=">" border="0" src="../../../../../../right.png"></a></td></tr></table>-->
+
+<h1>read_text
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>read data file into structure</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>function [time,signal,header]=read_text(filename) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> read data file into structure</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [time,signal,header]=read_text(filename)</a>
+0002 
+0003 <span class="comment">% read data file into structure</span>
+0004 data=SMASH.FileAccess.readFile(filename,<span class="string">'column'</span>);
+0005 
+0006 <span class="comment">% process header</span>
+0007 header=struct();
+0008 header.Contents=data.Header;
+0009 
+0010 <span class="keyword">for</span> n=1:numel(data.Header)
+0011     temp=data.Header{n};
+0012     <span class="keyword">if</span> any(regexpi(temp,<span class="string">'group index'</span>))
+0013         <span class="keyword">while</span> numel(temp)&gt;0
+0014             n=sscanf(temp,<span class="string">'%g'</span>,1);            
+0015             <span class="keyword">if</span> isempty(n)
+0016                 temp=temp(2:end);
+0017             <span class="keyword">else</span>
+0018                 <span class="keyword">break</span>
+0019             <span class="keyword">end</span>
+0020         <span class="keyword">end</span>
+0021         header.GroupIndex=n;
+0022     <span class="keyword">end</span>    
+0023 <span class="keyword">end</span>
+0024 
+0025 temp=double(data.Header{end});
+0026 stop=find(temp==9); <span class="comment">% tab character</span>
+0027 N=numel(stop);
+0028 start=1;
+0029 TimeColumn=nan;
+0030 DataColumn=nan;
+0031 <span class="keyword">for</span> k=1:N
+0032     temp=data.Header{end}(start:stop(k));
+0033     <span class="keyword">if</span> regexpi(temp,<span class="string">'Time'</span>)
+0034         TimeColumn=k;
+0035     <span class="keyword">elseif</span> regexpi(temp,<span class="string">'Linear Amplitude'</span>)
+0036         DataColumn=k;
+0037     <span class="keyword">end</span>
+0038     start=stop(k)+1;        
+0039 <span class="keyword">end</span>
+0040 assert(~isnan(TimeColumn),<span class="string">'ERROR: Time column not found'</span>);
+0041 time=data.Data(:,TimeColumn);
+0042 assert(~isnan(DataColumn),<span class="string">'ERROR: Linear Amplitude column not fond'</span>);
+0043 signal=data.Data(:,DataColumn);
+0044 
+0045 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

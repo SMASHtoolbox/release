@@ -1,0 +1,121 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of Log</title>
+  <meta name="keywords" content="Log">
+  <meta name="description" content="Log Message logging class">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="../../index.html">+SMASH</a> &gt; <a href="../index.html">+System</a> &gt; <a href="index.html">@Log</a> &gt; Log.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+System/@Log&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>Log
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>Log Message logging class</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Log Message logging class
+
+ This class supports several types of message logging.  Messages can be
+ simultaneously written to the command window, text files, and list box
+ objects.  Log objects are created from a list indicating where messages
+ are to be written.
+    object=Log(target1,target2,...);
+ Valid targets include:
+    -'-stdout' and '-stderr' for the command window
+    -Text file names
+    -List box handles
+ The default target, if none are specified, is '-stdout'.
+
+ See also SMASH.System</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="Log.html" class="code" title="">Log</a>	Log Message logging class</li><li><a href="generateWarning.html" class="code" title="function generateWarning(object,varargin)">generateWarning</a>	</li><li><a href="reset.html" class="code" title="function reset(object,varargin)">reset</a>	reset Reset log target(s)</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="Log.html" class="code" title="">Log</a>	Log Message logging class</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function object=Log(varargin)</a></li><li><a href="#_sub2" class="code">function set.Warning(object,value)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% Log Message logging class</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This class supports several types of message logging.  Messages can be</span>
+0004 <span class="comment">% simultaneously written to the command window, text files, and list box</span>
+0005 <span class="comment">% objects.  Log objects are created from a list indicating where messages</span>
+0006 <span class="comment">% are to be written.</span>
+0007 <span class="comment">%    object=Log(target1,target2,...);</span>
+0008 <span class="comment">% Valid targets include:</span>
+0009 <span class="comment">%    -'-stdout' and '-stderr' for the command window</span>
+0010 <span class="comment">%    -Text file names</span>
+0011 <span class="comment">%    -List box handles</span>
+0012 <span class="comment">% The default target, if none are specified, is '-stdout'.</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% See also SMASH.System</span>
+0015 <span class="comment">%</span>
+0016 
+0017 <span class="comment">%</span>
+0018 <span class="comment">% created October 21, 2018 by Daniel Dolan (Sandia National Laboratories)</span>
+0019 <span class="comment">%</span>
+0020 classdef <a href="Log.html" class="code" title="">Log</a> &lt; handle
+0021     properties (SetAccess=protected)
+0022         Target <span class="comment">% Log targets (cell array)</span>
+0023     <span class="keyword">end</span>
+0024     properties
+0025         Warning = <span class="string">'on'</span> <span class="comment">% Generate log warnings ('on' or 'off')</span>
+0026     <span class="keyword">end</span>
+0027     methods (Hidden=true)
+0028         <a name="_sub0" href="#_subfunctions" class="code">function object=Log(varargin)</a>
+0029             <a href="reset.html" class="code" title="function reset(object,varargin)">reset</a>(object,varargin{:});                      
+0030         <span class="keyword">end</span>
+0031     <span class="keyword">end</span>
+0032     methods (Hidden=true)
+0033         varargout=addlistener(varargin)
+0034         varargout=eq(varargin)
+0035         varargout=findprop(varargin)
+0036         varargout=gt(varargin)
+0037         varargout=le(varargin)
+0038         varargout=lt(varargin)
+0039         varargout=notify(varargin)
+0040         varargout=findobj(varargin)
+0041         varargout=ge(varargin)
+0042         varargout=listener(varargin)
+0043         varargout=ne(varargin)
+0044     <span class="keyword">end</span>
+0045     methods (Access=protected, Hidden=true)
+0046         varargout=<a href="generateWarning.html" class="code" title="function generateWarning(object,varargin)">generateWarning</a>(varargin)
+0047     <span class="keyword">end</span>
+0048     <span class="comment">%% setters</span>
+0049     methods
+0050         <a name="_sub1" href="#_subfunctions" class="code">function set.Warning(object,value)</a>
+0051             <span class="keyword">if</span> strcmpi(value,<span class="string">'on'</span>) || strcmpi(value,<span class="string">'off'</span>)
+0052                 object.Warning=lower(value);
+0053             <span class="keyword">else</span>
+0054                 error(<span class="string">'ERROR: warning state must be ''on'' or ''off'''</span>);
+0055             <span class="keyword">end</span>
+0056         <span class="keyword">end</span>
+0057         
+0058     <span class="keyword">end</span>
+0059 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

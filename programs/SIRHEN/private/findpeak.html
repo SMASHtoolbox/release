@@ -1,0 +1,264 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of findpeak</title>
+  <meta name="keywords" content="findpeak">
+  <meta name="description" content="findpeak : determine the position, width, and strength of a peak">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">SIRHEN</a> &gt; <a href="index.html">private</a> &gt; findpeak.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/SIRHEN/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>findpeak
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>findpeak : determine the position, width, and strength of a peak</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function result=findpeak(x,y,options) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> findpeak : determine the position, width, and strength of a peak
+
+ Usage:
+ &gt;&gt; result=findpeak(x,y,options);
+
+ Required input:
+    x : horizontal data array
+    y : vertical data array
+ Both arrays must be the same size
+
+ Optional input may be passed through a structure containing one or more
+ of the following fields (square brackets indicated defaults)l.
+   -method ('robust',['maximum'],'centroid','median','parabola','gaussian')
+   -threshold [50%]
+   -fullwidth [inf]
+   -minpoints [3]
+   -xmin [-inf]
+   -xmax [+inf]
+
+ Output:
+ The result array is a 3xN matrix, where N is the number of (x,y) data
+ points.  Each row contains information about the peak:
+   -The first row is the peak location.
+   -The second row is the peak width.
+   -The third row is the peak amplitude.  
+ Analysis failure is indicated by NaN value(s).</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="gaussianfit.html" class="code" title="function [params,yfit]=gaussianfit(x,y,guess,options)">gaussianfit</a>	gaussianfit : fit data to Gaussian curve</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="AnalysisScreen.html" class="code" title="function fig=AnalysisScreen(prevfig)">AnalysisScreen</a>	allocate mising input</li><li><a href="SelectionScreen.html" class="code" title="function fig=SelectionScreen(prevfig)">SelectionScreen</a>	allocate mising input</li><li><a href="estimate_noise.html" class="code" title="function value=estimate_noise(signal)">estimate_noise</a>	estimate_noise : estimate Gaussian noise fraction in a harmonic signal</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% findpeak : determine the position, width, and strength of a peak</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% Usage:</span>
+0004 <span class="comment">% &gt;&gt; result=findpeak(x,y,options);</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Required input:</span>
+0007 <span class="comment">%    x : horizontal data array</span>
+0008 <span class="comment">%    y : vertical data array</span>
+0009 <span class="comment">% Both arrays must be the same size</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% Optional input may be passed through a structure containing one or more</span>
+0012 <span class="comment">% of the following fields (square brackets indicated defaults)l.</span>
+0013 <span class="comment">%   -method ('robust',['maximum'],'centroid','median','parabola','gaussian')</span>
+0014 <span class="comment">%   -threshold [50%]</span>
+0015 <span class="comment">%   -fullwidth [inf]</span>
+0016 <span class="comment">%   -minpoints [3]</span>
+0017 <span class="comment">%   -xmin [-inf]</span>
+0018 <span class="comment">%   -xmax [+inf]</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% Output:</span>
+0021 <span class="comment">% The result array is a 3xN matrix, where N is the number of (x,y) data</span>
+0022 <span class="comment">% points.  Each row contains information about the peak:</span>
+0023 <span class="comment">%   -The first row is the peak location.</span>
+0024 <span class="comment">%   -The second row is the peak width.</span>
+0025 <span class="comment">%   -The third row is the peak amplitude.</span>
+0026 <span class="comment">% Analysis failure is indicated by NaN value(s).</span>
+0027 
+0028 <span class="comment">% created 2/9/2010 by Daniel Dolan</span>
+0029 <span class="comment">% updated 3/3/2010 by Daniel Dolan</span>
+0030 <span class="comment">%   -added 'robust' method and made it the default choice</span>
+0031 <span class="comment">% updated 10/12/2010 by Daniel Dolan</span>
+0032 <span class="comment">%   -incorporated method selection into an options structure</span>
+0033 <span class="comment">%   -added xmin and xmax options</span>
+0034 <a name="_sub0" href="#_subfunctions" class="code">function result=findpeak(x,y,options)</a>
+0035 
+0036 <span class="comment">% handle input</span>
+0037 <span class="keyword">if</span> nargin&lt;2
+0038     error(<span class="string">'ERROR: missing x and y inputs'</span>);
+0039 <span class="keyword">end</span>
+0040 <span class="keyword">if</span> (nargin&lt;3) || isempty(options)
+0041     options=struct();
+0042 <span class="keyword">end</span>
+0043 
+0044 <span class="comment">% process options</span>
+0045 <span class="keyword">if</span> ~isfield(options,<span class="string">'method'</span>) || isempty(options.method)
+0046     options.method=<span class="string">'maximum'</span>;
+0047 <span class="keyword">end</span>
+0048 options.method=lower(options.method);
+0049 
+0050 <span class="keyword">if</span> ~isfield(options,<span class="string">'threshold'</span>) || isempty(options.threshold)
+0051     options.threshold=0.50; <span class="comment">% 50% of the peak</span>
+0052 <span class="keyword">end</span>
+0053 options.threshold=abs(options.threshold);
+0054 
+0055 <span class="keyword">if</span> ~isfield(options,<span class="string">'fullwidth'</span>) || isempty(options.fullwidth)
+0056     options.fullwidth=max(x)-min(x);
+0057 <span class="keyword">end</span>
+0058 options.fullwidth=abs(options.fullwidth);
+0059 
+0060 <span class="keyword">if</span> ~isfield(options,<span class="string">'minpoints'</span>) || isempty(options.minpoints)
+0061     options.minpoints=3;
+0062 <span class="keyword">end</span>
+0063 options.minpoints=ceil(abs(options.minpoints));
+0064 
+0065 <span class="keyword">if</span> ~isfield(options,<span class="string">'xmin'</span>) || isempty(options.xmin)
+0066     options.xmin=-inf;
+0067 <span class="keyword">end</span>
+0068 
+0069 <span class="keyword">if</span> ~isfield(options,<span class="string">'xmax'</span>) || isempty(options.xmax)
+0070     options.xmax=+inf;
+0071 <span class="keyword">end</span>
+0072 
+0073 <span class="comment">% define output array</span>
+0074 result=zeros(3,1); <span class="comment">% location, width, amplitude</span>
+0075 
+0076 <span class="comment">% apply absolute horizontal limits</span>
+0077 keep=(x&gt;=options.xmin) &amp; (x&lt;=options.xmax);
+0078 x=x(keep);
+0079 y=y(keep);
+0080 
+0081 <span class="comment">% robust method uses entire spectrum</span>
+0082 <span class="keyword">if</span> strcmp(options.method,<span class="string">'robust'</span>)
+0083     keep=repmat(true,size(x));
+0084     <span class="keyword">for</span> n=1:3
+0085         xk=x(keep);
+0086         yk=y(keep);
+0087         area=trapz(xk,yk);
+0088         weight=yk/area;
+0089         xm=trapz(xk,xk.*weight);
+0090         L=sqrt(trapz(xk,(xk-xm).^2.*weight));
+0091         xb=xm+2*[-L +L];
+0092         keep=(x&gt;=xb(1)) &amp; (x&lt;=xb(2));
+0093     <span class="keyword">end</span>
+0094     result(1)=xm;
+0095     result(2)=L;
+0096     result(3)=area;
+0097     <span class="keyword">return</span>
+0098 <span class="keyword">end</span>
+0099 
+0100 <span class="comment">% crop data around peak</span>
+0101 <span class="keyword">if</span> rem(options.minpoints,2)==1 <span class="comment">% odd number</span>
+0102     Mleft=(options.minpoints-1)/2;
+0103     Mright=Mleft;
+0104 <span class="keyword">else</span> <span class="comment">% even number</span>
+0105     Mleft=options.minpoints/2;
+0106     Mright=Mleft+1;
+0107 <span class="keyword">end</span>
+0108 
+0109 [ypeak,index]=max(y);
+0110 xpeak=x(index);
+0111 threshold=options.threshold*ypeak;
+0112 
+0113 xbound=xpeak-options.fullwidth/2;
+0114 change=0;
+0115 <span class="keyword">for</span> kleft=index:-1:1
+0116     change=change+1;
+0117     <span class="keyword">if</span> change&lt;Mleft
+0118         <span class="keyword">continue</span>
+0119     <span class="keyword">elseif</span> (y(kleft)&lt;=threshold) || (x(kleft)&lt;=xbound)
+0120         <span class="keyword">break</span>       
+0121     <span class="keyword">end</span>   
+0122 <span class="keyword">end</span>
+0123 
+0124 xbound=xpeak+options.fullwidth/2;
+0125 change=0;
+0126 <span class="keyword">for</span> kright=index:1:numel(x)
+0127     change=change+1;
+0128     <span class="keyword">if</span> change&lt;Mright
+0129         <span class="keyword">continue</span>
+0130     <span class="keyword">elseif</span> (y(kright)&lt;=threshold) || (x(kright)&gt;=xbound)
+0131         <span class="keyword">break</span>       
+0132     <span class="keyword">end</span>   
+0133 <span class="keyword">end</span>
+0134 
+0135 index=kleft:kright;
+0136 x=x(index);
+0137 y=y(index);
+0138 
+0139 <span class="comment">% locate peak position, width, and amplitude</span>
+0140 <span class="keyword">try</span>
+0141     <span class="keyword">switch</span> options.method
+0142         <span class="keyword">case</span> <span class="string">'maximum'</span>
+0143             result(1)=xpeak;
+0144             result(2)=(max(x)-min(x))/2;
+0145             result(3)=ypeak;
+0146         <span class="keyword">case</span> <span class="string">'centroid'</span>
+0147             weight=y/trapz(x,y);
+0148             result(1)=trapz(x,weight.*x);
+0149             result(2)=sqrt(trapz(x,weight.*(x-result(1)).^2));
+0150             result(3)=mean(y);
+0151         <span class="keyword">case</span> <span class="string">'median'</span>
+0152             weight=cumtrapz(x,y);
+0153             weight=weight/weight(end);
+0154             index=[0 0];
+0155             index(1)=find(weight&lt;0.25,1,<span class="string">'last'</span>);
+0156             index(2)=index(1)+1;
+0157             x25=interp1(weight(index),x(index),0.25,<span class="string">'linear'</span>);
+0158             index(1)=find(weight&lt;0.50,1,<span class="string">'last'</span>);
+0159             index(2)=index(1)+1;
+0160             x50=interp1(weight(index),x(index),0.50,<span class="string">'linear'</span>);
+0161             index(1)=find(weight&lt;0.75,1,<span class="string">'last'</span>);
+0162             index(2)=index(1)+1;
+0163             x75=interp1(weight(index),x(index),0.75,<span class="string">'linear'</span>);
+0164             result(1)=x50;
+0165             result(2)=(x75-x25)/2;
+0166             result(3)=interp1(x,y,x75,<span class="string">'linear'</span>);
+0167         <span class="keyword">case</span> <span class="string">'parabola'</span>
+0168             x0=min(x);
+0169             Lx=max(x)-x0;
+0170             x=(x-x0)/Lx;
+0171             y0=min(y);
+0172             Ly=max(y)-y0;
+0173             y=(y-y0)/Ly;
+0174             a=polyfit(x,y,2);
+0175             xp=-a(2)/(2*a(1)); <span class="comment">% peak location</span>
+0176             LR=abs(1/(2*a(1))); <span class="comment">% latus rectum</span>
+0177             result(1)=Lx*xp+x0; <span class="comment">% undo normalization</span>
+0178             result(2)=Lx*LR; <span class="comment">% undo normalization</span>
+0179             result(3)=Ly*polyval(a,result(1))+y0;
+0180         <span class="keyword">case</span> <span class="string">'gaussian'</span>
+0181             [a,fit]=<a href="gaussianfit.html" class="code" title="function [params,yfit]=gaussianfit(x,y,guess,options)">gaussianfit</a>(x,y);
+0182             result(1)=a(3);
+0183             result(2)=a(4);
+0184             result(3)=a(2);
+0185         <span class="keyword">otherwise</span>
+0186             error(<span class="string">'ERROR: %s is an invalid method'</span>,options.method);
+0187     <span class="keyword">end</span>
+0188 <span class="keyword">catch</span>
+0189     result(1:3)=nan;
+0190 <span class="keyword">end</span>
+0191 
+0192 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

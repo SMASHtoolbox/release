@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of fitStep</title>
+  <meta name="keywords" content="fitStep">
+  <meta name="description" content="manage input">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../../index.html">SMASHtoolbox</a> &gt; <a href="../../../index.html">+SMASH</a> &gt; <a href="../../index.html">+ImageAnalysis</a> &gt; <a href="../index.html">@StepWedge</a> &gt; <a href="index.html">private</a> &gt; fitStep.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../../index.html"><img alt="<" border="0" src="../../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+ImageAnalysis/@StepWedge/private&nbsp;<img alt=">" border="0" src="../../../../../../right.png"></a></td></tr></table>-->
+
+<h1>fitStep
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>manage input</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>function result=fitStep(x,y,order,options) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> manage input</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function chi2=residual(param)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function result=fitStep(x,y,order,options)</a>
+0002 
+0003 <span class="comment">% manage input</span>
+0004 <span class="keyword">if</span> (nargin&lt;3) || isempty(order)
+0005     order=2;
+0006 <span class="keyword">end</span>
+0007 
+0008 <span class="keyword">if</span> (nargin&lt;4) || isempty(options)
+0009     options=optimset(<span class="string">'MaxFunEvals'</span>,2000);
+0010 <span class="keyword">end</span>
+0011 
+0012 N=numel(x);
+0013 x=x(:);
+0014 y=y(:);
+0015 [x,index]=sort(x);
+0016 y=y(index);
+0017 
+0018 <span class="comment">% perform fit</span>
+0019 x0=[];
+0020 L=[];
+0021 gamma=[];
+0022 beta=[];
+0023 matrix=ones(N,2);
+0024 vector=[];
+0025 fit=[];
+0026     <a name="_sub1" href="#_subfunctions" class="code">function chi2=residual(param)</a>
+0027         x0=param(1);
+0028         L=param(2);
+0029         gamma=param(3:end);    
+0030         gamma(end+1)=1;
+0031         beta=conv(gamma,gamma);       
+0032         beta=polyint(beta);       
+0033         arg=polyval(beta,(x-x0)/L)-polyval(beta,0);            
+0034         matrix(:,2)=arg;
+0035         <span class="comment">%matrix(:,2)=tanh(arg);</span>
+0036         <span class="comment">%arg=(matrix(:,2)-min(matrix(:,2)))/(max(matrix(:,2)-min(matrix(:,2))));</span>
+0037         <span class="comment">%index=(arg&gt;0.975);</span>
+0038         <span class="comment">%matrix(index,2)=min(matrix(index,2));</span>
+0039         <span class="comment">%index=(arg&lt;0.025);</span>
+0040         <span class="comment">%matrix(index,2)=max(matrix(index,2));</span>
+0041         <span class="comment">%matrix(:,2)=arg;</span>
+0042         vector=matrix\y;
+0043         fit=matrix*vector;
+0044         chi2=(y-fit).^2;
+0045         chi2=sum(chi2)/N;
+0046     <span class="keyword">end</span>
+0047 xmin=min(x);
+0048 xmax=max(x);
+0049 Lx=xmax-xmin;
+0050 xmean=(xmin+xmax)/2;
+0051 guess=[xmean Lx/4];
+0052 guess(end+1:end+2*order)=0;
+0053 
+0054 result=fminsearch(@<a href="#_sub1" class="code" title="subfunction chi2=residual(param)">residual</a>,guess,options);
+0055 final=sqrt(<a href="#_sub1" class="code" title="subfunction chi2=residual(param)">residual</a>(result));
+0056 fprintf(<span class="string">'Average error: %.2g\n'</span>,final);
+0057 
+0058 <span class="comment">%%</span>
+0059 ha(1)=subplot(2,1,1);
+0060 plot(x,y,<span class="string">'o'</span>,x,fit);
+0061 xlabel(<span class="string">'x=log_{10} (exposure)'</span>);
+0062 ylabel(<span class="string">'Step density'</span>);
+0063 
+0064 ha(2)=subplot(2,1,2);
+0065 plot(x,polyval(conv(gamma,gamma),(x-x0)/L));
+0066 
+0067 
+0068 linkaxes(ha,<span class="string">'x'</span>);
+0069 
+0070 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

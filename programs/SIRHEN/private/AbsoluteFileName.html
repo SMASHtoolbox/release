@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of AbsoluteFileName</title>
+  <meta name="keywords" content="AbsoluteFileName">
+  <meta name="description" content="AbsoluteFileName : determine absolute path of a file">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../index.html">SMASHtoolbox</a> &gt; <a href="#">programs</a> &gt; <a href="../index.html">SIRHEN</a> &gt; <a href="index.html">private</a> &gt; AbsoluteFileName.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../index.html"><img alt="<" border="0" src="../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/programs/SIRHEN/private&nbsp;<img alt=">" border="0" src="../../../../../right.png"></a></td></tr></table>-->
+
+<h1>AbsoluteFileName
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>AbsoluteFileName : determine absolute path of a file</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="box"><strong>function func=AbsoluteFileName(filename,sourcepath) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> AbsoluteFileName : determine absolute path of a file
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../matlabicon.gif)">
+<li><a href="RelativeFileName.html" class="code" title="function func=RelativeFileName(filename,sourcepath)">RelativeFileName</a>	RelativeFileName : determine the relative path between two directories</li><li><a href="SelectionScreen.html" class="code" title="function fig=SelectionScreen(prevfig)">SelectionScreen</a>	allocate mising input</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% AbsoluteFileName : determine absolute path of a file</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0004 <a name="_sub0" href="#_subfunctions" class="code">function func=AbsoluteFileName(filename,sourcepath)</a>
+0005 
+0006 <span class="comment">% input check</span>
+0007 <span class="keyword">if</span> nargin&lt;1
+0008     error(<span class="string">'Error: no file name specified'</span>);
+0009 <span class="keyword">end</span>
+0010 <span class="keyword">if</span> nargin&lt;2
+0011     sourcepath=<span class="string">''</span>;
+0012 <span class="keyword">end</span>
+0013 
+0014 <span class="comment">% default value(s)</span>
+0015 <span class="keyword">if</span> isempty(sourcepath)
+0016     sourcepath=pwd;
+0017 <span class="keyword">end</span>
+0018 
+0019 <span class="comment">% enforce correct file separators for current system</span>
+0020 kk=(filename==<span class="string">'/'</span>)|(filename==<span class="string">'\'</span>);
+0021 filename(kk)=filesep;
+0022 kk=(sourcepath==<span class="string">'/'</span>)|(sourcepath==<span class="string">'\'</span>);
+0023 sourcepath(kk)=filesep;
+0024 
+0025 <span class="comment">% save starting location</span>
+0026 OldDir=pwd;
+0027 
+0028 <span class="comment">% move to file location</span>
+0029 cd(sourcepath);
+0030 [pathstr,name,ext]=fileparts(filename);
+0031 <span class="keyword">if</span> isempty(pathstr)
+0032     <span class="comment">% do nothing</span>
+0033 <span class="keyword">else</span>
+0034     <span class="keyword">if</span> isdir(pathstr)
+0035         cd(pathstr); <span class="comment">% may contain a relative path</span>
+0036     <span class="keyword">else</span>        
+0037         cd(OldDir);
+0038         error(<span class="string">'Error: %s \n is not a valid directory with respect to %s \n'</span>,<span class="keyword">...</span>
+0039             pathstr,sourcepath);
+0040     <span class="keyword">end</span>
+0041 <span class="keyword">end</span>
+0042 
+0043 <span class="comment">% determine absolute path</span>
+0044 name=[name ext];
+0045 func=fullfile(pwd,name);
+0046 
+0047 <span class="comment">% return to starting location</span>
+0048 cd(OldDir);</pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

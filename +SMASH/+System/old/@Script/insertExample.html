@@ -1,0 +1,131 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of insertExample</title>
+  <meta name="keywords" content="insertExample">
+  <meta name="description" content="insertExample Insert example into toolbox">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../../../index.html">Home</a> &gt;  <a href="#">..</a> &gt; <a href="../../../../index.html">SMASHtoolbox</a> &gt; <a href="../../../index.html">+SMASH</a> &gt; <a href="../../index.html">+System</a> &gt; <a href="#">old</a> &gt; <a href="index.html">@Script</a> &gt; insertExample.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../../../index.html"><img alt="<" border="0" src="../../../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for ../SMASHtoolbox/+SMASH/+System/old/@Script&nbsp;<img alt=">" border="0" src="../../../../../../right.png"></a></td></tr></table>-->
+
+<h1>insertExample
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>insertExample Insert example into toolbox</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="box"><strong>function insertExample(name,location) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> insertExample Insert example into toolbox
+
+ This method inserts a MATLAB script into the &quot;examples&quot; directory of the
+ SMASH toolbox.
+    Script.insertExample(filename);
+ The input &quot;filename&quot; must be a standard or live script file.  Live
+ scripts are automatically converted to standard scripts during insertion.
+
+ Scripts can also be inserted into a subdirectory within the &quot;examples&quot;
+ directory.
+    Script.insertExample(filename,subdir);
+
+ See also <a href="Script.html" class="code" title="">Script</a>, <a href="extractExample.html" class="code" title="function varargout=extractExample(name)">extractExample</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../../../matlabicon.gif)">
+<li><a href="Script.html" class="code" title="">Script</a>	This class manages the format of MATLAB scripts and their inclusion into</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% insertExample Insert example into toolbox</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% This method inserts a MATLAB script into the &quot;examples&quot; directory of the</span>
+0004 <span class="comment">% SMASH toolbox.</span>
+0005 <span class="comment">%    Script.insertExample(filename);</span>
+0006 <span class="comment">% The input &quot;filename&quot; must be a standard or live script file.  Live</span>
+0007 <span class="comment">% scripts are automatically converted to standard scripts during insertion.</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% Scripts can also be inserted into a subdirectory within the &quot;examples&quot;</span>
+0010 <span class="comment">% directory.</span>
+0011 <span class="comment">%    Script.insertExample(filename,subdir);</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">% See also Script, extractExample</span>
+0014 <span class="comment">%</span>
+0015 
+0016 <span class="comment">%</span>
+0017 <span class="comment">% created January 10, 2018 by Daniel Dolan (Sandia National Laboratories)</span>
+0018 <span class="comment">%</span>
+0019 <a name="_sub0" href="#_subfunctions" class="code">function insertExample(name,location)</a>
+0020 
+0021 <span class="comment">% manage input</span>
+0022 assert(nargin &gt;= 1,<span class="string">'ERROR: no file name specified'</span>);
+0023 assert(packtools.call(<span class="string">'Script.isScript'</span>,name),<span class="string">'ERROR: invalid file'</span>);
+0024 
+0025 start=fullfile(smashroot,<span class="string">'examples'</span>);
+0026 <span class="keyword">if</span> (nargin &lt; 2) || isempty(location)
+0027     location=start;
+0028 <span class="keyword">elseif</span> ischar(location)
+0029     location=fullfile(start,location);
+0030     <span class="keyword">if</span> ~exist(location,<span class="string">'dir'</span>)
+0031         <span class="keyword">try</span>
+0032             mkdir(location);
+0033         <span class="keyword">catch</span>
+0034             error(<span class="string">'ERROR: invalid location'</span>);
+0035         <span class="keyword">end</span>
+0036     <span class="keyword">end</span>
+0037 <span class="keyword">else</span>
+0038     error(<span class="string">'ERROR: invalid location'</span>);
+0039 <span class="keyword">end</span>
+0040 
+0041 <span class="comment">% check for overwrite</span>
+0042 [~,short,ext]=fileparts(name);
+0043 new=fullfile(location,[short <span class="string">'.m'</span>]);
+0044 <span class="keyword">if</span> exist(new,<span class="string">'file'</span>)
+0045     commandwindow();
+0046     choice=input(<span class="string">'Overwrite existing file? (y)es or (n)o: '</span>,<span class="string">'s'</span>);
+0047     <span class="keyword">switch</span> choice
+0048         <span class="keyword">case</span> {<span class="string">'y'</span> <span class="string">'yes'</span>}
+0049             delete(new);
+0050         <span class="keyword">otherwise</span>
+0051             fprintf(<span class="string">'   Example not inserted \n'</span>);
+0052             <span class="keyword">return</span>
+0053     <span class="keyword">end</span>
+0054 <span class="keyword">end</span>
+0055 
+0056 <span class="comment">% copy script, converting as needed</span>
+0057 [dirname,~,~]=fileparts(new);
+0058 log=fullfile(dirname,[<span class="string">'.'</span> short]);
+0059 fid=fopen(log,<span class="string">'w'</span>);
+0060 <span class="keyword">switch</span> lower(ext)
+0061     <span class="keyword">case</span> <span class="string">'.m'</span>
+0062         copyfile(name,new);        
+0063         fprintf(fid,<span class="string">'%s\n'</span>,<span class="string">'standard'</span>);
+0064     <span class="keyword">case</span> <span class="string">'.mlx'</span>
+0065         fprintf(<span class="string">'Converting live script to standard format...'</span>);
+0066         packtools.call(<span class="string">'Script.convert'</span>,name,new,<span class="string">'-overwrite'</span>);
+0067         fprintf(<span class="string">'done\n'</span>);
+0068         fprintf(fid,<span class="string">'%s\n'</span>,<span class="string">'live'</span>);
+0069 <span class="keyword">end</span>
+0070 fclose(fid);
+0071 
+0072 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 10-Nov-2020 17:53:50 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>
