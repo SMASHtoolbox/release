@@ -1,0 +1,25 @@
+[text example]
+This is some text
+that spans more than one line.  It will be merged.
+
+Here is some additional text separated from the previous lines.  It will
+be not be merged with the previous text.
+
+[array example]
+1 2
+3 4
+5 6
+
+[table example]
+A,B,C,D,E
+this is it,24,1,8,Q
+23,5,7,14,16
+4,6,13,20,22
+10,12,19,21,3
+11,18,25,2,9
+
+[pair example]
+parameter 1 = 1
+parameter 2 = [1 10]
+parameter3 = 1:10
+choice = yes
