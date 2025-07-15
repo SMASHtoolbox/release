@@ -1,0 +1,7 @@
+datninja points saved 25-Nov-2008 08:31:05 
+Image file: exampleA.tif
+reference: 363.0 348.9 1 0
+reference: 362.9 39.0 1 1
+reference: 52.0 39.0 0 1
+reference: 52.0 348.9 0 0
+data: 208.0 194.0 0.501538 0.499722
