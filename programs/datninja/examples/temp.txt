@@ -1,0 +1,7 @@
+datninja points saved 31-May-2010 14:08:47 
+Data format: m n x y 
+Image file: exampleA.tif
+reference: 79.16 45.84 0 6
+reference: 545.47 535.18 6 0
+reference: 78.76 535.15 0 0
+data: 234.22 290.32 1.99601 3.00233

@@ -1,0 +1,98 @@
+% ColumnReader : extract column data from a file
+%
+% This function extracts numerical data columns from a text file.  Columns
+% are denoted by white space and/or delimeter characters (',', ';', and '&'
+% by default).  A header containing any valid ASCII character may be
+% placed at the beginning of the file.  The program distinguishes between
+% header lines and data lines by the fact that the latter is comprised
+% soley of numerical values, white space, and delimeters.  The file may
+% contain any number of data columns (with arbitrary width), but consistent
+% column separators are expected from one line to the next.
+%
+% Usage: 
+%    [data,header,filename]=ColumnReader(filename,delim);
+%
+% Input:
+%    filename : file name (user prompted if omitted)
+%    delim : custom delimeter character(s)
+% 
+% Output:
+%    data : numeric column data (2D double array)
+%    header : header lines (1D cell array)
+%    filename : import file (character array)
+
+% created 7/6/2005 by Daniel Dolan (Sandia National Labs)
+%
+% updated 3/28/2006 by Daniel Dolan
+%    -implemented user choice of delim
+%    -added filename output (useful when uidialog is called)
+%    -changed '%*c' to '%*s' to fix bug in MATLAB R2006a
+% updated 3/19/2007 by Daniel Dolan
+%    -streamlined file header logic
+%    -revised documentation
+
+function [data,header,filename]=ColumnReader(filename,delim)
+
+% input check
+if nargin<1
+    filename='';
+end
+if nargin<2
+    delim={};
+end
+
+% default input
+if isempty(filename)
+    [filename,pathname]=uigetfile('*.*','Select data file');
+    filename=fullfile(pathname,filename);
+end
+if isempty(delim)
+    delim={',' ';' '&'};
+end
+    
+% open file for reading
+fid=fopen(filename,'rt');     
+
+% find the first numerical column
+Nheader=0;
+%done=false;
+format='';
+while isempty(format)
+    Ncolumn=0;
+    format='';
+    in=fgets(fid);
+    while numel(in)>0
+        in=strtrim(in); % remove extraneous whitespace
+        % try to read a number
+        [value,count,err,next]=sscanf(in,'%g',1);
+        if count==1 % numerical value read
+            format=[format '%g'];
+            Ncolumn=Ncolumn+1;
+            in=in(next:end);
+            continue
+        end
+        % try to read a delimeter
+         [value,count,err,next]=sscanf(in,'%c',1);
+         switch value
+             case delim
+                 format=[format '%*1s'];
+                 in=in(next:end);
+             otherwise
+                 Nheader=Nheader+1;
+                 format='';
+                 break
+         end
+    end
+end
+
+% read header and column data
+frewind(fid);
+header=cell([1 Nheader]);
+for ii=1:Nheader
+    header{ii}=fgetl(fid);
+end
+data=fscanf(fid,format,[Ncolumn inf]);
+data=transpose(data);
+
+% close the file
+fclose(fid);

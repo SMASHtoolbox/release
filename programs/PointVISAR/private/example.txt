@@ -1,0 +1,11 @@
+% example input file
+
+begin{material}
+density = 1
+cv = 1
+param = {1 1 1}
+end{material}
+
+begin{simulation}
+tmax = 1e-6
+end{simulation}

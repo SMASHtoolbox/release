@@ -1,0 +1,125 @@
+<deployment-project plugin="plugin.ezdeploy" plugin-version="1.0">
+  <configuration build-checksum="4032932219" file="/Users/dhdolan/data/Sandia/projects/SMASH/SMASHtoolbox/programs/SIRHEN/SIRHEN.prj" location="/Users/dhdolan/data/Sandia/projects/SMASH/SMASHtoolbox/programs/SIRHEN" name="SIRHEN" preferred-package-location="/Users/dhdolan/data/Sandia/projects/SMASH/SMASHtoolbox/programs/SIRHEN/SIRHEN/for_redistribution" preferred-package-type="package.type.app" target="target.ezdeploy.standalone" target-name="Application Compiler">
+    <param.appname>SIRHEN</param.appname>
+    <param.icon />
+    <param.icons />
+    <param.version>1.0</param.version>
+    <param.authnamewatermark>Daniel Dolan</param.authnamewatermark>
+    <param.email>dhdolan@sandia.gov</param.email>
+    <param.company>Sandia National Laboratories</param.company>
+    <param.summary>SIRHEN (Sandia InfaRed HEterodyne aNalysis) is a program for analyzing PDV data</param.summary>
+    <param.description />
+    <param.screenshot />
+    <param.guid />
+    <param.net.saved.interface />
+    <param.installpath.string>/Sandia_National_Laboratories/SIRHEN/</param.installpath.string>
+    <param.installpath.combo>option.installpath.systemwideapp</param.installpath.combo>
+    <param.logo />
+    <param.install.notes />
+    <param.intermediate>${PROJECT_ROOT}/SIRHEN/for_testing</param.intermediate>
+    <param.files.only>${PROJECT_ROOT}/SIRHEN/for_redistribution_files_only</param.files.only>
+    <param.output>${PROJECT_ROOT}/SIRHEN/for_redistribution</param.output>
+    <param.enable.clean.build>false</param.enable.clean.build>
+    <param.user.defined.mcr.options />
+    <param.embed.ctf>true</param.embed.ctf>
+    <param.target.type>subtarget.standalone</param.target.type>
+    <param.support.packages />
+    <param.required.mcr.products>
+      <item>35000</item>
+      <item>35010</item>
+      <item>35001</item>
+    </param.required.mcr.products>
+    <param.web.mcr>false</param.web.mcr>
+    <param.package.mcr>true</param.package.mcr>
+    <param.no.mcr>false</param.no.mcr>
+    <param.web.mcr.name>MyAppInstaller_web</param.web.mcr.name>
+    <param.package.mcr.name>SIRHENinstaller</param.package.mcr.name>
+    <param.no.mcr.name>MyAppInstaller_app</param.no.mcr.name>
+    <param.windows.command.prompt>false</param.windows.command.prompt>
+    <param.create.log>true</param.create.log>
+    <param.log.file>SIRHEN.log</param.log.file>
+    <unset>
+      <param.icon />
+      <param.icons />
+      <param.version />
+      <param.description />
+      <param.screenshot />
+      <param.guid />
+      <param.net.saved.interface />
+      <param.installpath.string />
+      <param.installpath.combo />
+      <param.logo />
+      <param.intermediate />
+      <param.files.only />
+      <param.output />
+      <param.enable.clean.build />
+      <param.user.defined.mcr.options />
+      <param.embed.ctf />
+      <param.target.type />
+      <param.support.packages />
+      <param.no.mcr />
+      <param.web.mcr.name />
+      <param.no.mcr.name />
+      <param.windows.command.prompt />
+    </unset>
+    <fileset.main>
+      <file>${PROJECT_ROOT}/SIRHEN.m</file>
+    </fileset.main>
+    <fileset.resources>
+      <file>${PROJECT_ROOT}/private/AbsoluteFileName.m</file>
+      <file>${PROJECT_ROOT}/private/AnalysisScreen.m</file>
+      <file>${PROJECT_ROOT}/private/ColumnReader.m</file>
+      <file>${PROJECT_ROOT}/private/DisplayOptions.m</file>
+      <file>${PROJECT_ROOT}/private/GeneralOptions.m</file>
+      <file>${PROJECT_ROOT}/private/HelpWindow.m</file>
+      <file>${PROJECT_ROOT}/private/MinimalFigure.m</file>
+      <file>${PROJECT_ROOT}/private/RelativeFileName.m</file>
+      <file>${PROJECT_ROOT}/private/STFTOptions.m</file>
+      <file>${PROJECT_ROOT}/private/SelectionScreen.m</file>
+      <file>${PROJECT_ROOT}/private/StartOver.m</file>
+      <file>${PROJECT_ROOT}/private/about_SIRHEN.m</file>
+      <file>${PROJECT_ROOT}/private/datadlg.m</file>
+      <file>${PROJECT_ROOT}/private/datadlg_STFT.m</file>
+      <file>${PROJECT_ROOT}/private/datadlg_calhist.m</file>
+      <file>${PROJECT_ROOT}/private/datadlg_display.m</file>
+      <file>${PROJECT_ROOT}/private/digread.m</file>
+      <file>${PROJECT_ROOT}/private/estimate_noise.m</file>
+      <file>${PROJECT_ROOT}/private/findpeak.m</file>
+      <file>${PROJECT_ROOT}/private/gaussianfit.m</file>
+      <file>${PROJECT_ROOT}/private/local_graphic.m</file>
+      <file>${PROJECT_ROOT}/private/screen.m</file>
+      <file>${PROJECT_ROOT}/private/set_colormap.m</file>
+      <file>${PROJECT_ROOT}/private/stft.m</file>
+      <file>${PROJECT_ROOT}/private/trcread.m</file>
+      <file>${PROJECT_ROOT}/private/updateoptions.m</file>
+      <file>${PROJECT_ROOT}/private/wfmread.m</file>
+    </fileset.resources>
+    <fileset.package />
+    <build-deliverables>
+      <file location="${PROJECT_ROOT}/SIRHEN/for_testing" name="readme.txt" optional="true">/Users/dhdolan/data/Sandia/projects/SMASH/SMASHtoolbox/programs/SIRHEN/SIRHEN/for_testing/readme.txt</file>
+      <file location="${PROJECT_ROOT}/SIRHEN/for_testing" name="run_SIRHEN.sh" optional="false">/Users/dhdolan/data/Sandia/projects/SMASH/SMASHtoolbox/programs/SIRHEN/SIRHEN/for_testing/run_SIRHEN.sh</file>
+      <file location="${PROJECT_ROOT}/SIRHEN/for_testing" name="SIRHEN.app" optional="false">/Users/dhdolan/data/Sandia/projects/SMASH/SMASHtoolbox/programs/SIRHEN/SIRHEN/for_testing/SIRHEN.app</file>
+      <file location="${PROJECT_ROOT}/SIRHEN/for_testing" name="splash.png" optional="false">/Users/dhdolan/data/Sandia/projects/SMASH/SMASHtoolbox/programs/SIRHEN/SIRHEN/for_testing/splash.png</file>
+    </build-deliverables>
+    <workflow />
+    <matlab>
+      <root>/Applications/MATLAB_R2015a.app</root>
+      <toolboxes />
+    </matlab>
+    <platform>
+      <unix>true</unix>
+      <mac>true</mac>
+      <windows>false</windows>
+      <win2k>false</win2k>
+      <winxp>false</winxp>
+      <vista>false</vista>
+      <linux>false</linux>
+      <solaris>false</solaris>
+      <osver>10.11.6</osver>
+      <os32>false</os32>
+      <os64>true</os64>
+      <arch>maci64</arch>
+      <matlab>true</matlab>
+    </platform>
+  </configuration>
+</deployment-project>
